@@ -204,3 +204,23 @@ l'activation des comptes : proposer un bouton "Importer mes données locales"
 qui lit `localStorage.getItem('pokelo_state_v1')` et pousse bankrolls/sessions
 vers Supabase via des `insert` après la première connexion réussie — à
 construire une fois l'auth réelle branchée.
+
+## 6. Profil utilisateur (photo, nom d'affichage, partage public)
+
+À exécuter dans Supabase (SQL Editor) — colonnes utilisées par la photo de
+profil, le nom d'affichage et le partage de profil public :
+
+```sql
+alter table public.profiles
+  add column if not exists display_name text,
+  add column if not exists avatar_url text,
+  add column if not exists is_public boolean not null default false;
+```
+
+Le profil public (`#/u/:id`) ne passe **jamais** par le client Supabase
+directement : les policies RLS actuelles (`auth.uid() = id`) empêchent tout
+visiteur anonyme de lire la table `profiles`, même avec `is_public = true`.
+La route publique passe par `api/public-profile.js`, qui utilise la clé
+service_role côté serveur et ne renvoie que `display_name` / `avatar_url` /
+`created_at` — jamais l'email ni les données financières. Aucune policy RLS
+supplémentaire n'est donc nécessaire pour cette fonctionnalité.

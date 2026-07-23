@@ -403,6 +403,9 @@
   .footer-top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; max-width: 1140px; margin: 0 auto 2rem; }
   .footer-brand { display: flex; align-items: center; gap: 10px; }
   .footer-brand span { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.1em; color: var(--grey); }
+  .footer-social { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; margin-left: 6px; border-radius: 8px; border: 1px solid var(--border); color: var(--grey); transition: color .2s, border-color .2s; }
+  .footer-social:hover { color: var(--green); border-color: rgba(8,191,47,0.4); }
+  .footer-social .icon { width: 17px; height: 17px; }
   .footer-cols { display: flex; gap: 4rem; flex-wrap: wrap; }
   .footer-col h5 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--grey); margin-bottom: 0.9rem; }
   .footer-col a { display: block; font-size: 0.85rem; color: var(--text); text-decoration: none; margin-bottom: 0.6rem; opacity: 0.85; cursor: pointer; }
@@ -683,6 +686,20 @@
   .settings-account-row .form-row .input { flex: 1; min-width: 180px; }
   #mfa-status { font-size: 0.85rem; color: var(--text); margin-bottom: 0.6rem; }
   #mfa-enroll-flow { display: flex; flex-direction: column; gap: 0.6rem; align-items: flex-start; margin-top: 0.8rem; }
+  .profile-avatar-row { display: flex; align-items: center; gap: 1rem; }
+  .profile-avatar { width: 64px; height: 64px; border-radius: 50%; background: var(--black); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; color: var(--grey); }
+  .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .profile-avatar-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+  .switch-row { display: flex; align-items: center; gap: 0.6rem; font-size: 0.85rem; color: var(--text); cursor: pointer; }
+  .profile-share-row { margin-top: 1rem; }
+  #profile-share-link-row .form-row { margin-top: 0.6rem; }
+  .plan-compare-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.8rem; margin-top: 1.2rem; }
+  .plan-compare-card { border: 1px solid var(--border); border-radius: 10px; padding: 0.9rem 1rem; }
+  .plan-compare-card.current { border-color: rgba(8,191,47,0.45); background: rgba(8,191,47,0.05); }
+  .plan-compare-card h4 { font-size: 0.85rem; font-weight: 700; color: var(--text); margin-bottom: 0.2rem; }
+  .plan-compare-card .pc-price { font-size: 0.78rem; color: var(--grey); margin-bottom: 0.6rem; }
+  .plan-compare-card ul { list-style: none; padding: 0; margin: 0 0 0.7rem; display: flex; flex-direction: column; gap: 0.3rem; }
+  .plan-compare-card li { font-size: 0.76rem; color: var(--grey); }
 
   /* ── Account / auth (stub) ── */
   .account-card { width: 100%; max-width: 420px; background: var(--black-card); border: 1px solid var(--border); border-radius: 14px; padding: 2rem 1.8rem; text-align: center; }
@@ -779,7 +796,7 @@
     <li><a href="#preview" data-link data-i18n="nav_product">Le produit</a></li>
     <li><a href="#pricing" data-link data-i18n="nav_pricing">Tarifs</a></li>
     <li><a href="#/blog" data-link data-i18n="nav_blog">Blog</a></li>
-    <li><a href="#/app" data-link class="nav-cta" data-i18n="nav_open_app">Ouvrir l'app</a></li>
+    <li><a href="#/account" data-link class="nav-cta" data-i18n="nav_open_app">Se connecter</a></li>
   </ul>
   <button class="nav-burger" id="burger" aria-label="Menu" onclick="toggleMenu()">
     <span></span><span></span><span></span>
@@ -791,7 +808,7 @@
   <a href="#preview" data-link onclick="closeMenu()" data-i18n="nav_product">Le produit</a>
   <a href="#pricing" data-link onclick="closeMenu()" data-i18n="nav_pricing">Tarifs</a>
   <a href="#/blog" data-link onclick="closeMenu()" data-i18n="nav_blog">Blog</a>
-  <a href="#/app" data-link class="nav-cta" onclick="closeMenu()" data-i18n="nav_open_app">Ouvrir l'app</a>
+  <a href="#/account" data-link class="nav-cta" onclick="closeMenu()" data-i18n="nav_open_app">Se connecter</a>
 </div>
 
 <!-- ══════════════ VIEW : LANDING ══════════════ -->
@@ -816,7 +833,7 @@
         tout ça en graphiques clairs pour progresser sereinement.
       </p>
       <div class="hero-actions">
-        <a href="#/app" data-link class="btn-primary" data-i18n="hero_cta_primary">Commencer gratuitement</a>
+        <a href="#/account/signup" data-link class="btn-primary" data-i18n="hero_cta_primary">Créer un compte gratuit</a>
         <a href="#how" data-link class="btn-secondary" data-i18n="hero_cta_secondary">Comment ça marche</a>
       </div>
     </div>
@@ -1005,7 +1022,7 @@
           <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Graphiques &amp; statistiques de base</li>
           <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Application installable (PWA)</li>
         </ul>
-        <a href="#/app" data-link class="btn-secondary" style="justify-content:center" data-i18n="price_cta_free">Commencer gratuitement</a>
+        <a href="#/account/signup" data-link class="btn-secondary" style="justify-content:center" data-i18n="price_cta_free">Créer un compte gratuit</a>
       </div>
       <div class="price-card featured">
         <div class="price-badge" data-i18n="price_pro_badge">Le plus choisi</div>
@@ -1092,7 +1109,7 @@
       <h2 class="section-title" data-i18n="cta_title">Commencez à suivre<br>votre bankroll aujourd'hui</h2>
       <p class="section-sub center" data-i18n="cta_sub">Gratuit pour commencer, sans carte bancaire.</p>
       <div class="hero-actions" style="margin-top:2rem">
-        <a href="#/app" data-link class="btn-primary" data-i18n="cta_button">Ouvrir Pokelo</a>
+        <a href="#/account/signup" data-link class="btn-primary" data-i18n="cta_button">Créer un compte gratuit</a>
       </div>
     </div>
   </section>
@@ -1120,7 +1137,7 @@
       <div id="article-content"><!-- filled by JS --></div>
       <div class="article-cta fade-up visible">
         <p data-i18n="article_cta_text">Mettez ces principes en pratique dès votre prochaine session.</p>
-        <a href="#/app" data-link class="btn-primary" data-i18n="article_cta_button">Ouvrir Pokelo gratuitement</a>
+        <a href="#/account/signup" data-link class="btn-primary" data-i18n="article_cta_button">Créer un compte gratuit</a>
       </div>
     </div>
   </section>
@@ -1137,6 +1154,9 @@
         <path class="lpip" d="M29.5 4C23 10 20 14 20 17.5C20 20 22.2 22 25 22C26.8 22 28.4 21.2 29.5 19.8C30.6 21.2 32.2 22 34 22C36.8 22 39 20 39 17.5C39 14 36 10 29.5 4Z"/>
       </svg>
       <span>Pokelo</span>
+      <a class="footer-social" href="https://www.instagram.com/mypokelo/" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg class="icon" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+      </a>
     </div>
     <div class="footer-cols">
       <div class="footer-col">
@@ -1144,7 +1164,7 @@
         <a href="#features" data-link data-i18n="nav_features">Fonctionnalités</a>
         <a href="#preview" data-link data-i18n="nav_product">Le produit</a>
         <a href="#pricing" data-link data-i18n="nav_pricing">Tarifs</a>
-        <a href="#/app" data-link data-i18n="nav_open_app">Ouvrir l'app</a>
+        <a href="#/account" data-link data-i18n="nav_open_app">Se connecter</a>
       </div>
       <div class="footer-col">
         <h5 data-i18n="footer_resources">Ressources</h5>
@@ -1185,7 +1205,7 @@
       </div>
 
       <div class="account-notice" data-i18n="account_local_notice">
-        Créez un compte pour synchroniser vos bankrolls et sessions dans le cloud et y accéder depuis n'importe quel appareil. Sans compte, Pokelo continue de fonctionner en local sur cet appareil.
+        Un compte est nécessaire pour utiliser Pokelo et synchroniser vos bankrolls et sessions dans le cloud, accessibles depuis n'importe quel appareil.
       </div>
 
       <!-- LOGIN -->
@@ -1301,8 +1321,7 @@
       <div class="legal-todo">À compléter avec vos informations réelles avant mise en ligne — les champs entre crochets <code>[...]</code> sont des placeholders, pas des données valides.</div>
       <div class="article-body">
         <h2>Quelles données sont collectées</h2>
-        <p><strong>Sans compte (mode local) :</strong> vos bankrolls, sessions et préférences sont stockées uniquement dans le navigateur de votre appareil (localStorage). Aucune de ces données n'est envoyée à un serveur Pokelo.</p>
-        <p><strong>Avec un compte :</strong> lorsque vous créez un compte, nous collectons votre adresse e-mail et un mot de passe (stocké de façon chiffrée par notre prestataire d'authentification, jamais en clair). Vos bankrolls et sessions sont alors synchronisées vers une base de données sécurisée afin d'être accessibles depuis vos différents appareils.</p>
+        <p>Un compte est nécessaire pour utiliser Pokelo. Lorsque vous créez un compte, nous collectons votre adresse e-mail et un mot de passe (stocké de façon chiffrée par notre prestataire d'authentification, jamais en clair). Vos bankrolls et sessions sont synchronisées vers une base de données sécurisée afin d'être accessibles depuis vos différents appareils.</p>
 
         <h2>Pourquoi ces données sont collectées</h2>
         <ul>
@@ -1322,7 +1341,7 @@
         </ul>
 
         <h2>Cookies &amp; stockage local</h2>
-        <p>Le Site n'utilise pas de cookies publicitaires ou de traceurs tiers. Il utilise le <code>localStorage</code> de votre navigateur pour conserver vos données en mode local, et un cookie de session technique (strictement nécessaire) une fois connecté à un compte.</p>
+        <p>Le Site n'utilise pas de cookies publicitaires ou de traceurs tiers. Il utilise le <code>localStorage</code> de votre navigateur comme copie locale de vos données (pour un chargement plus rapide), ainsi qu'un cookie de session technique (strictement nécessaire) pour vous garder connecté à votre compte.</p>
 
         <h2>Durée de conservation</h2>
         <p>Les données d'un compte sont conservées tant que celui-ci est actif. Vous pouvez demander la suppression complète de votre compte et de toutes les données associées à tout moment (voir « Vos droits » ci-dessous).</p>
@@ -1335,9 +1354,18 @@
         <p>Pour toute question relative à cette politique ou à vos données personnelles : [adresse e-mail de contact].</p>
       </div>
       <div class="article-cta">
-        <p>Vous préférez rester en mode 100% local, sans compte ?</p>
-        <a href="#/app" data-link class="btn-primary">Continuer sans compte</a>
+        <p>Prêt à créer votre compte Pokelo ?</p>
+        <a href="#/account/signup" data-link class="btn-primary">Créer un compte gratuit</a>
       </div>
+    </div>
+  </section>
+</main>
+
+<!-- ══════════════ VIEW : PROFIL PUBLIC ══════════════ -->
+<main id="view-public-profile" hidden>
+  <section style="padding-top:150px; min-height:80vh; display:flex; align-items:flex-start; justify-content:center;">
+    <div class="account-card fade-up visible" id="public-profile-card">
+      <p style="color:var(--grey)">Chargement…</p>
     </div>
   </section>
 </main>
@@ -1385,7 +1413,10 @@
           <span data-i18n="install_app">Installer l'app</span>
         </a>
         <div class="account-status" id="account-status" hidden>
-          <div class="account-status-email" id="account-status-email"></div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:.35rem;">
+            <div class="profile-avatar" id="account-status-avatar" style="width:24px;height:24px;flex-shrink:0;"></div>
+            <div class="account-status-email" id="account-status-email" style="margin-bottom:0;"></div>
+          </div>
           <a class="account-status-logout" onclick="signOutUser()"><span data-i18n="account_logout">Déconnexion</span></a>
         </div>
         <a href="#/account" data-link style="margin-bottom:.6rem;" id="account-login-link">
@@ -1493,6 +1524,97 @@
         </div>
         <div class="app-content">
           <div class="settings-grid">
+            <div class="settings-card" style="grid-column: 1 / -1;">
+              <h3 data-i18n="settings_account_title">Compte</h3>
+              <div id="settings-account-loggedout">
+                <p class="settings-desc" data-i18n="settings_account_loggedout_desc">Connectez-vous pour synchroniser vos données dans le cloud et gérer la sécurité de votre compte.</p>
+                <a class="btn-primary btn-sm" href="#/account" data-link data-i18n="account_tab_login">Connexion</a>
+              </div>
+              <div id="settings-account-loggedin" hidden>
+                <div class="settings-account-row">
+                  <label data-i18n="settings_account_profile">Profil</label>
+                  <div class="profile-avatar-row">
+                    <div class="profile-avatar" id="profile-avatar-preview"><span id="profile-avatar-fallback">?</span></div>
+                    <div class="profile-avatar-actions">
+                      <input type="file" id="profile-avatar-input" accept="image/*" hidden onchange="onAvatarFileSelected(event)" />
+                      <button class="btn-ghost btn-sm" onclick="document.getElementById('profile-avatar-input').click()" data-i18n="settings_account_avatar_upload">Changer la photo</button>
+                      <button class="btn-ghost btn-sm" onclick="removeAvatar()" data-i18n="settings_account_avatar_remove">Retirer</button>
+                    </div>
+                  </div>
+                  <div class="form-row" style="margin-top:1rem">
+                    <input class="input" id="profile-display-name" placeholder="Nom d'affichage (optionnel)" maxlength="40" />
+                    <button class="btn-ghost btn-sm" onclick="saveDisplayName()" data-i18n="settings_account_save">Enregistrer</button>
+                  </div>
+                  <div class="account-feedback" id="account-profile-feedback" hidden></div>
+                  <div class="profile-share-row">
+                    <label class="switch-row">
+                      <input type="checkbox" id="profile-public-toggle" onchange="toggleProfilePublic(this.checked)" />
+                      <span data-i18n="settings_account_public_toggle">Rendre mon profil public</span>
+                    </label>
+                    <div id="profile-share-link-row" hidden>
+                      <div class="form-row">
+                        <input class="input" id="profile-share-link" readonly />
+                        <button class="btn-ghost btn-sm" onclick="copyProfileLink()" data-i18n="settings_account_copy_link">Copier le lien</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="settings-account-row">
+                  <label data-i18n="settings_account_plan">Plan actuel</label>
+                  <p class="form-hint" id="settings-account-plan-label"></p>
+                  <button class="btn-ghost btn-sm" id="settings-account-manage-plan-btn" onclick="openBillingPortal()" hidden data-i18n="settings_account_manage_plan">Gérer mon abonnement</button>
+                  <div class="account-feedback" id="account-plan-feedback" hidden></div>
+                  <div class="plan-compare-grid" id="plan-compare-grid"></div>
+                </div>
+                <div class="settings-account-row">
+                  <label data-i18n="settings_account_email">Adresse e-mail</label>
+                  <p class="form-hint" id="settings-account-current-email"></p>
+                  <div class="form-row">
+                    <input class="input" id="account-new-email" placeholder="nouvelle@adresse.com" />
+                    <button class="btn-ghost btn-sm" onclick="updateAccountEmail()" data-i18n="settings_account_update_email">Mettre à jour</button>
+                  </div>
+                  <div class="account-feedback" id="account-email-feedback" hidden></div>
+                </div>
+                <div class="settings-account-row">
+                  <label data-i18n="settings_account_password">Nouveau mot de passe</label>
+                  <div class="form-row">
+                    <input class="input" type="password" id="account-new-password" placeholder="••••••••" autocomplete="new-password" />
+                    <input class="input" type="password" id="account-new-password-confirm" placeholder="Confirmer" autocomplete="new-password" />
+                    <button class="btn-ghost btn-sm" onclick="updateAccountPassword()" data-i18n="settings_account_update_password">Changer le mot de passe</button>
+                  </div>
+                  <div class="account-feedback" id="account-password-feedback" hidden></div>
+                </div>
+                <div class="settings-account-row">
+                  <label data-i18n="settings_account_mfa">Double authentification (MFA)</label>
+                  <p class="settings-desc" data-i18n="settings_account_mfa_desc">Ajoutez une couche de sécurité avec une application d'authentification (Google Authenticator, Authy...).</p>
+                  <div id="mfa-status"></div>
+                  <div id="mfa-enroll-flow" hidden>
+                    <img id="mfa-qr" alt="QR code MFA" style="background:#fff; padding:8px; border-radius:8px; width:160px; height:160px;" />
+                    <p class="form-hint" id="mfa-secret-hint"></p>
+                    <div class="form-row">
+                      <input class="input" id="mfa-verify-code" placeholder="Code à 6 chiffres" maxlength="6" inputmode="numeric" />
+                      <button class="btn-primary btn-sm" onclick="confirmMfaEnroll()" data-i18n="settings_account_mfa_confirm">Confirmer</button>
+                      <button class="btn-ghost btn-sm" onclick="cancelMfaEnroll()" data-i18n="settings_account_mfa_cancel">Annuler</button>
+                    </div>
+                  </div>
+                  <div class="account-feedback" id="account-mfa-feedback" hidden></div>
+                </div>
+                <div class="settings-account-row">
+                  <label data-i18n="settings_account_export">Exporter mes données</label>
+                  <p class="settings-desc" data-i18n="settings_account_export_desc">Téléchargez une copie complète de vos bankrolls et sessions (droit à la portabilité des données).</p>
+                  <div class="form-row">
+                    <button class="btn-ghost btn-sm" onclick="exportDataJson()" data-i18n="settings_account_export_json">Exporter en JSON</button>
+                    <button class="btn-ghost btn-sm" onclick="exportDataCsv()" data-i18n="settings_account_export_csv">Exporter les sessions en CSV</button>
+                  </div>
+                </div>
+                <div class="settings-account-row">
+                  <label data-i18n="settings_account_delete">Supprimer mon compte</label>
+                  <p class="settings-desc" data-i18n="settings_account_delete_desc">Supprime définitivement votre compte et toutes vos données (bankrolls, sessions, préférences). Action irréversible.</p>
+                  <button class="btn-ghost btn-sm" style="color:var(--critical); border-color:rgba(230,103,103,0.3);" onclick="confirmDeleteAccount()" data-i18n="settings_account_delete_button">Supprimer définitivement mon compte</button>
+                  <div class="account-feedback" id="account-delete-feedback" hidden></div>
+                </div>
+              </div>
+            </div>
             <div class="settings-card">
               <h3 data-i18n="settings_lang_title">Langue</h3>
               <p class="settings-desc" data-i18n="settings_lang_desc">Langue de l'interface de Pokelo.</p>
@@ -1556,68 +1678,6 @@
               <p class="settings-desc" data-i18n="settings_install_desc">Ajoutez Pokelo à votre écran d'accueil pour un accès en un tap, comme une vraie app.</p>
               <button class="btn-primary btn-sm install-app-btn" onclick="triggerInstallPrompt()" hidden data-i18n="install_app">Installer l'app</button>
               <p class="form-hint" data-i18n="install_ios_hint">Sur iPhone/iPad : bouton Partager de Safari → « Sur l'écran d'accueil ».</p>
-            </div>
-            <div class="settings-card" style="grid-column: 1 / -1;">
-              <h3 data-i18n="settings_account_title">Compte</h3>
-              <div id="settings-account-loggedout">
-                <p class="settings-desc" data-i18n="settings_account_loggedout_desc">Connectez-vous pour synchroniser vos données dans le cloud et gérer la sécurité de votre compte.</p>
-                <a class="btn-primary btn-sm" href="#/account" data-link data-i18n="account_tab_login">Connexion</a>
-              </div>
-              <div id="settings-account-loggedin" hidden>
-                <div class="settings-account-row">
-                  <label data-i18n="settings_account_plan">Plan actuel</label>
-                  <p class="form-hint" id="settings-account-plan-label"></p>
-                  <button class="btn-ghost btn-sm" id="settings-account-manage-plan-btn" onclick="openBillingPortal()" hidden data-i18n="settings_account_manage_plan">Gérer mon abonnement</button>
-                  <div class="account-feedback" id="account-plan-feedback" hidden></div>
-                </div>
-                <div class="settings-account-row">
-                  <label data-i18n="settings_account_email">Adresse e-mail</label>
-                  <p class="form-hint" id="settings-account-current-email"></p>
-                  <div class="form-row">
-                    <input class="input" id="account-new-email" placeholder="nouvelle@adresse.com" />
-                    <button class="btn-ghost btn-sm" onclick="updateAccountEmail()" data-i18n="settings_account_update_email">Mettre à jour</button>
-                  </div>
-                  <div class="account-feedback" id="account-email-feedback" hidden></div>
-                </div>
-                <div class="settings-account-row">
-                  <label data-i18n="settings_account_password">Nouveau mot de passe</label>
-                  <div class="form-row">
-                    <input class="input" type="password" id="account-new-password" placeholder="••••••••" autocomplete="new-password" />
-                    <input class="input" type="password" id="account-new-password-confirm" placeholder="Confirmer" autocomplete="new-password" />
-                    <button class="btn-ghost btn-sm" onclick="updateAccountPassword()" data-i18n="settings_account_update_password">Changer le mot de passe</button>
-                  </div>
-                  <div class="account-feedback" id="account-password-feedback" hidden></div>
-                </div>
-                <div class="settings-account-row">
-                  <label data-i18n="settings_account_mfa">Double authentification (MFA)</label>
-                  <p class="settings-desc" data-i18n="settings_account_mfa_desc">Ajoutez une couche de sécurité avec une application d'authentification (Google Authenticator, Authy...).</p>
-                  <div id="mfa-status"></div>
-                  <div id="mfa-enroll-flow" hidden>
-                    <img id="mfa-qr" alt="QR code MFA" style="background:#fff; padding:8px; border-radius:8px; width:160px; height:160px;" />
-                    <p class="form-hint" id="mfa-secret-hint"></p>
-                    <div class="form-row">
-                      <input class="input" id="mfa-verify-code" placeholder="Code à 6 chiffres" maxlength="6" inputmode="numeric" />
-                      <button class="btn-primary btn-sm" onclick="confirmMfaEnroll()" data-i18n="settings_account_mfa_confirm">Confirmer</button>
-                      <button class="btn-ghost btn-sm" onclick="cancelMfaEnroll()" data-i18n="settings_account_mfa_cancel">Annuler</button>
-                    </div>
-                  </div>
-                  <div class="account-feedback" id="account-mfa-feedback" hidden></div>
-                </div>
-                <div class="settings-account-row">
-                  <label data-i18n="settings_account_export">Exporter mes données</label>
-                  <p class="settings-desc" data-i18n="settings_account_export_desc">Téléchargez une copie complète de vos bankrolls et sessions (droit à la portabilité des données).</p>
-                  <div class="form-row">
-                    <button class="btn-ghost btn-sm" onclick="exportDataJson()" data-i18n="settings_account_export_json">Exporter en JSON</button>
-                    <button class="btn-ghost btn-sm" onclick="exportDataCsv()" data-i18n="settings_account_export_csv">Exporter les sessions en CSV</button>
-                  </div>
-                </div>
-                <div class="settings-account-row">
-                  <label data-i18n="settings_account_delete">Supprimer mon compte</label>
-                  <p class="settings-desc" data-i18n="settings_account_delete_desc">Supprime définitivement votre compte et toutes vos données (bankrolls, sessions, préférences). Action irréversible.</p>
-                  <button class="btn-ghost btn-sm" style="color:var(--critical); border-color:rgba(230,103,103,0.3);" onclick="confirmDeleteAccount()" data-i18n="settings_account_delete_button">Supprimer définitivement mon compte</button>
-                  <div class="account-feedback" id="account-delete-feedback" hidden></div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -1912,7 +1972,7 @@
       'sb_publishable_k9a3u7fv_qhv80Jgzz35cg_Uc9eNxno'
     );
   } catch (e) {
-    console.warn('Supabase indisponible, l\'app fonctionnera en mode local uniquement.', e);
+    console.warn('Supabase indisponible : la connexion et la synchronisation ne fonctionneront pas.', e);
   }
 </script>
 
@@ -2092,11 +2152,11 @@ function refreshLabelDicts(){
    ══════════════════════════════════════════════════════════════ */
 const I18N = {
   fr: {
-    nav_features:'Fonctionnalités', nav_product:'Le produit', nav_pricing:'Tarifs', nav_blog:'Blog', nav_open_app:"Ouvrir l'app",
+    nav_features:'Fonctionnalités', nav_product:'Le produit', nav_pricing:'Tarifs', nav_blog:'Blog', nav_open_app:"Se connecter",
     hero_badge:'Multi-devises · gestion du risque intégrée',
     hero_title_1:'Votre bankroll,', hero_title_2:'sous contrôle.',
     hero_sub:"Pokelo enregistre vos <strong>tournois</strong>, <strong>cash games</strong> et <strong>expressos</strong>, en <strong>live</strong> comme en <strong>online</strong>, dans la devise de votre choix — et transforme tout ça en graphiques clairs pour progresser sereinement.",
-    hero_cta_primary:'Commencer gratuitement', hero_cta_secondary:'Comment ça marche',
+    hero_cta_primary:'Créer un compte gratuit', hero_cta_secondary:'Comment ça marche',
     hero_stat_currency:'Devises acceptées', hero_stat_formats:'Formats de jeu', hero_stat_unified:'Suivi unifié', hero_stat_start:'Pour commencer',
     features_tag:'Fonctionnalités', features_title_1:'Tout ce qu\'il faut,', features_title_2:'rien de superflu',
     features_sub:"Pokelo se concentre sur l'essentiel du bankroll management : enregistrer vite, comprendre vite.",
@@ -2124,18 +2184,20 @@ const I18N = {
     price_free_name:'Gratuit', price_free_desc:'Pour suivre sa bankroll sans se poser de questions.',
     price_pro_name:'Pro', price_pro_desc:'Pour les joueurs réguliers qui gèrent plusieurs bankrolls.', price_pro_badge:'Le plus choisi',
     price_team_name:'Équipe', price_team_desc:'Pour les clubs, staffs de coaching et groupes de joueurs.',
-    price_cta_free:'Commencer gratuitement', price_cta_soon:'Bientôt disponible',
+    price_cta_free:'Créer un compte gratuit', price_cta_soon:'Bientôt disponible',
     price_note:'Aucune carte bancaire requise pour le plan Gratuit. Les formules Pro et Équipe sont en préparation.',
     trust_tag:'Retours', trust_title:'Pensé par et pour<br>des joueurs réguliers',
     blog_tag:'Blog', blog_title:'Apprendre à gérer<br>sa bankroll',
     blog_sub:'Des guides courts et concrets sur le bankroll management, écrits pour être appliqués dès la prochaine session.',
     blog_see_all:'Voir tous les articles',
     cta_tag:'Prêt ?', cta_title:'Commencez à suivre<br>votre bankroll aujourd\'hui',
-    cta_sub:'Gratuit pour commencer, sans carte bancaire.', cta_button:'Ouvrir Pokelo',
+    cta_sub:'Gratuit pour commencer, sans carte bancaire.', cta_button:'Créer un compte gratuit',
     footer_product:'Produit', footer_resources:'Ressources', footer_legal:'Légal', footer_rights:'Tous droits réservés.', footer_tagline:'Le poker responsable commence par une bonne gestion de bankroll.',
     blog_hero_tag:'Blog Pokelo', blog_hero_title:'Bankroll management<br>&amp; stratégie poker', blog_hero_sub:'Des tutos courts, sans blabla, pour mieux gérer votre argent de jeu.',
-    article_back:'Retour au blog', article_cta_text:'Mettez ces principes en pratique dès votre prochaine session.', article_cta_button:'Ouvrir Pokelo gratuitement',
+    article_back:'Retour au blog', article_cta_text:'Mettez ces principes en pratique dès votre prochaine session.', article_cta_button:'Créer un compte gratuit',
     app_back_site:'Retour au site',
+    public_profile_anonymous:'Joueur Pokelo', public_profile_member_since:'Membre depuis',
+    public_profile_not_found:'Ce profil est introuvable ou n\'est pas public.',
     nav_dashboard:'Dashboard', nav_sessions:'Sessions', nav_bankrolls:'Bankrolls', nav_stats:'Statistiques', nav_settings:'Paramètres',
     btn_new_session:'Nouvelle session', btn_new_bankroll:'Nouvelle bankroll', btn_customize:'Personnaliser', btn_save:'Enregistrer',
     fx_loading:'Calcul du taux de change…', fx_unavailable:'Taux de change indisponible pour cette devise — montant pris tel quel.',
@@ -2187,7 +2249,7 @@ const I18N = {
     locked_forecast_title:'Prévision de bankroll', locked_forecast_desc:'Projection basée sur le winrate historique (Monte Carlo)',
     locked_autoImport_title:'Import automatique', locked_autoImport_desc:'Parsing des historiques de mains (Winamax, PokerStars)',
     account_tab_login:'Connexion', account_tab_signup:'Créer un compte', account_tab_forgot:'Mot de passe oublié',
-    account_local_notice:'Créez un compte pour synchroniser vos bankrolls et sessions dans le cloud et y accéder depuis n\'importe quel appareil. Sans compte, Pokelo continue de fonctionner en local sur cet appareil.',
+    account_local_notice:'Un compte est nécessaire pour utiliser Pokelo et synchroniser vos bankrolls et sessions dans le cloud, accessibles depuis n\'importe quel appareil.',
     account_email:'Adresse e-mail', account_password:'Mot de passe', account_password_confirm:'Confirmer', account_name:'Nom',
     account_submit_login:'Se connecter', account_submit_signup:'Créer mon compte', account_submit_forgot:'Envoyer le lien de réinitialisation',
     account_pending_signup:'Compte créé ! Vérifiez votre boîte mail ({email}) et cliquez sur le lien de confirmation avant de vous connecter.',
@@ -2222,6 +2284,14 @@ const I18N = {
     settings_account_delete_error:'La suppression a échoué. Réessayez ou contactez le support.',
     settings_account_plan:'Plan actuel', settings_account_plan_free:'Gratuit', settings_account_plan_pro:'Pro', settings_account_plan_team:'Équipe',
     settings_account_manage_plan:'Gérer mon abonnement',
+    settings_account_profile:'Profil', settings_account_avatar_upload:'Changer la photo', settings_account_avatar_remove:'Retirer',
+    settings_account_save:'Enregistrer', settings_account_profile_saved:'Profil mis à jour.',
+    settings_account_public_toggle:'Rendre mon profil public', settings_account_copy_link:'Copier le lien',
+    settings_account_link_copied:'Lien copié dans le presse-papiers.', settings_account_plan_current:'Plan actuel',
+    plan_per_month:'mois',
+    plan_feat_1_bankroll:'1 bankroll', plan_feat_unlimited_sessions:'Sessions illimitées', plan_feat_basic_stats:'Statistiques de base',
+    plan_feat_unlimited_bankrolls:'Bankrolls illimitées', plan_feat_modular_dashboard:'Dashboard modulaire', plan_feat_advanced_stats:'Statistiques avancées',
+    plan_feat_all_pro:'Tout Pro, multi-joueurs', plan_feat_group_view:'Vue de groupe', plan_feat_roles:'Gestion des rôles',
     toast_sync_error:'La synchronisation a échoué. Vos changements seront réessayés automatiquement.',
     toast_cloud_pull_error:'Impossible de récupérer vos données depuis le cloud. Vérifiez votre connexion.',
     toast_account_deleted:'Votre compte a été supprimé définitivement.',
@@ -2255,11 +2325,11 @@ const I18N = {
     empty_no_sessions_bankroll:'Aucune session pour cette bankroll.', empty_no_sessions_filter:'Aucune session ne correspond à ces filtres.',
   },
   en: {
-    nav_features:'Features', nav_product:'Product', nav_pricing:'Pricing', nav_blog:'Blog', nav_open_app:'Open the app',
+    nav_features:'Features', nav_product:'Product', nav_pricing:'Pricing', nav_blog:'Blog', nav_open_app:'Log in',
     hero_badge:'Multi-currency · built-in risk management',
     hero_title_1:'Your bankroll,', hero_title_2:'under control.',
     hero_sub:"Pokelo logs your <strong>tournaments</strong>, <strong>cash games</strong> and <strong>Spin & Go's</strong>, both <strong>live</strong> and <strong>online</strong>, in the currency of your choice — and turns it all into clear charts so you can play with a level head.",
-    hero_cta_primary:'Get started for free', hero_cta_secondary:'How it works',
+    hero_cta_primary:'Create a free account', hero_cta_secondary:'How it works',
     hero_stat_currency:'Currencies supported', hero_stat_formats:'Game formats', hero_stat_unified:'Unified tracking', hero_stat_start:'To get started',
     features_tag:'Features', features_title_1:'Everything you need,', features_title_2:'nothing you don\'t',
     features_sub:'Pokelo focuses on what bankroll management is really about: log fast, understand fast.',
@@ -2287,18 +2357,20 @@ const I18N = {
     price_free_name:'Free', price_free_desc:'To track your bankroll without overthinking it.',
     price_pro_name:'Pro', price_pro_desc:'For regular players managing several bankrolls.', price_pro_badge:'Most popular',
     price_team_name:'Team', price_team_desc:'For clubs, coaching staffs and groups of players.',
-    price_cta_free:'Get started for free', price_cta_soon:'Coming soon',
+    price_cta_free:'Create a free account', price_cta_soon:'Coming soon',
     price_note:'No credit card required for the Free plan. Pro and Team are in the works.',
     trust_tag:'Feedback', trust_title:'Built by and for<br>regular players',
     blog_tag:'Blog', blog_title:'Learn to manage<br>your bankroll',
     blog_sub:'Short, practical guides on bankroll management, written to be applied from your very next session.',
     blog_see_all:'See all articles',
     cta_tag:'Ready?', cta_title:'Start tracking<br>your bankroll today',
-    cta_sub:'Free to start, no credit card required.', cta_button:'Open Pokelo',
+    cta_sub:'Free to start, no credit card required.', cta_button:'Create a free account',
     footer_product:'Product', footer_resources:'Resources', footer_legal:'Legal', footer_rights:'All rights reserved.', footer_tagline:'Responsible poker starts with solid bankroll management.',
     blog_hero_tag:'Pokelo Blog', blog_hero_title:'Bankroll management<br>&amp; poker strategy', blog_hero_sub:'Short, no-fluff tutorials to better manage your poker money.',
-    article_back:'Back to blog', article_cta_text:'Put these principles into practice starting your very next session.', article_cta_button:'Open Pokelo for free',
+    article_back:'Back to blog', article_cta_text:'Put these principles into practice starting your very next session.', article_cta_button:'Create a free account',
     app_back_site:'Back to site',
+    public_profile_anonymous:'Pokelo player', public_profile_member_since:'Member since',
+    public_profile_not_found:'This profile could not be found or is not public.',
     nav_dashboard:'Dashboard', nav_sessions:'Sessions', nav_bankrolls:'Bankrolls', nav_stats:'Statistics', nav_settings:'Settings',
     btn_new_session:'New session', btn_new_bankroll:'New bankroll', btn_customize:'Customize', btn_save:'Save',
     fx_loading:'Fetching exchange rate…', fx_unavailable:'Exchange rate unavailable for this currency — amount used as-is.',
@@ -2350,7 +2422,7 @@ const I18N = {
     locked_forecast_title:'Bankroll forecast', locked_forecast_desc:'Projection based on historical winrate (Monte Carlo)',
     locked_autoImport_title:'Automatic import', locked_autoImport_desc:'Hand history parsing (Winamax, PokerStars)',
     account_tab_login:'Log in', account_tab_signup:'Create account', account_tab_forgot:'Forgot password',
-    account_local_notice:'Create an account to sync your bankrolls and sessions to the cloud and access them from any device. Without an account, Pokelo keeps working locally on this device.',
+    account_local_notice:'An account is required to use Pokelo and sync your bankrolls and sessions to the cloud, accessible from any device.',
     account_email:'Email address', account_password:'Password', account_password_confirm:'Confirm', account_name:'Name',
     account_submit_login:'Log in', account_submit_signup:'Create my account', account_submit_forgot:'Send reset link',
     account_pending_signup:'Account created! Check your inbox ({email}) and click the confirmation link before logging in.',
@@ -2385,6 +2457,14 @@ const I18N = {
     settings_account_delete_error:'Deletion failed. Please try again or contact support.',
     settings_account_plan:'Current plan', settings_account_plan_free:'Free', settings_account_plan_pro:'Pro', settings_account_plan_team:'Team',
     settings_account_manage_plan:'Manage my subscription',
+    settings_account_profile:'Profile', settings_account_avatar_upload:'Change photo', settings_account_avatar_remove:'Remove',
+    settings_account_save:'Save', settings_account_profile_saved:'Profile updated.',
+    settings_account_public_toggle:'Make my profile public', settings_account_copy_link:'Copy link',
+    settings_account_link_copied:'Link copied to clipboard.', settings_account_plan_current:'Current plan',
+    plan_per_month:'month',
+    plan_feat_1_bankroll:'1 bankroll', plan_feat_unlimited_sessions:'Unlimited sessions', plan_feat_basic_stats:'Basic statistics',
+    plan_feat_unlimited_bankrolls:'Unlimited bankrolls', plan_feat_modular_dashboard:'Modular dashboard', plan_feat_advanced_stats:'Advanced statistics',
+    plan_feat_all_pro:'Everything in Pro, multi-player', plan_feat_group_view:'Group view', plan_feat_roles:'Role management',
     toast_sync_error:'Sync failed. Your changes will be retried automatically.',
     toast_cloud_pull_error:'Could not fetch your data from the cloud. Check your connection.',
     toast_account_deleted:'Your account has been permanently deleted.',
@@ -2666,8 +2746,11 @@ const ARTICLES = [
 const STORAGE_KEY = 'pokelo_state_v1';
 let state = null;
 
+function defaultProfile(){
+  return { displayName: '', avatarUrl: '', isPublic: false };
+}
 function defaultState(){
-  return { bankrolls: [], sessions: [], isDemo: false, demoDismissed: false, dashboardLayout: DEFAULT_LAYOUT.slice(), settings: defaultSettings() };
+  return { bankrolls: [], sessions: [], isDemo: false, demoDismissed: false, dashboardLayout: DEFAULT_LAYOUT.slice(), settings: defaultSettings(), profile: defaultProfile() };
 }
 
 /* ── Data adapter — seam prête pour Supabase ──
@@ -2685,6 +2768,7 @@ const LocalStorageAdapter = {
 const DB = LocalStorageAdapter;
 
 let stateLoadedFromCache = false;
+let authCheckComplete = false;
 function loadState(){
   const cached = DB.load();
   if (cached) { stateLoadedFromCache = true; return cached; }
@@ -2722,7 +2806,7 @@ function seedDemoState(){
       notes: '', createdAt: Date.now()
     });
   }
-  return { bankrolls: [bkOnline, bkLive], sessions, isDemo: true, demoDismissed: false, dashboardLayout: DEFAULT_LAYOUT.slice(), settings: defaultSettings() };
+  return { bankrolls: [bkOnline, bkLive], sessions, isDemo: true, demoDismissed: false, dashboardLayout: DEFAULT_LAYOUT.slice(), settings: defaultSettings(), profile: defaultProfile() };
 }
 
 function resetToEmpty(){
@@ -2760,7 +2844,7 @@ function bankrollColor(bk){
 /* ══════════════════════════════════════════════════════════════
    POKELO — router
    ══════════════════════════════════════════════════════════════ */
-const VIEWS = ['view-landing','view-blog','view-article','view-app','view-account','view-legal','view-privacy'];
+const VIEWS = ['view-landing','view-blog','view-article','view-app','view-account','view-legal','view-privacy','view-public-profile'];
 let currentBankrollScope = null; // for dashboard/stats bankroll selector
 
 function showView(id){
@@ -2778,12 +2862,27 @@ function router(){
     showView('view-blog');
     renderBlogGrid('blog-list-grid', null);
   } else if (hash.startsWith('#/app')) {
-    showView('view-app');
-    appRouter(hash);
+    if (!authCheckComplete) {
+      showView('view-app');
+      showAppLoadingSkeleton();
+    } else if (!currentUser) {
+      location.hash = '#/account';
+      return;
+    } else {
+      showView('view-app');
+      appRouter(hash);
+    }
   } else if (hash.startsWith('#/account')) {
+    if (authCheckComplete && currentUser) {
+      location.hash = '#/app';
+      return;
+    }
     showView('view-account');
     const tab = hash.replace(/^#\/account\/?/, '') || 'login';
     setAccountTab(['login','signup','forgot'].includes(tab) ? tab : 'login');
+  } else if (hash.startsWith('#/u/')) {
+    showView('view-public-profile');
+    renderPublicProfile(decodeURIComponent(hash.slice('#/u/'.length)));
   } else if (hash.startsWith('#/legal')) {
     showView('view-legal');
   } else if (hash.startsWith('#/privacy')) {
@@ -4028,10 +4127,12 @@ async function syncPushToCloudRun(){
     const localSessIds = new Set(state.sessions.map(s => s.id));
     const staleSess = (remoteSess || []).filter(r => !localSessIds.has(r.id)).map(r => r.id);
     if (staleSess.length) await supabase.from('sessions').delete().in('id', staleSess);
+    const profile = state.profile || defaultProfile();
     await supabase.from('profiles').upsert({
       id: userId, email: currentUser.email, lang: state.settings.lang, theme: state.settings.theme,
       date_format: state.settings.dateFormat, colors: state.settings.colors,
       dashboard_layout: state.dashboardLayout,
+      display_name: profile.displayName || null, avatar_url: profile.avatarUrl || null, is_public: !!profile.isPublic,
     });
   } catch (e) {
     console.warn('Synchronisation Supabase échouée :', e);
@@ -4056,6 +4157,7 @@ function hideAppLoadingSkeleton(){
 }
 async function onAuthSignedIn(session){
   currentUser = session.user;
+  authCheckComplete = true;
   updateAccountUI();
   showAppLoadingSkeleton();
   try {
@@ -4076,6 +4178,11 @@ async function onAuthSignedIn(session){
         state.dashboardLayout = Array.isArray(cloud.profile.dashboard_layout) && cloud.profile.dashboard_layout.length
           ? cloud.profile.dashboard_layout : DEFAULT_LAYOUT.slice();
         currentPlan = cloud.profile.plan || 'free';
+        state.profile = {
+          displayName: cloud.profile.display_name || '',
+          avatarUrl: cloud.profile.avatar_url || '',
+          isPublic: !!cloud.profile.is_public,
+        };
       }
       state.isDemo = false;
       DB.save(state);
@@ -4113,31 +4220,33 @@ function updateAccountUI(){
     loginLink.hidden = true;
     const emailEl = document.getElementById('account-status-email');
     if (emailEl) emailEl.textContent = currentUser.email;
+    updateSidebarAvatar();
   } else {
     statusEl.hidden = true;
     loginLink.hidden = false;
   }
 }
 function initSupabaseAuth(){
-  if (!window.supabase) return;
+  if (!window.supabase) { authCheckComplete = true; router(); return; }
   if (stateLoadedFromCache) showAppLoadingSkeleton();
   supabase.auth.getSession().then(({ data }) => {
     if (data.session) {
       onAuthSignedIn(data.session);
     } else {
+      authCheckComplete = true;
       if (stateLoadedFromCache) {
         localStorage.removeItem(STORAGE_KEY);
         state = seedDemoState();
         applySettingsToDOM();
         populateBankrollSelects();
-        router();
       }
       hideAppLoadingSkeleton();
+      router();
     }
   });
   supabase.auth.onAuthStateChange((event, session) => {
     if (event === 'SIGNED_IN' && session && (!currentUser || currentUser.id !== session.user.id)) onAuthSignedIn(session);
-    if (event === 'SIGNED_OUT') { currentUser = null; updateAccountUI(); }
+    if (event === 'SIGNED_OUT') { currentUser = null; authCheckComplete = true; updateAccountUI(); router(); }
   });
 }
 
@@ -4177,7 +4286,134 @@ function renderAccountSettings(){
   if (planLabelEl) planLabelEl.textContent = planLabels[currentPlan] || planLabels.free;
   const manageBtn = document.getElementById('settings-account-manage-plan-btn');
   if (manageBtn) manageBtn.hidden = !isPremium();
+  renderPlanCompare();
+  renderProfileSettings();
   refreshMfaStatus();
+}
+
+function renderProfileSettings(){
+  if (!state.profile) state.profile = defaultProfile();
+  const p = state.profile;
+  const preview = document.getElementById('profile-avatar-preview');
+  if (preview) {
+    if (p.avatarUrl) {
+      preview.innerHTML = `<img src="${p.avatarUrl}" alt="" />`;
+    } else {
+      const initial = (p.displayName || currentUser.email || '?').trim().charAt(0).toUpperCase();
+      preview.innerHTML = `<span id="profile-avatar-fallback">${escapeHtml(initial)}</span>`;
+    }
+  }
+  const nameInput = document.getElementById('profile-display-name');
+  if (nameInput && document.activeElement !== nameInput) nameInput.value = p.displayName || '';
+  const toggle = document.getElementById('profile-public-toggle');
+  if (toggle) toggle.checked = !!p.isPublic;
+  const linkRow = document.getElementById('profile-share-link-row');
+  if (linkRow) linkRow.hidden = !p.isPublic;
+  const linkInput = document.getElementById('profile-share-link');
+  if (linkInput) linkInput.value = `${location.origin}${location.pathname}#/u/${currentUser.id}`;
+  updateSidebarAvatar();
+}
+
+function updateSidebarAvatar(){
+  const el = document.getElementById('account-status-avatar');
+  if (!el || !state.profile) return;
+  if (state.profile.avatarUrl) el.innerHTML = `<img src="${state.profile.avatarUrl}" alt="" />`;
+  else el.innerHTML = '';
+}
+
+function onAvatarFileSelected(event){
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  const feedback = document.getElementById('account-profile-feedback');
+  const img = new Image();
+  const reader = new FileReader();
+  reader.onload = () => {
+    img.onload = async () => {
+      const size = 200;
+      const canvas = document.createElement('canvas');
+      canvas.width = size; canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      const side = Math.min(img.width, img.height);
+      const sx = (img.width - side) / 2, sy = (img.height - side) / 2;
+      ctx.drawImage(img, sx, sy, side, side, 0, 0, size, size);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+      state.profile.avatarUrl = dataUrl;
+      saveState();
+      renderProfileSettings();
+      feedback.hidden = false; feedback.className = 'account-feedback'; feedback.textContent = t('settings_account_profile_saved');
+    };
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(file);
+  event.target.value = '';
+}
+function removeAvatar(){
+  if (!state.profile) state.profile = defaultProfile();
+  state.profile.avatarUrl = '';
+  saveState();
+  renderProfileSettings();
+}
+function saveDisplayName(){
+  if (!state.profile) state.profile = defaultProfile();
+  state.profile.displayName = document.getElementById('profile-display-name').value.trim().slice(0, 40);
+  saveState();
+  renderProfileSettings();
+  const feedback = document.getElementById('account-profile-feedback');
+  feedback.hidden = false; feedback.className = 'account-feedback'; feedback.textContent = t('settings_account_profile_saved');
+}
+function toggleProfilePublic(checked){
+  if (!state.profile) state.profile = defaultProfile();
+  state.profile.isPublic = checked;
+  saveState();
+  renderProfileSettings();
+}
+function copyProfileLink(){
+  const input = document.getElementById('profile-share-link');
+  input.select();
+  navigator.clipboard?.writeText(input.value).then(() => showToast(t('settings_account_link_copied'), 'success')).catch(() => {});
+}
+
+async function renderPublicProfile(userId){
+  const card = document.getElementById('public-profile-card');
+  card.innerHTML = `<p style="color:var(--grey)">${t('account_loading')}</p>`;
+  try {
+    const res = await fetch(`/api/public-profile?id=${encodeURIComponent(userId)}`);
+    if (!res.ok) throw new Error('not-found');
+    const data = await res.json();
+    const initial = (data.displayName || 'P').trim().charAt(0).toUpperCase();
+    const joined = data.createdAt ? new Date(data.createdAt).toLocaleDateString(state.settings.lang === 'en' ? 'en-US' : 'fr-FR', { month: 'long', year: 'numeric' }) : '';
+    card.innerHTML = `
+      <div class="profile-avatar" style="width:88px;height:88px;font-size:2rem;margin:0 auto 1.2rem;">
+        ${data.avatarUrl ? `<img src="${data.avatarUrl}" alt="" />` : `<span>${escapeHtml(initial)}</span>`}
+      </div>
+      <h1 class="article-title" style="text-align:center;font-size:1.4rem;">${escapeHtml(data.displayName || t('public_profile_anonymous'))}</h1>
+      ${joined ? `<p style="text-align:center;color:var(--grey);font-size:.85rem;margin-top:.3rem;">${t('public_profile_member_since')} ${joined}</p>` : ''}
+      <a href="#/" data-link class="btn-secondary" style="justify-content:center;margin-top:1.6rem;">${t('app_back_site')}</a>
+    `;
+  } catch (e) {
+    card.innerHTML = `
+      <p style="color:var(--grey)">${t('public_profile_not_found')}</p>
+      <a href="#/" data-link class="btn-secondary" style="justify-content:center;margin-top:1.2rem;">${t('app_back_site')}</a>
+    `;
+  }
+}
+
+const PLAN_TIERS = [
+  { id: 'free', nameKey: 'price_free_name', price: '0€', features: ['plan_feat_1_bankroll','plan_feat_unlimited_sessions','plan_feat_basic_stats'] },
+  { id: 'pro', nameKey: 'price_pro_name', price: '6€', features: ['plan_feat_unlimited_bankrolls','plan_feat_modular_dashboard','plan_feat_advanced_stats'] },
+  { id: 'team', nameKey: 'price_team_name', price: '14€', features: ['plan_feat_all_pro','plan_feat_group_view','plan_feat_roles'] },
+];
+function renderPlanCompare(){
+  const el = document.getElementById('plan-compare-grid');
+  if (!el) return;
+  el.innerHTML = PLAN_TIERS.map(tier => `
+    <div class="plan-compare-card ${tier.id === currentPlan ? 'current' : ''}">
+      <h4>${t(tier.nameKey)}</h4>
+      <div class="pc-price">${tier.price} / ${t('plan_per_month')}</div>
+      <ul>${tier.features.map(f => `<li>${t(f)}</li>`).join('')}</ul>
+      ${tier.id === currentPlan ? `<span class="module-chip-soon">${t('settings_account_plan_current')}</span>` : (tier.id === 'free' ? '' : `<button class="btn-ghost btn-sm" disabled>${t('price_cta_soon')}</button>`)}
+    </div>
+  `).join('');
 }
 
 async function openBillingPortal(){
