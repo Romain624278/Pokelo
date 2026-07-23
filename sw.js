@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pokelo-v1';
+const CACHE_NAME = 'pokelo-v2';
 const SHELL_ASSETS = [
   './',
   './index.html',
@@ -23,12 +23,31 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Cache-first pour l'app shell et les assets statiques ; réseau direct (sans cache)
-// pour les appels d'API externes (taux de change) qui doivent toujours être frais.
+// Réseau d'abord pour les pages HTML (app shell) : index.html change souvent
+// (mises à jour fréquentes), donc on va toujours chercher la dernière version en
+// premier et on ne retombe sur le cache qu'hors-ligne. Cache-first pour le reste
+// (polices, Chart.js, icônes) qui change rarement. Réseau direct sans cache pour
+// les appels d'API externes (taux de change) qui doivent toujours être frais.
 self.addEventListener('fetch', (event) => {
   const url = event.request.url;
   if (event.request.method !== 'GET') return;
   if (url.includes('api.frankfurter.app')) return; // toujours réseau, jamais de cache
+
+  const isAppShell = event.request.mode === 'navigate' || url.endsWith('/index.html') || url.endsWith('/');
+  if (isAppShell) {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          if (response && response.ok) {
+            const copy = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+          }
+          return response;
+        })
+        .catch(() => caches.match(event.request).then((cached) => cached || caches.match('./index.html')))
+    );
+    return;
+  }
 
   event.respondWith(
     caches.match(event.request).then((cached) => {
