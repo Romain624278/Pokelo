@@ -3,8 +3,44 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Pokelo — Le suivi de bankroll poker, enfin simple</title>
-<meta name="description" content="Pokelo est l'outil minimaliste pour suivre vos bankrolls poker : tournois, cash game, expressos, live et online, multi-devises, avec des graphiques clairs." />
+<title>Pokelo — Suivi de bankroll poker, simple et gratuit</title>
+<meta name="description" content="Pokelo est l'outil de suivi de bankroll poker, gratuit et minimaliste : tournois, cash game, expressos, live et online, multi-devises, graphiques clairs et analyses de risque." />
+<meta name="keywords" content="pokelo, bankroll poker, suivi bankroll, gestion de bankroll, bankroll management, poker tracker, suivi tournoi poker, cash game, expresso poker, ROI poker, winrate poker" />
+<meta name="robots" content="index, follow" />
+<meta name="author" content="Pokelo" />
+<link rel="canonical" href="https://pokelo.fr/" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Pokelo" />
+<meta property="og:locale" content="fr_FR" />
+<meta property="og:url" content="https://pokelo.fr/" />
+<meta property="og:title" content="Pokelo — Le suivi de bankroll poker, enfin simple" />
+<meta property="og:description" content="Suivez vos bankrolls poker (tournois, cash game, expressos, live/online) avec des graphiques clairs, le multi-devises et des analyses de risque. Gratuit pour commencer." />
+<meta property="og:image" content="https://pokelo.fr/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Pokelo — Le suivi de bankroll poker, enfin simple" />
+<meta name="twitter:description" content="Suivez vos bankrolls poker (tournois, cash game, expressos, live/online) avec des graphiques clairs, le multi-devises et des analyses de risque." />
+<meta name="twitter:image" content="https://pokelo.fr/og-image.png" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Pokelo",
+  "url": "https://pokelo.fr/",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Web, iOS, Android",
+  "description": "Pokelo est l'outil de suivi de bankroll poker, gratuit et minimaliste : tournois, cash game, expressos, live et online, multi-devises, graphiques clairs et analyses de risque.",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+  "publisher": { "@type": "Organization", "name": "Pokelo", "url": "https://pokelo.fr/" }
+}
+</script>
+
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='11' fill='%230a0a0a'/%3E%3Crect x='4' y='32' width='7' height='10' rx='2' fill='%2308BF2F' opacity='.5'/%3E%3Crect x='15' y='25' width='7' height='17' rx='2' fill='%2308BF2F' opacity='.75'/%3E%3Crect x='26' y='18' width='7' height='24' rx='2' fill='%2308BF2F'/%3E%3Cpath d='M29.5 4C23 10 20 14 20 17.5C20 20 22.2 22 25 22C26.8 22 28.4 21.2 29.5 19.8C30.6 21.2 32.2 22 34 22C36.8 22 39 20 39 17.5C39 14 36 10 29.5 4Z' fill='%2308BF2F'/%3E%3C/svg%3E" />
 <link rel="manifest" href="manifest.json" />
 <meta name="theme-color" content="#08BF2F" />
@@ -70,6 +106,9 @@
     font-family: 'Inter', sans-serif;
     font-size: 16px;
     line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
   }
   a { color: inherit; }
   button { font-family: inherit; }
@@ -192,8 +231,9 @@
 
   /* ── FEATURES (bento, immersive) ── */
   #features { background: var(--black-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
-  .feat-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 168px; gap: 1.1rem; margin-top: 3.5rem; max-width: 1180px; }
+  .feat-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: minmax(168px, auto); gap: 1.1rem; margin-top: 3.5rem; max-width: 1180px; }
   .feat-card { padding: 1.7rem; background: var(--black); border: 1px solid var(--border); border-radius: var(--radius); transition: border-color .25s, transform .25s, box-shadow .25s; position: relative; overflow: hidden; }
+  .feat-card:not(.big) { display: flex; flex-direction: column; justify-content: center; }
   .feat-card:hover { border-color: rgba(8,191,47,0.5); transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.35); }
   .feat-card.big { grid-column: span 2; grid-row: span 2; display: flex; flex-direction: column; }
   .feat-card.wide { grid-column: span 2; }
@@ -204,9 +244,10 @@
   .feat-card h3 { font-size: 1.02rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; position: relative; z-index: 1; }
   .feat-card p { font-size: 0.86rem; color: var(--grey); line-height: 1.55; position: relative; z-index: 1; }
   .feat-card.big h3 { font-size: 1.2rem; }
-  .feat-big-chart { margin-top: auto; height: 92px; position: relative; z-index: 1; }
+  .feat-big-chart { margin-top: auto; flex: 1; min-height: 92px; position: relative; z-index: 1; }
   .feat-live-dot { display:inline-flex; align-items:center; gap:6px; font-size:0.68rem; color: var(--green); text-transform:uppercase; letter-spacing:.08em; font-weight:700; margin-bottom: .6rem; }
   .feat-live-dot::before { content:''; width:6px; height:6px; border-radius:50%; background: var(--green); animation: pulseDot 1.6s ease-in-out infinite; }
+  .feat-soon-badge { display: inline-block; align-self: flex-start; font-size: .64rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--grey); background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: .25rem .55rem; border-radius: 100px; margin-bottom: .7rem; }
   @keyframes pulseDot { 0%,100% { box-shadow: 0 0 0 0 rgba(8,191,47,0.5);} 50% { box-shadow: 0 0 0 5px rgba(8,191,47,0);} }
   .feat-mini-stat { display:flex; align-items:baseline; gap:8px; margin-top:.3rem; position:relative; z-index:1; }
   .feat-mini-stat b { font-family:'Bebas Neue',sans-serif; font-size:1.6rem; color: var(--text-wall); }
@@ -358,7 +399,7 @@
   .cta-inner { max-width: 680px; margin: 0 auto; }
 
   /* ── FOOTER ── */
-  footer.site-footer { padding: 2.5rem 6vw; border-top: 1px solid var(--border); background: var(--black); }
+  footer.site-footer { padding: 2.5rem 6vw; border-top: 1px solid var(--border); background: var(--black); margin-top: auto; order: 999; }
   .footer-top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; max-width: 1140px; margin: 0 auto 2rem; }
   .footer-brand { display: flex; align-items: center; gap: 10px; }
   .footer-brand span { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.1em; color: var(--grey); }
@@ -384,7 +425,11 @@
   .app-sidebar-bottom a { font-size: 0.8rem; color: var(--grey); text-decoration: none; display: flex; align-items: center; gap: 8px; cursor: pointer; }
   .app-sidebar-bottom a:hover { color: var(--green); }
 
-  .app-main { flex: 1; min-width: 0; margin-left: 240px; min-height: 100vh; display: flex; flex-direction: column; }
+  .app-main { flex: 1; min-width: 0; margin-left: 240px; min-height: 100vh; display: flex; flex-direction: column; position: relative; }
+  .app-loading-overlay { position: absolute; inset: 0; z-index: 50; background: var(--black); padding: 2rem 2.4rem; display: flex; flex-direction: column; gap: 1.2rem; }
+  .app-loading-overlay .sk-row { display: flex; gap: 1rem; }
+  .skeleton-block { border-radius: 12px; background: linear-gradient(90deg, var(--black-card) 25%, rgba(255,255,255,0.05) 37%, var(--black-card) 63%); background-size: 400% 100%; animation: skeleton-shimmer 1.4s ease infinite; }
+  @keyframes skeleton-shimmer { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
   /* Flex/grid items default to min-width:auto which refuses to shrink below content
      (wide tables, long text). Force them shrinkable so overflow-x:auto on .table-wrap
      can do its job instead of pushing the whole layout wider than the viewport. */
@@ -631,6 +676,13 @@
   .color-item input[type="color"]::-webkit-color-swatch { border: none; border-radius: 4px; }
   .settings-card .segmented button { display: inline-flex; align-items: center; gap: 6px; }
   @media (max-width: 700px) { .settings-grid { grid-template-columns: 1fr; } }
+  .settings-account-row { margin-bottom: 1.4rem; padding-bottom: 1.4rem; border-bottom: 1px solid var(--border); }
+  .settings-account-row:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+  .settings-account-row > label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text); margin-bottom: 0.4rem; }
+  .settings-account-row .form-row { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+  .settings-account-row .form-row .input { flex: 1; min-width: 180px; }
+  #mfa-status { font-size: 0.85rem; color: var(--text); margin-bottom: 0.6rem; }
+  #mfa-enroll-flow { display: flex; flex-direction: column; gap: 0.6rem; align-items: flex-start; margin-top: 0.8rem; }
 
   /* ── Account / auth (stub) ── */
   .account-card { width: 100%; max-width: 420px; background: var(--black-card); border: 1px solid var(--border); border-radius: 14px; padding: 2rem 1.8rem; text-align: center; }
@@ -643,6 +695,19 @@
   .account-panel.active { display: block; }
   .account-feedback { margin-top: 1rem; font-size: 0.82rem; color: var(--green); background: rgba(8,191,47,0.08); border: 1px solid var(--border); border-radius: 8px; padding: 0.7rem 0.9rem; line-height: 1.5; }
   .account-feedback.error { color: var(--critical); background: rgba(230,103,103,0.08); border-color: rgba(230,103,103,0.3); }
+
+  .toast-container { position: fixed; bottom: 1.4rem; right: 1.4rem; z-index: 500; display: flex; flex-direction: column; gap: 0.6rem; max-width: min(360px, calc(100vw - 2.8rem)); }
+  .toast { display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.8rem 0.9rem; border-radius: 10px; background: var(--black-card); border: 1px solid var(--border); box-shadow: 0 12px 30px rgba(0,0,0,0.35); font-size: 0.85rem; color: var(--text); line-height: 1.45; opacity: 0; transform: translateY(8px); animation: toast-in 0.25s ease forwards; cursor: pointer; }
+  .toast.leaving { animation: toast-out 0.2s ease forwards; }
+  .toast.success { border-color: rgba(8,191,47,0.35); }
+  .toast.error { border-color: rgba(230,103,103,0.35); }
+  .toast .toast-icon { flex-shrink: 0; width: 18px; height: 18px; margin-top: 1px; }
+  .toast.success .toast-icon { color: var(--good); }
+  .toast.error .toast-icon { color: var(--critical); }
+  .toast.info .toast-icon { color: var(--blue); }
+  @keyframes toast-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes toast-out { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(8px); } }
+  @media (max-width: 640px) { .toast-container { left: 1rem; right: 1rem; max-width: none; } }
   .account-status { padding: 0.7rem 0.8rem; margin-bottom: .8rem; background: rgba(8,191,47,0.06); border: 1px solid var(--border); border-radius: 8px; }
   .account-status-email { font-size: 0.76rem; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: .35rem; }
   .account-status-logout { font-size: 0.76rem; color: var(--grey); cursor: pointer; display: inline-block; }
@@ -659,7 +724,7 @@
     nav.site-nav .nav-links { display: none; }
     .nav-burger { display: flex; }
     section { padding: 70px 5vw; }
-    .feat-grid { grid-template-columns: 1fr 1fr; grid-auto-rows: 190px; }
+    .feat-grid { grid-template-columns: 1fr 1fr; grid-auto-rows: minmax(190px, auto); }
     .feat-card.big { grid-column: span 2; grid-row: span 1; }
     .trust-grid { grid-template-columns: 1fr 1fr; }
     .blog-grid { grid-template-columns: 1fr 1fr; }
@@ -829,10 +894,11 @@
       </div>
       <div class="feat-card">
         <div class="feat-icon">
-          <svg class="icon" viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4Z"/></svg>
+          <svg class="icon" viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg>
         </div>
-        <h3 data-i18n="feat_privacy_title">100% local &amp; privé</h3>
-        <p data-i18n="feat_privacy_desc">Vos données restent dans votre navigateur, sur votre appareil. Aucun compte, aucun serveur, aucune fuite.</p>
+        <span class="feat-soon-badge" data-i18n="coming_soon">Bientôt disponible</span>
+        <h3 data-i18n="feat_mobile_title">Application mobile iOS &amp; Android</h3>
+        <p data-i18n="feat_mobile_desc">Une app native est en préparation pour logger vos sessions encore plus vite. En attendant, installez Pokelo depuis votre navigateur pour un accès en un tap, comme une vraie app.</p>
       </div>
     </div>
   </section>
@@ -937,7 +1003,7 @@
           <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Sessions illimitées</li>
           <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Tournois, cash game, expressos</li>
           <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Graphiques &amp; statistiques de base</li>
-          <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Données 100% locales</li>
+          <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Application installable (PWA)</li>
         </ul>
         <a href="#/app" data-link class="btn-secondary" style="justify-content:center" data-i18n="price_cta_free">Commencer gratuitement</a>
       </div>
@@ -1024,7 +1090,7 @@
     <div class="cta-inner fade-up">
       <div class="section-tag" data-i18n="cta_tag">Prêt ?</div>
       <h2 class="section-title" data-i18n="cta_title">Commencez à suivre<br>votre bankroll aujourd'hui</h2>
-      <p class="section-sub center" data-i18n="cta_sub">Gratuit, sans compte, sans carte bancaire. Vos données restent chez vous.</p>
+      <p class="section-sub center" data-i18n="cta_sub">Gratuit pour commencer, sans carte bancaire.</p>
       <div class="hero-actions" style="margin-top:2rem">
         <a href="#/app" data-link class="btn-primary" data-i18n="cta_button">Ouvrir Pokelo</a>
       </div>
@@ -1334,6 +1400,19 @@
     </aside>
 
     <div class="app-main">
+      <div class="app-loading-overlay" id="app-loading-overlay" hidden>
+        <div class="sk-row">
+          <div class="skeleton-block" style="height:88px;flex:1;"></div>
+          <div class="skeleton-block" style="height:88px;flex:1;"></div>
+          <div class="skeleton-block" style="height:88px;flex:1;"></div>
+          <div class="skeleton-block" style="height:88px;flex:1;"></div>
+        </div>
+        <div class="skeleton-block" style="height:280px;"></div>
+        <div class="sk-row">
+          <div class="skeleton-block" style="height:180px;flex:1;"></div>
+          <div class="skeleton-block" style="height:180px;flex:1;"></div>
+        </div>
+      </div>
       <button class="quick-log-fab" onclick="openQuickLogModal()" aria-label="Log rapide" title="Log rapide">
         <svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
       </button>
@@ -1478,6 +1557,68 @@
               <button class="btn-primary btn-sm install-app-btn" onclick="triggerInstallPrompt()" hidden data-i18n="install_app">Installer l'app</button>
               <p class="form-hint" data-i18n="install_ios_hint">Sur iPhone/iPad : bouton Partager de Safari → « Sur l'écran d'accueil ».</p>
             </div>
+            <div class="settings-card" style="grid-column: 1 / -1;">
+              <h3 data-i18n="settings_account_title">Compte</h3>
+              <div id="settings-account-loggedout">
+                <p class="settings-desc" data-i18n="settings_account_loggedout_desc">Connectez-vous pour synchroniser vos données dans le cloud et gérer la sécurité de votre compte.</p>
+                <a class="btn-primary btn-sm" href="#/account" data-link data-i18n="account_tab_login">Connexion</a>
+              </div>
+              <div id="settings-account-loggedin" hidden>
+                <div class="settings-account-row">
+                  <label data-i18n="settings_account_plan">Plan actuel</label>
+                  <p class="form-hint" id="settings-account-plan-label"></p>
+                  <button class="btn-ghost btn-sm" id="settings-account-manage-plan-btn" onclick="openBillingPortal()" hidden data-i18n="settings_account_manage_plan">Gérer mon abonnement</button>
+                  <div class="account-feedback" id="account-plan-feedback" hidden></div>
+                </div>
+                <div class="settings-account-row">
+                  <label data-i18n="settings_account_email">Adresse e-mail</label>
+                  <p class="form-hint" id="settings-account-current-email"></p>
+                  <div class="form-row">
+                    <input class="input" id="account-new-email" placeholder="nouvelle@adresse.com" />
+                    <button class="btn-ghost btn-sm" onclick="updateAccountEmail()" data-i18n="settings_account_update_email">Mettre à jour</button>
+                  </div>
+                  <div class="account-feedback" id="account-email-feedback" hidden></div>
+                </div>
+                <div class="settings-account-row">
+                  <label data-i18n="settings_account_password">Nouveau mot de passe</label>
+                  <div class="form-row">
+                    <input class="input" type="password" id="account-new-password" placeholder="••••••••" autocomplete="new-password" />
+                    <input class="input" type="password" id="account-new-password-confirm" placeholder="Confirmer" autocomplete="new-password" />
+                    <button class="btn-ghost btn-sm" onclick="updateAccountPassword()" data-i18n="settings_account_update_password">Changer le mot de passe</button>
+                  </div>
+                  <div class="account-feedback" id="account-password-feedback" hidden></div>
+                </div>
+                <div class="settings-account-row">
+                  <label data-i18n="settings_account_mfa">Double authentification (MFA)</label>
+                  <p class="settings-desc" data-i18n="settings_account_mfa_desc">Ajoutez une couche de sécurité avec une application d'authentification (Google Authenticator, Authy...).</p>
+                  <div id="mfa-status"></div>
+                  <div id="mfa-enroll-flow" hidden>
+                    <img id="mfa-qr" alt="QR code MFA" style="background:#fff; padding:8px; border-radius:8px; width:160px; height:160px;" />
+                    <p class="form-hint" id="mfa-secret-hint"></p>
+                    <div class="form-row">
+                      <input class="input" id="mfa-verify-code" placeholder="Code à 6 chiffres" maxlength="6" inputmode="numeric" />
+                      <button class="btn-primary btn-sm" onclick="confirmMfaEnroll()" data-i18n="settings_account_mfa_confirm">Confirmer</button>
+                      <button class="btn-ghost btn-sm" onclick="cancelMfaEnroll()" data-i18n="settings_account_mfa_cancel">Annuler</button>
+                    </div>
+                  </div>
+                  <div class="account-feedback" id="account-mfa-feedback" hidden></div>
+                </div>
+                <div class="settings-account-row">
+                  <label data-i18n="settings_account_export">Exporter mes données</label>
+                  <p class="settings-desc" data-i18n="settings_account_export_desc">Téléchargez une copie complète de vos bankrolls et sessions (droit à la portabilité des données).</p>
+                  <div class="form-row">
+                    <button class="btn-ghost btn-sm" onclick="exportDataJson()" data-i18n="settings_account_export_json">Exporter en JSON</button>
+                    <button class="btn-ghost btn-sm" onclick="exportDataCsv()" data-i18n="settings_account_export_csv">Exporter les sessions en CSV</button>
+                  </div>
+                </div>
+                <div class="settings-account-row">
+                  <label data-i18n="settings_account_delete">Supprimer mon compte</label>
+                  <p class="settings-desc" data-i18n="settings_account_delete_desc">Supprime définitivement votre compte et toutes vos données (bankrolls, sessions, préférences). Action irréversible.</p>
+                  <button class="btn-ghost btn-sm" style="color:var(--critical); border-color:rgba(230,103,103,0.3);" onclick="confirmDeleteAccount()" data-i18n="settings_account_delete_button">Supprimer définitivement mon compte</button>
+                  <div class="account-feedback" id="account-delete-feedback" hidden></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -1490,12 +1631,12 @@
   <div class="modal">
     <div class="modal-head">
       <h3 id="bankroll-modal-title">Nouvelle bankroll</h3>
-      <button class="icon-btn" onclick="closeBankrollModal()"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      <button class="icon-btn" onclick="closeBankrollModal()" aria-label="Fermer"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
     </div>
     <div class="modal-body">
       <input type="hidden" id="bankroll-id" />
       <div class="form-group">
-        <label>Nom de la bankroll</label>
+        <label for="bankroll-name">Nom de la bankroll</label>
         <input class="input" id="bankroll-name" placeholder="Ex. Bankroll Online, Roll MTT Live..." />
       </div>
       <div class="form-row">
@@ -1511,7 +1652,7 @@
           </div>
         </div>
         <div class="form-group">
-          <label>Solde de départ</label>
+          <label for="bankroll-start">Solde de départ</label>
           <input class="input" type="number" step="0.01" id="bankroll-start" placeholder="0" />
         </div>
       </div>
@@ -1528,7 +1669,7 @@
   <div class="modal" style="max-width:420px">
     <div class="modal-head">
       <h3 data-i18n="quicklog_title">Log rapide</h3>
-      <button class="icon-btn" onclick="closeQuickLogModal()"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      <button class="icon-btn" onclick="closeQuickLogModal()" aria-label="Fermer"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
     </div>
     <div class="modal-body">
       <div class="form-group">
@@ -1571,7 +1712,7 @@
   <div class="modal">
     <div class="modal-head">
       <h3 id="session-modal-title">Nouvelle session</h3>
-      <button class="icon-btn" onclick="closeSessionModal()"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      <button class="icon-btn" onclick="closeSessionModal()" aria-label="Fermer"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
     </div>
     <div class="modal-body">
       <input type="hidden" id="session-id" />
@@ -1598,17 +1739,17 @@
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label>Date</label>
+          <label for="session-date">Date</label>
           <input class="input" type="date" id="session-date" onchange="onSessionDateChange()" />
         </div>
         <div class="form-group">
-          <label>Heure (optionnel)</label>
+          <label for="session-time">Heure (optionnel)</label>
           <input class="input" type="time" id="session-time" />
         </div>
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label>Durée (min, optionnel)</label>
+          <label for="session-duration">Durée (min, optionnel)</label>
           <input class="input" type="number" id="session-duration" placeholder="Ex. 120" />
         </div>
         <div class="form-group tilt-check-group">
@@ -1621,11 +1762,11 @@
       </div>
       <div class="form-row" id="session-cash-fields" hidden>
         <div class="form-group">
-          <label>Grosse blinde / BB (optionnel)</label>
+          <label for="session-bb">Grosse blinde / BB (optionnel)</label>
           <input class="input" type="number" step="0.01" id="session-bb" placeholder="Ex. 0.5" />
         </div>
         <div class="form-group">
-          <label>Mains jouées (optionnel)</label>
+          <label for="session-hands">Mains jouées (optionnel)</label>
           <input class="input" type="number" id="session-hands" placeholder="Ex. 320" />
         </div>
       </div>
@@ -1660,12 +1801,14 @@
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label>Site / lieu (optionnel)</label>
-          <input class="input" id="session-site" placeholder="Winamax, PMU, Cercle..." />
+          <label for="session-site">Site / lieu (optionnel)</label>
+          <input class="input" id="session-site" list="session-site-history" placeholder="Winamax, PMU, Cercle..." autocomplete="off" />
+          <datalist id="session-site-history"></datalist>
         </div>
         <div class="form-group">
-          <label>Variante (optionnel)</label>
-          <input class="input" id="session-variant" placeholder="NLHE, PLO5..." />
+          <label for="session-variant">Variante (optionnel)</label>
+          <input class="input" id="session-variant" list="session-variant-history" placeholder="NLHE, PLO5..." autocomplete="off" />
+          <datalist id="session-variant-history"></datalist>
         </div>
       </div>
       <div class="form-group">
@@ -1685,7 +1828,7 @@
   <div class="modal" style="max-width:520px">
     <div class="modal-head">
       <h3 data-i18n="preset_prompt_title">Quel type de joueur êtes-vous ?</h3>
-      <button class="icon-btn" onclick="closePresetPrompt()"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      <button class="icon-btn" onclick="closePresetPrompt()" aria-label="Fermer"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
     </div>
     <div class="modal-body">
       <p style="font-size:.85rem;color:var(--grey);margin-bottom:1.3rem" data-i18n="preset_prompt_text">On pré-sélectionne les modules les plus utiles pour vous. Modifiable à tout moment depuis « Personnaliser ».</p>
@@ -1716,7 +1859,7 @@
   <div class="modal" style="max-width:420px">
     <div class="modal-head">
       <h3 id="confirm-modal-title">Confirmer</h3>
-      <button class="icon-btn" onclick="closeConfirmModal()"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      <button class="icon-btn" onclick="closeConfirmModal()" aria-label="Fermer"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
     </div>
     <div class="modal-body">
       <p id="confirm-modal-text" style="color:var(--grey);font-size:0.9rem;line-height:1.6"></p>
@@ -1733,7 +1876,7 @@
   <div class="modal" style="max-width:760px">
     <div class="modal-head">
       <h3>Personnaliser le dashboard</h3>
-      <button class="icon-btn" onclick="closeCustomizeModal()"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      <button class="icon-btn" onclick="closeCustomizeModal()" aria-label="Fermer"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
     </div>
     <div class="modal-body">
       <p style="font-size:.83rem;color:var(--grey);margin-bottom:1rem">Glissez un module de la banque vers votre dashboard, ou cliquez sur <strong style="color:var(--text)">+</strong>. Réorganisez vos modules actifs par glisser-déposer.</p>
@@ -1772,6 +1915,9 @@
     console.warn('Supabase indisponible, l\'app fonctionnera en mode local uniquement.', e);
   }
 </script>
+
+<div class="toast-container" id="toast-container" aria-live="polite"></div>
+
 <script>
 /* ══════════════════════════════════════════════════════════════
    POKELO — utils
@@ -1960,7 +2106,7 @@ const I18N = {
     feat_bankrolls_title:'Bankrolls multiples', feat_bankrolls_desc:'Créez autant de bankrolls que nécessaire — online, live, un roll dédié aux MTT — et assignez chaque session à la bonne.',
     feat_currency_title:'Devise libre', feat_currency_desc:'EUR, USD, USDT, jetons de club... indiquez la devise de votre choix pour chaque bankroll, sans conversion imposée.',
     feat_types_title:'Tournois, cash game, expressos — live & online', feat_types_desc:'Trois types de session, deux formats de jeu : tout ce que vous jouez trouve sa place, avec ses propres champs.',
-    feat_privacy_title:'100% local & privé', feat_privacy_desc:'Vos données restent dans votre navigateur, sur votre appareil. Aucun compte, aucun serveur, aucune fuite.',
+    feat_mobile_title:'Application mobile iOS & Android', feat_mobile_desc:'Une app native est en préparation pour logger vos sessions encore plus vite. En attendant, installez Pokelo depuis votre navigateur pour un accès en un tap, comme une vraie app.',
     how_tag:'Fonctionnement', how_title:'Quatre étapes,<br>une meilleure vision',
     step1_title:'Créez vos bankrolls', step1_desc:'Nommez-les, choisissez leur devise, et fixez un solde de départ.',
     step2_title:'Enregistrez vos sessions', step2_desc:'Tournoi, cash game ou expresso, live ou online — en quelques secondes.',
@@ -1985,7 +2131,7 @@ const I18N = {
     blog_sub:'Des guides courts et concrets sur le bankroll management, écrits pour être appliqués dès la prochaine session.',
     blog_see_all:'Voir tous les articles',
     cta_tag:'Prêt ?', cta_title:'Commencez à suivre<br>votre bankroll aujourd\'hui',
-    cta_sub:'Gratuit, sans compte, sans carte bancaire. Vos données restent chez vous.', cta_button:'Ouvrir Pokelo',
+    cta_sub:'Gratuit pour commencer, sans carte bancaire.', cta_button:'Ouvrir Pokelo',
     footer_product:'Produit', footer_resources:'Ressources', footer_legal:'Légal', footer_rights:'Tous droits réservés.', footer_tagline:'Le poker responsable commence par une bonne gestion de bankroll.',
     blog_hero_tag:'Blog Pokelo', blog_hero_title:'Bankroll management<br>&amp; stratégie poker', blog_hero_sub:'Des tutos courts, sans blabla, pour mieux gérer votre argent de jeu.',
     article_back:'Retour au blog', article_cta_text:'Mettez ces principes en pratique dès votre prochaine session.', article_cta_button:'Ouvrir Pokelo gratuitement',
@@ -2056,6 +2202,30 @@ const I18N = {
     auth_err_bad_credentials:'E-mail ou mot de passe incorrect.',
     auth_err_not_confirmed:'Confirmez votre adresse e-mail avant de vous connecter (vérifiez vos e-mails).',
     auth_err_generic:'Une erreur est survenue. Réessayez.',
+    settings_account_title:'Compte', settings_account_loggedout_desc:'Connectez-vous pour synchroniser vos données dans le cloud et gérer la sécurité de votre compte.',
+    settings_account_email:'Adresse e-mail', settings_account_current_email:'Adresse actuelle : {email}',
+    settings_account_update_email:'Mettre à jour', settings_account_email_pending:'Vérifiez votre boîte mail (ancienne et nouvelle adresse) pour confirmer ce changement.',
+    settings_account_password:'Nouveau mot de passe', settings_account_update_password:'Changer le mot de passe',
+    settings_account_password_updated:'Mot de passe mis à jour avec succès.',
+    settings_account_mfa:'Double authentification (MFA)', settings_account_mfa_desc:'Ajoutez une couche de sécurité avec une application d\'authentification (Google Authenticator, Authy...).',
+    settings_account_mfa_enable:'Activer la double authentification', settings_account_mfa_disable:'Désactiver',
+    settings_account_mfa_enabled:'Double authentification activée', settings_account_mfa_confirm:'Confirmer', settings_account_mfa_cancel:'Annuler',
+    settings_account_mfa_secret_hint:'Ou entrez ce code manuellement dans votre application : {secret}',
+    settings_account_mfa_verified:'Double authentification activée avec succès.',
+    settings_account_mfa_invalid_code:'Code invalide. Vérifiez l\'heure de votre appareil et réessayez.',
+    settings_account_export:'Exporter mes données', settings_account_export_desc:'Téléchargez une copie complète de vos bankrolls et sessions (droit à la portabilité des données).',
+    settings_account_export_json:'Exporter en JSON', settings_account_export_csv:'Exporter les sessions en CSV',
+    settings_account_delete:'Supprimer mon compte', settings_account_delete_desc:'Supprime définitivement votre compte et toutes vos données (bankrolls, sessions, préférences). Action irréversible.',
+    settings_account_delete_button:'Supprimer définitivement mon compte',
+    settings_account_delete_confirm_title:'Supprimer mon compte',
+    settings_account_delete_confirm_text:'Cette action supprime définitivement votre compte, vos bankrolls, vos sessions et vos préférences. Elle est irréversible et ne peut pas être annulée.',
+    settings_account_delete_error:'La suppression a échoué. Réessayez ou contactez le support.',
+    settings_account_plan:'Plan actuel', settings_account_plan_free:'Gratuit', settings_account_plan_pro:'Pro', settings_account_plan_team:'Équipe',
+    settings_account_manage_plan:'Gérer mon abonnement',
+    toast_sync_error:'La synchronisation a échoué. Vos changements seront réessayés automatiquement.',
+    toast_cloud_pull_error:'Impossible de récupérer vos données depuis le cloud. Vérifiez votre connexion.',
+    toast_account_deleted:'Votre compte a été supprimé définitivement.',
+    toast_export_ready:'Export téléchargé.',
     networth_title:'Patrimoine total',
     preset_label:'Preset :', preset_grinder_cash:'Grinder Cash', preset_grinder_cash_desc:'Cash game, stakes, salles, discipline',
     preset_mtt:'MTT', preset_mtt_desc:'ITM, streaks, risque de ruine', preset_casual_live:'Casual Live', preset_casual_live_desc:'Résumé simple, heatmap, tilt',
@@ -2099,7 +2269,7 @@ const I18N = {
     feat_bankrolls_title:'Multiple bankrolls', feat_bankrolls_desc:'Create as many bankrolls as you need — online, live, a dedicated MTT roll — and assign each session to the right one.',
     feat_currency_title:'Any currency', feat_currency_desc:'EUR, USD, USDT, club chips... set the currency you want for each bankroll, no forced conversion.',
     feat_types_title:'Tournaments, cash game, Spin & Go — live & online', feat_types_desc:'Three session types, two game formats: whatever you play has its place, with its own fields.',
-    feat_privacy_title:'100% local & private', feat_privacy_desc:'Your data stays in your browser, on your device. No account, no server, no leaks.',
+    feat_mobile_title:'iOS & Android mobile app', feat_mobile_desc:'A native app is in the works so you can log sessions even faster. In the meantime, install Pokelo from your browser for one-tap access, just like a real app.',
     how_tag:'How it works', how_title:'Four steps,<br>a clearer view',
     step1_title:'Create your bankrolls', step1_desc:'Name them, pick a currency, and set a starting balance.',
     step2_title:'Log your sessions', step2_desc:'Tournament, cash game or Spin & Go, live or online — in seconds.',
@@ -2124,7 +2294,7 @@ const I18N = {
     blog_sub:'Short, practical guides on bankroll management, written to be applied from your very next session.',
     blog_see_all:'See all articles',
     cta_tag:'Ready?', cta_title:'Start tracking<br>your bankroll today',
-    cta_sub:'Free, no account, no credit card. Your data stays with you.', cta_button:'Open Pokelo',
+    cta_sub:'Free to start, no credit card required.', cta_button:'Open Pokelo',
     footer_product:'Product', footer_resources:'Resources', footer_legal:'Legal', footer_rights:'All rights reserved.', footer_tagline:'Responsible poker starts with solid bankroll management.',
     blog_hero_tag:'Pokelo Blog', blog_hero_title:'Bankroll management<br>&amp; poker strategy', blog_hero_sub:'Short, no-fluff tutorials to better manage your poker money.',
     article_back:'Back to blog', article_cta_text:'Put these principles into practice starting your very next session.', article_cta_button:'Open Pokelo for free',
@@ -2195,6 +2365,30 @@ const I18N = {
     auth_err_bad_credentials:'Incorrect email or password.',
     auth_err_not_confirmed:'Please confirm your email address before signing in (check your inbox).',
     auth_err_generic:'Something went wrong. Please try again.',
+    settings_account_title:'Account', settings_account_loggedout_desc:'Sign in to sync your data to the cloud and manage your account security.',
+    settings_account_email:'Email address', settings_account_current_email:'Current address: {email}',
+    settings_account_update_email:'Update', settings_account_email_pending:'Check your inbox (old and new address) to confirm this change.',
+    settings_account_password:'New password', settings_account_update_password:'Change password',
+    settings_account_password_updated:'Password updated successfully.',
+    settings_account_mfa:'Two-factor authentication (MFA)', settings_account_mfa_desc:'Add a layer of security with an authenticator app (Google Authenticator, Authy...).',
+    settings_account_mfa_enable:'Enable two-factor authentication', settings_account_mfa_disable:'Disable',
+    settings_account_mfa_enabled:'Two-factor authentication enabled', settings_account_mfa_confirm:'Confirm', settings_account_mfa_cancel:'Cancel',
+    settings_account_mfa_secret_hint:'Or enter this code manually in your app: {secret}',
+    settings_account_mfa_verified:'Two-factor authentication enabled successfully.',
+    settings_account_mfa_invalid_code:'Invalid code. Check your device\'s clock and try again.',
+    settings_account_export:'Export my data', settings_account_export_desc:'Download a full copy of your bankrolls and sessions (data portability right).',
+    settings_account_export_json:'Export as JSON', settings_account_export_csv:'Export sessions as CSV',
+    settings_account_delete:'Delete my account', settings_account_delete_desc:'Permanently deletes your account and all your data (bankrolls, sessions, preferences). This action is irreversible.',
+    settings_account_delete_button:'Permanently delete my account',
+    settings_account_delete_confirm_title:'Delete my account',
+    settings_account_delete_confirm_text:'This permanently deletes your account, bankrolls, sessions, and preferences. It is irreversible and cannot be undone.',
+    settings_account_delete_error:'Deletion failed. Please try again or contact support.',
+    settings_account_plan:'Current plan', settings_account_plan_free:'Free', settings_account_plan_pro:'Pro', settings_account_plan_team:'Team',
+    settings_account_manage_plan:'Manage my subscription',
+    toast_sync_error:'Sync failed. Your changes will be retried automatically.',
+    toast_cloud_pull_error:'Could not fetch your data from the cloud. Check your connection.',
+    toast_account_deleted:'Your account has been permanently deleted.',
+    toast_export_ready:'Export downloaded.',
     networth_title:'Total net worth',
     preset_label:'Preset:', preset_grinder_cash:'Grinder Cash', preset_grinder_cash_desc:'Cash game, stakes, rooms, discipline',
     preset_mtt:'MTT', preset_mtt_desc:'ITM, streaks, risk of ruin', preset_casual_live:'Casual Live', preset_casual_live_desc:'Simple summary, heatmap, tilt',
@@ -2256,6 +2450,28 @@ function fmtMoney(n, cur){ return fmtNum(n) + ' ' + (cur||''); }
 function fmtSigned(n, cur){ return (n>=0?'+':'') + fmtMoney(n, cur); }
 function escapeHtml(s){
   return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+const TOAST_ICONS = {
+  success: '<path d="M20 6 9 17l-5-5"/>',
+  error: '<circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/>',
+  info: '<circle cx="12" cy="12" r="10"/><path d="M12 16v-5M12 8h.01"/>',
+};
+function showToast(message, type, duration){
+  type = type || 'info';
+  duration = duration || 4500;
+  const container = document.getElementById('toast-container');
+  if (!container) return;
+  const toast = document.createElement('div');
+  toast.className = 'toast ' + type;
+  toast.innerHTML = `<svg class="icon toast-icon" viewBox="0 0 24 24">${TOAST_ICONS[type] || TOAST_ICONS.info}</svg><span>${escapeHtml(message)}</span>`;
+  const remove = () => {
+    toast.classList.add('leaving');
+    setTimeout(() => toast.remove(), 220);
+  };
+  toast.addEventListener('click', remove);
+  container.appendChild(toast);
+  setTimeout(remove, duration);
 }
 function mulberry32(seed){
   return function(){
@@ -2468,10 +2684,15 @@ const LocalStorageAdapter = {
 };
 const DB = LocalStorageAdapter;
 
+let stateLoadedFromCache = false;
 function loadState(){
-  return DB.load() || seedDemoState();
+  const cached = DB.load();
+  if (cached) { stateLoadedFromCache = true; return cached; }
+  return seedDemoState();
 }
-function saveState(){ DB.save(state); scheduleCloudSync(); }
+function saveState(){
+  if (currentUser) { DB.save(state); scheduleCloudSync(); }
+}
 
 function seedDemoState(){
   const rand = mulberry32(42);
@@ -2682,7 +2903,7 @@ function drawHeroCharts(){
     charts.featBig = new Chart(featCanvas, {
       type:'line',
       data:{ labels:l3, datasets:[{ data:d3, borderColor:'#08BF2F', borderWidth:2.5, pointRadius:0, tension:.35, fill:true,
-        backgroundColor:(ctx)=>{ const g=ctx.chart.ctx.createLinearGradient(0,0,0,92); g.addColorStop(0,'rgba(8,191,47,0.28)'); g.addColorStop(1,'rgba(8,191,47,0)'); return g; } }] },
+        backgroundColor:(ctx)=>{ const g=ctx.chart.ctx.createLinearGradient(0,0,0,ctx.chart.height||92); g.addColorStop(0,'rgba(8,191,47,0.28)'); g.addColorStop(1,'rgba(8,191,47,0)'); return g; } }] },
       options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false},tooltip:{enabled:false}},
         scales:{ x:{display:false}, y:{display:false} }, animation:{ duration: 1400 } }
     });
@@ -3688,9 +3909,18 @@ function reorderLiveModule(id, targetId){
    POKELO — account / auth (UI prête, backend à brancher via Supabase)
    ══════════════════════════════════════════════════════════════ */
 let currentUser = null;
+let currentPlan = 'free';
 let cloudSyncInFlight = false;
 let cloudSyncQueued = false;
+let cloudSyncPromise = null;
 let syncDebounceTimer = null;
+
+// Préparation Stripe (voir STRIPE_SETUP.md) : aucun module n'est verrouillé par
+// défaut — ajouter des identifiants de module ici est une décision produit à
+// prendre volontairement, pas une valeur imposée par cette préparation technique.
+const PREMIUM_MODULES = [];
+function isPremium(){ return currentPlan && currentPlan !== 'free'; }
+function isPremiumModule(moduleId){ return PREMIUM_MODULES.includes(moduleId); }
 
 function setAccountTab(tab){
   document.querySelectorAll('.account-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
@@ -3723,7 +3953,10 @@ async function submitAccountForm(kind){
     feedback.textContent = t('account_loading');
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) { feedback.className = 'account-feedback error'; feedback.textContent = translateAuthError(error); }
-    else { feedback.className = 'account-feedback'; feedback.textContent = t('account_login_success'); }
+    else {
+      feedback.className = 'account-feedback'; feedback.textContent = t('account_login_success');
+      setTimeout(() => { location.hash = '#/app'; }, 700);
+    }
   } else if (kind === 'signup') {
     const name = document.getElementById('signup-name').value.trim();
     const email = document.getElementById('signup-email').value.trim();
@@ -3763,10 +3996,14 @@ async function pullFromCloud(userId){
   ]);
   return { profile: profileRes.data, bankrolls: bankrollsRes.data || [], sessions: sessionsRes.data || [] };
 }
-async function syncPushToCloud(){
-  if (!currentUser || !window.supabase) return;
-  if (cloudSyncInFlight) { cloudSyncQueued = true; return; }
+function syncPushToCloud(){
+  if (!currentUser || !window.supabase) return Promise.resolve();
+  if (cloudSyncInFlight) { cloudSyncQueued = true; return cloudSyncPromise; }
   cloudSyncInFlight = true;
+  cloudSyncPromise = syncPushToCloudRun();
+  return cloudSyncPromise;
+}
+async function syncPushToCloudRun(){
   try {
     const userId = currentUser.id;
     const bkPayload = state.bankrolls.map(b => ({
@@ -3798,9 +4035,10 @@ async function syncPushToCloud(){
     });
   } catch (e) {
     console.warn('Synchronisation Supabase échouée :', e);
+    showToast(t('toast_sync_error'), 'error');
   } finally {
     cloudSyncInFlight = false;
-    if (cloudSyncQueued) { cloudSyncQueued = false; syncPushToCloud(); }
+    if (cloudSyncQueued) { cloudSyncQueued = false; return syncPushToCloud(); }
   }
 }
 function scheduleCloudSync(){
@@ -3808,9 +4046,18 @@ function scheduleCloudSync(){
   clearTimeout(syncDebounceTimer);
   syncDebounceTimer = setTimeout(syncPushToCloud, 1200);
 }
+function showAppLoadingSkeleton(){
+  const el = document.getElementById('app-loading-overlay');
+  if (el) el.hidden = false;
+}
+function hideAppLoadingSkeleton(){
+  const el = document.getElementById('app-loading-overlay');
+  if (el) el.hidden = true;
+}
 async function onAuthSignedIn(session){
   currentUser = session.user;
   updateAccountUI();
+  showAppLoadingSkeleton();
   try {
     const cloud = await pullFromCloud(currentUser.id);
     const hasCloudData = cloud.bankrolls.length > 0;
@@ -3828,22 +4075,30 @@ async function onAuthSignedIn(session){
         });
         state.dashboardLayout = Array.isArray(cloud.profile.dashboard_layout) && cloud.profile.dashboard_layout.length
           ? cloud.profile.dashboard_layout : DEFAULT_LAYOUT.slice();
+        currentPlan = cloud.profile.plan || 'free';
       }
       state.isDemo = false;
       DB.save(state);
     }
   } catch (e) {
     console.warn('Récupération des données Supabase échouée :', e);
+    showToast(t('toast_cloud_pull_error'), 'error');
   }
   applySettingsToDOM();
   populateBankrollSelects();
   router();
+  hideAppLoadingSkeleton();
 }
 async function signOutUser(){
-  if (window.supabase) await supabase.auth.signOut();
+  if (currentUser && window.supabase) {
+    clearTimeout(syncDebounceTimer);
+    await syncPushToCloud();
+    await supabase.auth.signOut();
+  }
   currentUser = null;
+  currentPlan = 'free';
+  localStorage.removeItem(STORAGE_KEY);
   state = seedDemoState();
-  DB.save(state);
   updateAccountUI();
   applySettingsToDOM();
   populateBankrollSelects();
@@ -3865,8 +4120,20 @@ function updateAccountUI(){
 }
 function initSupabaseAuth(){
   if (!window.supabase) return;
+  if (stateLoadedFromCache) showAppLoadingSkeleton();
   supabase.auth.getSession().then(({ data }) => {
-    if (data.session) onAuthSignedIn(data.session);
+    if (data.session) {
+      onAuthSignedIn(data.session);
+    } else {
+      if (stateLoadedFromCache) {
+        localStorage.removeItem(STORAGE_KEY);
+        state = seedDemoState();
+        applySettingsToDOM();
+        populateBankrollSelects();
+        router();
+      }
+      hideAppLoadingSkeleton();
+    }
   });
   supabase.auth.onAuthStateChange((event, session) => {
     if (event === 'SIGNED_IN' && session && (!currentUser || currentUser.id !== session.user.id)) onAuthSignedIn(session);
@@ -3889,7 +4156,239 @@ function renderSettingsPage(){
     const el = document.getElementById('color-'+k);
     if (el) el.value = s.colors[k];
   });
+  renderAccountSettings();
 }
+
+function renderAccountSettings(){
+  const loggedOut = document.getElementById('settings-account-loggedout');
+  const loggedIn = document.getElementById('settings-account-loggedin');
+  if (!loggedOut || !loggedIn) return;
+  if (!currentUser) {
+    loggedOut.hidden = false;
+    loggedIn.hidden = true;
+    return;
+  }
+  loggedOut.hidden = true;
+  loggedIn.hidden = false;
+  const emailEl = document.getElementById('settings-account-current-email');
+  if (emailEl) emailEl.textContent = t('settings_account_current_email').replace('{email}', currentUser.email);
+  const planLabels = { free: t('settings_account_plan_free'), pro: t('settings_account_plan_pro'), team: t('settings_account_plan_team') };
+  const planLabelEl = document.getElementById('settings-account-plan-label');
+  if (planLabelEl) planLabelEl.textContent = planLabels[currentPlan] || planLabels.free;
+  const manageBtn = document.getElementById('settings-account-manage-plan-btn');
+  if (manageBtn) manageBtn.hidden = !isPremium();
+  refreshMfaStatus();
+}
+
+async function openBillingPortal(){
+  const feedback = document.getElementById('account-plan-feedback');
+  feedback.hidden = false; feedback.className = 'account-feedback'; feedback.textContent = t('account_loading');
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    const token = session && session.access_token;
+    const res = await fetch('/api/create-portal-session', { method: 'POST', headers: { Authorization: `Bearer ${token}` } });
+    const data = await res.json();
+    if (!res.ok || !data.url) throw new Error(data.error || 'portal-failed');
+    location.href = data.url;
+  } catch (e) {
+    feedback.className = 'account-feedback error';
+    feedback.textContent = t('auth_err_generic');
+  }
+}
+
+async function startCheckout(priceId){
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    const token = session && session.access_token;
+    if (!token) { location.hash = '#/account'; return; }
+    const res = await fetch('/api/create-checkout-session', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ priceId }),
+    });
+    const data = await res.json();
+    if (!res.ok || !data.url) throw new Error(data.error || 'checkout-failed');
+    location.href = data.url;
+  } catch (e) {
+    console.warn('Stripe checkout failed:', e);
+  }
+}
+
+let mfaEnrollFactorId = null;
+
+async function refreshMfaStatus(){
+  const statusEl = document.getElementById('mfa-status');
+  if (!statusEl || !window.supabase) return;
+  try {
+    const { data, error } = await supabase.auth.mfa.listFactors();
+    if (error) throw error;
+    const verified = (data.totp || []).find(f => f.status === 'verified');
+    if (verified) {
+      statusEl.innerHTML = `<span style="color:var(--good)">✓ ${t('settings_account_mfa_enabled')}</span>`;
+      statusEl.insertAdjacentHTML('beforeend', ` <button class="btn-ghost btn-sm" onclick="disableMfa('${verified.id}')">${t('settings_account_mfa_disable')}</button>`);
+      document.getElementById('mfa-enroll-flow').hidden = true;
+    } else {
+      statusEl.innerHTML = `<button class="btn-primary btn-sm" onclick="startMfaEnroll()">${t('settings_account_mfa_enable')}</button>`;
+    }
+  } catch (e) {
+    statusEl.textContent = t('account_error_offline');
+  }
+}
+
+async function startMfaEnroll(){
+  const feedback = document.getElementById('account-mfa-feedback');
+  feedback.hidden = true;
+  try {
+    const { data, error } = await supabase.auth.mfa.enroll({ factorType: 'totp' });
+    if (error) throw error;
+    mfaEnrollFactorId = data.id;
+    document.getElementById('mfa-qr').src = data.totp.qr_code;
+    document.getElementById('mfa-secret-hint').textContent = t('settings_account_mfa_secret_hint').replace('{secret}', data.totp.secret);
+    document.getElementById('mfa-enroll-flow').hidden = false;
+    document.getElementById('mfa-verify-code').value = '';
+  } catch (e) {
+    feedback.hidden = false; feedback.className = 'account-feedback error';
+    feedback.textContent = (e && e.message) || t('auth_err_generic');
+  }
+}
+
+function cancelMfaEnroll(){
+  if (mfaEnrollFactorId) supabase.auth.mfa.unenroll({ factorId: mfaEnrollFactorId }).catch(()=>{});
+  mfaEnrollFactorId = null;
+  document.getElementById('mfa-enroll-flow').hidden = true;
+  refreshMfaStatus();
+}
+
+async function confirmMfaEnroll(){
+  const feedback = document.getElementById('account-mfa-feedback');
+  const code = document.getElementById('mfa-verify-code').value.trim();
+  feedback.hidden = false; feedback.className = 'account-feedback'; feedback.textContent = t('account_loading');
+  try {
+    const { data: challenge, error: challengeErr } = await supabase.auth.mfa.challenge({ factorId: mfaEnrollFactorId });
+    if (challengeErr) throw challengeErr;
+    const { error: verifyErr } = await supabase.auth.mfa.verify({ factorId: mfaEnrollFactorId, challengeId: challenge.id, code });
+    if (verifyErr) throw verifyErr;
+    feedback.className = 'account-feedback'; feedback.textContent = t('settings_account_mfa_verified');
+    mfaEnrollFactorId = null;
+    document.getElementById('mfa-enroll-flow').hidden = true;
+    refreshMfaStatus();
+  } catch (e) {
+    feedback.className = 'account-feedback error';
+    feedback.textContent = t('settings_account_mfa_invalid_code');
+  }
+}
+
+async function disableMfa(factorId){
+  const statusEl = document.getElementById('mfa-status');
+  try {
+    await supabase.auth.mfa.unenroll({ factorId });
+    refreshMfaStatus();
+  } catch (e) {
+    statusEl.textContent = (e && e.message) || t('auth_err_generic');
+  }
+}
+
+async function updateAccountEmail(){
+  const feedback = document.getElementById('account-email-feedback');
+  const newEmail = document.getElementById('account-new-email').value.trim();
+  feedback.hidden = false;
+  if (!newEmail) { feedback.className = 'account-feedback error'; feedback.textContent = t('account_error_fields'); return; }
+  feedback.className = 'account-feedback'; feedback.textContent = t('account_loading');
+  const { error } = await supabase.auth.updateUser({ email: newEmail });
+  if (error) { feedback.className = 'account-feedback error'; feedback.textContent = translateAuthError(error); }
+  else { feedback.className = 'account-feedback'; feedback.textContent = t('settings_account_email_pending'); document.getElementById('account-new-email').value = ''; }
+}
+
+async function updateAccountPassword(){
+  const feedback = document.getElementById('account-password-feedback');
+  const pass = document.getElementById('account-new-password').value;
+  const confirm = document.getElementById('account-new-password-confirm').value;
+  feedback.hidden = false;
+  if (!pass || !confirm) { feedback.className = 'account-feedback error'; feedback.textContent = t('account_error_fields'); return; }
+  if (pass !== confirm) { feedback.className = 'account-feedback error'; feedback.textContent = t('account_password_mismatch'); return; }
+  if (pass.length < 6) { feedback.className = 'account-feedback error'; feedback.textContent = t('account_password_too_short'); return; }
+  feedback.className = 'account-feedback'; feedback.textContent = t('account_loading');
+  const { error } = await supabase.auth.updateUser({ password: pass });
+  if (error) { feedback.className = 'account-feedback error'; feedback.textContent = translateAuthError(error); }
+  else {
+    feedback.className = 'account-feedback'; feedback.textContent = t('settings_account_password_updated');
+    document.getElementById('account-new-password').value = '';
+    document.getElementById('account-new-password-confirm').value = '';
+  }
+}
+
+function downloadBlob(content, filename, mime){
+  const blob = new Blob([content], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+function exportDataJson(){
+  const payload = {
+    exportedAt: new Date().toISOString(),
+    account: currentUser ? currentUser.email : null,
+    bankrolls: state.bankrolls,
+    sessions: state.sessions,
+    settings: state.settings,
+    dashboardLayout: state.dashboardLayout,
+  };
+  downloadBlob(JSON.stringify(payload, null, 2), `pokelo-donnees-${todayStr()}.json`, 'application/json');
+  showToast(t('toast_export_ready'), 'success');
+}
+function csvEscape(v){
+  const s = v == null ? '' : String(v);
+  return /[",\n;]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+}
+function exportDataCsv(){
+  const cols = ['date','bankroll','type','format','devise','tauxChange','miseEngagee','gainTotal','resultat','site','variante','dureeMin','tilt','notes'];
+  const rows = [cols.join(';')];
+  state.sessions.slice().sort((a,b)=>a.date.localeCompare(b.date)).forEach(s => {
+    const bk = getBankroll(s.bankrollId);
+    rows.push([
+      s.date, bk ? bk.name : '', s.category, s.format, s.currency || (bk && bk.currency) || 'EUR',
+      s.fxRate == null ? 1 : s.fxRate, s.buyIn, s.cashout, sessionProfit(s),
+      s.site || '', s.variant || '', s.duration || '', s.tilt ? '1' : '0', s.notes || '',
+    ].map(csvEscape).join(';'));
+  });
+  downloadBlob('﻿' + rows.join('\n'), `pokelo-sessions-${todayStr()}.csv`, 'text/csv;charset=utf-8');
+  showToast(t('toast_export_ready'), 'success');
+}
+
+function confirmDeleteAccount(){
+  if (!currentUser) return;
+  openConfirm(
+    t('settings_account_delete_confirm_title'),
+    t('settings_account_delete_confirm_text'),
+    () => { closeConfirmModal(); deleteMyAccount(); }
+  );
+}
+async function deleteMyAccount(){
+  const feedback = document.getElementById('account-delete-feedback');
+  feedback.hidden = false; feedback.className = 'account-feedback'; feedback.textContent = t('account_loading');
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    const token = session && session.access_token;
+    if (!token) throw new Error('no-session');
+    const res = await fetch('/api/delete-account', { method: 'POST', headers: { Authorization: `Bearer ${token}` } });
+    if (!res.ok) throw new Error('delete-failed');
+    clearTimeout(syncDebounceTimer);
+    currentUser = null;
+    localStorage.removeItem(STORAGE_KEY);
+    state = seedDemoState();
+    updateAccountUI();
+    applySettingsToDOM();
+    populateBankrollSelects();
+    location.hash = '#/';
+    router();
+    showToast(t('toast_account_deleted'), 'success');
+  } catch (e) {
+    feedback.className = 'account-feedback error';
+    feedback.textContent = t('settings_account_delete_error');
+  }
+}
+
 function updateSetting(key, val){
   if (!state.settings) state.settings = defaultSettings();
   state.settings[key] = val;
@@ -4357,7 +4856,19 @@ function openSessionModal(id){
   document.getElementById('session-variant').value = s ? s.variant : '';
   document.getElementById('session-notes').value = s ? s.notes : '';
   updateFxPreview();
+  populateSessionHistoryLists();
   document.getElementById('session-modal-overlay').hidden = false;
+}
+function populateSessionHistoryLists(){
+  const sites = new Set(), variants = new Set();
+  state.sessions.forEach(sess => {
+    if (sess.site) sites.add(sess.site);
+    if (sess.variant) variants.add(sess.variant);
+  });
+  const siteList = document.getElementById('session-site-history');
+  const variantList = document.getElementById('session-variant-history');
+  siteList.innerHTML = Array.from(sites).sort().map(v => `<option value="${escapeHtml(v)}"></option>`).join('');
+  variantList.innerHTML = Array.from(variants).sort().map(v => `<option value="${escapeHtml(v)}"></option>`).join('');
 }
 function closeSessionModal(){ document.getElementById('session-modal-overlay').hidden = true; closeAllCurrencyMenus(); }
 async function saveSession(){
