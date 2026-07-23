@@ -40,8 +40,21 @@
   "publisher": { "@type": "Organization", "name": "Pokelo", "url": "https://pokelo.fr/" }
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Pokelo",
+  "url": "https://pokelo.fr/"
+}
+</script>
 
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='11' fill='%230a0a0a'/%3E%3Crect x='4' y='32' width='7' height='10' rx='2' fill='%2308BF2F' opacity='.5'/%3E%3Crect x='15' y='25' width='7' height='17' rx='2' fill='%2308BF2F' opacity='.75'/%3E%3Crect x='26' y='18' width='7' height='24' rx='2' fill='%2308BF2F'/%3E%3Cpath d='M29.5 4C23 10 20 14 20 17.5C20 20 22.2 22 25 22C26.8 22 28.4 21.2 29.5 19.8C30.6 21.2 32.2 22 34 22C36.8 22 39 20 39 17.5C39 14 36 10 29.5 4Z' fill='%2308BF2F'/%3E%3C/svg%3E" />
+<!-- Favicon référencé via de vrais fichiers PNG crawlables : Google Search exige une
+     ressource accessible à une URL stable pour afficher un favicon dans les résultats
+     de recherche — une data URI inline (l'ancienne version) n'en est pas une. -->
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png" />
+<link rel="shortcut icon" type="image/png" href="icons/icon-192.png" />
 <link rel="manifest" href="manifest.json" />
 <meta name="theme-color" content="#08BF2F" />
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
@@ -668,6 +681,10 @@
   .stats-table-wrap { background: var(--black-card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-top: 1.2rem; }
 
   /* ── SETTINGS ── */
+  .settings-tabs { display: flex; gap: 0.4rem; border-bottom: 1px solid var(--border); margin-bottom: 1.6rem; max-width: 900px; }
+  .settings-tab { background: none; border: none; color: var(--grey); font-size: 0.86rem; font-weight: 600; padding: 0.7rem 1rem; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color .15s, border-color .15s; }
+  .settings-tab:hover { color: var(--text); }
+  .settings-tab.active { color: var(--green); border-color: var(--green); }
   .settings-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem; max-width: 900px; }
   .settings-card { background: var(--black-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem 1.5rem; }
   .settings-card h3 { font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; }
@@ -693,13 +710,20 @@
   .switch-row { display: flex; align-items: center; gap: 0.6rem; font-size: 0.85rem; color: var(--text); cursor: pointer; }
   .profile-share-row { margin-top: 1rem; }
   #profile-share-link-row .form-row { margin-top: 0.6rem; }
-  .plan-compare-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.8rem; margin-top: 1.2rem; }
-  .plan-compare-card { border: 1px solid var(--border); border-radius: 10px; padding: 0.9rem 1rem; }
-  .plan-compare-card.current { border-color: rgba(8,191,47,0.45); background: rgba(8,191,47,0.05); }
-  .plan-compare-card h4 { font-size: 0.85rem; font-weight: 700; color: var(--text); margin-bottom: 0.2rem; }
-  .plan-compare-card .pc-price { font-size: 0.78rem; color: var(--grey); margin-bottom: 0.6rem; }
-  .plan-compare-card ul { list-style: none; padding: 0; margin: 0 0 0.7rem; display: flex; flex-direction: column; gap: 0.3rem; }
-  .plan-compare-card li { font-size: 0.76rem; color: var(--grey); }
+  .pricing-table-wrap { overflow-x: auto; margin-top: 2.5rem; max-width: 1140px; }
+  .pricing-table { width: 100%; border-collapse: collapse; min-width: 620px; }
+  .pricing-table th, .pricing-table td { padding: 0.85rem 1.1rem; text-align: center; border-bottom: 1px solid var(--border); font-size: 0.82rem; color: var(--grey); }
+  .pricing-table th:first-child, .pricing-table td:first-child { text-align: left; color: var(--text); font-weight: 500; white-space: nowrap; }
+  .pricing-table .pt-plan-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.35rem; letter-spacing: 0.03em; color: var(--text); }
+  .pricing-table .pt-plan-price { font-size: 1rem; color: var(--text); margin-top: 0.2rem; }
+  .pricing-table .pt-plan-price .per { font-size: 0.7rem; color: var(--grey); }
+  .pricing-table th.current, .pricing-table td.current { background: rgba(8,191,47,0.06); border-left: 1px solid rgba(8,191,47,0.3); border-right: 1px solid rgba(8,191,47,0.3); }
+  .pricing-table thead th.current { border-top: 1px solid rgba(8,191,47,0.3); border-radius: 10px 10px 0 0; }
+  .pricing-table tfoot td.current { border-bottom: 1px solid rgba(8,191,47,0.3); border-radius: 0 0 10px 10px; }
+  .pt-current-badge { display: inline-block; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--green); margin-top: 0.35rem; background: rgba(8,191,47,0.12); padding: 0.2rem 0.5rem; border-radius: 100px; }
+  .pt-check { color: var(--green); width: 18px; height: 18px; }
+  .pt-dash { color: var(--grey); opacity: 0.45; }
+  .pricing-table tfoot td { border-bottom: none; padding-top: 1.3rem; }
 
   /* ── Account / auth (stub) ── */
   .account-card { width: 100%; max-width: 420px; background: var(--black-card); border: 1px solid var(--border); border-radius: 14px; padding: 2rem 1.8rem; text-align: center; }
@@ -1009,50 +1033,7 @@
       <div class="divider"></div>
       <p class="section-sub"><span data-i18n="pricing_sub">Un plan gratuit qui couvre l'essentiel, et des formules à venir pour les joueurs les plus exigeants.</span> <em style="font-style:normal;color:var(--grey)" data-i18n="pricing_note_italic">Tarifs indicatifs, susceptibles d'évoluer.</em></p>
     </div>
-    <div class="pricing-grid fade-up">
-      <div class="price-card">
-        <div class="price-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4Z"/></svg></div>
-        <div class="price-name" data-i18n="price_free_name">Gratuit</div>
-        <div class="price-desc" data-i18n="price_free_desc">Pour suivre sa bankroll sans se poser de questions.</div>
-        <div class="price-amount"><span class="n">0€</span><span class="p">/ mois</span></div>
-        <ul class="price-list">
-          <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>1 bankroll</li>
-          <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Sessions illimitées</li>
-          <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Tournois, cash game, expressos</li>
-          <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Graphiques &amp; statistiques de base</li>
-          <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Application installable (PWA)</li>
-        </ul>
-        <a href="#/account/signup" data-link class="btn-secondary" style="justify-content:center" data-i18n="price_cta_free">Créer un compte gratuit</a>
-      </div>
-      <div class="price-card featured">
-        <div class="price-badge" data-i18n="price_pro_badge">Le plus choisi</div>
-        <div class="price-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg></div>
-        <div class="price-name" data-i18n="price_pro_name">Pro</div>
-        <div class="price-desc" data-i18n="price_pro_desc">Pour les joueurs réguliers qui gèrent plusieurs bankrolls.</div>
-        <div class="price-amount"><span class="n">6€</span><span class="p">/ mois</span></div>
-        <ul class="price-list">
-          <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Bankrolls illimitées</li>
-          <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Dashboard modulaire (drag &amp; drop)</li>
-          <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Statistiques avancées &amp; export</li>
-          <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Sauvegarde &amp; synchronisation</li>
-          <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Support prioritaire</li>
-        </ul>
-        <button class="btn-primary" style="justify-content:center" disabled data-i18n="price_cta_soon">Bientôt disponible</button>
-      </div>
-      <div class="price-card">
-        <div class="price-icon"><svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 21c0-3.6 2.7-6 6-6s6 2.4 6 6"/><circle cx="17" cy="9" r="2.6"/><path d="M15.5 15.2c2.6.4 4.5 2.4 4.5 5.8"/></svg></div>
-        <div class="price-name" data-i18n="price_team_name">Équipe</div>
-        <div class="price-desc" data-i18n="price_team_desc">Pour les clubs, staffs de coaching et groupes de joueurs.</div>
-        <div class="price-amount"><span class="n">14€</span><span class="p">/ mois</span></div>
-        <ul class="price-list">
-          <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Tout Pro, pour plusieurs joueurs</li>
-          <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Vue consolidée du groupe</li>
-          <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Gestion des accès par rôle</li>
-          <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Facturation centralisée</li>
-        </ul>
-        <button class="btn-secondary" style="justify-content:center" disabled data-i18n="price_cta_soon">Bientôt disponible</button>
-      </div>
-    </div>
+    <div class="pricing-table-wrap fade-up" id="pricing-table-landing"><!-- filled by JS: renderPricingTable() --></div>
     <p class="price-note center fade-up" data-i18n="price_note">Aucune carte bancaire requise pour le plan Gratuit. Les formules Pro et Équipe sont en préparation.</p>
   </section>
 
@@ -1523,7 +1504,11 @@
           <h1 data-i18n="settings_title">Paramètres</h1>
         </div>
         <div class="app-content">
-          <div class="settings-grid">
+          <div class="settings-tabs">
+            <button type="button" class="settings-tab active" data-tab="display" onclick="setSettingsTab('display')" data-i18n="settings_tab_display">Affichage</button>
+            <button type="button" class="settings-tab" data-tab="account" onclick="setSettingsTab('account')" data-i18n="settings_tab_account">Compte</button>
+          </div>
+          <div class="settings-grid" id="settings-tab-account" hidden>
             <div class="settings-card" style="grid-column: 1 / -1;">
               <h3 data-i18n="settings_account_title">Compte</h3>
               <div id="settings-account-loggedout">
@@ -1564,7 +1549,7 @@
                   <p class="form-hint" id="settings-account-plan-label"></p>
                   <button class="btn-ghost btn-sm" id="settings-account-manage-plan-btn" onclick="openBillingPortal()" hidden data-i18n="settings_account_manage_plan">Gérer mon abonnement</button>
                   <div class="account-feedback" id="account-plan-feedback" hidden></div>
-                  <div class="plan-compare-grid" id="plan-compare-grid"></div>
+                  <div class="pricing-table-wrap" id="pricing-table-settings"></div>
                 </div>
                 <div class="settings-account-row">
                   <label data-i18n="settings_account_email">Adresse e-mail</label>
@@ -1615,6 +1600,8 @@
                 </div>
               </div>
             </div>
+          </div>
+          <div class="settings-grid" id="settings-tab-display">
             <div class="settings-card">
               <h3 data-i18n="settings_lang_title">Langue</h3>
               <p class="settings-desc" data-i18n="settings_lang_desc">Langue de l'interface de Pokelo.</p>
@@ -2289,6 +2276,12 @@ const I18N = {
     settings_account_public_toggle:'Rendre mon profil public', settings_account_copy_link:'Copier le lien',
     settings_account_link_copied:'Lien copié dans le presse-papiers.', settings_account_plan_current:'Plan actuel',
     plan_per_month:'mois',
+    pt_feat_bankrolls:'Bankrolls', pt_feat_sessions:'Sessions', pt_feat_game_types:'Tournois, cash game, expressos',
+    pt_feat_stats:'Statistiques', pt_feat_export:'Export des données (CSV/JSON)', pt_feat_modular_dashboard:'Dashboard modulaire (drag & drop)',
+    pt_feat_cloud_sync:'Sauvegarde & synchronisation cloud', pt_feat_pwa:'Application installable (PWA)', pt_feat_support:'Support',
+    pt_feat_group_view:'Vue consolidée multi-joueurs', pt_feat_roles:'Gestion des accès par rôle', pt_feat_billing:'Facturation centralisée',
+    pt_val_1_bankroll:'1', pt_val_unlimited:'Illimité', pt_val_basic:'De base', pt_val_advanced:'Avancées',
+    pt_val_standard:'Standard', pt_val_priority:'Prioritaire',
     plan_feat_1_bankroll:'1 bankroll', plan_feat_unlimited_sessions:'Sessions illimitées', plan_feat_basic_stats:'Statistiques de base',
     plan_feat_unlimited_bankrolls:'Bankrolls illimitées', plan_feat_modular_dashboard:'Dashboard modulaire', plan_feat_advanced_stats:'Statistiques avancées',
     plan_feat_all_pro:'Tout Pro, multi-joueurs', plan_feat_group_view:'Vue de groupe', plan_feat_roles:'Gestion des rôles',
@@ -2311,7 +2304,8 @@ const I18N = {
     empty_no_module_text:'Aucun module actif. Cliquez sur « Personnaliser » pour en ajouter.',
     th_date:'Date', th_type:'Type', th_format:'Format', th_buyin:'Mise', th_cashout:'Gain', th_result:'Résultat', th_bankroll:'Bankroll',
     th_sessions_count:'Sessions', th_invested:'Investi', th_roi:'ROI',
-    settings_title:'Paramètres', settings_lang_title:'Langue', settings_lang_desc:'Langue de l\'interface de Pokelo.',
+    settings_title:'Paramètres', settings_tab_display:'Affichage', settings_tab_account:'Compte',
+    settings_lang_title:'Langue', settings_lang_desc:'Langue de l\'interface de Pokelo.',
     settings_theme_title:'Thème', settings_theme_desc:'Apparence claire ou sombre de l\'application.',
     settings_theme_dark:'Sombre', settings_theme_light:'Clair',
     settings_date_title:'Format de date', settings_date_desc:'Comment les dates s\'affichent dans vos tableaux et graphiques.',
@@ -2462,6 +2456,12 @@ const I18N = {
     settings_account_public_toggle:'Make my profile public', settings_account_copy_link:'Copy link',
     settings_account_link_copied:'Link copied to clipboard.', settings_account_plan_current:'Current plan',
     plan_per_month:'month',
+    pt_feat_bankrolls:'Bankrolls', pt_feat_sessions:'Sessions', pt_feat_game_types:'Tournaments, cash game, Spin & Go',
+    pt_feat_stats:'Statistics', pt_feat_export:'Data export (CSV/JSON)', pt_feat_modular_dashboard:'Modular dashboard (drag & drop)',
+    pt_feat_cloud_sync:'Cloud backup & sync', pt_feat_pwa:'Installable app (PWA)', pt_feat_support:'Support',
+    pt_feat_group_view:'Consolidated multi-player view', pt_feat_roles:'Role-based access', pt_feat_billing:'Centralized billing',
+    pt_val_1_bankroll:'1', pt_val_unlimited:'Unlimited', pt_val_basic:'Basic', pt_val_advanced:'Advanced',
+    pt_val_standard:'Standard', pt_val_priority:'Priority',
     plan_feat_1_bankroll:'1 bankroll', plan_feat_unlimited_sessions:'Unlimited sessions', plan_feat_basic_stats:'Basic statistics',
     plan_feat_unlimited_bankrolls:'Unlimited bankrolls', plan_feat_modular_dashboard:'Modular dashboard', plan_feat_advanced_stats:'Advanced statistics',
     plan_feat_all_pro:'Everything in Pro, multi-player', plan_feat_group_view:'Group view', plan_feat_roles:'Role management',
@@ -2484,7 +2484,8 @@ const I18N = {
     empty_no_module_text:'No active module. Click "Customize" to add one.',
     th_date:'Date', th_type:'Type', th_format:'Format', th_buyin:'Buy-in', th_cashout:'Cash-out', th_result:'Result', th_bankroll:'Bankroll',
     th_sessions_count:'Sessions', th_invested:'Invested', th_roi:'ROI',
-    settings_title:'Settings', settings_lang_title:'Language', settings_lang_desc:'Language of the Pokelo interface.',
+    settings_title:'Settings', settings_tab_display:'Display', settings_tab_account:'Account',
+    settings_lang_title:'Language', settings_lang_desc:'Language of the Pokelo interface.',
     settings_theme_title:'Theme', settings_theme_desc:'Light or dark appearance of the app.',
     settings_theme_dark:'Dark', settings_theme_light:'Light',
     settings_date_title:'Date format', settings_date_desc:'How dates are displayed in your tables and charts.',
@@ -2750,7 +2751,7 @@ function defaultProfile(){
   return { displayName: '', avatarUrl: '', isPublic: false };
 }
 function defaultState(){
-  return { bankrolls: [], sessions: [], isDemo: false, demoDismissed: false, dashboardLayout: DEFAULT_LAYOUT.slice(), settings: defaultSettings(), profile: defaultProfile() };
+  return { bankrolls: [], sessions: [], isDemo: false, demoDismissed: false, dashboardLayout: DEFAULT_LAYOUT.slice(), settings: defaultSettings(), profile: defaultProfile(), deletedBankrollIds: [], deletedSessionIds: [] };
 }
 
 /* ── Data adapter — seam prête pour Supabase ──
@@ -2806,7 +2807,7 @@ function seedDemoState(){
       notes: '', createdAt: Date.now()
     });
   }
-  return { bankrolls: [bkOnline, bkLive], sessions, isDemo: true, demoDismissed: false, dashboardLayout: DEFAULT_LAYOUT.slice(), settings: defaultSettings(), profile: defaultProfile() };
+  return { bankrolls: [bkOnline, bkLive], sessions, isDemo: true, demoDismissed: false, dashboardLayout: DEFAULT_LAYOUT.slice(), settings: defaultSettings(), profile: defaultProfile(), deletedBankrollIds: [], deletedSessionIds: [] };
 }
 
 function resetToEmpty(){
@@ -4093,6 +4094,13 @@ async function pullFromCloud(userId){
     supabase.from('bankrolls').select('*').eq('user_id', userId),
     supabase.from('sessions').select('*').eq('user_id', userId),
   ]);
+  // Important : ne jamais traiter une erreur comme "aucune donnée" — sans ce
+  // contrôle, une erreur réseau/RLS transformait silencieusement `data` en
+  // liste vide, et le prochain sync interprétait ça comme "tout a été supprimé
+  // localement" et effaçait les vraies données côté cloud.
+  if (profileRes.error) throw profileRes.error;
+  if (bankrollsRes.error) throw bankrollsRes.error;
+  if (sessionsRes.error) throw sessionsRes.error;
   return { profile: profileRes.data, bankrolls: bankrollsRes.data || [], sessions: sessionsRes.data || [] };
 }
 function syncPushToCloud(){
@@ -4119,14 +4127,20 @@ async function syncPushToCloudRun(){
     }));
     if (bkPayload.length) await supabase.from('bankrolls').upsert(bkPayload);
     if (sessPayload.length) await supabase.from('sessions').upsert(sessPayload);
-    const { data: remoteBks } = await supabase.from('bankrolls').select('id').eq('user_id', userId);
-    const localBkIds = new Set(state.bankrolls.map(b => b.id));
-    const staleBks = (remoteBks || []).filter(r => !localBkIds.has(r.id)).map(r => r.id);
-    if (staleBks.length) await supabase.from('bankrolls').delete().in('id', staleBks);
-    const { data: remoteSess } = await supabase.from('sessions').select('id').eq('user_id', userId);
-    const localSessIds = new Set(state.sessions.map(s => s.id));
-    const staleSess = (remoteSess || []).filter(r => !localSessIds.has(r.id)).map(r => r.id);
-    if (staleSess.length) await supabase.from('sessions').delete().in('id', staleSess);
+    // Suppressions explicites (tombstones) plutôt qu'un diff "ce qui n'est plus
+    // présent localement doit être supprimé côté cloud" : cette dernière approche
+    // effaçait TOUTES les données distantes si `state` était vidé par erreur
+    // (ex. échec silencieux du pull), ce qui provoquait de vraies pertes de données.
+    const deletedSessionIds = (state.deletedSessionIds || []).slice();
+    if (deletedSessionIds.length) {
+      await supabase.from('sessions').delete().in('id', deletedSessionIds);
+      state.deletedSessionIds = (state.deletedSessionIds || []).filter(id => !deletedSessionIds.includes(id));
+    }
+    const deletedBankrollIds = (state.deletedBankrollIds || []).slice();
+    if (deletedBankrollIds.length) {
+      await supabase.from('bankrolls').delete().in('id', deletedBankrollIds);
+      state.deletedBankrollIds = (state.deletedBankrollIds || []).filter(id => !deletedBankrollIds.includes(id));
+    }
     const profile = state.profile || defaultProfile();
     await supabase.from('profiles').upsert({
       id: userId, email: currentUser.email, lang: state.settings.lang, theme: state.settings.theme,
@@ -4255,6 +4269,7 @@ function initSupabaseAuth(){
    ══════════════════════════════════════════════════════════════ */
 function renderSettingsPage(){
   ensureLayout();
+  setSettingsTab(currentSettingsTab);
   if (!state.settings) state.settings = defaultSettings();
   const s = state.settings;
   document.querySelectorAll('#settings-lang-seg button').forEach(b => b.classList.toggle('active', b.dataset.val === s.lang));
@@ -4266,6 +4281,16 @@ function renderSettingsPage(){
     if (el) el.value = s.colors[k];
   });
   renderAccountSettings();
+}
+
+let currentSettingsTab = 'display';
+function setSettingsTab(tab){
+  currentSettingsTab = tab;
+  document.querySelectorAll('.settings-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  const displayGrid = document.getElementById('settings-tab-display');
+  const accountGrid = document.getElementById('settings-tab-account');
+  if (displayGrid) displayGrid.hidden = tab !== 'display';
+  if (accountGrid) accountGrid.hidden = tab !== 'account';
 }
 
 function renderAccountSettings(){
@@ -4286,7 +4311,7 @@ function renderAccountSettings(){
   if (planLabelEl) planLabelEl.textContent = planLabels[currentPlan] || planLabels.free;
   const manageBtn = document.getElementById('settings-account-manage-plan-btn');
   if (manageBtn) manageBtn.hidden = !isPremium();
-  renderPlanCompare();
+  renderPricingTable('pricing-table-settings', { highlightPlanId: currentPlan, showCta: false });
   renderProfileSettings();
   refreshMfaStatus();
 }
@@ -4398,22 +4423,71 @@ async function renderPublicProfile(userId){
   }
 }
 
-const PLAN_TIERS = [
-  { id: 'free', nameKey: 'price_free_name', price: '0€', features: ['plan_feat_1_bankroll','plan_feat_unlimited_sessions','plan_feat_basic_stats'] },
-  { id: 'pro', nameKey: 'price_pro_name', price: '6€', features: ['plan_feat_unlimited_bankrolls','plan_feat_modular_dashboard','plan_feat_advanced_stats'] },
-  { id: 'team', nameKey: 'price_team_name', price: '14€', features: ['plan_feat_all_pro','plan_feat_group_view','plan_feat_roles'] },
+const PRICING_PLANS = [
+  { id: 'free', nameKey: 'price_free_name', price: '0€' },
+  { id: 'pro', nameKey: 'price_pro_name', price: '6€' },
+  { id: 'team', nameKey: 'price_team_name', price: '14€' },
 ];
-function renderPlanCompare(){
-  const el = document.getElementById('plan-compare-grid');
+const PRICING_FEATURES = [
+  { key: 'pt_feat_bankrolls', values: ['pt_val_1_bankroll', 'pt_val_unlimited', 'pt_val_unlimited'] },
+  { key: 'pt_feat_sessions', values: ['pt_val_unlimited', 'pt_val_unlimited', 'pt_val_unlimited'] },
+  { key: 'pt_feat_game_types', values: [true, true, true] },
+  { key: 'pt_feat_stats', values: ['pt_val_basic', 'pt_val_advanced', 'pt_val_advanced'] },
+  { key: 'pt_feat_export', values: [false, true, true] },
+  { key: 'pt_feat_modular_dashboard', values: [false, true, true] },
+  { key: 'pt_feat_cloud_sync', values: [false, true, true] },
+  { key: 'pt_feat_pwa', values: [true, true, true] },
+  { key: 'pt_feat_support', values: ['pt_val_standard', 'pt_val_priority', 'pt_val_priority'] },
+  { key: 'pt_feat_group_view', values: [false, false, true] },
+  { key: 'pt_feat_roles', values: [false, false, true] },
+  { key: 'pt_feat_billing', values: [false, false, true] },
+];
+const CHECK_SVG = '<svg class="icon pt-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>';
+const DASH_SVG = '<span class="pt-dash">—</span>';
+function pricingCell(v){
+  if (v === true) return CHECK_SVG;
+  if (v === false) return DASH_SVG;
+  return t(v);
+}
+function renderPricingTable(containerId, opts){
+  const el = document.getElementById(containerId);
   if (!el) return;
-  el.innerHTML = PLAN_TIERS.map(tier => `
-    <div class="plan-compare-card ${tier.id === currentPlan ? 'current' : ''}">
-      <h4>${t(tier.nameKey)}</h4>
-      <div class="pc-price">${tier.price} / ${t('plan_per_month')}</div>
-      <ul>${tier.features.map(f => `<li>${t(f)}</li>`).join('')}</ul>
-      ${tier.id === currentPlan ? `<span class="module-chip-soon">${t('settings_account_plan_current')}</span>` : (tier.id === 'free' ? '' : `<button class="btn-ghost btn-sm" disabled>${t('price_cta_soon')}</button>`)}
-    </div>
-  `).join('');
+  opts = opts || {};
+  const highlight = opts.highlightPlanId;
+  const showCta = !!opts.showCta;
+  el.innerHTML = `
+    <table class="pricing-table">
+      <thead>
+        <tr>
+          <th></th>
+          ${PRICING_PLANS.map(p => `
+            <th class="${p.id === highlight ? 'current' : ''}">
+              <div class="pt-plan-name">${t(p.nameKey)}</div>
+              <div class="pt-plan-price">${p.price} <span class="per">/ ${t('plan_per_month')}</span></div>
+              ${p.id === highlight ? `<span class="pt-current-badge">${t('settings_account_plan_current')}</span>` : ''}
+            </th>
+          `).join('')}
+        </tr>
+      </thead>
+      <tbody>
+        ${PRICING_FEATURES.map(f => `
+          <tr>
+            <td>${t(f.key)}</td>
+            ${f.values.map((v, i) => `<td class="${PRICING_PLANS[i].id === highlight ? 'current' : ''}">${pricingCell(v)}</td>`).join('')}
+          </tr>
+        `).join('')}
+      </tbody>
+      ${showCta ? `
+      <tfoot>
+        <tr>
+          <td></td>
+          <td class="${'free' === highlight ? 'current' : ''}"><a href="#/account/signup" data-link class="btn-secondary btn-sm" data-i18n="price_cta_free">${t('price_cta_free')}</a></td>
+          <td class="${'pro' === highlight ? 'current' : ''}"><button class="btn-primary btn-sm" disabled data-i18n="price_cta_soon">${t('price_cta_soon')}</button></td>
+          <td class="${'team' === highlight ? 'current' : ''}"><button class="btn-secondary btn-sm" disabled data-i18n="price_cta_soon">${t('price_cta_soon')}</button></td>
+        </tr>
+      </tfoot>` : ''}
+    </table>
+  `;
 }
 
 async function openBillingPortal(){
@@ -4656,7 +4730,11 @@ function refreshAllViewsAfterSettingsChange(){
   if (active === 'sessions') renderSessionsTable();
   if (active === 'bankrolls') renderBankrolls();
   if (active === 'stats') renderStats();
-  if (!document.getElementById('view-landing').hidden) { renderPreviewTab(document.querySelector('.preview-tab.active')?.dataset.tab || 'dashboard'); drawHeroCharts(); }
+  if (!document.getElementById('view-landing').hidden) {
+    renderPreviewTab(document.querySelector('.preview-tab.active')?.dataset.tab || 'dashboard');
+    drawHeroCharts();
+    renderPricingTable('pricing-table-landing', { highlightPlanId: null, showCta: true });
+  }
 }
 
 function emptyStateHtml(iconKey, title, text, action, cta){
@@ -4732,6 +4810,8 @@ function renderSessionsTable(){
 function confirmDeleteSession(id){
   openConfirm('Supprimer la session', 'Cette session sera définitivement supprimée.', () => {
     state.sessions = state.sessions.filter(s=>s.id!==id);
+    if (!state.deletedSessionIds) state.deletedSessionIds = [];
+    state.deletedSessionIds.push(id);
     state.isDemo = false;
     saveState(); closeConfirmModal(); renderSessionsTable(); populateBankrollSelects();
   });
@@ -4826,6 +4906,8 @@ function confirmDeleteBankroll(id){
     () => {
       state.sessions = state.sessions.filter(s=>s.bankrollId!==id);
       state.bankrolls = state.bankrolls.filter(b=>b.id!==id);
+      if (!state.deletedBankrollIds) state.deletedBankrollIds = [];
+      state.deletedBankrollIds.push(id);
       state.isDemo = false;
       saveState(); closeConfirmModal(); populateBankrollSelects(); renderBankrolls();
     });
@@ -5201,6 +5283,7 @@ document.addEventListener('DOMContentLoaded', function(){
   drawHeroCharts();
   renderPreviewTab('dashboard');
   renderModuleShowcase();
+  renderPricingTable('pricing-table-landing', { highlightPlanId: null, showCta: true });
   populateBankrollSelects();
   router();
   initPwa();

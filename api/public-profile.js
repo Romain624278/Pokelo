@@ -20,8 +20,16 @@ module.exports = async (req, res) => {
     const profileRes = await fetch(url, {
       headers: { apikey: SERVICE_ROLE_KEY, Authorization: `Bearer ${SERVICE_ROLE_KEY}` },
     });
-    const rows = await profileRes.json();
-    const row = rows && rows[0];
+    const body = await profileRes.json();
+    if (!profileRes.ok) {
+      // Erreur Postgrest (ex. colonne is_public/display_name/avatar_url absente
+      // si la migration SQL du §6 de SUPABASE_SETUP.md n'a pas été exécutée) —
+      // journalisée ici plutôt que silencieusement traitée comme "introuvable".
+      console.error('public-profile: Postgrest error', body);
+      res.status(502).json({ error: 'Upstream error', detail: body });
+      return;
+    }
+    const row = Array.isArray(body) ? body[0] : null;
     if (!row) { res.status(404).json({ error: 'Not found' }); return; }
 
     res.setHeader('Cache-Control', 'public, max-age=60');
