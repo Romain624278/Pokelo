@@ -65,6 +65,17 @@ async function getSupabaseUser(supabaseUrl, serviceRoleKey, accessToken){
   return user && user.id ? user : null;
 }
 
+// Lecture minimale d'un profil (clé service_role, contourne RLS) — utilisé par
+// la logique de parrainage (create-checkout-session.js, stripe-webhook.js).
+async function fetchProfileFields(supabaseUrl, serviceRoleKey, userId, fields){
+  const res = await fetch(`${supabaseUrl}/rest/v1/profiles?select=${fields}&id=eq.${userId}`, {
+    headers: { apikey: serviceRoleKey, Authorization: `Bearer ${serviceRoleKey}` },
+  });
+  if (!res.ok) return null;
+  const rows = await res.json();
+  return rows[0] || null;
+}
+
 function verifyStripeSignature(rawBody, sigHeader, secret){
   if (!sigHeader) return false;
   const parts = sigHeader.split(',').reduce((acc, part) => {
@@ -93,4 +104,4 @@ function getRawBody(req){
   });
 }
 
-module.exports = { stripeRequest, stripeGet, getSupabaseUser, verifyStripeSignature, getRawBody };
+module.exports = { stripeRequest, stripeGet, getSupabaseUser, fetchProfileFields, verifyStripeSignature, getRawBody };

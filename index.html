@@ -235,7 +235,11 @@
   .hero-mock-tile .hmt-label { font-size: 0.68rem; color: var(--grey); text-transform: uppercase; letter-spacing: 0.08em; }
   .hero-mock-tile .hmt-val { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--text-wall); margin-top: 4px; }
   .hero-mock-tile .hmt-val.pos { color: var(--green); }
-  .hero-mock-chart { grid-column: span 4; height: 170px; margin-top: .2rem; }
+  .hero-mock-chart { grid-column: span 4; height: 170px; margin-top: .2rem; overflow: hidden; }
+  .hero-chart-track { display: flex; width: 200%; height: 100%; animation: hero-chart-scroll 16s linear infinite; }
+  .hero-chart-track svg { width: 50%; height: 100%; flex-shrink: 0; display: block; }
+  @keyframes hero-chart-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .hero-chart-track { animation: none; } }
   .hero-stats { display: flex; gap: 3rem; justify-content: center; margin-top: 3.5rem; flex-wrap: wrap; position: relative; z-index: 1; }
   .stat { text-align: center; }
   .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.4rem; color: var(--green); line-height: 1; }
@@ -323,34 +327,6 @@
   .msc-thumb { width: 100%; height: 34px; }
   .msc-thumb svg { width: 100%; height: 100%; }
   .msc-title { font-size: .7rem; color: var(--grey); line-height: 1.3; }
-  .msc-preview { display: none; }
-  @media (hover: hover) and (pointer: fine) {
-    .msc-preview {
-      display: block; position: absolute; left: 50%; bottom: calc(100% + 12px); width: 260px;
-      max-width: calc(100vw - 40px);
-      background: var(--black-card); border: 1px solid var(--green); border-radius: 10px; padding: 1rem;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.5); text-align: left; z-index: 45;
-      opacity: 0; visibility: hidden; pointer-events: none;
-      transform: translateX(-50%) translateY(6px); transition: opacity .18s, transform .18s, visibility .18s;
-    }
-    .module-showcase-card:hover .msc-preview { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
-    .module-showcase-card:nth-child(7n) .msc-preview, .module-showcase-card:nth-child(7n-1) .msc-preview { left: auto; right: 0; transform: translateY(6px); }
-    .module-showcase-card:nth-child(7n):hover .msc-preview, .module-showcase-card:nth-child(7n-1):hover .msc-preview { transform: translateY(0); }
-    .module-showcase-card:nth-child(7n-6) .msc-preview, .module-showcase-card:nth-child(7n-5) .msc-preview { left: 0; transform: translateX(0) translateY(6px); }
-    .module-showcase-card:nth-child(7n-6):hover .msc-preview, .module-showcase-card:nth-child(7n-5):hover .msc-preview { transform: translateX(0) translateY(0); }
-  }
-  .msc-preview-thumb { width: 100%; height: 68px; margin-bottom: .7rem; }
-  .msc-preview-thumb svg { width: 100%; height: 100%; }
-  .msc-preview-sim { margin-bottom: .7rem; pointer-events: none; }
-  .msc-preview-sim .chart-box { height: 74px; }
-  .msc-preview-sim table.data-table { font-size: .62rem; }
-  .msc-preview-sim .table-wrap { max-height: 110px; overflow-y: auto; }
-  .msc-preview-sim .mini-stat-tile, .msc-preview-sim .summary-grid > * { padding: .5rem .6rem; }
-  .msc-preview-sim .mst-val, .msc-preview-sim .st-val { font-size: 1rem; }
-  .msc-preview-sim .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .4rem; }
-  .msc-preview-sim .module-toolbar { display: none; }
-  .msc-preview-title { font-size: .82rem; font-weight: 700; color: var(--text); margin-bottom: .35rem; }
-  .msc-preview-desc { font-size: .72rem; color: var(--grey); line-height: 1.4; }
   @media (max-width: 1100px) { .module-showcase-grid { grid-template-columns: repeat(4, 1fr); } }
   @media (max-width: 640px) { .module-showcase-grid { grid-template-columns: repeat(2, 1fr); } }
 
@@ -371,7 +347,31 @@
   .trust-avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 0.9rem; letter-spacing: 0.03em; color: var(--text-wall); flex-shrink: 0; border: 1px solid rgba(255,255,255,0.1); }
 
   /* ── BLOG PREVIEW / BLOG LIST ── */
-  .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.3rem; margin-top: 3.5rem; max-width: 1140px; }
+  .blog-filter-tabs { display: flex; gap: .6rem; margin-top: 2.4rem; flex-wrap: wrap; }
+  .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.3rem; margin-top: 1.6rem; max-width: 1140px; }
+
+  /* ── CALENDRIER POKER ── */
+  #calendar-hero { padding: 150px 6vw 5rem; }
+  .calendar-filters { display: flex; gap: 1.4rem; margin-top: 2.2rem; flex-wrap: wrap; max-width: 1140px; }
+  .calendar-filter-group { display: flex; flex-direction: column; gap: .4rem; }
+  .calendar-filter-group label { font-size: .72rem; color: var(--grey); text-transform: uppercase; letter-spacing: .06em; }
+  .calendar-filter-group select { min-width: 200px; }
+  .calendar-list { display: flex; flex-direction: column; gap: .7rem; margin-top: 2rem; max-width: 1140px; }
+  .calendar-event { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.2rem; background: var(--black-card); border: 1px solid var(--border); border-radius: var(--radius); transition: border-color .2s; }
+  .calendar-event:hover { border-color: rgba(8,191,47,0.4); }
+  .ce-flag { width: 38px; height: 26px; flex-shrink: 0; border-radius: 4px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+  .ce-flag svg { width: 100%; height: 100%; display: block; }
+  .ce-body { flex: 1; min-width: 0; }
+  .ce-top { display: flex; align-items: center; gap: .7rem; flex-wrap: wrap; }
+  .ce-name { font-size: .92rem; font-weight: 700; color: var(--text); }
+  .ce-badge { font-size: .64rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; padding: .2rem .55rem; border-radius: 100px; }
+  .ce-badge-majeur { color: var(--green); background: color-mix(in srgb, var(--green) 14%, transparent); }
+  .ce-badge-highroller { color: var(--critical); background: color-mix(in srgb, var(--critical) 14%, transparent); }
+  .ce-badge-circuit { color: var(--blue); background: color-mix(in srgb, var(--blue) 14%, transparent); }
+  .ce-meta { font-size: .8rem; color: var(--grey); margin-top: .25rem; }
+  .calendar-empty { color: var(--grey); font-size: .88rem; padding: 1rem 0; }
+  .calendar-disclaimer { font-size: .76rem; color: var(--grey); max-width: 1140px; margin-top: 2rem; line-height: 1.5; border-top: 1px solid var(--border); padding-top: 1.4rem; }
+  @media (max-width: 640px) { .calendar-event { flex-wrap: wrap; } }
   .blog-card { background: var(--black-card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; cursor: pointer; transition: border-color .25s, transform .25s; text-decoration: none; display: flex; flex-direction: column; }
   .blog-card:hover { border-color: var(--green); transform: translateY(-4px); }
   .blog-card-top { height: 120px; background: var(--black); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
@@ -413,8 +413,6 @@
   .article-body li { margin-bottom: 0.4rem; }
   .article-body li::marker { color: var(--green); }
   .article-cta { margin-top: 3rem; padding: 2rem; background: rgba(8,191,47,0.05); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
-  .legal-todo { font-size: .82rem; color: var(--amber); background: rgba(201,133,0,0.1); border: 1px solid rgba(201,133,0,0.35); border-radius: 8px; padding: .8rem 1rem; margin-bottom: 2rem; line-height: 1.5; }
-  .legal-todo code { background: rgba(255,255,255,0.08); padding: .1rem .35rem; border-radius: 4px; }
   .article-cta p { color: var(--grey); margin-bottom: 1.2rem; }
   .article-related { max-width: 1140px; margin: 5rem auto 0; }
 
@@ -842,6 +840,7 @@
     <li><a href="#preview" data-link data-i18n="nav_product">Le produit</a></li>
     <li><a href="#pricing" data-link data-i18n="nav_pricing">Tarifs</a></li>
     <li><a href="#/blog" data-link data-i18n="nav_blog">Blog</a></li>
+    <li><a href="#/calendrier" data-link data-i18n="nav_calendar">Calendrier</a></li>
     <li><a href="#/account" data-link class="nav-cta" data-i18n="nav_open_app">Se connecter</a></li>
   </ul>
   <button class="nav-burger" id="burger" aria-label="Menu" onclick="toggleMenu()">
@@ -854,6 +853,7 @@
   <a href="#preview" data-link onclick="closeMenu()" data-i18n="nav_product">Le produit</a>
   <a href="#pricing" data-link onclick="closeMenu()" data-i18n="nav_pricing">Tarifs</a>
   <a href="#/blog" data-link onclick="closeMenu()" data-i18n="nav_blog">Blog</a>
+  <a href="#/calendrier" data-link onclick="closeMenu()" data-i18n="nav_calendar">Calendrier</a>
   <a href="#/account" data-link class="nav-cta" onclick="closeMenu()" data-i18n="nav_open_app">Se connecter</a>
 </div>
 
@@ -906,7 +906,7 @@
           <div class="hmt-label">Sessions</div>
           <div class="hmt-val" id="hm-sessions">57</div>
         </div>
-        <div class="hero-mock-chart"><canvas id="heroChart"></canvas></div>
+        <div class="hero-mock-chart" id="hero-mock-chart"><div class="hero-chart-track" id="hero-chart-track"></div></div>
       </div>
     </div>
 
@@ -1176,7 +1176,41 @@
       <div class="divider"></div>
       <p class="section-sub" data-i18n="blog_hero_sub">Des tutos courts, sans blabla, pour mieux gérer votre argent de jeu.</p>
     </div>
+    <div class="blog-filter-tabs fade-up">
+      <button type="button" class="preview-tab active" data-type="all" onclick="setBlogFilter('all')" data-i18n="blog_filter_all">Tous</button>
+      <button type="button" class="preview-tab" data-type="guide" onclick="setBlogFilter('guide')" data-i18n="blog_filter_guide">Progresser</button>
+      <button type="button" class="preview-tab" data-type="news" onclick="setBlogFilter('news')" data-i18n="blog_filter_news">Actualités</button>
+    </div>
     <div class="blog-grid fade-up" id="blog-list-grid"><!-- filled by JS --></div>
+  </section>
+</main>
+
+<!-- ══════════════ VIEW : CALENDRIER POKER ══════════════ -->
+<main id="view-calendar" hidden>
+  <section id="calendar-hero">
+    <div class="fade-up">
+      <div class="section-tag" style="color: var(--amber);" data-i18n="calendar_tag">Gratuit</div>
+      <h2 class="section-title" data-i18n="calendar_title">Le calendrier du poker mondial 2026</h2>
+      <div class="divider"></div>
+      <p class="section-sub" data-i18n="calendar_sub">Les grands rendez-vous live de l'année, filtrables par pays et par type d'événement.</p>
+    </div>
+    <div class="calendar-filters fade-up">
+      <div class="calendar-filter-group">
+        <label data-i18n="calendar_filter_country">Pays</label>
+        <select class="input" id="calendar-country-filter" onchange="setCalendarFilter('country', this.value)"></select>
+      </div>
+      <div class="calendar-filter-group">
+        <label data-i18n="calendar_filter_type">Type d'événement</label>
+        <select class="input" id="calendar-type-filter" onchange="setCalendarFilter('type', this.value)">
+          <option value="all" data-i18n="calendar_type_all">Tous</option>
+          <option value="majeur" data-i18n="calendar_type_majeur">Circuit majeur</option>
+          <option value="highroller" data-i18n="calendar_type_highroller">High Roller</option>
+          <option value="circuit" data-i18n="calendar_type_circuit">Circuit régional</option>
+        </select>
+      </div>
+    </div>
+    <div class="calendar-list fade-up" id="calendar-list"><!-- filled by JS --></div>
+    <p class="calendar-disclaimer fade-up" data-i18n="calendar_disclaimer">Dates indicatives fondées sur les annonces officielles des organisateurs au moment de la publication — vérifiez les dates exactes sur le site de l'organisateur avant de réserver un déplacement.</p>
   </section>
 </main>
 
@@ -1220,6 +1254,7 @@
       <div class="footer-col">
         <h5 data-i18n="footer_resources">Ressources</h5>
         <a href="#/blog" data-link data-i18n="nav_blog">Blog</a>
+        <a href="#/calendrier" data-link data-i18n="nav_calendar">Calendrier poker 2026</a>
         <a href="#how" data-link data-i18n="hero_cta_secondary">Comment ça marche</a>
       </div>
       <div class="footer-col">
@@ -1294,6 +1329,10 @@
             <input class="input" type="password" id="signup-password-confirm" placeholder="••••••••" />
           </div>
         </div>
+        <div class="form-group">
+          <label data-i18n="account_referral_code">Code de parrainage (optionnel)</label>
+          <input class="input" id="signup-referral-code" placeholder="Ex. A1B2C3D4" style="text-transform:uppercase" />
+        </div>
         <button class="btn-primary" style="width:100%; justify-content:center" onclick="submitAccountForm('signup')" data-i18n="account_submit_signup">Créer mon compte</button>
         <div class="account-feedback" id="signup-feedback" hidden></div>
       </div>
@@ -1321,14 +1360,13 @@
       <div class="article-tag">Informations légales</div>
       <h1 class="article-title">Mentions légales</h1>
       <div class="article-meta">Dernière mise à jour : 24 juillet 2026</div>
-      <div class="legal-todo">Numéro SIRET/SIREN à compléter — le seul champ encore en attente. Le reste reprend les informations publiques de RD DIGITAL.</div>
       <div class="article-body">
         <h2>Éditeur du site</h2>
         <p>Le site Pokelo (ci-après « le Site ») est édité par :<br>
         RD DIGITAL<br>
         Entreprise individuelle<br>
         Siège social : Annecy, Haute-Savoie (74), France<br>
-        [Numéro SIRET / SIREN]<br>
+        SIRET : 901 296 947 00020 — SIREN : 901 296 947<br>
         Téléphone : 07 83 75 45 23<br>
         Email : contact@rd-digital.fr</p>
 
@@ -1421,7 +1459,6 @@
       <div class="article-tag">Conditions</div>
       <h1 class="article-title">Conditions générales d'utilisation et de vente</h1>
       <div class="article-meta">Dernière mise à jour : 24 juillet 2026</div>
-      <div class="legal-todo">Numéro SIRET/SIREN à compléter dans les Mentions légales — ce document en dépend.</div>
       <div class="article-body">
         <h2>1. Objet</h2>
         <p>Les présentes conditions générales d'utilisation et de vente (CGU/CGV) régissent l'accès et l'utilisation du site et de l'application Pokelo (ci-après « le Service »), édité par RD DIGITAL (entreprise individuelle, Annecy, Haute-Savoie), ainsi que la souscription aux offres payantes proposées. L'utilisation du Service implique l'acceptation pleine et entière des présentes CGU/CGV.</p>
@@ -1666,6 +1703,15 @@
                   <button class="btn-ghost btn-sm" id="settings-account-manage-plan-btn" onclick="openBillingPortal()" hidden data-i18n="settings_account_manage_plan">Gérer mon abonnement</button>
                   <div class="account-feedback" id="account-plan-feedback" hidden></div>
                   <div class="pricing-table-wrap" id="pricing-table-settings"></div>
+                </div>
+                <div class="settings-account-row">
+                  <label data-i18n="settings_referral_title">Parrainage</label>
+                  <p class="settings-desc" data-i18n="settings_referral_desc">Invitez des amis avec votre lien : ils obtiennent -30% sur leur premier mois Pro, et vous recevez 1 mois offert dès qu'ils s'abonnent (si vous êtes abonné Pro).</p>
+                  <div class="form-row">
+                    <input class="input" id="referral-link" readonly />
+                    <button class="btn-ghost btn-sm" onclick="copyReferralLink()" data-i18n="settings_account_copy_link">Copier le lien</button>
+                  </div>
+                  <p class="form-hint" id="referral-stats-hint"></p>
                 </div>
                 <div class="settings-account-row">
                   <label data-i18n="settings_account_email">Adresse e-mail</label>
@@ -2256,7 +2302,7 @@ function refreshLabelDicts(){
    ══════════════════════════════════════════════════════════════ */
 const I18N = {
   fr: {
-    nav_features:'Fonctionnalités', nav_product:'Le produit', nav_pricing:'Tarifs', nav_blog:'Blog', nav_open_app:"Se connecter",
+    nav_features:'Fonctionnalités', nav_product:'Le produit', nav_pricing:'Tarifs', nav_blog:'Blog', nav_calendar:'Calendrier', nav_open_app:"Se connecter",
     hero_badge:'Multi-devises · gestion du risque intégrée',
     hero_title_1:'Votre bankroll,', hero_title_2:'sous contrôle.',
     hero_sub:"Pokelo enregistre vos <strong>tournois</strong>, <strong>cash games</strong> et <strong>expressos</strong>, en <strong>live</strong> comme en <strong>online</strong>, dans la devise de votre choix — et transforme tout ça en graphiques clairs pour progresser sereinement.",
@@ -2319,6 +2365,13 @@ const I18N = {
     cta_sub:'Gratuit pour commencer, sans carte bancaire.', cta_button:'Créer un compte gratuit',
     footer_product:'Produit', footer_resources:'Ressources', footer_legal:'Légal', footer_rights:'Tous droits réservés.', footer_tagline:'Le poker responsable commence par une bonne gestion de bankroll.',
     blog_hero_tag:'Blog Pokelo', blog_hero_title:'Bankroll management<br>&amp; stratégie poker', blog_hero_sub:'Des tutos courts, sans blabla, pour mieux gérer votre argent de jeu.',
+    blog_filter_all:'Tous', blog_filter_guide:'Progresser', blog_filter_news:'Actualités',
+    calendar_tag:'Gratuit', calendar_title:'Le calendrier du poker mondial 2026',
+    calendar_sub:"Les grands rendez-vous live de l'année, filtrables par pays et par type d'événement.",
+    calendar_filter_country:'Pays', calendar_filter_type:"Type d'événement", calendar_filter_all_countries:'Tous les pays',
+    calendar_type_all:'Tous', calendar_type_majeur:'Circuit majeur', calendar_type_highroller:'High Roller', calendar_type_circuit:'Circuit régional',
+    calendar_empty:'Aucun événement ne correspond à ces filtres.',
+    calendar_disclaimer:"Dates indicatives fondées sur les annonces officielles des organisateurs au moment de la publication — vérifiez les dates exactes sur le site de l'organisateur avant de réserver un déplacement.",
     article_back:'Retour au blog', article_cta_text:'Mettez ces principes en pratique dès votre prochaine session.', article_cta_button:'Créer un compte gratuit',
     app_back_site:'Retour au site',
     public_profile_anonymous:'Joueur Pokelo', public_profile_member_since:'Membre depuis',
@@ -2376,6 +2429,7 @@ const I18N = {
     account_tab_login:'Connexion', account_tab_signup:'Créer un compte', account_tab_forgot:'Mot de passe oublié',
     account_local_notice:'Un compte est nécessaire pour utiliser Pokelo et synchroniser vos bankrolls et sessions dans le cloud, accessibles depuis n\'importe quel appareil.',
     account_email:'Adresse e-mail', account_password:'Mot de passe', account_password_confirm:'Confirmer', account_name:'Nom',
+    account_referral_code:'Code de parrainage (optionnel)',
     account_submit_login:'Se connecter', account_submit_signup:'Créer mon compte', account_submit_forgot:'Envoyer le lien de réinitialisation',
     account_pending_signup:'Compte créé ! Vérifiez votre boîte mail ({email}) et cliquez sur le lien de confirmation avant de vous connecter.',
     account_pending_forgot_sent:'Si un compte existe avec cette adresse, un e-mail de réinitialisation vient de lui être envoyé.',
@@ -2414,6 +2468,9 @@ const I18N = {
     settings_account_save:'Enregistrer', settings_account_profile_saved:'Profil mis à jour.',
     settings_account_public_toggle:'Rendre mon profil public', settings_account_copy_link:'Copier le lien',
     settings_account_link_copied:'Lien copié dans le presse-papiers.', settings_account_plan_current:'Plan actuel',
+    settings_referral_title:'Parrainage',
+    settings_referral_desc:'Invitez des amis avec votre lien : ils obtiennent -30% sur leur premier mois Pro, et vous recevez 1 mois offert dès qu\'ils s\'abonnent (si vous êtes abonné Pro).',
+    settings_referral_stats:'{count} ami(s) inscrit(s) avec votre code · {rewards} mois offert(s) reçu(s)',
     plan_per_month:'mois',
     pt_feat_bankrolls:'Bankrolls', pt_feat_sessions:'Sessions', pt_feat_game_types:'Tournois, cash game, expressos',
     pt_feat_stats:'Statistiques', pt_feat_export:'Export des données (CSV/JSON)', pt_feat_modular_dashboard:'Dashboard modulaire (drag & drop)',
@@ -2458,7 +2515,7 @@ const I18N = {
     empty_no_sessions_bankroll:'Aucune session pour cette bankroll.', empty_no_sessions_filter:'Aucune session ne correspond à ces filtres.',
   },
   en: {
-    nav_features:'Features', nav_product:'Product', nav_pricing:'Pricing', nav_blog:'Blog', nav_open_app:'Log in',
+    nav_features:'Features', nav_product:'Product', nav_pricing:'Pricing', nav_blog:'Blog', nav_calendar:'Calendar', nav_open_app:'Log in',
     hero_badge:'Multi-currency · built-in risk management',
     hero_title_1:'Your bankroll,', hero_title_2:'under control.',
     hero_sub:"Pokelo logs your <strong>tournaments</strong>, <strong>cash games</strong> and <strong>Spin & Go's</strong>, both <strong>live</strong> and <strong>online</strong>, in the currency of your choice — and turns it all into clear charts so you can play with a level head.",
@@ -2521,6 +2578,13 @@ const I18N = {
     cta_sub:'Free to start, no credit card required.', cta_button:'Create a free account',
     footer_product:'Product', footer_resources:'Resources', footer_legal:'Legal', footer_rights:'All rights reserved.', footer_tagline:'Responsible poker starts with solid bankroll management.',
     blog_hero_tag:'Pokelo Blog', blog_hero_title:'Bankroll management<br>&amp; poker strategy', blog_hero_sub:'Short, no-fluff tutorials to better manage your poker money.',
+    blog_filter_all:'All', blog_filter_guide:'Improve', blog_filter_news:'News',
+    calendar_tag:'Free', calendar_title:'The 2026 world poker calendar',
+    calendar_sub:"The year's biggest live events, filterable by country and event type.",
+    calendar_filter_country:'Country', calendar_filter_type:'Event type', calendar_filter_all_countries:'All countries',
+    calendar_type_all:'All', calendar_type_majeur:'Major tour', calendar_type_highroller:'High Roller', calendar_type_circuit:'Regional circuit',
+    calendar_empty:'No events match these filters.',
+    calendar_disclaimer:"Indicative dates based on official organizer announcements at time of publishing — check the organizer's website for exact dates before booking travel.",
     article_back:'Back to blog', article_cta_text:'Put these principles into practice starting your very next session.', article_cta_button:'Create a free account',
     app_back_site:'Back to site',
     public_profile_anonymous:'Pokelo player', public_profile_member_since:'Member since',
@@ -2578,6 +2642,7 @@ const I18N = {
     account_tab_login:'Log in', account_tab_signup:'Create account', account_tab_forgot:'Forgot password',
     account_local_notice:'An account is required to use Pokelo and sync your bankrolls and sessions to the cloud, accessible from any device.',
     account_email:'Email address', account_password:'Password', account_password_confirm:'Confirm', account_name:'Name',
+    account_referral_code:'Referral code (optional)',
     account_submit_login:'Log in', account_submit_signup:'Create my account', account_submit_forgot:'Send reset link',
     account_pending_signup:'Account created! Check your inbox ({email}) and click the confirmation link before logging in.',
     account_pending_forgot_sent:'If an account exists with this email, a reset link was just sent to it.',
@@ -2616,6 +2681,9 @@ const I18N = {
     settings_account_save:'Save', settings_account_profile_saved:'Profile updated.',
     settings_account_public_toggle:'Make my profile public', settings_account_copy_link:'Copy link',
     settings_account_link_copied:'Link copied to clipboard.', settings_account_plan_current:'Current plan',
+    settings_referral_title:'Referral program',
+    settings_referral_desc:'Invite friends with your link: they get 30% off their first Pro month, and you get 1 month free as soon as they subscribe (if you have Pokelo Pro).',
+    settings_referral_stats:'{count} friend(s) signed up with your code · {rewards} free month(s) received',
     plan_per_month:'month',
     pt_feat_bankrolls:'Bankrolls', pt_feat_sessions:'Sessions', pt_feat_game_types:'Tournaments, cash game, Spin & Go',
     pt_feat_stats:'Statistics', pt_feat_export:'Data export (CSV/JSON)', pt_feat_modular_dashboard:'Modular dashboard (drag & drop)',
@@ -2723,6 +2791,7 @@ const ARTICLES = [
     slug: 'bankroll-management-regles-essentielles',
     tag: 'Bases',
     accent: 'green',
+    type: 'guide',
     title: "Bankroll management : les règles essentielles pour ne jamais tomber à zéro",
     excerpt: "Les principes fondamentaux pour dimensionner votre bankroll et éviter le tapis, quel que soit votre format de jeu.",
     date: '2026-01-12',
@@ -2761,6 +2830,7 @@ const ARTICLES = [
     slug: 'combien-de-buyins-mtt',
     tag: 'Tournois',
     accent: 'amber',
+    type: 'guide',
     title: "Combien de buy-ins faut-il pour jouer les MTT sereinement ?",
     excerpt: "La variance des tournois multi-tables est brutale. Voici comment calculer un nombre de buy-ins réaliste selon votre profil.",
     date: '2026-01-19',
@@ -2793,6 +2863,7 @@ const ARTICLES = [
     slug: 'cashgame-vs-tournoi-gestion-bankroll',
     tag: 'Stratégie',
     accent: 'violet',
+    type: 'guide',
     title: "Cash game vs Tournoi : quelle gestion de bankroll adopter ?",
     excerpt: "Les deux formats n'ont pas la même variance ni la même logique de mise. Comparatif pratique pour adapter votre BRM.",
     date: '2026-01-26',
@@ -2815,6 +2886,7 @@ const ARTICLES = [
     slug: 'expresso-spin-go-variance',
     tag: 'Expresso',
     accent: 'critical',
+    type: 'guide',
     title: "Expressos / Spin & Go : gérer la variance de la loterie",
     excerpt: "Le multiplicateur aléatoire rend les expressos passionnants — et statistiquement violents pour une bankroll mal calibrée.",
     date: '2026-02-02',
@@ -2840,6 +2912,7 @@ const ARTICLES = [
     slug: 'live-vs-online-adapter-bankroll',
     tag: 'Stratégie',
     accent: 'blue',
+    type: 'guide',
     title: "Live vs Online : adapter sa bankroll selon le format",
     excerpt: "Rythme de jeu, niveau moyen, structure des mises : le live et l'online n'exposent pas votre bankroll de la même façon.",
     date: '2026-02-09',
@@ -2862,6 +2935,7 @@ const ARTICLES = [
     slug: 'suivre-statistiques-poker-pourquoi-comment',
     tag: 'Bases',
     accent: 'green',
+    type: 'guide',
     title: "Suivre ses statistiques poker : pourquoi et comment",
     excerpt: "Le suivi de résultats n'est pas réservé aux professionnels. Voici ce qu'il faut enregistrer, et pourquoi ça change tout.",
     date: '2026-02-16',
@@ -2888,6 +2962,73 @@ const ARTICLES = [
       <p>La barrière principale au suivi n'est pas la complexité, c'est l'oubli. Le rituel le plus efficace tient en trois étapes, à faire juste après la session pendant que les chiffres sont encore frais : noter la mise et le gain, cocher le type et le format, ajouter une note d'une ligne si quelque chose a particulièrement influencé le résultat (table difficile, fatigue, tilt). Fait systématiquement, ce rituel de deux minutes produit, au bout d'un mois, un historique bien plus fiable que n'importe quel souvenir a posteriori.</p>
       <h2>La discipline plutôt que la perfection</h2>
       <p>Il ne s'agit pas de noter chaque main jouée, mais d'enregistrer systématiquement chaque session — buy-in, gain, quelques minutes après la fin de la partie. C'est cette régularité, plus que la précision extrême, qui transforme un tableau de chiffres en un véritable outil de décision pour ajuster vos limites de jeu et votre discipline de bankroll management.</p>
+    `
+  },
+  {
+    slug: 'calendrier-tournois-live-2026-preparer-bankroll',
+    tag: 'Actualité',
+    accent: 'amber',
+    type: 'news',
+    title: "Calendrier des tournois live 2026 : comment préparer sa bankroll pour la saison",
+    excerpt: "WSOP, EPT, circuits nationaux : la saison live s'étale sur toute l'année. Comment planifier son budget sans se mettre en danger.",
+    date: '2026-03-02',
+    readTime: '6 min',
+    content: `
+      <p>Chaque année, le calendrier du poker live s'articule autour de quelques grands rendez-vous récurrents : les World Series of Poker (WSOP) à Las Vegas l'été, la tournée European Poker Tour (EPT) sur plusieurs étapes en Europe, et une multitude de circuits nationaux et de festivals de casino tout au long de l'année. Pour un joueur qui veut caler ses déplacements sur cette saison sans déséquilibrer sa bankroll, la planification compte autant que le jeu lui-même.</p>
+      <h2>Anticiper le coût réel d'un déplacement</h2>
+      <p>Le buy-in du tournoi principal n'est souvent qu'une fraction du budget réel : transport, hébergement sur plusieurs jours, repas, et éventuels re-entries ou side events gonflent vite la facture. Beaucoup de joueurs découvrent ce coût réel a posteriori, ce qui fausse leur perception de rentabilité du déplacement.</p>
+      <h2>Séparer bankroll de jeu et budget de déplacement</h2>
+      <p>Une pratique saine consiste à budgétiser le déplacement (transport, logement) comme une dépense de loisir séparée, et à ne faire porter la logique stricte de bankroll management que sur les buy-ins eux-mêmes. Mélanger les deux pousse souvent à sur-jouer des side events pour "rentabiliser" le voyage, ce qui va à l'encontre d'une gestion saine.</p>
+      <h2>Pourquoi suivre son calendrier de jeu, pas seulement ses résultats</h2>
+      <p>Savoir combien d'événements vous avez joués sur une saison, avec quel volume de buy-ins cumulés, aide à replacer une bad run dans son contexte réel : un mauvais mois sur trois gros festivals consécutifs n'a pas la même signification statistique qu'un mauvais mois sur trente petits tournois locaux étalés dans l'année.</p>
+      <h2>À retenir avant de partir</h2>
+      <ul>
+        <li>Fixez le nombre de buy-ins que vous êtes prêt à jouer sur le festival, à l'avance et par écrit.</li>
+        <li>Budgétisez transport et hébergement séparément de la bankroll de jeu.</li>
+        <li>Enregistrez chaque session du déplacement pour analyser sa rentabilité réelle une fois rentré, plutôt que sur une impression à chaud.</li>
+      </ul>
+    `
+  },
+  {
+    slug: 'tendances-poker-en-ligne-2026',
+    tag: 'Actualité',
+    accent: 'blue',
+    type: 'news',
+    title: "Poker en ligne : les tendances qui redessinent le jeu",
+    excerpt: "Formats rapides, marketplaces de staking, outils d'analyse démocratisés : un tour d'horizon des évolutions qui changent la manière de jouer et de suivre sa bankroll.",
+    date: '2026-03-16',
+    readTime: '6 min',
+    content: `
+      <p>Le poker en ligne évolue en permanence, porté par de nouveaux formats et de nouveaux outils. Sans prétendre à l'exhaustivité, quelques tendances de fond changent concrètement la façon dont les joueurs abordent leur bankroll.</p>
+      <h2>La montée des formats rapides</h2>
+      <p>Expressos, Spin & Go et autres formats à multiplicateur aléatoire occupent une place de plus en plus centrale dans l'offre des salles en ligne. Leur variance particulière (voir notre article dédié) impose des règles de bankroll management différentes des tournois classiques, ce qui pousse de plus en plus de joueurs à séparer leurs rolls par format plutôt que de tout regrouper.</p>
+      <h2>Les marketplaces de staking</h2>
+      <p>Les plateformes qui mettent en relation joueurs et investisseurs pour du staking (financement partiel ou total d'un buy-in contre un pourcentage des gains) se sont largement démocratisées. Elles changent la donne pour la gestion de bankroll : un joueur staké gère en réalité deux bankrolls distinctes — la sienne et celle, virtuelle, des parts vendues — qu'il est utile de suivre séparément pour ne pas fausser sa perception de rentabilité personnelle.</p>
+      <h2>Des outils d'analyse plus accessibles</h2>
+      <p>Les solveurs GTO et les trackers de statistiques, longtemps réservés à un cercle de joueurs technophiles ou professionnels, sont aujourd'hui accessibles à un public beaucoup plus large. Cette démocratisation relève le niveau moyen, ce qui a une conséquence directe sur la bankroll : les marges de profit se resserrent, et un dimensionnement prudent devient plus important qu'auparavant, pas moins.</p>
+      <h2>Ce qui ne change pas</h2>
+      <p>Malgré ces évolutions, le principe de base reste identique : sans suivi rigoureux de ses résultats, il est impossible de distinguer objectivement un vrai edge d'une variance favorable temporaire, quel que soit le format ou l'outil utilisé.</p>
+    `
+  },
+  {
+    slug: 'fiscalite-gains-poker-france',
+    tag: 'Actualité',
+    accent: 'violet',
+    type: 'news',
+    title: "Fiscalité des gains de poker en France : ce qu'il faut savoir",
+    excerpt: "Joueur occasionnel ou habituel, la frontière fiscale n'est pas qu'une formalité. Tour d'horizon des grands principes — et pourquoi ce n'est pas un conseil personnalisé.",
+    date: '2026-04-06',
+    readTime: '5 min',
+    content: `
+      <p>La question revient régulièrement chez les joueurs qui commencent à suivre sérieusement leurs résultats : mes gains de poker sont-ils imposables ? En France, la réponse dépend avant tout du caractère occasionnel ou habituel de la pratique — ce texte présente les grands principes généralement admis, mais ne constitue en aucun cas un conseil fiscal personnalisé.</p>
+      <h2>Le principe général pour un joueur occasionnel</h2>
+      <p>En France, les gains issus du hasard (jeux de casino, paris, loteries) perçus par un joueur occasionnel ne sont en principe pas soumis à l'impôt sur le revenu, le poker étant traditionnellement rattaché à cette famille de jeux par l'administration fiscale et la jurisprudence. Cette non-imposition concerne l'activité de loisir, pas une activité exercée de manière habituelle et organisée.</p>
+      <h2>La frontière avec l'activité "habituelle"</h2>
+      <p>La qualification change si l'activité est exercée de façon régulière, organisée et significative en termes de revenus — la frontière exacte s'apprécie au cas par cas selon la fréquence de jeu, le volume de gains, et le degré de professionnalisation (par exemple, vivre principalement de ses gains de poker). Dans ce cas, une requalification en bénéfices non commerciaux (BNC) est possible, avec les obligations déclaratives et sociales qui en découlent.</p>
+      <h2>Pourquoi un suivi précis devient utile</h2>
+      <p>Qu'un joueur reste clairement occasionnel ou se rapproche d'une pratique plus régulière, disposer d'un historique précis de ses sessions, buy-ins et résultats nets est utile dans les deux cas : pour objectiver son statut réel si la question se pose, et pour avoir une vision claire de sa situation en cas d'échange avec un professionnel du chiffre.</p>
+      <h2>Ce que cet article n'est pas</h2>
+      <p>Ce texte présente des principes généraux, pas un conseil fiscal individualisé : la situation de chaque joueur dépend de faits précis (fréquence, volumes, autres revenus) qui ne peuvent être évalués que par un professionnel (expert-comptable, avocat fiscaliste) au vu de votre situation réelle.</p>
     `
   }
 ];
@@ -2993,7 +3134,7 @@ function bankrollColor(bk){
 /* ══════════════════════════════════════════════════════════════
    POKELO — router
    ══════════════════════════════════════════════════════════════ */
-const VIEWS = ['view-landing','view-blog','view-article','view-app','view-account','view-legal','view-privacy','view-terms','view-public-profile'];
+const VIEWS = ['view-landing','view-blog','view-article','view-calendar','view-app','view-account','view-legal','view-privacy','view-terms','view-public-profile'];
 let currentBankrollScope = null; // for dashboard/stats bankroll selector
 
 function showView(id){
@@ -3009,7 +3150,10 @@ function router(){
     renderArticle(slug);
   } else if (hash.startsWith('#/blog')) {
     showView('view-blog');
-    renderBlogGrid('blog-list-grid', null);
+    renderBlogGrid('blog-list-grid', null, currentBlogFilter);
+  } else if (hash.startsWith('#/calendrier')) {
+    showView('view-calendar');
+    renderPokerCalendar();
   } else if (hash.startsWith('#/app')) {
     if (!authCheckComplete) {
       showView('view-app');
@@ -3164,6 +3308,41 @@ const ARTICLE_ILLUSTRATIONS = {
     <line x1="161" y1="71" x2="177" y2="87" stroke="var(--green)" stroke-width="4" stroke-linecap="round"/>
     <rect x="135" y="48" width="20" height="2" fill="var(--green)" opacity="0.5"/>
   </svg>`,
+  'calendrier-tournois-live-2026-preparer-bankroll': `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="140" cy="40" r="44" fill="var(--amber)" opacity="0.07"/>
+    <rect x="20" y="24" width="90" height="76" rx="6" fill="none" stroke="var(--amber)" stroke-width="2.2"/>
+    <path d="M20 44h90" stroke="var(--amber)" stroke-width="2.2"/>
+    <path d="M40 16v16M90 16v16" stroke="var(--amber)" stroke-width="2.2" stroke-linecap="round"/>
+    <rect x="34" y="54" width="12" height="12" rx="2" fill="var(--amber)" opacity="0.5"/>
+    <rect x="54" y="54" width="12" height="12" rx="2" fill="var(--amber)" opacity="0.85"/>
+    <rect x="74" y="54" width="12" height="12" rx="2" fill="var(--amber)" opacity="0.3"/>
+    <rect x="34" y="74" width="12" height="12" rx="2" fill="var(--amber)" opacity="0.3"/>
+    <rect x="54" y="74" width="12" height="12" rx="2" fill="var(--amber)" opacity="0.5"/>
+    <path d="M150 20c-13 0-22 10-22 22 0 16 22 40 22 40s22-24 22-40c0-12-9-22-22-22Z" fill="none" stroke="var(--amber)" stroke-width="2.4"/>
+    <circle cx="150" cy="42" r="7" fill="var(--amber)"/>
+  </svg>`,
+  'tendances-poker-en-ligne-2026': `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="100" cy="55" r="48" fill="var(--blue)" opacity="0.07"/>
+    <rect x="34" y="30" width="90" height="58" rx="4" fill="none" stroke="var(--blue)" stroke-width="2.2"/>
+    <path d="M46 72 66 54 82 64 108 40" fill="none" stroke="var(--blue)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="66" cy="54" r="3" fill="var(--blue)"/>
+    <circle cx="82" cy="64" r="3" fill="var(--blue)"/>
+    <circle cx="108" cy="40" r="3" fill="var(--blue)"/>
+    <path d="M20 96h140" stroke="var(--blue)" stroke-width="2.2" stroke-linecap="round" opacity="0.5"/>
+    <circle cx="150" cy="34" r="5" fill="none" stroke="var(--blue)" stroke-width="2"/>
+    <circle cx="164" cy="52" r="5" fill="none" stroke="var(--blue)" stroke-width="2"/>
+    <circle cx="150" cy="70" r="5" fill="none" stroke="var(--blue)" stroke-width="2"/>
+    <path d="M150 34l14 18M164 52l-14 18" stroke="var(--blue)" stroke-width="1.6" opacity="0.6"/>
+  </svg>`,
+  'fiscalite-gains-poker-france': `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="70" cy="55" r="46" fill="var(--violet)" opacity="0.07"/>
+    <rect x="30" y="18" width="70" height="90" rx="5" fill="none" stroke="var(--violet)" stroke-width="2.2"/>
+    <path d="M42 38h46M42 52h46M42 66h30" stroke="var(--violet)" stroke-width="2.2" stroke-linecap="round"/>
+    <circle cx="140" cy="70" r="26" fill="none" stroke="var(--violet)" stroke-width="2.4"/>
+    <circle cx="131" cy="61" r="4" fill="var(--violet)"/>
+    <circle cx="149" cy="79" r="4" fill="var(--violet)"/>
+    <line x1="128" y1="82" x2="152" y2="58" stroke="var(--violet)" stroke-width="2.4" stroke-linecap="round"/>
+  </svg>`,
 };
 const ARTICLE_ACCENT_VAR = { green: '--green', amber: '--amber', violet: '--violet', critical: '--critical', blue: '--blue' };
 function blogCardHtml(a){
@@ -3184,9 +3363,16 @@ function blogCardHtml(a){
       </div>
     </a>`;
 }
-function renderBlogGrid(containerId, limit){
+let currentBlogFilter = 'all';
+function setBlogFilter(type){
+  currentBlogFilter = type;
+  document.querySelectorAll('.blog-filter-tabs .preview-tab').forEach(b => b.classList.toggle('active', b.dataset.type === type));
+  renderBlogGrid('blog-list-grid', null, currentBlogFilter);
+}
+function renderBlogGrid(containerId, limit, filterType){
   const el = document.getElementById(containerId);
-  const list = limit ? ARTICLES.slice(0, limit) : ARTICLES;
+  let list = filterType && filterType !== 'all' ? ARTICLES.filter(a => a.type === filterType) : ARTICLES;
+  if (limit) list = list.slice(0, limit);
   el.innerHTML = list.map(blogCardHtml).join('');
 }
 function renderArticle(slug){
@@ -3198,6 +3384,115 @@ function renderArticle(slug){
     <div class="article-body">${a.content}</div>
   `;
   document.title = a.title + ' — Pokelo';
+}
+
+/* ══════════════════════════════════════════════════════════════
+   POKELO — calendrier du poker mondial (fonctionnalité gratuite)
+   Dates fondées sur les annonces officielles des organisateurs
+   (WSOP.com, PokerNews, Pokerfuse) au moment de la rédaction —
+   voir la mention "dates indicatives" affichée sur la page.
+   ══════════════════════════════════════════════════════════════ */
+const POKER_CALENDAR_2026 = [
+  { name:'WPT Seminole Hard Rock Lucky Hearts Poker Open', country:'US', city:'Hollywood, Floride', start:'2026-01-06', end:'2026-01-20', type:'majeur' },
+  { name:'Partouche Poker Deepstack — La Tour-de-Salvagny', country:'FR', city:'La Tour-de-Salvagny', start:'2026-01-21', end:'2026-01-25', type:'circuit' },
+  { name:'WPT Cambodia', country:'KH', city:'Phnom Penh (NagaWorld)', start:'2026-01-21', end:'2026-02-03', type:'majeur' },
+  { name:"PokerStars Open Campione", country:'IT', city:"Campione d'Italia", start:'2026-01-23', end:'2026-02-01', type:'circuit' },
+  { name:'WPT Venetian Las Vegas Spring Championship', country:'US', city:'Las Vegas', start:'2026-02-09', end:'2026-02-24', type:'majeur' },
+  { name:'EPT Paris', country:'FR', city:'Paris', start:'2026-02-18', end:'2026-03-01', type:'majeur' },
+  { name:'Triton ONE Jeju', country:'KR', city:'Jeju', start:'2026-03-05', end:'2026-03-15', type:'highroller' },
+  { name:'Triton Super High Roller Series Jeju', country:'KR', city:'Jeju', start:'2026-03-14', end:'2026-04-01', type:'highroller' },
+  { name:'Irish Poker Open', country:'IE', city:'Dublin', start:'2026-03-26', end:'2026-04-06', type:'majeur' },
+  { name:'WSOP Europe', country:'CZ', city:"Prague (King's Casino)", start:'2026-03-31', end:'2026-04-12', type:'majeur' },
+  { name:'WSOP Circuit — Pasino Partouche', country:'FR', city:'Aix-en-Provence', start:'2026-04-10', end:'2026-04-21', type:'circuit' },
+  { name:'Partouche Poker Deepstack — Divonne-les-Bains', country:'FR', city:'Divonne-les-Bains', start:'2026-04-22', end:'2026-04-26', type:'circuit' },
+  { name:'Aussie Millions', country:'AU', city:'Melbourne (Crown)', start:'2026-04-24', end:'2026-05-10', type:'majeur' },
+  { name:'EPT Monte-Carlo', country:'MC', city:'Monte-Carlo', start:'2026-04-30', end:'2026-05-10', type:'majeur' },
+  { name:'Triton Super High Roller Series Montenegro', country:'ME', city:'Sveti Stefan', start:'2026-05-13', end:'2026-05-28', type:'highroller' },
+  { name:'Riviera Poker Festival', country:'FR', city:'Aix-en-Provence', start:'2026-05-08', end:'2026-08-05', type:'circuit' },
+  { name:'PokerStars Open Namur', country:'BE', city:'Namur', start:'2026-05-27', end:'2026-06-07', type:'circuit' },
+  { name:'World Series of Poker (WSOP)', country:'US', city:'Las Vegas (Horseshoe & Paris)', start:'2026-05-26', end:'2026-07-15', type:'majeur' },
+  { name:'WPT Cambodia — Passport to the World Championship', country:'KH', city:'Phnom Penh (NagaWorld)', start:'2026-08-12', end:'2026-08-24', type:'majeur' },
+  { name:'Triton Super High Roller Series Jeju', country:'KR', city:'Jeju', start:'2026-09-04', end:'2026-09-17', type:'highroller' },
+  { name:'WPT Prime Australia', country:'AU', city:'Sydney (The Star)', start:'2026-09-10', end:'2026-09-30', type:'majeur' },
+  { name:'WPT Prime Lodge Championship', country:'US', city:'Austin, Texas', start:'2026-09-24', end:'2026-10-12', type:'majeur' },
+  { name:'WPT Seoul', country:'KR', city:'Séoul (INSPIRE)', start:'2026-10-30', end:'2026-11-09', type:'majeur' },
+  { name:'PokerStars Open Aix-en-Provence', country:'FR', city:'Aix-en-Provence', start:'2026-11-02', end:'2026-11-08', type:'circuit' },
+  { name:'EPT Prague', country:'CZ', city:'Prague', start:'2026-12-02', end:'2026-12-13', type:'majeur' },
+];
+const FLAG_SVG = {
+  FR: `<rect width="10" height="20" fill="#002654"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ED2939"/>`,
+  US: `<rect width="30" height="20" fill="#fff"/>
+    <rect y="0" width="30" height="1.54" fill="#B22234"/><rect y="3.08" width="30" height="1.54" fill="#B22234"/><rect y="6.15" width="30" height="1.54" fill="#B22234"/>
+    <rect y="9.23" width="30" height="1.54" fill="#B22234"/><rect y="12.31" width="30" height="1.54" fill="#B22234"/><rect y="15.38" width="30" height="1.54" fill="#B22234"/><rect y="18.46" width="30" height="1.54" fill="#B22234"/>
+    <rect width="13" height="10.8" fill="#3C3B6E"/>`,
+  KH: `<rect width="30" height="20" fill="#032ea1"/><rect y="5" width="30" height="10" fill="#e00025"/><rect x="11" y="7" width="8" height="6" fill="#fff"/>`,
+  IT: `<rect width="10" height="20" fill="#008C45"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#CD212A"/>`,
+  KR: `<rect width="30" height="20" fill="#fff"/><circle cx="15" cy="10" r="6" fill="#CD2E3A"/><path d="M15 4a6 6 0 0 0 0 12 3 3 0 0 1 0-6 3 3 0 0 0 0-6Z" fill="#0047A0"/>`,
+  IE: `<rect width="10" height="20" fill="#169B62"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#FF883E"/>`,
+  CZ: `<rect width="30" height="10" fill="#fff"/><rect y="10" width="30" height="10" fill="#D7141A"/><path d="M0 0 15 10 0 20Z" fill="#11457E"/>`,
+  AU: `<rect width="30" height="20" fill="#00247D"/><path d="M0 0 15 10M15 0 0 10" stroke="#fff" stroke-width="1.6"/><path d="M7.5 0v10M0 5h15" stroke="#fff" stroke-width="1.8"/><path d="M7.5 0v10M0 5h15" stroke="#E4312B" stroke-width="0.9"/>
+    <circle cx="22" cy="6" r="0.8" fill="#fff"/><circle cx="25" cy="10" r="0.8" fill="#fff"/><circle cx="22" cy="14" r="0.8" fill="#fff"/><circle cx="19" cy="10" r="0.8" fill="#fff"/><circle cx="24" cy="15.5" r="0.6" fill="#fff"/>`,
+  MC: `<rect width="30" height="10" fill="#CE1126"/><rect y="10" width="30" height="10" fill="#fff"/>`,
+  ME: `<rect width="30" height="20" fill="#D40000"/><rect x="0.8" y="0.8" width="28.4" height="18.4" fill="none" stroke="#D4AF37" stroke-width="1.4"/><circle cx="15" cy="10" r="4" fill="none" stroke="#D4AF37" stroke-width="1.2"/>`,
+  BE: `<rect width="10" height="20" fill="#000"/><rect x="10" width="10" height="20" fill="#FDDA24"/><rect x="20" width="10" height="20" fill="#EF3340"/>`,
+};
+function flagSvg(code){
+  return `<svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg">${FLAG_SVG[code] || '<rect width="30" height="20" fill="var(--border)"/>'}</svg>`;
+}
+const COUNTRY_NAMES = {
+  fr: { US:'États-Unis', FR:'France', KH:'Cambodge', IT:'Italie', KR:'Corée du Sud', IE:'Irlande', CZ:'République tchèque', AU:'Australie', MC:'Monaco', ME:'Monténégro', BE:'Belgique' },
+  en: { US:'United States', FR:'France', KH:'Cambodia', IT:'Italy', KR:'South Korea', IE:'Ireland', CZ:'Czech Republic', AU:'Australia', MC:'Monaco', ME:'Montenegro', BE:'Belgium' },
+};
+function countryName(code){
+  const lang = (state.settings && state.settings.lang === 'en') ? 'en' : 'fr';
+  return COUNTRY_NAMES[lang][code] || code;
+}
+function fmtCalendarRange(startIso, endIso){
+  const locale = (state.settings && state.settings.lang === 'en') ? 'en-US' : 'fr-FR';
+  const opts = { day:'numeric', month:'short', year:'numeric' };
+  const s = new Date(startIso+'T00:00:00').toLocaleDateString(locale, opts);
+  if (!endIso || endIso === startIso) return s;
+  const e = new Date(endIso+'T00:00:00').toLocaleDateString(locale, opts);
+  return `${s} – ${e}`;
+}
+let calendarFilters = { country: 'all', type: 'all' };
+function setCalendarFilter(dim, value){
+  calendarFilters[dim] = value;
+  renderCalendarList();
+}
+function populateCalendarCountryFilter(){
+  const sel = document.getElementById('calendar-country-filter');
+  if (!sel) return;
+  const codes = [...new Set(POKER_CALENDAR_2026.map(e => e.country))].sort((a, b) => countryName(a).localeCompare(countryName(b)));
+  sel.innerHTML = `<option value="all">${t('calendar_filter_all_countries')}</option>` + codes.map(c => `<option value="${c}">${countryName(c)}</option>`).join('');
+  sel.value = calendarFilters.country;
+}
+function renderCalendarList(){
+  const el = document.getElementById('calendar-list');
+  if (!el) return;
+  const list = POKER_CALENDAR_2026
+    .filter(e => calendarFilters.country === 'all' || e.country === calendarFilters.country)
+    .filter(e => calendarFilters.type === 'all' || e.type === calendarFilters.type)
+    .slice()
+    .sort((a, b) => a.start.localeCompare(b.start));
+  if (!list.length) { el.innerHTML = `<p class="calendar-empty">${t('calendar_empty')}</p>`; return; }
+  el.innerHTML = list.map(e => `
+    <div class="calendar-event">
+      <div class="ce-flag">${flagSvg(e.country)}</div>
+      <div class="ce-body">
+        <div class="ce-top">
+          <span class="ce-name">${escapeHtml(e.name)}</span>
+          <span class="ce-badge ce-badge-${e.type}">${t('calendar_type_'+e.type)}</span>
+        </div>
+        <div class="ce-meta">${escapeHtml(e.city)}, ${escapeHtml(countryName(e.country))} · ${fmtCalendarRange(e.start, e.end)}</div>
+      </div>
+    </div>`).join('');
+}
+function renderPokerCalendar(){
+  populateCalendarCountryFilter();
+  const typeSel = document.getElementById('calendar-type-filter');
+  if (typeSel) typeSel.value = calendarFilters.type;
+  renderCalendarList();
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -3255,39 +3550,44 @@ function renderStatMarquee(){
   track.innerHTML = itemsHtml + itemsHtml; // dupliqué pour une boucle continue sans coupure
 }
 
-let heroScrollTimer = null;
-function startHeroChartScroll(startBal){
-  clearInterval(heroScrollTimer);
-  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const rand = mulberry32(99);
-  let last = startBal;
-  heroScrollTimer = setInterval(() => {
-    if (!charts.hero) { clearInterval(heroScrollTimer); return; }
-    const ds = charts.hero.data.datasets[0].data;
-    const labels = charts.hero.data.labels;
-    last += (rand() - 0.42) * 55;
-    ds.shift(); labels.shift();
-    ds.push(Math.round(last));
-    labels.push((labels[labels.length - 1] || 0) + 1);
-    charts.hero.update();
-  }, 1000);
+/* Ligne du mockup hero : un vrai défilement CSS (transform, GPU) plutôt qu'un
+   redessin Chart.js périodique — c'est ce qui le rend parfaitement fluide,
+   sur le même principe que la bande défilante (stat-marquee). */
+function buildHeroChartPath(seed, w, h){
+  const rand = mulberry32(seed);
+  const n = 36;
+  let bal = 2068;
+  const pts = [];
+  for (let i=0;i<n;i++){ bal += (rand()-0.4)*60; pts.push(bal); }
+  const min = Math.min(...pts), max = Math.max(...pts);
+  const pad = (max-min)*0.18 || 10;
+  const yMin = min-pad, yMax = max+pad;
+  const stepX = w/(n-1);
+  const coords = pts.map((v,i)=> [ i*stepX, h - ((v-yMin)/(yMax-yMin))*h ]);
+  const line = coords.map((c,i)=> (i===0?'M':'L')+c[0].toFixed(1)+','+c[1].toFixed(1)).join(' ');
+  const area = `${line} L${w.toFixed(1)},${h.toFixed(1)} L0,${h.toFixed(1)} Z`;
+  return { line, area };
+}
+function heroChartSvg(seed, instance){
+  const w = 440, h = 170;
+  const { line, area } = buildHeroChartPath(seed, w, h);
+  const gid = 'heroChartGrad' + seed + '-' + instance;
+  return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="var(--green)" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="var(--green)" stop-opacity="0"/>
+    </linearGradient></defs>
+    <path d="${area}" fill="url(#${gid})" stroke="none"/>
+    <path d="${line}" fill="none" stroke="var(--green)" stroke-width="2" vector-effect="non-scaling-stroke"/>
+  </svg>`;
+}
+function renderHeroChartScroll(){
+  const track = document.getElementById('hero-chart-track');
+  if (!track) return;
+  track.innerHTML = heroChartSvg(7, 'a') + heroChartSvg(7, 'b'); // même tracé dupliqué (ids distincts) : la boucle translateX(-50%) est donc invisible
 }
 function drawHeroCharts(){
-  if (!window.Chart) return;
-  const rand = mulberry32(7);
-  let bal = 2068; const labels = []; const data = [];
-  for (let i=0;i<24;i++){ bal += (rand()-0.4)*60; labels.push(i); data.push(Math.round(bal)); }
-  destroyChart('hero');
-  charts.hero = new Chart(document.getElementById('heroChart'), {
-    type: 'line',
-    data: { labels, datasets: [{ data, borderColor: '#08BF2F', borderWidth: 2, pointRadius: 0, fill: true,
-      backgroundColor: (ctx) => { const g = ctx.chart.ctx.createLinearGradient(0,0,0,170); g.addColorStop(0,'rgba(8,191,47,0.25)'); g.addColorStop(1,'rgba(8,191,47,0)'); return g; },
-      tension: 0.35 }] },
-    options: { responsive:true, maintainAspectRatio:false, animation: { duration: 700, easing: 'linear' },
-      plugins:{legend:{display:false},tooltip:{enabled:false}},
-      scales: { x:{ display:false }, y:{ display:false } } }
-  });
-  startHeroChartScroll(bal);
+  renderHeroChartScroll();
 
   const featCanvas = document.getElementById('featBigChart');
   if (featCanvas) {
@@ -3686,70 +3986,6 @@ function sessionsTableHtml(sessions, bk){
       <td>${fmtMoney(s.buyIn, sCur)}</td>
       <td class="cell-profit ${p>=0?'pos':'neg'}">${fmtSigned(p, bk.currency)}${converted ? ` <span class="fx-tag">${escapeHtml(sCur)}→${escapeHtml(bk.currency)}</span>` : ''}</td></tr>`;
   }).join('')}</tbody></table></div>`;
-}
-
-/* ── Aperçus au survol (landing) : vraie simulation avec les données démo,
-   pas une icône statique — canvases dédiés (préfixe showcase-) pour ne
-   jamais entrer en collision avec les canvases du vrai dashboard (préfixe mod-). ── */
-const MODULE_BODY_IDS = ['evolution','monthly','category','formatbar','best','worst','recent','summary','roi','itm',
-  'periodProfit','stakeBreakdown','platformBreakdown','heatmap','durationCorrelation','variance','riskOfRuin',
-  'moveDownAlert','buyinsReserve','streaks','tiltSessions','bb100'];
-const SHOWCASE_TREND_MODULES = ['evolution','monthly','periodProfit','durationCorrelation'];
-const SHOWCASE_BREAKDOWN_KEYS = {
-  category: s => CAT_LABEL[s.category] || s.category,
-  formatbar: s => FMT_LABEL[s.format] || s.format,
-  stakeBreakdown: s => stakeTier(s.buyIn),
-  platformBreakdown: s => s.site || '—',
-};
-function demoModulePreviewData(){
-  if (!state.bankrolls.length) return null;
-  const bk = state.bankrolls.reduce((best, b) => getSessionsFor(b.id).length > getSessionsFor(best.id).length ? b : best, state.bankrolls[0]);
-  return { bk, sessions: getSessionsFor(bk.id) };
-}
-function showcaseModuleBody(id){
-  const demo = demoModulePreviewData();
-  if (!demo) return null;
-  const { bk, sessions } = demo;
-  if (SHOWCASE_TREND_MODULES.includes(id) || SHOWCASE_BREAKDOWN_KEYS[id]) {
-    return `<div class="chart-box sm"><canvas id="showcase-${id}-chart"></canvas></div>`;
-  }
-  if (MODULE_BODY_IDS.includes(id)) return moduleBodyHtml(id, bk, sessions);
-  return null;
-}
-function drawShowcaseCharts(){
-  const demo = demoModulePreviewData();
-  if (!demo || !demo.sessions.length) return;
-  const { bk, sessions } = demo;
-  SHOWCASE_TREND_MODULES.forEach(id => drawShowcaseTrendChart(`showcase-${id}-chart`, bk, sessions));
-  Object.keys(SHOWCASE_BREAKDOWN_KEYS).forEach(id => drawShowcaseBreakdownChart(`showcase-${id}-chart`, sessions, SHOWCASE_BREAKDOWN_KEYS[id]));
-}
-function drawShowcaseTrendChart(canvasId, bk, sessions){
-  const canvas = document.getElementById(canvasId);
-  if (!canvas) return;
-  destroyChart(canvasId);
-  let running = bk.start;
-  const data = sessions.map(s => { running += sessionProfit(s); return Math.round(running * 100) / 100; });
-  const trendGood = data[data.length - 1] >= bk.start;
-  charts[canvasId] = new Chart(canvas, {
-    type: 'line',
-    data: { labels: data.map((_, i) => i), datasets: [{ data, borderColor: trendGood ? GOOD : CRITICAL, borderWidth: 2, pointRadius: 0, tension: .3, fill: true,
-      backgroundColor: (ctx) => { const g = ctx.chart.ctx.createLinearGradient(0, 0, 0, 90); const c = trendGood ? '8,191,47' : '230,103,103'; g.addColorStop(0, `rgba(${c},0.25)`); g.addColorStop(1, `rgba(${c},0)`); return g; } }] },
-    options: { responsive: true, maintainAspectRatio: false, animation: false, plugins: { legend: { display: false }, tooltip: { enabled: false } }, scales: { x: { display: false }, y: { display: false } } }
-  });
-}
-function drawShowcaseBreakdownChart(canvasId, sessions, keyFn){
-  const canvas = document.getElementById(canvasId);
-  if (!canvas) return;
-  destroyChart(canvasId);
-  const counts = {};
-  sessions.forEach(s => { const k = keyFn(s); counts[k] = (counts[k] || 0) + 1; });
-  const labels = Object.keys(counts);
-  const data = labels.map(l => counts[l]);
-  charts[canvasId] = new Chart(canvas, {
-    type: 'bar',
-    data: { labels, datasets: [{ data, backgroundColor: 'rgba(8,191,47,0.55)', borderRadius: 3, maxBarThickness: 22 }] },
-    options: { responsive: true, maintainAspectRatio: false, animation: false, plugins: { legend: { display: false }, tooltip: { enabled: false } }, scales: { x: { display: false }, y: { display: false } } }
-  });
 }
 
 function drawModuleChart(id, bk, sessions){
@@ -4217,23 +4453,11 @@ function moduleThumb(id){
 function renderModuleShowcase(){
   const el = document.getElementById('module-showcase-grid');
   if (!el) return;
-  el.innerHTML = Object.keys(MODULE_SIZE).map(id => {
-    const body = showcaseModuleBody(id);
-    const previewContent = body
-      ? `<div class="msc-preview-sim">${body}</div>`
-      : `<div class="msc-preview-thumb">${moduleThumb(id)}</div>`;
-    return `
+  el.innerHTML = Object.keys(MODULE_SIZE).map(id => `
     <div class="module-showcase-card">
       <div class="msc-thumb">${moduleThumb(id)}</div>
       <div class="msc-title" data-i18n="mod_${id}_title">${t('mod_'+id+'_title')}</div>
-      <div class="msc-preview">
-        ${previewContent}
-        <div class="msc-preview-title" data-i18n="mod_${id}_title">${t('mod_'+id+'_title')}</div>
-        <div class="msc-preview-desc" data-i18n="mod_${id}_desc">${t('mod_'+id+'_desc')}</div>
-      </div>
-    </div>`;
-  }).join('');
-  drawShowcaseCharts();
+    </div>`).join('');
 }
 function openCustomizeModal(){
   ensureLayout();
@@ -4377,6 +4601,7 @@ function reorderLiveModule(id, targetId){
 let currentUser = null;
 let currentPlan = 'free';
 let currentPlanPeriodEnd = null;
+let currentReferralCode = null;
 let cloudSyncInFlight = false;
 let cloudSyncQueued = false;
 let cloudSyncPromise = null;
@@ -4429,13 +4654,14 @@ async function submitAccountForm(kind){
     const email = document.getElementById('signup-email').value.trim();
     const password = document.getElementById('signup-password').value;
     const confirm = document.getElementById('signup-password-confirm').value;
+    const referredByCode = document.getElementById('signup-referral-code').value.trim().toUpperCase();
     if (!email || !password) { feedback.className = 'account-feedback error'; feedback.textContent = t('account_error_fields'); return; }
     if (password !== confirm) { feedback.className = 'account-feedback error'; feedback.textContent = t('account_password_mismatch'); return; }
     if (password.length < 6) { feedback.className = 'account-feedback error'; feedback.textContent = t('account_password_too_short'); return; }
     feedback.textContent = t('account_loading');
-    const { error } = await supabase.auth.signUp({ email, password, options: { data: { name } } });
+    const { error } = await supabase.auth.signUp({ email, password, options: { data: { name, referred_by_code: referredByCode || null } } });
     if (error) { feedback.className = 'account-feedback error'; feedback.textContent = translateAuthError(error); }
-    else { feedback.className = 'account-feedback'; feedback.textContent = t('account_pending_signup').replace('{email}', email); }
+    else { feedback.className = 'account-feedback'; feedback.textContent = t('account_pending_signup').replace('{email}', email); localStorage.removeItem('pokelo_pending_ref'); }
   } else if (kind === 'forgot') {
     const email = document.getElementById('forgot-email').value.trim();
     if (!email) { feedback.className = 'account-feedback error'; feedback.textContent = t('account_error_fields'); return; }
@@ -4560,6 +4786,7 @@ async function onAuthSignedIn(session){
           ? cloud.profile.dashboard_layout : DEFAULT_LAYOUT.slice();
         currentPlan = cloud.profile.plan || 'free';
         currentPlanPeriodEnd = cloud.profile.stripe_current_period_end || null;
+        currentReferralCode = cloud.profile.referral_code || null;
         state.profile = {
           displayName: cloud.profile.display_name || '',
           avatarUrl: cloud.profile.avatar_url || '',
@@ -4587,6 +4814,7 @@ async function signOutUser(){
   currentUser = null;
   currentPlan = 'free';
   currentPlanPeriodEnd = null;
+  currentReferralCode = null;
   localStorage.removeItem(STORAGE_KEY);
   state = seedDemoState();
   updateAccountUI();
@@ -4693,7 +4921,33 @@ function renderAccountSettings(){
   if (manageBtn) manageBtn.hidden = !isPremium();
   renderPricingTable('pricing-table-settings', { highlightPlanId: currentPlan, showCta: false });
   renderProfileSettings();
+  renderReferralSettings();
   refreshMfaStatus();
+}
+
+function renderReferralSettings(){
+  const linkEl = document.getElementById('referral-link');
+  if (linkEl && currentReferralCode) linkEl.value = `${location.origin}${location.pathname}?ref=${currentReferralCode}`;
+  loadReferralStats();
+}
+async function loadReferralStats(){
+  const hint = document.getElementById('referral-stats-hint');
+  if (!hint || !window.supabase) return;
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    const token = session && session.access_token;
+    if (!token) return;
+    const res = await fetch('/api/referral-stats', { headers: { Authorization: `Bearer ${token}` } });
+    if (!res.ok) return;
+    const data = await res.json();
+    hint.textContent = t('settings_referral_stats').replace('{count}', data.totalReferred).replace('{rewards}', data.rewardsGiven);
+  } catch (e) {}
+}
+function copyReferralLink(){
+  const input = document.getElementById('referral-link');
+  if (!input.value) return;
+  input.select();
+  navigator.clipboard?.writeText(input.value).then(() => showToast(t('settings_account_link_copied'), 'success')).catch(() => {});
 }
 
 function renderProfileSettings(){
@@ -5088,6 +5342,7 @@ async function deleteMyAccount(){
     currentUser = null;
     currentPlan = 'free';
     currentPlanPeriodEnd = null;
+    currentReferralCode = null;
     localStorage.removeItem(STORAGE_KEY);
     state = seedDemoState();
     updateAccountUI();
@@ -5694,7 +5949,19 @@ document.addEventListener('DOMContentLoaded', function(){
   router();
   initPwa();
   initSupabaseAuth();
+  captureReferralCode();
 });
+
+/* Code de parrainage passé en query string (ex. pokelo.fr/?ref=A1B2C3D4) :
+   pré-rempli sur le formulaire d'inscription, conservé tant que le compte
+   n'est pas créé (l'utilisateur peut arriver sur la landing avant de s'inscrire). */
+function captureReferralCode(){
+  const fromUrl = new URLSearchParams(location.search).get('ref');
+  if (fromUrl) localStorage.setItem('pokelo_pending_ref', fromUrl.trim().toUpperCase());
+  const pending = localStorage.getItem('pokelo_pending_ref');
+  const input = document.getElementById('signup-referral-code');
+  if (pending && input && !input.value) input.value = pending;
+}
 
 /* ══════════════════════════════════════════════════════════════
    POKELO — PWA (service worker + prompt d'installation)

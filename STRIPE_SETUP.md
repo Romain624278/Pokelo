@@ -80,7 +80,52 @@ Une fois les Price ID et clés en place, remplacer par :
 (remplacer par le vrai `price_...` ou mieux, le récupérer via un petit endpoint
 `/api/prices` si vous préférez ne pas le coder en dur).
 
-## 5. Décider quoi réserver au plan payant
+## 5bis. Parrainage (-30% premier mois / 1 mois offert)
+
+Le système de parrainage est déjà câblé côté code (`api/create-checkout-session.js`,
+`api/stripe-webhook.js`, voir SUPABASE_SETUP.md §7 pour la migration SQL). Il ne
+manque qu'une chose à créer manuellement dans Stripe :
+
+1. **Stripe → Produits → Coupons → Créer un coupon** :
+   - Type : **Pourcentage**, valeur **30%**.
+   - Durée : **Une fois** (`once`) — s'applique uniquement à la première facture.
+   - ID du coupon : notez-le (ex. `REFERRAL30`).
+2. **Vercel → Variables d'environnement** : ajouter `STRIPE_COUPON_REFERRAL30`
+   avec cet ID.
+
+Fonctionnement une fois branché :
+- Chaque utilisateur a un code de parrainage automatique (visible dans
+  Paramètres → Compte → Parrainage), dérivé de son identifiant.
+- À l'inscription, un nouvel utilisateur peut renseigner le code d'un ami.
+- S'il s'abonne à Pro pour la première fois **et** que son parrain est
+  actuellement abonné Pro/Équipe, la remise de 30% s'applique automatiquement
+  au checkout (aucune action manuelle du filleul).
+- Une fois l'abonnement du filleul confirmé (webhook), le parrain reçoit un
+  crédit de solde Stripe équivalent à 1 mois de Pro, appliqué automatiquement
+  à sa prochaine facture (potentiellement 0€ à payer ce mois-là).
+- Chaque parrainage ne peut déclencher qu'une seule remise et qu'une seule
+  récompense (protégé par `referral_discount_used` / `referral_reward_claimed`).
+
+## 5ter. Offrir des mois de Pokelo Pro à des amis (codes promo génériques)
+
+Indépendamment du parrainage, `create-checkout-session.js` active
+`allow_promotion_codes: true` dès qu'aucune remise de parrainage ne s'applique :
+la page Stripe Checkout affiche alors un champ "Code promo" que n'importe qui
+peut utiliser. Pour offrir un ou plusieurs mois à un ami précis :
+
+1. **Stripe → Produits → Coupons → Créer un coupon** : 100% de réduction,
+   durée "Plusieurs mois" (ex. 1 ou 3 mois selon le cadeau voulu).
+2. **Stripe → Produits → Codes promotionnels → Créer un code promotionnel**,
+   lié à ce coupon. Vous pouvez :
+   - Fixer un **code personnalisé** (ex. `MERCI-JULIEN`) à transmettre en privé.
+   - Limiter à **1 utilisation maximum** pour que le code ne soit utilisable
+     qu'une fois.
+   - Restreindre à une **adresse e-mail précise** si vous voulez être sûr que
+     seul cet ami puisse s'en servir.
+3. Partagez le code à votre ami : il le saisit sur la page Stripe Checkout au
+   moment de s'abonner à Pokelo Pro.
+
+## 6. Décider quoi réserver au plan payant
 
 `isPremium()` (dans `index.html`) renvoie `true`/`false` selon `currentPlan`.
 `PREMIUM_MODULES` est un tableau vide par défaut — y ajouter les identifiants de

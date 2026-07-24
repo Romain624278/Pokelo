@@ -224,3 +224,48 @@ La route publique passe par `api/public-profile.js`, qui utilise la clé
 service_role côté serveur et ne renvoie que `display_name` / `avatar_url` /
 `created_at` — jamais l'email ni les données financières. Aucune policy RLS
 supplémentaire n'est donc nécessaire pour cette fonctionnalité.
+
+## 7. Parrainage (code, -30% / 1 mois offert)
+
+À exécuter dans Supabase (SQL Editor) — ajoute le code de parrainage (dérivé
+de l'UUID de l'utilisateur, donc généré automatiquement sans étape en plus),
+le lien vers le parrain, et les deux indicateurs "déjà utilisé" qui empêchent
+de rejouer la remise ou de payer deux fois la même récompense :
+
+```sql
+alter table public.profiles
+  add column if not exists referral_code text,
+  add column if not exists referred_by_user_id uuid references public.profiles(id),
+  add column if not exists referral_discount_used boolean not null default false,
+  add column if not exists referral_reward_claimed boolean not null default false;
+
+create unique index if not exists profiles_referral_code_idx on public.profiles(referral_code);
+
+-- Rétro-remplissage des comptes déjà existants
+update public.profiles set referral_code = upper(substr(replace(id::text,'-',''),1,8)) where referral_code is null;
+
+-- La fonction déclenchée à l'inscription (créée au §1) doit être remplacée
+-- pour générer le code et résoudre le parrain à partir du code saisi au
+-- moment de l'inscription (passé en metadata `referred_by_code`, voir
+-- index.html → submitAccountForm('signup')) :
+create or replace function public.handle_new_user()
+returns trigger as $$
+declare
+  ref_code text := new.raw_user_meta_data->>'referred_by_code';
+  ref_user_id uuid;
+begin
+  if ref_code is not null and length(trim(ref_code)) > 0 then
+    select id into ref_user_id from public.profiles where referral_code = upper(trim(ref_code)) limit 1;
+  end if;
+  insert into public.profiles (id, email, referral_code, referred_by_user_id)
+  values (new.id, new.email, upper(substr(replace(new.id::text,'-',''),1,8)), ref_user_id);
+  return new;
+end;
+$$ language plpgsql security definer;
+```
+
+Le reste de la logique (vérifier que le parrain est bien Pro, appliquer la
+remise -30% au checkout, créditer le mois offert) vit côté serveur dans
+`api/create-checkout-session.js` et `api/stripe-webhook.js` — jamais dans le
+client, pour qu'un utilisateur ne puisse pas se créditer lui-même. Voir
+STRIPE_SETUP.md §6 pour le coupon Stripe à créer.

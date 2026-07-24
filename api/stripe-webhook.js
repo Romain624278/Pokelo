@@ -5,7 +5,7 @@
 //   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
 // Le body doit rester brut (non parsé) pour vérifier la signature Stripe — d'où
 // `bodyParser: false` ci-dessous.
-const { stripeGet, verifyStripeSignature, getRawBody } = require('./_stripe-helpers');
+const { stripeGet, stripeRequest, fetchProfileFields, verifyStripeSignature, getRawBody } = require('./_stripe-helpers');
 
 module.exports.config = { api: { bodyParser: false } };
 
@@ -30,6 +30,33 @@ async function updateProfile(supabaseUrl, serviceRoleKey, filterColumn, filterVa
     },
     body: JSON.stringify(fields),
   });
+}
+
+// Parrainage : si l'utilisateur qui vient de s'abonner (referredUserId) a été
+// parrainé et que la récompense n'a pas déjà été versée, crédite 1 mois offert
+// au parrain (via un crédit de solde Stripe, appliqué automatiquement à sa
+// prochaine facture) — à condition que le parrain soit actuellement Pro/Équipe
+// et ait déjà un stripe_customer_id (donc déjà passé par un vrai Checkout).
+async function creditReferralIfNeeded(supabaseUrl, serviceRoleKey, stripeSecretKey, referredUserId){
+  try {
+    const referred = await fetchProfileFields(supabaseUrl, serviceRoleKey, referredUserId, 'referred_by_user_id,referral_reward_claimed');
+    if (!referred || !referred.referred_by_user_id || referred.referral_reward_claimed) return;
+    const referrer = await fetchProfileFields(supabaseUrl, serviceRoleKey, referred.referred_by_user_id, 'stripe_customer_id,plan');
+    if (!referrer || !referrer.stripe_customer_id || !referrer.plan || referrer.plan === 'free') return;
+    const proPriceId = process.env.STRIPE_PRICE_PRO;
+    if (!proPriceId) return;
+    const price = await stripeGet(`prices/${proPriceId}`, stripeSecretKey);
+    const amount = price && price.unit_amount;
+    if (!amount) return;
+    await stripeRequest(`customers/${referrer.stripe_customer_id}/balance_transactions`, stripeSecretKey, {
+      amount: -amount, currency: price.currency || 'eur', description: 'Pokelo — 1 mois offert (parrainage)',
+    });
+    await updateProfile(supabaseUrl, serviceRoleKey, 'id', referredUserId, {
+      referral_reward_claimed: true, referral_discount_used: true,
+    });
+  } catch (e) {
+    console.error('Crédit de parrainage échoué :', e);
+  }
 }
 
 module.exports = async (req, res) => {
@@ -68,6 +95,7 @@ module.exports = async (req, res) => {
           plan, stripe_customer_id: customerId, stripe_subscription_id: subscriptionId,
           stripe_subscription_status: subscription.status, stripe_current_period_end: periodEndIso(subscription),
         });
+        await creditReferralIfNeeded(SUPABASE_URL, SERVICE_ROLE_KEY, STRIPE_SECRET_KEY, userId);
       }
     } else if (event.type === 'customer.subscription.updated' || event.type === 'customer.subscription.deleted') {
       const subscription = event.data.object;
