@@ -15,6 +15,10 @@ async function planForPriceId(priceId){
   return 'pro'; // prix inconnu : on suppose Pro plutôt que de laisser l'utilisateur sans plan payant
 }
 
+function periodEndIso(subscription){
+  return subscription.current_period_end ? new Date(subscription.current_period_end * 1000).toISOString() : null;
+}
+
 async function updateProfile(supabaseUrl, serviceRoleKey, filterColumn, filterValue, fields){
   await fetch(`${supabaseUrl}/rest/v1/profiles?${filterColumn}=eq.${filterValue}`, {
     method: 'PATCH',
@@ -62,7 +66,7 @@ module.exports = async (req, res) => {
         const plan = await planForPriceId(priceId);
         await updateProfile(SUPABASE_URL, SERVICE_ROLE_KEY, 'id', userId, {
           plan, stripe_customer_id: customerId, stripe_subscription_id: subscriptionId,
-          stripe_subscription_status: subscription.status,
+          stripe_subscription_status: subscription.status, stripe_current_period_end: periodEndIso(subscription),
         });
       }
     } else if (event.type === 'customer.subscription.updated' || event.type === 'customer.subscription.deleted') {
@@ -72,7 +76,7 @@ module.exports = async (req, res) => {
       const priceId = subscription.items && subscription.items.data[0] && subscription.items.data[0].price.id;
       const plan = isActive ? await planForPriceId(priceId) : 'free';
       await updateProfile(SUPABASE_URL, SERVICE_ROLE_KEY, 'stripe_customer_id', customerId, {
-        plan, stripe_subscription_status: subscription.status,
+        plan, stripe_subscription_status: subscription.status, stripe_current_period_end: periodEndIso(subscription),
       });
     }
     res.status(200).json({ received: true });

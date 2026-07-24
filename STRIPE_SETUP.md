@@ -54,8 +54,13 @@ alter table public.profiles
   add column if not exists plan text not null default 'free',
   add column if not exists stripe_customer_id text,
   add column if not exists stripe_subscription_id text,
-  add column if not exists stripe_subscription_status text;
+  add column if not exists stripe_subscription_status text,
+  add column if not exists stripe_current_period_end timestamptz;
 ```
+
+`stripe_current_period_end` est la date du prochain débit (fin de la période
+en cours). Elle n'est écrite que par `api/stripe-webhook.js` (jamais par le
+client) — c'est une donnée de facturation faisant autorité côté serveur.
 
 ## 4. Activer les boutons côté client
 

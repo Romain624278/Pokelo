@@ -1,0 +1,9 @@
+{
+  "name": "pokelo",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Pokelo — suivi de bankroll poker.",
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  }
+}

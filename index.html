@@ -242,6 +242,14 @@
   .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.4rem; color: var(--green); line-height: 1; }
   .stat-label { font-size: 0.72rem; color: var(--grey); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 4px; }
 
+  .stat-marquee { position: relative; z-index: 1; overflow: hidden; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--black-card); mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+  .stat-marquee-track { display: flex; width: max-content; animation: marquee-scroll 32s linear infinite; }
+  .stat-marquee:hover .stat-marquee-track { animation-play-state: paused; }
+  .stat-marquee-item { display: flex; align-items: center; gap: 8px; padding: 0.9rem 2.2rem; font-size: 0.78rem; color: var(--grey); white-space: nowrap; border-right: 1px solid var(--border); }
+  .stat-marquee-item svg { width: 15px; height: 15px; color: var(--green); flex-shrink: 0; }
+  @keyframes marquee-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .stat-marquee-track { animation: none; } }
+
   /* ── FEATURES (bento, immersive) ── */
   #features { background: var(--black-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
   .feat-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: minmax(168px, auto); gap: 1.1rem; margin-top: 3.5rem; max-width: 1180px; }
@@ -342,20 +350,6 @@
   /* ── PRICING ── */
   #pricing { background: var(--black-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
   .pricing-toggle { display: inline-flex; align-items: center; gap: .7rem; margin-top: 1.6rem; font-size: .85rem; color: var(--grey); }
-  .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.3rem; margin-top: 3rem; max-width: 1140px; align-items: stretch; }
-  .price-card { padding: 2rem 1.8rem; background: var(--black); border: 1px solid var(--border); border-radius: var(--radius); display: flex; flex-direction: column; transition: border-color .2s, transform .2s; position: relative; }
-  .price-card:hover { transform: translateY(-3px); border-color: rgba(8,191,47,0.35); }
-  .price-card.featured { border-color: var(--green); background: linear-gradient(180deg, rgba(8,191,47,0.06) 0%, var(--black) 40%); }
-  .price-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--green); color: var(--black); font-size: .68rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: .3rem .9rem; border-radius: 100px; }
-  .price-icon { width: 38px; height: 38px; border-radius: 9px; background: rgba(8,191,47,0.08); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--green); margin-bottom: 0.9rem; }
-  .price-name { font-size: .95rem; font-weight: 700; color: var(--text); }
-  .price-desc { font-size: .8rem; color: var(--grey); margin-top: .3rem; min-height: 34px; }
-  .price-amount { display: flex; align-items: baseline; gap: 6px; margin: 1.4rem 0 .3rem; }
-  .price-amount .n { font-family: 'Bebas Neue', sans-serif; font-size: 2.6rem; color: var(--text-wall); }
-  .price-amount .p { font-size: .82rem; color: var(--grey); }
-  .price-list { list-style: none; display: flex; flex-direction: column; gap: .7rem; margin: 1.5rem 0 1.8rem; flex: 1; }
-  .price-list li { display: flex; align-items: flex-start; gap: 8px; font-size: .84rem; color: var(--grey); line-height: 1.4; }
-  .price-list li svg { width: 15px; height: 15px; color: var(--green); flex-shrink: 0; margin-top: 2px; }
   .price-note { text-align: center; margin-top: 2.2rem; font-size: .78rem; color: var(--grey); max-width: 1140px; }
 
   /* ── TESTIMONIAL / TRUST ── */
@@ -382,6 +376,15 @@
   .blog-card p { font-size: 0.83rem; color: var(--grey); line-height: 1.55; flex: 1; }
   .blog-card-meta { display: flex; align-items: center; gap: 0.8rem; margin-top: 1rem; font-size: 0.72rem; color: var(--grey); }
   .blog-card-meta .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--grey); }
+
+  .faq-list { max-width: 780px; display: flex; flex-direction: column; gap: 0.7rem; margin-top: 2.8rem; }
+  .faq-item { background: var(--black-card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .faq-item summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.1rem 1.4rem; font-size: 0.92rem; font-weight: 600; color: var(--text); cursor: pointer; list-style: none; }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary:hover { color: var(--green); }
+  .faq-chevron { width: 18px; height: 18px; flex-shrink: 0; color: var(--grey); transition: transform 0.2s; }
+  .faq-item[open] .faq-chevron { transform: rotate(180deg); color: var(--green); }
+  .faq-item p { padding: 0 1.4rem 1.2rem; font-size: 0.85rem; color: var(--grey); line-height: 1.6; }
 
   #blog-hero { padding-top: 150px; }
   .blog-filters { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: 2rem; }
@@ -452,7 +455,7 @@
   .app-topbar, .app-topbar-actions, .app-content,
   .modules-grid, .module-card, .stat-grid, .stat-tile, .card-row, .chart-card,
   .bankroll-grid, .bankroll-card, .feat-grid, .feat-card, .trust-grid, .trust-card,
-  .blog-grid, .blog-card, .pricing-grid, .price-card, .customize-body, .settings-grid, .settings-card,
+  .blog-grid, .blog-card, .customize-body, .settings-grid, .settings-card,
   .preview-grid, .preview-card { min-width: 0; }
   .app-topbar { position: sticky; top: 0; z-index: 60; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.1rem 2rem; border-bottom: 1px solid var(--border); background: rgba(10,10,10,0.9); backdrop-filter: blur(10px); flex-wrap: wrap; }
   .app-topbar h1 { font-family: 'Bebas Neue', sans-serif; font-size: 1.7rem; letter-spacing: 0.03em; color: var(--text-wall); }
@@ -711,19 +714,31 @@
   .profile-share-row { margin-top: 1rem; }
   #profile-share-link-row .form-row { margin-top: 0.6rem; }
   .pricing-table-wrap { overflow-x: auto; margin-top: 2.5rem; max-width: 1140px; }
-  .pricing-table { width: 100%; border-collapse: collapse; min-width: 620px; }
-  .pricing-table th, .pricing-table td { padding: 0.85rem 1.1rem; text-align: center; border-bottom: 1px solid var(--border); font-size: 0.82rem; color: var(--grey); }
-  .pricing-table th:first-child, .pricing-table td:first-child { text-align: left; color: var(--text); font-weight: 500; white-space: nowrap; }
-  .pricing-table .pt-plan-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.35rem; letter-spacing: 0.03em; color: var(--text); }
-  .pricing-table .pt-plan-price { font-size: 1rem; color: var(--text); margin-top: 0.2rem; }
-  .pricing-table .pt-plan-price .per { font-size: 0.7rem; color: var(--grey); }
-  .pricing-table th.current, .pricing-table td.current { background: rgba(8,191,47,0.06); border-left: 1px solid rgba(8,191,47,0.3); border-right: 1px solid rgba(8,191,47,0.3); }
+  .pricing-table { width: 100%; border-collapse: collapse; min-width: 660px; }
+  .pricing-table th, .pricing-table td { padding: 1rem 1.2rem; text-align: center; border-bottom: 1px solid var(--border); font-size: 0.88rem; color: var(--grey); }
+  .pricing-table th:first-child, .pricing-table td:first-child { text-align: left; color: var(--text); font-weight: 600; white-space: nowrap; font-size: 0.85rem; }
+  .pricing-table tbody tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  .pricing-table tbody tr:hover td { background: rgba(255,255,255,0.045); }
+  .pricing-table .pt-plan-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.03em; color: var(--text); }
+  .pricing-table .pt-plan-price { font-size: 1.1rem; font-weight: 700; color: var(--text); margin-top: 0.25rem; }
+  .pricing-table .pt-plan-price .per { font-size: 0.7rem; font-weight: 400; color: var(--grey); }
+  .pricing-table th.current, .pricing-table td.current { background: rgba(8,191,47,0.07); border-left: 1px solid rgba(8,191,47,0.3); border-right: 1px solid rgba(8,191,47,0.3); }
+  .pricing-table tbody tr:nth-child(even) td.current { background: rgba(8,191,47,0.1); }
+  .pricing-table tbody tr:hover td.current { background: rgba(8,191,47,0.13); }
   .pricing-table thead th.current { border-top: 1px solid rgba(8,191,47,0.3); border-radius: 10px 10px 0 0; }
   .pricing-table tfoot td.current { border-bottom: 1px solid rgba(8,191,47,0.3); border-radius: 0 0 10px 10px; }
-  .pt-current-badge { display: inline-block; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--green); margin-top: 0.35rem; background: rgba(8,191,47,0.12); padding: 0.2rem 0.5rem; border-radius: 100px; }
-  .pt-check { color: var(--green); width: 18px; height: 18px; }
-  .pt-dash { color: var(--grey); opacity: 0.45; }
-  .pricing-table tfoot td { border-bottom: none; padding-top: 1.3rem; }
+  .pt-current-badge { display: inline-block; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--green); margin-top: 0.45rem; background: rgba(8,191,47,0.12); padding: 0.25rem 0.6rem; border-radius: 100px; }
+  .pricing-table th.featured, .pricing-table td.featured { background: rgba(8,191,47,0.1); border-left: 2px solid var(--green); border-right: 2px solid var(--green); }
+  .pricing-table tbody tr:nth-child(even) td.featured { background: rgba(8,191,47,0.14); }
+  .pricing-table tbody tr:hover td.featured { background: rgba(8,191,47,0.17); }
+  .pricing-table thead th.featured { border-top: 2px solid var(--green); border-radius: 12px 12px 0 0; padding-top: 1.2rem; }
+  .pricing-table tfoot td.featured { border-bottom: 2px solid var(--green); border-radius: 0 0 12px 12px; }
+  .pricing-table th.featured .pt-plan-name { font-size: 1.65rem; color: var(--text-wall); }
+  .pt-featured-badge { display: inline-block; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--black); margin-top: 0.45rem; background: var(--green); padding: 0.28rem 0.7rem; border-radius: 100px; }
+  .pt-check { color: var(--green); width: 19px; height: 19px; }
+  .pt-dash { color: var(--grey); opacity: 0.4; }
+  .pricing-table tfoot td { border-bottom: none; padding-top: 1.4rem; }
+  .pricing-table tfoot .btn-primary, .pricing-table tfoot .btn-secondary { width: 100%; justify-content: center; }
 
   /* ── Account / auth (stub) ── */
   .account-card { width: 100%; max-width: 420px; background: var(--black-card); border: 1px solid var(--border); border-radius: 14px; padding: 2rem 1.8rem; text-align: center; }
@@ -769,7 +784,6 @@
     .feat-card.big { grid-column: span 2; grid-row: span 1; }
     .trust-grid { grid-template-columns: 1fr 1fr; }
     .blog-grid { grid-template-columns: 1fr 1fr; }
-    .pricing-grid { grid-template-columns: 1fr; max-width: 420px; }
     .steps-grid { grid-template-columns: repeat(2, 1fr); row-gap: 2.2rem; }
     .how-track { display: none; }
     .hero-mock-body { grid-template-columns: repeat(2, 1fr); }
@@ -895,6 +909,11 @@
       <div class="stat"><div class="stat-num">0€</div><div class="stat-label" data-i18n="hero_stat_start">Pour commencer</div></div>
     </div>
   </section>
+
+  <!-- BANDE DÉFILANTE -->
+  <div class="stat-marquee" aria-hidden="true">
+    <div class="stat-marquee-track" id="stat-marquee-track"></div>
+  </div>
 
   <!-- FEATURES -->
   <section id="features">
@@ -1080,6 +1099,49 @@
     <div class="blog-grid fade-up" id="blog-preview-grid"><!-- filled by JS from ARTICLES --></div>
     <div class="fade-up" style="margin-top:2.5rem">
       <a href="#/blog" data-link class="btn-secondary" data-i18n="blog_see_all">Voir tous les articles</a>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="fade-up">
+      <div class="section-tag" data-i18n="faq_tag">FAQ</div>
+      <h2 class="section-title" data-i18n="faq_title">Questions fréquentes</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="faq-list fade-up">
+      <details class="faq-item">
+        <summary><span data-i18n="faq_q1">Qu'est-ce que la gestion de bankroll au poker ?</span><svg class="icon faq-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></summary>
+        <p data-i18n="faq_a1">C'est le suivi rigoureux de vos gains et pertes pour ajuster vos limites de jeu selon votre roll réel, plutôt qu'à l'instinct. Pokelo automatise ce suivi : vous entrez vos sessions, l'app calcule ROI, winrate, variance et risque de ruine pour vous.</p>
+      </details>
+      <details class="faq-item">
+        <summary><span data-i18n="faq_q2">Pokelo est-il adapté aux joueurs réguliers et semi-pros ?</span><svg class="icon faq-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></summary>
+        <p data-i18n="faq_a2">Oui. Le dashboard modulaire, les statistiques avancées (BB/100, ITM%, écart-type) et le multi-bankroll sont pensés pour un suivi sérieux, pas juste un journal de bord occasionnel.</p>
+      </details>
+      <details class="faq-item">
+        <summary><span data-i18n="faq_q3">Puis-je suivre le cash game, les tournois et les expressos ?</span><svg class="icon faq-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></summary>
+        <p data-i18n="faq_a3">Oui, les trois types de session sont pris en charge nativement, en live comme en online, chacun avec ses propres champs et statistiques adaptées.</p>
+      </details>
+      <details class="faq-item">
+        <summary><span data-i18n="faq_q4">Mes données sont-elles en sécurité ?</span><svg class="icon faq-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></summary>
+        <p data-i18n="faq_a4">Vos données sont hébergées de façon sécurisée et ne sont jamais revendues. Vous pouvez exporter ou supprimer définitivement vos données à tout moment depuis les paramètres de votre compte.</p>
+      </details>
+      <details class="faq-item">
+        <summary><span data-i18n="faq_q5">Puis-je utiliser Pokelo sur mobile ?</span><svg class="icon faq-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></summary>
+        <p data-i18n="faq_a5">Pokelo est installable comme une vraie app (PWA) sur iOS et Android depuis votre navigateur, pour logger une session en quelques secondes juste après avoir joué. Une app native est aussi en préparation.</p>
+      </details>
+      <details class="faq-item">
+        <summary><span data-i18n="faq_q6">Dois-je entrer ma carte bancaire pour créer un compte gratuit ?</span><svg class="icon faq-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></summary>
+        <p data-i18n="faq_a6">Non, le plan Gratuit ne demande aucune carte bancaire. Vous n'en aurez besoin que si vous choisissez de passer à un plan payant.</p>
+      </details>
+      <details class="faq-item">
+        <summary><span data-i18n="faq_q7">Comment fonctionne la conversion multi-devises ?</span><svg class="icon faq-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></summary>
+        <p data-i18n="faq_a7">Chaque bankroll a sa propre devise. Si vous loggez une session dans une autre devise, Pokelo la convertit automatiquement au taux de change de la date de la session.</p>
+      </details>
+      <details class="faq-item">
+        <summary><span data-i18n="faq_q8">Puis-je changer de plan ou annuler à tout moment ?</span><svg class="icon faq-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></summary>
+        <p data-i18n="faq_a8">Oui, sans engagement. Vous gérez votre abonnement (changement de plan, annulation, moyen de paiement) directement depuis les paramètres de votre compte.</p>
+      </details>
     </div>
   </section>
 
@@ -1547,6 +1609,7 @@
                 <div class="settings-account-row">
                   <label data-i18n="settings_account_plan">Plan actuel</label>
                   <p class="form-hint" id="settings-account-plan-label"></p>
+                  <p class="form-hint" id="settings-account-period-end" hidden></p>
                   <button class="btn-ghost btn-sm" id="settings-account-manage-plan-btn" onclick="openBillingPortal()" hidden data-i18n="settings_account_manage_plan">Gérer mon abonnement</button>
                   <div class="account-feedback" id="account-plan-feedback" hidden></div>
                   <div class="pricing-table-wrap" id="pricing-table-settings"></div>
@@ -1965,6 +2028,7 @@
 
 <div class="toast-container" id="toast-container" aria-live="polite"></div>
 
+<script src="js/pure-utils.js"></script>
 <script>
 /* ══════════════════════════════════════════════════════════════
    POKELO — utils
@@ -2171,12 +2235,33 @@ const I18N = {
     price_free_name:'Gratuit', price_free_desc:'Pour suivre sa bankroll sans se poser de questions.',
     price_pro_name:'Pro', price_pro_desc:'Pour les joueurs réguliers qui gèrent plusieurs bankrolls.', price_pro_badge:'Le plus choisi',
     price_team_name:'Équipe', price_team_desc:'Pour les clubs, staffs de coaching et groupes de joueurs.',
-    price_cta_free:'Créer un compte gratuit', price_cta_soon:'Bientôt disponible',
+    price_cta_free:'Créer un compte gratuit', price_cta_soon:'Bientôt disponible', price_cta_subscribe:'S\'abonner',
     price_note:'Aucune carte bancaire requise pour le plan Gratuit. Les formules Pro et Équipe sont en préparation.',
     trust_tag:'Retours', trust_title:'Pensé par et pour<br>des joueurs réguliers',
     blog_tag:'Blog', blog_title:'Apprendre à gérer<br>sa bankroll',
     blog_sub:'Des guides courts et concrets sur le bankroll management, écrits pour être appliqués dès la prochaine session.',
     blog_see_all:'Voir tous les articles',
+    marquee_1:'Multi-devises avec conversion automatique', marquee_2:'Dashboard modulaire personnalisable',
+    marquee_3:'Live &amp; Online unifiés', marquee_4:'Statistiques avancées (ROI, BB/100, variance)',
+    marquee_5:'Export de vos données à tout moment', marquee_6:'Installable comme une vraie app (PWA)',
+    marquee_7:'Sans carte bancaire pour commencer', marquee_8:'Sécurité : double authentification (MFA)',
+    faq_tag:'FAQ', faq_title:'Questions fréquentes',
+    faq_q1:'Qu\'est-ce que la gestion de bankroll au poker ?',
+    faq_a1:'C\'est le suivi rigoureux de vos gains et pertes pour ajuster vos limites de jeu selon votre roll réel, plutôt qu\'à l\'instinct. Pokelo automatise ce suivi : vous entrez vos sessions, l\'app calcule ROI, winrate, variance et risque de ruine pour vous.',
+    faq_q2:'Pokelo est-il adapté aux joueurs réguliers et semi-pros ?',
+    faq_a2:'Oui. Le dashboard modulaire, les statistiques avancées (BB/100, ITM%, écart-type) et le multi-bankroll sont pensés pour un suivi sérieux, pas juste un journal de bord occasionnel.',
+    faq_q3:'Puis-je suivre le cash game, les tournois et les expressos ?',
+    faq_a3:'Oui, les trois types de session sont pris en charge nativement, en live comme en online, chacun avec ses propres champs et statistiques adaptées.',
+    faq_q4:'Mes données sont-elles en sécurité ?',
+    faq_a4:'Vos données sont hébergées de façon sécurisée et ne sont jamais revendues. Vous pouvez exporter ou supprimer définitivement vos données à tout moment depuis les paramètres de votre compte.',
+    faq_q5:'Puis-je utiliser Pokelo sur mobile ?',
+    faq_a5:'Pokelo est installable comme une vraie app (PWA) sur iOS et Android depuis votre navigateur, pour logger une session en quelques secondes juste après avoir joué. Une app native est aussi en préparation.',
+    faq_q6:'Dois-je entrer ma carte bancaire pour créer un compte gratuit ?',
+    faq_a6:'Non, le plan Gratuit ne demande aucune carte bancaire. Vous n\'en aurez besoin que si vous choisissez de passer à un plan payant.',
+    faq_q7:'Comment fonctionne la conversion multi-devises ?',
+    faq_a7:'Chaque bankroll a sa propre devise. Si vous loggez une session dans une autre devise, Pokelo la convertit automatiquement au taux de change de la date de la session.',
+    faq_q8:'Puis-je changer de plan ou annuler à tout moment ?',
+    faq_a8:'Oui, sans engagement. Vous gérez votre abonnement (changement de plan, annulation, moyen de paiement) directement depuis les paramètres de votre compte.',
     cta_tag:'Prêt ?', cta_title:'Commencez à suivre<br>votre bankroll aujourd\'hui',
     cta_sub:'Gratuit pour commencer, sans carte bancaire.', cta_button:'Créer un compte gratuit',
     footer_product:'Produit', footer_resources:'Ressources', footer_legal:'Légal', footer_rights:'Tous droits réservés.', footer_tagline:'Le poker responsable commence par une bonne gestion de bankroll.',
@@ -2271,6 +2356,7 @@ const I18N = {
     settings_account_delete_error:'La suppression a échoué. Réessayez ou contactez le support.',
     settings_account_plan:'Plan actuel', settings_account_plan_free:'Gratuit', settings_account_plan_pro:'Pro', settings_account_plan_team:'Équipe',
     settings_account_manage_plan:'Gérer mon abonnement',
+    settings_account_next_billing:'Prochain débit le {date}',
     settings_account_profile:'Profil', settings_account_avatar_upload:'Changer la photo', settings_account_avatar_remove:'Retirer',
     settings_account_save:'Enregistrer', settings_account_profile_saved:'Profil mis à jour.',
     settings_account_public_toggle:'Rendre mon profil public', settings_account_copy_link:'Copier le lien',
@@ -2351,12 +2437,33 @@ const I18N = {
     price_free_name:'Free', price_free_desc:'To track your bankroll without overthinking it.',
     price_pro_name:'Pro', price_pro_desc:'For regular players managing several bankrolls.', price_pro_badge:'Most popular',
     price_team_name:'Team', price_team_desc:'For clubs, coaching staffs and groups of players.',
-    price_cta_free:'Create a free account', price_cta_soon:'Coming soon',
+    price_cta_free:'Create a free account', price_cta_soon:'Coming soon', price_cta_subscribe:'Subscribe',
     price_note:'No credit card required for the Free plan. Pro and Team are in the works.',
     trust_tag:'Feedback', trust_title:'Built by and for<br>regular players',
     blog_tag:'Blog', blog_title:'Learn to manage<br>your bankroll',
     blog_sub:'Short, practical guides on bankroll management, written to be applied from your very next session.',
     blog_see_all:'See all articles',
+    marquee_1:'Multi-currency with automatic conversion', marquee_2:'Modular, customizable dashboard',
+    marquee_3:'Live &amp; online unified', marquee_4:'Advanced statistics (ROI, BB/100, variance)',
+    marquee_5:'Export your data anytime', marquee_6:'Installable as a real app (PWA)',
+    marquee_7:'No credit card to get started', marquee_8:'Security: two-factor authentication (MFA)',
+    faq_tag:'FAQ', faq_title:'Frequently asked questions',
+    faq_q1:'What is poker bankroll management?',
+    faq_a1:'It\'s the rigorous tracking of your wins and losses to adjust your stakes based on your actual roll, not gut feeling. Pokelo automates this: you log your sessions, the app calculates ROI, winrate, variance and risk of ruin for you.',
+    faq_q2:'Is Pokelo suited for regular and semi-pro players?',
+    faq_a2:'Yes. The modular dashboard, advanced statistics (BB/100, ITM%, standard deviation) and multi-bankroll support are built for serious tracking, not just an occasional logbook.',
+    faq_q3:'Can I track cash game, tournaments and Spin & Go?',
+    faq_a3:'Yes, all three session types are supported natively, both live and online, each with its own fields and matching statistics.',
+    faq_q4:'Is my data secure?',
+    faq_a4:'Your data is hosted securely and never resold. You can export or permanently delete your data at any time from your account settings.',
+    faq_q5:'Can I use Pokelo on mobile?',
+    faq_a5:'Pokelo can be installed as a real app (PWA) on iOS and Android straight from your browser, so you can log a session in seconds right after playing. A native app is also in the works.',
+    faq_q6:'Do I need to enter a credit card to create a free account?',
+    faq_a6:'No, the Free plan never requires a credit card. You\'ll only need one if you choose to upgrade to a paid plan.',
+    faq_q7:'How does multi-currency conversion work?',
+    faq_a7:'Each bankroll has its own currency. If you log a session in a different currency, Pokelo automatically converts it using the exchange rate on the session\'s date.',
+    faq_q8:'Can I change plans or cancel at any time?',
+    faq_a8:'Yes, with no commitment. You manage your subscription (plan change, cancellation, payment method) directly from your account settings.',
     cta_tag:'Ready?', cta_title:'Start tracking<br>your bankroll today',
     cta_sub:'Free to start, no credit card required.', cta_button:'Create a free account',
     footer_product:'Product', footer_resources:'Resources', footer_legal:'Legal', footer_rights:'All rights reserved.', footer_tagline:'Responsible poker starts with solid bankroll management.',
@@ -2451,6 +2558,7 @@ const I18N = {
     settings_account_delete_error:'Deletion failed. Please try again or contact support.',
     settings_account_plan:'Current plan', settings_account_plan_free:'Free', settings_account_plan_pro:'Pro', settings_account_plan_team:'Team',
     settings_account_manage_plan:'Manage my subscription',
+    settings_account_next_billing:'Next billing on {date}',
     settings_account_profile:'Profile', settings_account_avatar_upload:'Change photo', settings_account_avatar_remove:'Remove',
     settings_account_save:'Save', settings_account_profile_saved:'Profile updated.',
     settings_account_public_toggle:'Make my profile public', settings_account_copy_link:'Copy link',
@@ -2513,8 +2621,7 @@ function applyStaticI18n(){
   });
 }
 
-function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
-function todayStr(){ return new Date().toISOString().slice(0,10); }
+// uid, todayStr, fmtNum, fmtMoney, fmtSigned, escapeHtml : voir js/pure-utils.js
 function fmtDateFr(iso){
   const d = new Date(iso + 'T00:00:00');
   const fmt = (state.settings && state.settings.dateFormat) || 'fr-long';
@@ -2523,14 +2630,6 @@ function fmtDateFr(iso){
   if (fmt === 'eu-slash') return d.toLocaleDateString('fr-FR');
   if (fmt === 'us-slash') return d.toLocaleDateString('en-US');
   return d.toLocaleDateString(locale, { day:'2-digit', month:'short', year:'numeric' });
-}
-function fmtNum(n){
-  return (Math.round(n*100)/100).toLocaleString('fr-FR', { minimumFractionDigits:2, maximumFractionDigits:2 });
-}
-function fmtMoney(n, cur){ return fmtNum(n) + ' ' + (cur||''); }
-function fmtSigned(n, cur){ return (n>=0?'+':'') + fmtMoney(n, cur); }
-function escapeHtml(s){
-  return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
 const TOAST_ICONS = {
@@ -2554,14 +2653,7 @@ function showToast(message, type, duration){
   container.appendChild(toast);
   setTimeout(remove, duration);
 }
-function mulberry32(seed){
-  return function(){
-    seed |= 0; seed = seed + 0x6D2B79F5 | 0;
-    let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
-    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
-    return ((t ^ t >>> 14) >>> 0) / 4294967296;
-  };
-}
+// mulberry32 : voir js/pure-utils.js
 
 /* Chart.js dark defaults */
 if (window.Chart) {
@@ -2825,10 +2917,7 @@ function getBankroll(id){ return state.bankrolls.find(b => b.id === id); }
 function getSessionsFor(bankrollId){
   return state.sessions.filter(s => s.bankrollId === bankrollId).sort((a,b)=> a.date.localeCompare(b.date));
 }
-function sessionProfit(s){
-  const rate = (s.fxRate == null) ? 1 : s.fxRate;
-  return Math.round((s.cashout - s.buyIn) * rate * 100)/100;
-}
+// sessionProfit : voir js/pure-utils.js
 function bankrollBalance(bankrollId){
   const bk = getBankroll(bankrollId); if(!bk) return 0;
   const invested = state.sessions.filter(s=>s.bankrollId===bankrollId).reduce((sum,s)=>sum+sessionProfit(s),0);
@@ -2978,6 +3067,55 @@ function renderArticle(slug){
    ══════════════════════════════════════════════════════════════ */
 const charts = {};
 function destroyChart(key){ if (charts[key]) { charts[key].destroy(); delete charts[key]; } }
+
+function animateCountUp(el, endValue, opts){
+  if (!el) return;
+  opts = opts || {};
+  const duration = opts.duration || 1400;
+  const decimals = opts.decimals != null ? opts.decimals : 0;
+  const prefix = opts.prefix || '';
+  const suffix = opts.suffix || '';
+  const start = performance.now();
+  function frame(now){
+    const p = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - p, 3);
+    const val = endValue * eased;
+    el.textContent = prefix + val.toLocaleString('fr-FR', { minimumFractionDigits: decimals, maximumFractionDigits: decimals }) + suffix;
+    if (p < 1) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+function playHeroCounters(){
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  animateCountUp(document.getElementById('hm-balance'), 2480, { suffix: ' €' });
+  animateCountUp(document.getElementById('hm-profit'), 412, { prefix: '+', suffix: ' €' });
+  animateCountUp(document.getElementById('hm-roi'), 18.4, { prefix: '+', decimals: 1, suffix: ' %' });
+  animateCountUp(document.getElementById('hm-sessions'), 57);
+  animateCountUp(document.getElementById('feat-mini-val'), 412, { prefix: '+', suffix: ' €' });
+}
+
+const STAT_MARQUEE_ICONS = {
+  currency: '<path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
+  layout: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+  globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18"/>',
+  download: '<path d="M12 3v13M6 11l6 6 6-6"/><path d="M5 21h14"/>',
+  shield: '<path d="M12 2 4 5v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V5l-8-3Z"/>',
+  card: '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>',
+  export: '<path d="M12 3v13M8 8l4-5 4 5"/><path d="M5 21h14"/>',
+  chart: '<path d="M4 19V9M10 19V5M16 19v-7M4 19h16"/>',
+};
+const STAT_MARQUEE_ITEMS = [
+  ['currency', 'marquee_1'], ['layout', 'marquee_2'], ['globe', 'marquee_3'], ['chart', 'marquee_4'],
+  ['export', 'marquee_5'], ['download', 'marquee_6'], ['card', 'marquee_7'], ['shield', 'marquee_8'],
+];
+function renderStatMarquee(){
+  const track = document.getElementById('stat-marquee-track');
+  if (!track) return;
+  const itemsHtml = STAT_MARQUEE_ITEMS.map(([icon, key]) =>
+    `<span class="stat-marquee-item"><svg class="icon" viewBox="0 0 24 24">${STAT_MARQUEE_ICONS[icon]}</svg>${t(key)}</span>`
+  ).join('');
+  track.innerHTML = itemsHtml + itemsHtml; // dupliqué pour une boucle continue sans coupure
+}
 
 function drawHeroCharts(){
   if (!window.Chart) return;
@@ -4010,6 +4148,7 @@ function reorderLiveModule(id, targetId){
    ══════════════════════════════════════════════════════════════ */
 let currentUser = null;
 let currentPlan = 'free';
+let currentPlanPeriodEnd = null;
 let cloudSyncInFlight = false;
 let cloudSyncQueued = false;
 let cloudSyncPromise = null;
@@ -4192,6 +4331,7 @@ async function onAuthSignedIn(session){
         state.dashboardLayout = Array.isArray(cloud.profile.dashboard_layout) && cloud.profile.dashboard_layout.length
           ? cloud.profile.dashboard_layout : DEFAULT_LAYOUT.slice();
         currentPlan = cloud.profile.plan || 'free';
+        currentPlanPeriodEnd = cloud.profile.stripe_current_period_end || null;
         state.profile = {
           displayName: cloud.profile.display_name || '',
           avatarUrl: cloud.profile.avatar_url || '',
@@ -4218,6 +4358,7 @@ async function signOutUser(){
   }
   currentUser = null;
   currentPlan = 'free';
+  currentPlanPeriodEnd = null;
   localStorage.removeItem(STORAGE_KEY);
   state = seedDemoState();
   updateAccountUI();
@@ -4309,6 +4450,17 @@ function renderAccountSettings(){
   const planLabels = { free: t('settings_account_plan_free'), pro: t('settings_account_plan_pro'), team: t('settings_account_plan_team') };
   const planLabelEl = document.getElementById('settings-account-plan-label');
   if (planLabelEl) planLabelEl.textContent = planLabels[currentPlan] || planLabels.free;
+  const periodEndEl = document.getElementById('settings-account-period-end');
+  if (periodEndEl) {
+    if (isPremium() && currentPlanPeriodEnd) {
+      const d = new Date(currentPlanPeriodEnd);
+      const locale = state.settings.lang === 'en' ? 'en-US' : 'fr-FR';
+      periodEndEl.textContent = t('settings_account_next_billing').replace('{date}', d.toLocaleDateString(locale, { day:'2-digit', month:'long', year:'numeric' }));
+      periodEndEl.hidden = false;
+    } else {
+      periodEndEl.hidden = true;
+    }
+  }
   const manageBtn = document.getElementById('settings-account-manage-plan-btn');
   if (manageBtn) manageBtn.hidden = !isPremium();
   renderPricingTable('pricing-table-settings', { highlightPlanId: currentPlan, showCta: false });
@@ -4423,10 +4575,13 @@ async function renderPublicProfile(userId){
   }
 }
 
+// Price IDs Stripe (publics, pas des secrets — voir STRIPE_SETUP.md).
+const STRIPE_PRICE_PRO = 'price_1Twmy9JY2RG9mZpHGoABcbiD';
+const STRIPE_PRICE_TEAM = null; // à renseigner quand le plan Équipe sera créé dans Stripe
 const PRICING_PLANS = [
   { id: 'free', nameKey: 'price_free_name', price: '0€' },
-  { id: 'pro', nameKey: 'price_pro_name', price: '6€' },
-  { id: 'team', nameKey: 'price_team_name', price: '14€' },
+  { id: 'pro', nameKey: 'price_pro_name', price: '6€', featured: true, priceId: STRIPE_PRICE_PRO },
+  { id: 'team', nameKey: 'price_team_name', price: '14€', priceId: STRIPE_PRICE_TEAM },
 ];
 const PRICING_FEATURES = [
   { key: 'pt_feat_bankrolls', values: ['pt_val_1_bankroll', 'pt_val_unlimited', 'pt_val_unlimited'] },
@@ -4435,7 +4590,6 @@ const PRICING_FEATURES = [
   { key: 'pt_feat_stats', values: ['pt_val_basic', 'pt_val_advanced', 'pt_val_advanced'] },
   { key: 'pt_feat_export', values: [false, true, true] },
   { key: 'pt_feat_modular_dashboard', values: [false, true, true] },
-  { key: 'pt_feat_cloud_sync', values: [false, true, true] },
   { key: 'pt_feat_pwa', values: [true, true, true] },
   { key: 'pt_feat_support', values: ['pt_val_standard', 'pt_val_priority', 'pt_val_priority'] },
   { key: 'pt_feat_group_view', values: [false, false, true] },
@@ -4449,6 +4603,30 @@ function pricingCell(v){
   if (v === false) return DASH_SVG;
   return t(v);
 }
+function pricingColClass(p, highlight){
+  if (p.id === highlight) return 'current';
+  if (p.featured) return 'featured';
+  return '';
+}
+function pricingColBadge(p, highlight){
+  if (p.id === highlight) return `<span class="pt-current-badge">${t('settings_account_plan_current')}</span>`;
+  if (p.featured) return `<span class="pt-featured-badge">${t('price_pro_badge')}</span>`;
+  return '';
+}
+function pricingCtaCell(plan, highlight){
+  if (plan.id === 'free') {
+    return `<a href="#/account/signup" data-link class="btn-secondary btn-sm" data-i18n="price_cta_free">${t('price_cta_free')}</a>`;
+  }
+  if (plan.id === highlight) {
+    return `<button class="btn-ghost btn-sm" disabled>${t('settings_account_plan_current')}</button>`;
+  }
+  if (plan.priceId) {
+    const cls = plan.featured ? 'btn-primary' : 'btn-secondary';
+    return `<button class="${cls} btn-sm" onclick="startCheckout('${plan.priceId}')" data-i18n="price_cta_subscribe">${t('price_cta_subscribe')}</button>`;
+  }
+  const cls = plan.featured ? 'btn-primary' : 'btn-secondary';
+  return `<button class="${cls} btn-sm" disabled data-i18n="price_cta_soon">${t('price_cta_soon')}</button>`;
+}
 function renderPricingTable(containerId, opts){
   const el = document.getElementById(containerId);
   if (!el) return;
@@ -4461,10 +4639,10 @@ function renderPricingTable(containerId, opts){
         <tr>
           <th></th>
           ${PRICING_PLANS.map(p => `
-            <th class="${p.id === highlight ? 'current' : ''}">
+            <th class="${pricingColClass(p, highlight)}">
               <div class="pt-plan-name">${t(p.nameKey)}</div>
               <div class="pt-plan-price">${p.price} <span class="per">/ ${t('plan_per_month')}</span></div>
-              ${p.id === highlight ? `<span class="pt-current-badge">${t('settings_account_plan_current')}</span>` : ''}
+              ${pricingColBadge(p, highlight)}
             </th>
           `).join('')}
         </tr>
@@ -4473,7 +4651,7 @@ function renderPricingTable(containerId, opts){
         ${PRICING_FEATURES.map(f => `
           <tr>
             <td>${t(f.key)}</td>
-            ${f.values.map((v, i) => `<td class="${PRICING_PLANS[i].id === highlight ? 'current' : ''}">${pricingCell(v)}</td>`).join('')}
+            ${f.values.map((v, i) => `<td class="${pricingColClass(PRICING_PLANS[i], highlight)}">${pricingCell(v)}</td>`).join('')}
           </tr>
         `).join('')}
       </tbody>
@@ -4481,9 +4659,7 @@ function renderPricingTable(containerId, opts){
       <tfoot>
         <tr>
           <td></td>
-          <td class="${'free' === highlight ? 'current' : ''}"><a href="#/account/signup" data-link class="btn-secondary btn-sm" data-i18n="price_cta_free">${t('price_cta_free')}</a></td>
-          <td class="${'pro' === highlight ? 'current' : ''}"><button class="btn-primary btn-sm" disabled data-i18n="price_cta_soon">${t('price_cta_soon')}</button></td>
-          <td class="${'team' === highlight ? 'current' : ''}"><button class="btn-secondary btn-sm" disabled data-i18n="price_cta_soon">${t('price_cta_soon')}</button></td>
+          ${PRICING_PLANS.map(p => `<td class="${pricingColClass(p, highlight)}">${pricingCtaCell(p, highlight)}</td>`).join('')}
         </tr>
       </tfoot>` : ''}
     </table>
@@ -4647,10 +4823,7 @@ function exportDataJson(){
   downloadBlob(JSON.stringify(payload, null, 2), `pokelo-donnees-${todayStr()}.json`, 'application/json');
   showToast(t('toast_export_ready'), 'success');
 }
-function csvEscape(v){
-  const s = v == null ? '' : String(v);
-  return /[",\n;]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
-}
+// csvEscape : voir js/pure-utils.js
 function exportDataCsv(){
   const cols = ['date','bankroll','type','format','devise','tauxChange','miseEngagee','gainTotal','resultat','site','variante','dureeMin','tilt','notes'];
   const rows = [cols.join(';')];
@@ -4685,6 +4858,8 @@ async function deleteMyAccount(){
     if (!res.ok) throw new Error('delete-failed');
     clearTimeout(syncDebounceTimer);
     currentUser = null;
+    currentPlan = 'free';
+    currentPlanPeriodEnd = null;
     localStorage.removeItem(STORAGE_KEY);
     state = seedDemoState();
     updateAccountUI();
@@ -4734,6 +4909,7 @@ function refreshAllViewsAfterSettingsChange(){
     renderPreviewTab(document.querySelector('.preview-tab.active')?.dataset.tab || 'dashboard');
     drawHeroCharts();
     renderPricingTable('pricing-table-landing', { highlightPlanId: null, showCta: true });
+    renderStatMarquee();
   }
 }
 
@@ -5284,6 +5460,8 @@ document.addEventListener('DOMContentLoaded', function(){
   renderPreviewTab('dashboard');
   renderModuleShowcase();
   renderPricingTable('pricing-table-landing', { highlightPlanId: null, showCta: true });
+  renderStatMarquee();
+  playHeroCounters();
   populateBankrollSelects();
   router();
   initPwa();
