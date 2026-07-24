@@ -364,6 +364,7 @@
   .ce-body { flex: 1; min-width: 0; }
   .ce-top { display: flex; align-items: center; gap: .7rem; flex-wrap: wrap; }
   .ce-name { font-size: .92rem; font-weight: 700; color: var(--text); }
+  .ce-tour { font-size: .68rem; color: var(--grey); border: 1px solid var(--border); padding: .15rem .5rem; border-radius: 100px; }
   .ce-badge { font-size: .64rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; padding: .2rem .55rem; border-radius: 100px; }
   .ce-badge-majeur { color: var(--green); background: color-mix(in srgb, var(--green) 14%, transparent); }
   .ce-badge-highroller { color: var(--critical); background: color-mix(in srgb, var(--critical) 14%, transparent); }
@@ -1206,6 +1207,17 @@
           <option value="majeur" data-i18n="calendar_type_majeur">Circuit majeur</option>
           <option value="highroller" data-i18n="calendar_type_highroller">High Roller</option>
           <option value="circuit" data-i18n="calendar_type_circuit">Circuit régional</option>
+        </select>
+      </div>
+      <div class="calendar-filter-group">
+        <label data-i18n="calendar_filter_tour">Circuit</label>
+        <select class="input" id="calendar-tour-filter" onchange="setCalendarFilter('tour', this.value)"></select>
+      </div>
+      <div class="calendar-filter-group">
+        <label data-i18n="calendar_sort_label">Trier par</label>
+        <select class="input" id="calendar-sort" onchange="setCalendarSort(this.value)">
+          <option value="date" data-i18n="calendar_sort_date">Date</option>
+          <option value="tour" data-i18n="calendar_sort_tour">Type d'événement</option>
         </select>
       </div>
     </div>
@@ -2369,6 +2381,8 @@ const I18N = {
     calendar_tag:'Gratuit', calendar_title:'Le calendrier du poker mondial 2026',
     calendar_sub:"Les grands rendez-vous live de l'année, filtrables par pays et par type d'événement.",
     calendar_filter_country:'Pays', calendar_filter_type:"Type d'événement", calendar_filter_all_countries:'Tous les pays',
+    calendar_filter_tour:'Circuit', calendar_filter_all_tours:'Tous les circuits',
+    calendar_sort_label:'Trier par', calendar_sort_date:'Date', calendar_sort_tour:"Type d'événement",
     calendar_type_all:'Tous', calendar_type_majeur:'Circuit majeur', calendar_type_highroller:'High Roller', calendar_type_circuit:'Circuit régional',
     calendar_empty:'Aucun événement ne correspond à ces filtres.',
     calendar_disclaimer:"Dates indicatives fondées sur les annonces officielles des organisateurs au moment de la publication — vérifiez les dates exactes sur le site de l'organisateur avant de réserver un déplacement.",
@@ -2582,6 +2596,8 @@ const I18N = {
     calendar_tag:'Free', calendar_title:'The 2026 world poker calendar',
     calendar_sub:"The year's biggest live events, filterable by country and event type.",
     calendar_filter_country:'Country', calendar_filter_type:'Event type', calendar_filter_all_countries:'All countries',
+    calendar_filter_tour:'Tour', calendar_filter_all_tours:'All tours',
+    calendar_sort_label:'Sort by', calendar_sort_date:'Date', calendar_sort_tour:'Event type',
     calendar_type_all:'All', calendar_type_majeur:'Major tour', calendar_type_highroller:'High Roller', calendar_type_circuit:'Regional circuit',
     calendar_empty:'No events match these filters.',
     calendar_disclaimer:"Indicative dates based on official organizer announcements at time of publishing — check the organizer's website for exact dates before booking travel.",
@@ -3393,31 +3409,31 @@ function renderArticle(slug){
    voir la mention "dates indicatives" affichée sur la page.
    ══════════════════════════════════════════════════════════════ */
 const POKER_CALENDAR_2026 = [
-  { name:'WPT Seminole Hard Rock Lucky Hearts Poker Open', country:'US', city:'Hollywood, Floride', start:'2026-01-06', end:'2026-01-20', type:'majeur' },
-  { name:'Partouche Poker Deepstack — La Tour-de-Salvagny', country:'FR', city:'La Tour-de-Salvagny', start:'2026-01-21', end:'2026-01-25', type:'circuit' },
-  { name:'WPT Cambodia', country:'KH', city:'Phnom Penh (NagaWorld)', start:'2026-01-21', end:'2026-02-03', type:'majeur' },
-  { name:"PokerStars Open Campione", country:'IT', city:"Campione d'Italia", start:'2026-01-23', end:'2026-02-01', type:'circuit' },
-  { name:'WPT Venetian Las Vegas Spring Championship', country:'US', city:'Las Vegas', start:'2026-02-09', end:'2026-02-24', type:'majeur' },
-  { name:'EPT Paris', country:'FR', city:'Paris', start:'2026-02-18', end:'2026-03-01', type:'majeur' },
-  { name:'Triton ONE Jeju', country:'KR', city:'Jeju', start:'2026-03-05', end:'2026-03-15', type:'highroller' },
-  { name:'Triton Super High Roller Series Jeju', country:'KR', city:'Jeju', start:'2026-03-14', end:'2026-04-01', type:'highroller' },
-  { name:'Irish Poker Open', country:'IE', city:'Dublin', start:'2026-03-26', end:'2026-04-06', type:'majeur' },
-  { name:'WSOP Europe', country:'CZ', city:"Prague (King's Casino)", start:'2026-03-31', end:'2026-04-12', type:'majeur' },
-  { name:'WSOP Circuit — Pasino Partouche', country:'FR', city:'Aix-en-Provence', start:'2026-04-10', end:'2026-04-21', type:'circuit' },
-  { name:'Partouche Poker Deepstack — Divonne-les-Bains', country:'FR', city:'Divonne-les-Bains', start:'2026-04-22', end:'2026-04-26', type:'circuit' },
-  { name:'Aussie Millions', country:'AU', city:'Melbourne (Crown)', start:'2026-04-24', end:'2026-05-10', type:'majeur' },
-  { name:'EPT Monte-Carlo', country:'MC', city:'Monte-Carlo', start:'2026-04-30', end:'2026-05-10', type:'majeur' },
-  { name:'Triton Super High Roller Series Montenegro', country:'ME', city:'Sveti Stefan', start:'2026-05-13', end:'2026-05-28', type:'highroller' },
-  { name:'Riviera Poker Festival', country:'FR', city:'Aix-en-Provence', start:'2026-05-08', end:'2026-08-05', type:'circuit' },
-  { name:'PokerStars Open Namur', country:'BE', city:'Namur', start:'2026-05-27', end:'2026-06-07', type:'circuit' },
-  { name:'World Series of Poker (WSOP)', country:'US', city:'Las Vegas (Horseshoe & Paris)', start:'2026-05-26', end:'2026-07-15', type:'majeur' },
-  { name:'WPT Cambodia — Passport to the World Championship', country:'KH', city:'Phnom Penh (NagaWorld)', start:'2026-08-12', end:'2026-08-24', type:'majeur' },
-  { name:'Triton Super High Roller Series Jeju', country:'KR', city:'Jeju', start:'2026-09-04', end:'2026-09-17', type:'highroller' },
-  { name:'WPT Prime Australia', country:'AU', city:'Sydney (The Star)', start:'2026-09-10', end:'2026-09-30', type:'majeur' },
-  { name:'WPT Prime Lodge Championship', country:'US', city:'Austin, Texas', start:'2026-09-24', end:'2026-10-12', type:'majeur' },
-  { name:'WPT Seoul', country:'KR', city:'Séoul (INSPIRE)', start:'2026-10-30', end:'2026-11-09', type:'majeur' },
-  { name:'PokerStars Open Aix-en-Provence', country:'FR', city:'Aix-en-Provence', start:'2026-11-02', end:'2026-11-08', type:'circuit' },
-  { name:'EPT Prague', country:'CZ', city:'Prague', start:'2026-12-02', end:'2026-12-13', type:'majeur' },
+  { name:'WPT Seminole Hard Rock Lucky Hearts Poker Open', tour:'WPT', country:'US', city:'Hollywood, Floride', start:'2026-01-06', end:'2026-01-20', type:'majeur' },
+  { name:'Partouche Poker Deepstack — La Tour-de-Salvagny', tour:'Partouche', country:'FR', city:'La Tour-de-Salvagny', start:'2026-01-21', end:'2026-01-25', type:'circuit' },
+  { name:'WPT Cambodia', tour:'WPT', country:'KH', city:'Phnom Penh (NagaWorld)', start:'2026-01-21', end:'2026-02-03', type:'majeur' },
+  { name:"PokerStars Open Campione", tour:'PokerStars Open', country:'IT', city:"Campione d'Italia", start:'2026-01-23', end:'2026-02-01', type:'circuit' },
+  { name:'WPT Venetian Las Vegas Spring Championship', tour:'WPT', country:'US', city:'Las Vegas', start:'2026-02-09', end:'2026-02-24', type:'majeur' },
+  { name:'EPT Paris', tour:'EPT', country:'FR', city:'Paris', start:'2026-02-18', end:'2026-03-01', type:'majeur' },
+  { name:'Triton ONE Jeju', tour:'Triton', country:'KR', city:'Jeju', start:'2026-03-05', end:'2026-03-15', type:'highroller' },
+  { name:'Triton Super High Roller Series Jeju', tour:'Triton', country:'KR', city:'Jeju', start:'2026-03-14', end:'2026-04-01', type:'highroller' },
+  { name:'Irish Poker Open', tour:'Irish Poker Open', country:'IE', city:'Dublin', start:'2026-03-26', end:'2026-04-06', type:'majeur' },
+  { name:'WSOP Europe', tour:'WSOP Europe', country:'CZ', city:"Prague (King's Casino)", start:'2026-03-31', end:'2026-04-12', type:'majeur' },
+  { name:'WSOP Circuit — Pasino Partouche', tour:'WSOP Circuit', country:'FR', city:'Aix-en-Provence', start:'2026-04-10', end:'2026-04-21', type:'circuit' },
+  { name:'Partouche Poker Deepstack — Divonne-les-Bains', tour:'Partouche', country:'FR', city:'Divonne-les-Bains', start:'2026-04-22', end:'2026-04-26', type:'circuit' },
+  { name:'Aussie Millions', tour:'Aussie Millions', country:'AU', city:'Melbourne (Crown)', start:'2026-04-24', end:'2026-05-10', type:'majeur' },
+  { name:'EPT Monte-Carlo', tour:'EPT', country:'MC', city:'Monte-Carlo', start:'2026-04-30', end:'2026-05-10', type:'majeur' },
+  { name:'Triton Super High Roller Series Montenegro', tour:'Triton', country:'ME', city:'Sveti Stefan', start:'2026-05-13', end:'2026-05-28', type:'highroller' },
+  { name:'Riviera Poker Festival', tour:'Partouche', country:'FR', city:'Aix-en-Provence', start:'2026-05-08', end:'2026-08-05', type:'circuit' },
+  { name:'PokerStars Open Namur', tour:'PokerStars Open', country:'BE', city:'Namur', start:'2026-05-27', end:'2026-06-07', type:'circuit' },
+  { name:'World Series of Poker (WSOP)', tour:'WSOP', country:'US', city:'Las Vegas (Horseshoe & Paris)', start:'2026-05-26', end:'2026-07-15', type:'majeur' },
+  { name:'WPT Cambodia — Passport to the World Championship', tour:'WPT', country:'KH', city:'Phnom Penh (NagaWorld)', start:'2026-08-12', end:'2026-08-24', type:'majeur' },
+  { name:'Triton Super High Roller Series Jeju', tour:'Triton', country:'KR', city:'Jeju', start:'2026-09-04', end:'2026-09-17', type:'highroller' },
+  { name:'WPT Prime Australia', tour:'WPT', country:'AU', city:'Sydney (The Star)', start:'2026-09-10', end:'2026-09-30', type:'majeur' },
+  { name:'WPT Prime Lodge Championship', tour:'WPT', country:'US', city:'Austin, Texas', start:'2026-09-24', end:'2026-10-12', type:'majeur' },
+  { name:'WPT Seoul', tour:'WPT', country:'KR', city:'Séoul (INSPIRE)', start:'2026-10-30', end:'2026-11-09', type:'majeur' },
+  { name:'PokerStars Open Aix-en-Provence', tour:'PokerStars Open', country:'FR', city:'Aix-en-Provence', start:'2026-11-02', end:'2026-11-08', type:'circuit' },
+  { name:'EPT Prague', tour:'EPT', country:'CZ', city:'Prague', start:'2026-12-02', end:'2026-12-13', type:'majeur' },
 ];
 const FLAG_SVG = {
   FR: `<rect width="10" height="20" fill="#002654"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ED2939"/>`,
@@ -3455,9 +3471,14 @@ function fmtCalendarRange(startIso, endIso){
   const e = new Date(endIso+'T00:00:00').toLocaleDateString(locale, opts);
   return `${s} – ${e}`;
 }
-let calendarFilters = { country: 'all', type: 'all' };
+let calendarFilters = { country: 'all', type: 'all', tour: 'all' };
+let calendarSort = 'date';
 function setCalendarFilter(dim, value){
   calendarFilters[dim] = value;
+  renderCalendarList();
+}
+function setCalendarSort(value){
+  calendarSort = value;
   renderCalendarList();
 }
 function populateCalendarCountryFilter(){
@@ -3467,14 +3488,23 @@ function populateCalendarCountryFilter(){
   sel.innerHTML = `<option value="all">${t('calendar_filter_all_countries')}</option>` + codes.map(c => `<option value="${c}">${countryName(c)}</option>`).join('');
   sel.value = calendarFilters.country;
 }
+function populateCalendarTourFilter(){
+  const sel = document.getElementById('calendar-tour-filter');
+  if (!sel) return;
+  const tours = [...new Set(POKER_CALENDAR_2026.map(e => e.tour))].sort((a, b) => a.localeCompare(b));
+  sel.innerHTML = `<option value="all">${t('calendar_filter_all_tours')}</option>` + tours.map(tr => `<option value="${escapeHtml(tr)}">${escapeHtml(tr)}</option>`).join('');
+  sel.value = calendarFilters.tour;
+}
 function renderCalendarList(){
   const el = document.getElementById('calendar-list');
   if (!el) return;
   const list = POKER_CALENDAR_2026
     .filter(e => calendarFilters.country === 'all' || e.country === calendarFilters.country)
     .filter(e => calendarFilters.type === 'all' || e.type === calendarFilters.type)
-    .slice()
-    .sort((a, b) => a.start.localeCompare(b.start));
+    .filter(e => calendarFilters.tour === 'all' || e.tour === calendarFilters.tour)
+    .slice();
+  if (calendarSort === 'tour') list.sort((a, b) => a.tour.localeCompare(b.tour) || a.start.localeCompare(b.start));
+  else list.sort((a, b) => a.start.localeCompare(b.start));
   if (!list.length) { el.innerHTML = `<p class="calendar-empty">${t('calendar_empty')}</p>`; return; }
   el.innerHTML = list.map(e => `
     <div class="calendar-event">
@@ -3482,6 +3512,7 @@ function renderCalendarList(){
       <div class="ce-body">
         <div class="ce-top">
           <span class="ce-name">${escapeHtml(e.name)}</span>
+          <span class="ce-tour">${escapeHtml(e.tour)}</span>
           <span class="ce-badge ce-badge-${e.type}">${t('calendar_type_'+e.type)}</span>
         </div>
         <div class="ce-meta">${escapeHtml(e.city)}, ${escapeHtml(countryName(e.country))} · ${fmtCalendarRange(e.start, e.end)}</div>
@@ -3490,8 +3521,11 @@ function renderCalendarList(){
 }
 function renderPokerCalendar(){
   populateCalendarCountryFilter();
+  populateCalendarTourFilter();
   const typeSel = document.getElementById('calendar-type-filter');
   if (typeSel) typeSel.value = calendarFilters.type;
+  const sortSel = document.getElementById('calendar-sort');
+  if (sortSel) sortSel.value = calendarSort;
   renderCalendarList();
 }
 
@@ -3553,32 +3587,77 @@ function renderStatMarquee(){
 /* Ligne du mockup hero : un vrai défilement CSS (transform, GPU) plutôt qu'un
    redessin Chart.js périodique — c'est ce qui le rend parfaitement fluide,
    sur le même principe que la bande défilante (stat-marquee). */
-function buildHeroChartPath(seed, w, h){
+function buildHeroChartValues(seed, n){
   const rand = mulberry32(seed);
-  const n = 36;
-  let bal = 2068;
-  const pts = [];
-  for (let i=0;i<n;i++){ bal += (rand()-0.4)*60; pts.push(bal); }
-  const min = Math.min(...pts), max = Math.max(...pts);
+  // Anchors : une histoire lisible (départ proche de 0, creux net sous zéro
+  // pour illustrer la zone rouge, reprise, puis croissance) — premier et
+  // dernier point identiques, pour que la copie dupliquée boucle sans coupure.
+  const anchors = [[0,20],[0.15,-15],[0.35,-150],[0.55,-25],[0.78,150],[1,20]];
+  const raw = [];
+  for (let i=0;i<n;i++){
+    const frac = i/(n-1);
+    let seg = 0;
+    while (seg < anchors.length-2 && frac > anchors[seg+1][0]) seg++;
+    const [t0,v0] = anchors[seg], [t1,v1] = anchors[seg+1];
+    const localT = (frac-t0)/((t1-t0) || 1);
+    const smooth = localT*localT*(3-2*localT);
+    raw.push(v0 + (v1-v0)*smooth + (rand()-0.5)*16);
+  }
+  // Filet de sécurité : force le dernier point à rejoindre exactement le
+  // premier, même si le bruit aléatoire a légèrement décalé la boucle.
+  const drift = (raw[n-1]-raw[0])/(n-1);
+  return raw.map((v,i)=> v - drift*i);
+}
+function splitRunsAtZero(values, coords, zeroY){
+  const sign = v => v >= 0 ? 1 : -1;
+  const runs = [{ sign: sign(values[0]), pts: [coords[0]] }];
+  for (let i=1;i<values.length;i++){
+    const prevSign = sign(values[i-1]);
+    const curSign = sign(values[i]);
+    if (curSign !== prevSign) {
+      const t = values[i-1] / (values[i-1]-values[i]);
+      const crossPt = [coords[i-1][0] + (coords[i][0]-coords[i-1][0])*t, zeroY];
+      runs[runs.length-1].pts.push(crossPt);
+      runs.push({ sign: curSign, pts: [crossPt] });
+    }
+    runs[runs.length-1].pts.push(coords[i]);
+  }
+  return runs;
+}
+function pathFromPts(pts){
+  return pts.map((p,i)=> (i===0?'M':'L')+p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
+}
+function heroChartSvg(seed, instance){
+  const w = 440, h = 170, n = 48;
+  const values = buildHeroChartValues(seed, n);
+  const min = Math.min(...values), max = Math.max(...values);
   const pad = (max-min)*0.18 || 10;
   const yMin = min-pad, yMax = max+pad;
   const stepX = w/(n-1);
-  const coords = pts.map((v,i)=> [ i*stepX, h - ((v-yMin)/(yMax-yMin))*h ]);
-  const line = coords.map((c,i)=> (i===0?'M':'L')+c[0].toFixed(1)+','+c[1].toFixed(1)).join(' ');
-  const area = `${line} L${w.toFixed(1)},${h.toFixed(1)} L0,${h.toFixed(1)} Z`;
-  return { line, area };
-}
-function heroChartSvg(seed, instance){
-  const w = 440, h = 170;
-  const { line, area } = buildHeroChartPath(seed, w, h);
-  const gid = 'heroChartGrad' + seed + '-' + instance;
+  const coords = values.map((v,i)=> [ i*stepX, h - ((v-yMin)/(yMax-yMin))*h ]);
+  const zeroY = h - ((0-yMin)/(yMax-yMin))*h;
+  const runs = splitRunsAtZero(values, coords, zeroY);
+  const gGreen = 'heroGreenGrad' + seed + '-' + instance;
+  const gRed = 'heroRedGrad' + seed + '-' + instance;
+  const areas = runs.map(r => {
+    const last = r.pts[r.pts.length-1], first = r.pts[0];
+    const d = pathFromPts(r.pts) + ` L${last[0].toFixed(1)},${zeroY.toFixed(1)} L${first[0].toFixed(1)},${zeroY.toFixed(1)} Z`;
+    return `<path d="${d}" fill="url(#${r.sign > 0 ? gGreen : gRed})" stroke="none"/>`;
+  }).join('');
+  const lines = runs.map(r => `<path d="${pathFromPts(r.pts)}" fill="none" stroke="${r.sign > 0 ? 'var(--green)' : 'var(--critical)'}" stroke-width="2" vector-effect="non-scaling-stroke"/>`).join('');
   return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="var(--green)" stop-opacity="0.28"/>
-      <stop offset="100%" stop-color="var(--green)" stop-opacity="0"/>
-    </linearGradient></defs>
-    <path d="${area}" fill="url(#${gid})" stroke="none"/>
-    <path d="${line}" fill="none" stroke="var(--green)" stroke-width="2" vector-effect="non-scaling-stroke"/>
+    <defs>
+      <linearGradient id="${gGreen}" x1="0" y1="0" x2="0" y2="${zeroY.toFixed(1)}" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="var(--green)" stop-opacity="0.28"/>
+        <stop offset="1" stop-color="var(--green)" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="${gRed}" x1="0" y1="${zeroY.toFixed(1)}" x2="0" y2="${h}" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="var(--critical)" stop-opacity="0"/>
+        <stop offset="1" stop-color="var(--critical)" stop-opacity="0.28"/>
+      </linearGradient>
+    </defs>
+    ${areas}
+    ${lines}
   </svg>`;
 }
 function renderHeroChartScroll(){
