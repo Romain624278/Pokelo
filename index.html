@@ -106,7 +106,6 @@
   :root[data-theme="light"] .app-mobile-topbar { background: rgba(255,255,255,0.97); }
   :root[data-theme="light"] .hero-mock { background: linear-gradient(180deg, #ffffff 0%, #f2f5f2 100%); box-shadow: 0 30px 80px rgba(0,0,0,0.08), 0 0 60px rgba(8,191,47,0.08); }
   :root[data-theme="light"] .hero-mock-bar { background: rgba(0,0,0,0.02); }
-  :root[data-theme="light"] .blog-card-top { background: linear-gradient(135deg, #eef7ee 0%, #dff3e4 100%); }
   :root[data-theme="light"] ::-webkit-scrollbar-track { background: var(--black); }
   :root[data-theme="light"] table.data-table tr:hover td { background: rgba(8,191,47,0.06); }
   :root[data-theme="light"] .step-node { box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
@@ -327,7 +326,7 @@
   .msc-preview { display: none; }
   @media (hover: hover) and (pointer: fine) {
     .msc-preview {
-      display: block; position: absolute; left: 50%; bottom: calc(100% + 12px); width: 210px;
+      display: block; position: absolute; left: 50%; bottom: calc(100% + 12px); width: 260px;
       max-width: calc(100vw - 40px);
       background: var(--black-card); border: 1px solid var(--green); border-radius: 10px; padding: 1rem;
       box-shadow: 0 20px 50px rgba(0,0,0,0.5); text-align: left; z-index: 45;
@@ -342,6 +341,14 @@
   }
   .msc-preview-thumb { width: 100%; height: 68px; margin-bottom: .7rem; }
   .msc-preview-thumb svg { width: 100%; height: 100%; }
+  .msc-preview-sim { margin-bottom: .7rem; pointer-events: none; }
+  .msc-preview-sim .chart-box { height: 74px; }
+  .msc-preview-sim table.data-table { font-size: .62rem; }
+  .msc-preview-sim .table-wrap { max-height: 110px; overflow-y: auto; }
+  .msc-preview-sim .mini-stat-tile, .msc-preview-sim .summary-grid > * { padding: .5rem .6rem; }
+  .msc-preview-sim .mst-val, .msc-preview-sim .st-val { font-size: 1rem; }
+  .msc-preview-sim .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .4rem; }
+  .msc-preview-sim .module-toolbar { display: none; }
   .msc-preview-title { font-size: .82rem; font-weight: 700; color: var(--text); margin-bottom: .35rem; }
   .msc-preview-desc { font-size: .72rem; color: var(--grey); line-height: 1.4; }
   @media (max-width: 1100px) { .module-showcase-grid { grid-template-columns: repeat(4, 1fr); } }
@@ -367,10 +374,11 @@
   .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.3rem; margin-top: 3.5rem; max-width: 1140px; }
   .blog-card { background: var(--black-card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; cursor: pointer; transition: border-color .25s, transform .25s; text-decoration: none; display: flex; flex-direction: column; }
   .blog-card:hover { border-color: var(--green); transform: translateY(-4px); }
-  .blog-card-top { height: 120px; background: linear-gradient(135deg, #0f1a0f 0%, #001a04 100%); display: flex; align-items: center; justify-content: center; position: relative; }
-  .blog-card-top .tag { position: absolute; top: 12px; left: 12px; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--green); background: rgba(8,191,47,0.12); border: 1px solid var(--border); padding: 0.25rem 0.6rem; border-radius: 100px; }
-  .blog-card-icon { width: 46px; height: 46px; opacity: 0.9; transition: transform .3s; }
-  .blog-card:hover .blog-card-icon { transform: scale(1.08) translateY(-2px); }
+  .blog-card-top { height: 120px; background: var(--black); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+  .blog-card-top .tag { position: absolute; top: 12px; left: 12px; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; border: 1px solid var(--border); padding: 0.25rem 0.6rem; border-radius: 100px; }
+  .blog-card-icon { width: 100%; height: 100%; opacity: 0.95; transition: transform .35s; }
+  .blog-card-icon svg { width: 100%; height: 100%; }
+  .blog-card:hover .blog-card-icon { transform: scale(1.04); }
   .blog-card-body { padding: 1.3rem 1.4rem 1.5rem; flex: 1; display: flex; flex-direction: column; }
   .blog-card h3 { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 0.6rem; line-height: 1.3; }
   .blog-card p { font-size: 0.83rem; color: var(--grey); line-height: 1.55; flex: 1; }
@@ -966,7 +974,7 @@
   <!-- HOW IT WORKS -->
   <section id="how">
     <div class="fade-up">
-      <div class="section-tag" data-i18n="how_tag">Fonctionnement</div>
+      <div class="section-tag" style="color: var(--blue);" data-i18n="how_tag">Fonctionnement</div>
       <h2 class="section-title" data-i18n="how_title">Quatre étapes,<br>une meilleure vision</h2>
       <div class="divider"></div>
     </div>
@@ -1012,7 +1020,7 @@
   <!-- PRODUCT PREVIEW -->
   <section id="preview">
     <div class="fade-up">
-      <div class="section-tag" data-i18n="preview_tag">Le produit</div>
+      <div class="section-tag" style="color: var(--violet);" data-i18n="preview_tag">Le produit</div>
       <h2 class="section-title" data-i18n="preview_title">Des vues sobres,<br>pensées pour durer</h2>
       <div class="divider"></div>
       <p class="section-sub" data-i18n="preview_sub">Un dashboard sans bruit visuel : les chiffres qui comptent, des graphiques lisibles, et rien d'autre. Explorez les quatre écrans de l'application.</p>
@@ -1059,7 +1067,7 @@
   <!-- TRUST / TESTIMONIALS -->
   <section id="trust">
     <div class="fade-up">
-      <div class="section-tag" data-i18n="trust_tag">Retours</div>
+      <div class="section-tag" style="color: var(--amber);" data-i18n="trust_tag">Retours</div>
       <h2 class="section-title" data-i18n="trust_title">Pensé par et pour<br>des joueurs réguliers</h2>
       <div class="divider"></div>
     </div>
@@ -1091,7 +1099,7 @@
   <!-- BLOG PREVIEW -->
   <section id="blog-preview">
     <div class="fade-up">
-      <div class="section-tag" data-i18n="blog_tag">Blog</div>
+      <div class="section-tag" style="color: var(--blue);" data-i18n="blog_tag">Blog</div>
       <h2 class="section-title" data-i18n="blog_title">Apprendre à gérer<br>sa bankroll</h2>
       <div class="divider"></div>
       <p class="section-sub" data-i18n="blog_sub">Des guides courts et concrets sur le bankroll management, écrits pour être appliqués dès la prochaine session.</p>
@@ -1105,7 +1113,7 @@
   <!-- FAQ -->
   <section id="faq">
     <div class="fade-up">
-      <div class="section-tag" data-i18n="faq_tag">FAQ</div>
+      <div class="section-tag" style="color: var(--violet);" data-i18n="faq_tag">FAQ</div>
       <h2 class="section-title" data-i18n="faq_title">Questions fréquentes</h2>
       <div class="divider"></div>
     </div>
@@ -1218,6 +1226,7 @@
         <h5 data-i18n="footer_legal">Légal</h5>
         <a href="#/legal" data-link>Mentions légales</a>
         <a href="#/privacy" data-link>Politique de confidentialité</a>
+        <a href="#/terms" data-link>CGU / CGV</a>
       </div>
     </div>
   </div>
@@ -1311,19 +1320,20 @@
       <a href="#/" data-link class="article-back">&larr; Retour au site</a>
       <div class="article-tag">Informations légales</div>
       <h1 class="article-title">Mentions légales</h1>
-      <div class="article-meta">Dernière mise à jour : à compléter</div>
-      <div class="legal-todo">À compléter avec vos informations réelles avant mise en ligne — les champs entre crochets <code>[...]</code> sont des placeholders, pas des données valides.</div>
+      <div class="article-meta">Dernière mise à jour : 24 juillet 2026</div>
+      <div class="legal-todo">Numéro SIRET/SIREN à compléter — le seul champ encore en attente. Le reste reprend les informations publiques de RD DIGITAL.</div>
       <div class="article-body">
         <h2>Éditeur du site</h2>
         <p>Le site Pokelo (ci-après « le Site ») est édité par :<br>
-        [Nom / raison sociale de l'éditeur]<br>
-        [Forme juridique — auto-entrepreneur, SASU, etc.]<br>
-        [Adresse du siège social]<br>
+        RD DIGITAL<br>
+        Entreprise individuelle<br>
+        Siège social : Annecy, Haute-Savoie (74), France<br>
         [Numéro SIRET / SIREN]<br>
-        [Adresse e-mail de contact]</p>
+        Téléphone : 07 83 75 45 23<br>
+        Email : contact@rd-digital.fr</p>
 
         <h2>Directeur de la publication</h2>
-        <p>[Nom du directeur de la publication]</p>
+        <p>Romain Desgres, en qualité d'exploitant de RD DIGITAL (entreprise individuelle).</p>
 
         <h2>Hébergement</h2>
         <p>Le Site est hébergé par :<br>
@@ -1343,7 +1353,7 @@
         <p>Le poker est un jeu d'argent : jouez de manière responsable et dans les limites autorisées par la législation de votre pays de résidence.</p>
 
         <h2>Contact</h2>
-        <p>Pour toute question relative au Site : [adresse e-mail de contact].</p>
+        <p>Pour toute question relative au Site : contact@rd-digital.fr.</p>
       </div>
       <div class="article-cta">
         <p>Une question sur vos données personnelles ?</p>
@@ -1360,8 +1370,7 @@
       <a href="#/" data-link class="article-back">&larr; Retour au site</a>
       <div class="article-tag">Vie privée</div>
       <h1 class="article-title">Politique de confidentialité</h1>
-      <div class="article-meta">Dernière mise à jour : à compléter</div>
-      <div class="legal-todo">À compléter avec vos informations réelles avant mise en ligne — les champs entre crochets <code>[...]</code> sont des placeholders, pas des données valides.</div>
+      <div class="article-meta">Dernière mise à jour : 24 juillet 2026</div>
       <div class="article-body">
         <h2>Quelles données sont collectées</h2>
         <p>Un compte est nécessaire pour utiliser Pokelo. Lorsque vous créez un compte, nous collectons votre adresse e-mail et un mot de passe (stocké de façon chiffrée par notre prestataire d'authentification, jamais en clair). Vos bankrolls et sessions sont synchronisées vers une base de données sécurisée afin d'être accessibles depuis vos différents appareils.</p>
@@ -1390,15 +1399,59 @@
         <p>Les données d'un compte sont conservées tant que celui-ci est actif. Vous pouvez demander la suppression complète de votre compte et de toutes les données associées à tout moment (voir « Vos droits » ci-dessous).</p>
 
         <h2>Vos droits (RGPD)</h2>
-        <p>Conformément au Règlement Général sur la Protection des Données, vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation et de portabilité de vos données, ainsi que du droit de vous opposer à leur traitement. Pour exercer ces droits, contactez [adresse e-mail de contact].</p>
+        <p>Conformément au Règlement Général sur la Protection des Données, vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation et de portabilité de vos données, ainsi que du droit de vous opposer à leur traitement. Pour exercer ces droits, contactez contact@rd-digital.fr.</p>
         <p>Vous disposez également du droit d'introduire une réclamation auprès de la CNIL (<a href="https://www.cnil.fr" target="_blank" rel="noopener">cnil.fr</a>) si vous estimez que vos droits ne sont pas respectés.</p>
 
         <h2>Contact</h2>
-        <p>Pour toute question relative à cette politique ou à vos données personnelles : [adresse e-mail de contact].</p>
+        <p>Pour toute question relative à cette politique ou à vos données personnelles : contact@rd-digital.fr.</p>
       </div>
       <div class="article-cta">
         <p>Prêt à créer votre compte Pokelo ?</p>
         <a href="#/account/signup" data-link class="btn-primary">Créer un compte gratuit</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ══════════════ VIEW : CGV / CGU ══════════════ -->
+<main id="view-terms" hidden>
+  <section id="terms-view" style="padding-top:150px">
+    <div class="article-wrap fade-up visible">
+      <a href="#/" data-link class="article-back">&larr; Retour au site</a>
+      <div class="article-tag">Conditions</div>
+      <h1 class="article-title">Conditions générales d'utilisation et de vente</h1>
+      <div class="article-meta">Dernière mise à jour : 24 juillet 2026</div>
+      <div class="legal-todo">Numéro SIRET/SIREN à compléter dans les Mentions légales — ce document en dépend.</div>
+      <div class="article-body">
+        <h2>1. Objet</h2>
+        <p>Les présentes conditions générales d'utilisation et de vente (CGU/CGV) régissent l'accès et l'utilisation du site et de l'application Pokelo (ci-après « le Service »), édité par RD DIGITAL (entreprise individuelle, Annecy, Haute-Savoie), ainsi que la souscription aux offres payantes proposées. L'utilisation du Service implique l'acceptation pleine et entière des présentes CGU/CGV.</p>
+
+        <h2>2. Accès au Service</h2>
+        <p>L'accès aux fonctionnalités de Pokelo nécessite la création d'un compte (adresse e-mail et mot de passe). L'utilisateur s'engage à fournir des informations exactes et à assurer la confidentialité de ses identifiants. Pokelo se réserve le droit de suspendre ou supprimer un compte en cas d'usage frauduleux ou contraire aux présentes conditions.</p>
+
+        <h2>3. Description des offres</h2>
+        <p>Pokelo propose un plan Gratuit sans limite de durée et des plans payants par abonnement (Pro, Équipe) dont le détail des fonctionnalités et tarifs est présenté sur la page <a href="#/" data-link>Tarifs</a>. Les tarifs sont indiqués en euros, toutes taxes applicables comprises le cas échéant.</p>
+
+        <h2>4. Prix et paiement</h2>
+        <p>Les abonnements payants sont facturés de façon récurrente (mensuelle) via notre prestataire de paiement Stripe, qui traite les données de paiement de façon sécurisée — Pokelo n'a à aucun moment accès à vos coordonnées bancaires complètes. Le paiement est exigible dès la souscription puis à chaque échéance jusqu'à résiliation.</p>
+
+        <h2>5. Droit de rétractation</h2>
+        <p>Conformément à l'article L221-28 du Code de la consommation, le droit de rétractation ne s'applique pas aux contenus numériques non fournis sur un support matériel dont l'exécution a commencé avec l'accord préalable exprès du consommateur, qui reconnaît ainsi renoncer à son droit de rétractation. En souscrivant à une offre payante, vous reconnaissez demander l'accès immédiat au Service et renoncer à votre droit de rétractation pour la période en cours.</p>
+
+        <h2>6. Durée et résiliation</h2>
+        <p>Les abonnements sont sans engagement de durée et peuvent être résiliés à tout moment depuis les paramètres du compte (portail de gestion d'abonnement). La résiliation prend effet à la fin de la période de facturation en cours ; aucun remboursement au prorata n'est effectué pour la période déjà entamée, sauf disposition légale contraire.</p>
+
+        <h2>7. Responsabilité</h2>
+        <p>Pokelo est un outil de suivi et d'analyse fourni à titre informatif (voir les <a href="#/legal" data-link>Mentions légales</a> pour la limitation de responsabilité complète, notamment concernant les indicateurs statistiques et le caractère non contractuel des estimations).</p>
+
+        <h2>8. Modification des CGU/CGV</h2>
+        <p>RD DIGITAL se réserve le droit de modifier les présentes conditions à tout moment. Les utilisateurs seront informés de toute modification substantielle ; la poursuite de l'utilisation du Service après modification vaut acceptation des nouvelles conditions.</p>
+
+        <h2>9. Droit applicable et litiges</h2>
+        <p>Les présentes conditions sont soumises au droit français. En cas de litige, une solution amiable sera recherchée en priorité avant toute action judiciaire, qui relèvera des juridictions françaises compétentes.</p>
+
+        <h2>10. Contact</h2>
+        <p>Pour toute question relative aux présentes conditions : contact@rd-digital.fr.</p>
       </div>
     </div>
   </section>
@@ -2669,6 +2722,7 @@ const ARTICLES = [
   {
     slug: 'bankroll-management-regles-essentielles',
     tag: 'Bases',
+    accent: 'green',
     title: "Bankroll management : les règles essentielles pour ne jamais tomber à zéro",
     excerpt: "Les principes fondamentaux pour dimensionner votre bankroll et éviter le tapis, quel que soit votre format de jeu.",
     date: '2026-01-12',
@@ -2706,6 +2760,7 @@ const ARTICLES = [
   {
     slug: 'combien-de-buyins-mtt',
     tag: 'Tournois',
+    accent: 'amber',
     title: "Combien de buy-ins faut-il pour jouer les MTT sereinement ?",
     excerpt: "La variance des tournois multi-tables est brutale. Voici comment calculer un nombre de buy-ins réaliste selon votre profil.",
     date: '2026-01-19',
@@ -2737,6 +2792,7 @@ const ARTICLES = [
   {
     slug: 'cashgame-vs-tournoi-gestion-bankroll',
     tag: 'Stratégie',
+    accent: 'violet',
     title: "Cash game vs Tournoi : quelle gestion de bankroll adopter ?",
     excerpt: "Les deux formats n'ont pas la même variance ni la même logique de mise. Comparatif pratique pour adapter votre BRM.",
     date: '2026-01-26',
@@ -2758,6 +2814,7 @@ const ARTICLES = [
   {
     slug: 'expresso-spin-go-variance',
     tag: 'Expresso',
+    accent: 'critical',
     title: "Expressos / Spin & Go : gérer la variance de la loterie",
     excerpt: "Le multiplicateur aléatoire rend les expressos passionnants — et statistiquement violents pour une bankroll mal calibrée.",
     date: '2026-02-02',
@@ -2782,6 +2839,7 @@ const ARTICLES = [
   {
     slug: 'live-vs-online-adapter-bankroll',
     tag: 'Stratégie',
+    accent: 'blue',
     title: "Live vs Online : adapter sa bankroll selon le format",
     excerpt: "Rythme de jeu, niveau moyen, structure des mises : le live et l'online n'exposent pas votre bankroll de la même façon.",
     date: '2026-02-09',
@@ -2803,6 +2861,7 @@ const ARTICLES = [
   {
     slug: 'suivre-statistiques-poker-pourquoi-comment',
     tag: 'Bases',
+    accent: 'green',
     title: "Suivre ses statistiques poker : pourquoi et comment",
     excerpt: "Le suivi de résultats n'est pas réservé aux professionnels. Voici ce qu'il faut enregistrer, et pourquoi ça change tout.",
     date: '2026-02-16',
@@ -2934,7 +2993,7 @@ function bankrollColor(bk){
 /* ══════════════════════════════════════════════════════════════
    POKELO — router
    ══════════════════════════════════════════════════════════════ */
-const VIEWS = ['view-landing','view-blog','view-article','view-app','view-account','view-legal','view-privacy','view-public-profile'];
+const VIEWS = ['view-landing','view-blog','view-article','view-app','view-account','view-legal','view-privacy','view-terms','view-public-profile'];
 let currentBankrollScope = null; // for dashboard/stats bankroll selector
 
 function showView(id){
@@ -2977,6 +3036,8 @@ function router(){
     showView('view-legal');
   } else if (hash.startsWith('#/privacy')) {
     showView('view-privacy');
+  } else if (hash.startsWith('#/terms')) {
+    showView('view-terms');
   } else {
     showView('view-landing');
   }
@@ -3026,17 +3087,94 @@ document.addEventListener('click', function(e){
 /* ══════════════════════════════════════════════════════════════
    POKELO — blog rendering
    ══════════════════════════════════════════════════════════════ */
-const ARTICLE_ICONS = {
-  'Bases': `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="10" width="40" height="44" rx="4" fill="none" stroke="var(--green)" stroke-width="2.5"/><path d="M20 22h24M20 32h24M20 42h16" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"/></svg>`,
-  'Tournois': `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M22 12h20v14a10 10 0 0 1-20 0Z" fill="none" stroke="var(--green)" stroke-width="2.5"/><path d="M22 16h-6a6 6 0 0 0 6 10M42 16h6a6 6 0 0 1-6 10" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"/><path d="M32 36v8M25 52h14l-2-8H27Z" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linejoin="round"/></svg>`,
-  'Stratégie': `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="20" fill="none" stroke="var(--green)" stroke-width="2.5"/><circle cx="32" cy="32" r="12" fill="none" stroke="var(--green)" stroke-width="2.5"/><circle cx="32" cy="32" r="3.5" fill="var(--green)"/></svg>`,
-  'Expresso': `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M35 10 20 34h10l-5 20 19-26H33Z" fill="var(--green)"/></svg>`,
+/* Illustrations de scène par article (uniques, pas de simple icône générique) */
+const ARTICLE_ILLUSTRATIONS = {
+  'bankroll-management-regles-essentielles': `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="150" cy="32" r="46" fill="var(--green)" opacity="0.08"/>
+    <line x1="18" y1="46" x2="176" y2="46" stroke="var(--green)" stroke-width="2" stroke-dasharray="5 5" opacity="0.5"/>
+    <rect x="28" y="70" width="18" height="30" rx="3" fill="var(--green)" opacity="0.35"/>
+    <rect x="56" y="56" width="18" height="44" rx="3" fill="var(--green)" opacity="0.55"/>
+    <rect x="84" y="38" width="18" height="62" rx="3" fill="var(--green)" opacity="0.75"/>
+    <rect x="112" y="20" width="18" height="80" rx="3" fill="var(--green)"/>
+    <path d="M152 12l7 3.5v10.5c0 8-4 12.5-7 14.5-3-2-7-6.5-7-14.5V15.5Z" fill="none" stroke="var(--green)" stroke-width="2.2" stroke-linejoin="round"/>
+    <path d="M148.5 23l2.6 2.6 4.6-5" stroke="var(--green)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`,
+  'combien-de-buyins-mtt': `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="55" cy="38" r="42" fill="var(--amber)" opacity="0.08"/>
+    <g stroke="var(--amber)" stroke-width="2.2" fill="none">
+      <ellipse cx="34" cy="94" rx="16" ry="6"/>
+      <ellipse cx="34" cy="85" rx="16" ry="6"/>
+      <ellipse cx="34" cy="76" rx="16" ry="6"/>
+      <ellipse cx="34" cy="67" rx="16" ry="6"/>
+    </g>
+    <g stroke="var(--amber)" stroke-width="2.2" fill="none" opacity="0.6">
+      <ellipse cx="70" cy="97" rx="13" ry="5"/>
+      <ellipse cx="70" cy="90" rx="13" ry="5"/>
+      <ellipse cx="70" cy="83" rx="13" ry="5"/>
+    </g>
+    <path d="M128 18h32v11c0 10.5-7.2 18-16 18s-16-7.5-16-18Z" fill="none" stroke="var(--amber)" stroke-width="2.4"/>
+    <path d="M128 22h-8a8 8 0 0 0 8 13.5M160 22h8a8 8 0 0 1-8 13.5" fill="none" stroke="var(--amber)" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M144 47v9M136 62h16l-2-6h-12Z" fill="none" stroke="var(--amber)" stroke-width="2.2" stroke-linejoin="round"/>
+  </svg>`,
+  'cashgame-vs-tournoi-gestion-bankroll': `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="100" cy="46" r="46" fill="var(--violet)" opacity="0.07"/>
+    <line x1="100" y1="22" x2="100" y2="60" stroke="var(--violet)" stroke-width="2.4"/>
+    <path d="M60 34h80" stroke="var(--violet)" stroke-width="2.4" stroke-linecap="round"/>
+    <circle cx="100" cy="30" r="4" fill="var(--violet)"/>
+    <line x1="60" y1="34" x2="44" y2="64" stroke="var(--violet)" stroke-width="2" opacity="0.7"/>
+    <line x1="60" y1="34" x2="76" y2="64" stroke="var(--violet)" stroke-width="2" opacity="0.7"/>
+    <path d="M44 64a16 9 0 0 0 32 0Z" fill="none" stroke="var(--violet)" stroke-width="2.2"/>
+    <ellipse cx="60" cy="60" rx="9" ry="3.6" fill="var(--violet)" opacity="0.6"/>
+    <line x1="140" y1="34" x2="124" y2="64" stroke="var(--violet)" stroke-width="2" opacity="0.7"/>
+    <line x1="140" y1="34" x2="156" y2="64" stroke="var(--violet)" stroke-width="2" opacity="0.7"/>
+    <path d="M124 64a16 9 0 0 0 32 0Z" fill="none" stroke="var(--violet)" stroke-width="2.2"/>
+    <rect x="132" y="50" width="15" height="11" rx="1.5" fill="var(--violet)" opacity="0.6" transform="rotate(-10 139 55)"/>
+    <rect x="94" y="86" width="12" height="16" rx="1.5" fill="var(--violet)" opacity="0.45"/>
+  </svg>`,
+  'expresso-spin-go-variance': `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="72" cy="58" r="46" fill="var(--critical)" opacity="0.08"/>
+    <path d="M102 14 70 64h20l-9 44 47-60h-24Z" fill="var(--critical)"/>
+    <g stroke="var(--critical)" stroke-width="2.2" fill="none" opacity="0.85">
+      <rect x="138" y="28" width="27" height="27" rx="6" transform="rotate(18 151.5 41.5)"/>
+    </g>
+    <circle cx="147" cy="38" r="2.1" fill="var(--critical)"/>
+    <circle cx="156" cy="46" r="2.1" fill="var(--critical)"/>
+    <path d="M148 80a15 15 0 1 1 9.5 14" stroke="var(--critical)" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.7"/>
+    <path d="M161 90l-4.5 7.5-7.5-3.2" stroke="var(--critical)" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+  </svg>`,
+  'live-vs-online-adapter-bankroll': `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="100" cy="52" r="48" fill="var(--blue)" opacity="0.07"/>
+    <ellipse cx="44" cy="82" rx="36" ry="15" fill="none" stroke="var(--blue)" stroke-width="2.2"/>
+    <rect x="30" y="58" width="14" height="20" rx="2" fill="var(--blue)" opacity="0.55" transform="rotate(-10 37 68)"/>
+    <rect x="44" y="56" width="14" height="20" rx="2" fill="var(--blue)" opacity="0.8" transform="rotate(8 51 66)"/>
+    <line x1="98" y1="18" x2="98" y2="102" stroke="var(--blue)" stroke-width="1.5" stroke-dasharray="3 5" opacity="0.35"/>
+    <rect x="118" y="28" width="58" height="38" rx="4" fill="none" stroke="var(--blue)" stroke-width="2.2"/>
+    <path d="M126 56l10-10 8 6 12-14" stroke="var(--blue)" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="140" y="66" width="14" height="5" fill="var(--blue)" opacity="0.5"/>
+    <rect x="134" y="72" width="26" height="4" rx="2" fill="var(--blue)" opacity="0.35"/>
+  </svg>`,
+  'suivre-statistiques-poker-pourquoi-comment': `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="70" cy="62" r="46" fill="var(--green)" opacity="0.07"/>
+    <path d="M20 92 45 67 62 80 90 42 115 60" fill="none" stroke="var(--green)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
+    <circle cx="45" cy="67" r="3" fill="var(--green)"/>
+    <circle cx="62" cy="80" r="3" fill="var(--green)"/>
+    <circle cx="90" cy="42" r="3" fill="var(--green)"/>
+    <circle cx="115" cy="60" r="3" fill="var(--green)"/>
+    <circle cx="145" cy="55" r="22" fill="none" stroke="var(--green)" stroke-width="3"/>
+    <line x1="161" y1="71" x2="177" y2="87" stroke="var(--green)" stroke-width="4" stroke-linecap="round"/>
+    <rect x="135" y="48" width="20" height="2" fill="var(--green)" opacity="0.5"/>
+  </svg>`,
 };
+const ARTICLE_ACCENT_VAR = { green: '--green', amber: '--amber', violet: '--violet', critical: '--critical', blue: '--blue' };
 function blogCardHtml(a){
-  const icon = ARTICLE_ICONS[a.tag] || ARTICLE_ICONS['Bases'];
+  const illu = ARTICLE_ILLUSTRATIONS[a.slug] || '';
+  const accentVar = ARTICLE_ACCENT_VAR[a.accent] || '--green';
   return `
     <a class="blog-card" href="#/blog/${a.slug}" data-link>
-      <div class="blog-card-top"><div class="blog-card-icon">${icon}</div><span class="tag">${escapeHtml(a.tag)}</span></div>
+      <div class="blog-card-top" style="background: radial-gradient(circle at 75% 15%, color-mix(in srgb, var(${accentVar}) 16%, transparent) 0%, var(--black) 70%);">
+        <div class="blog-card-icon">${illu}</div>
+        <span class="tag" style="color: var(${accentVar}); background: color-mix(in srgb, var(${accentVar}) 14%, transparent);">${escapeHtml(a.tag)}</span>
+      </div>
       <div class="blog-card-body">
         <h3>${escapeHtml(a.title)}</h3>
         <p>${escapeHtml(a.excerpt)}</p>
@@ -3117,6 +3255,23 @@ function renderStatMarquee(){
   track.innerHTML = itemsHtml + itemsHtml; // dupliqué pour une boucle continue sans coupure
 }
 
+let heroScrollTimer = null;
+function startHeroChartScroll(startBal){
+  clearInterval(heroScrollTimer);
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const rand = mulberry32(99);
+  let last = startBal;
+  heroScrollTimer = setInterval(() => {
+    if (!charts.hero) { clearInterval(heroScrollTimer); return; }
+    const ds = charts.hero.data.datasets[0].data;
+    const labels = charts.hero.data.labels;
+    last += (rand() - 0.42) * 55;
+    ds.shift(); labels.shift();
+    ds.push(Math.round(last));
+    labels.push((labels[labels.length - 1] || 0) + 1);
+    charts.hero.update();
+  }, 1000);
+}
 function drawHeroCharts(){
   if (!window.Chart) return;
   const rand = mulberry32(7);
@@ -3128,9 +3283,11 @@ function drawHeroCharts(){
     data: { labels, datasets: [{ data, borderColor: '#08BF2F', borderWidth: 2, pointRadius: 0, fill: true,
       backgroundColor: (ctx) => { const g = ctx.chart.ctx.createLinearGradient(0,0,0,170); g.addColorStop(0,'rgba(8,191,47,0.25)'); g.addColorStop(1,'rgba(8,191,47,0)'); return g; },
       tension: 0.35 }] },
-    options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false},tooltip:{enabled:false}},
+    options: { responsive:true, maintainAspectRatio:false, animation: { duration: 700, easing: 'linear' },
+      plugins:{legend:{display:false},tooltip:{enabled:false}},
       scales: { x:{ display:false }, y:{ display:false } } }
   });
+  startHeroChartScroll(bal);
 
   const featCanvas = document.getElementById('featBigChart');
   if (featCanvas) {
@@ -3529,6 +3686,70 @@ function sessionsTableHtml(sessions, bk){
       <td>${fmtMoney(s.buyIn, sCur)}</td>
       <td class="cell-profit ${p>=0?'pos':'neg'}">${fmtSigned(p, bk.currency)}${converted ? ` <span class="fx-tag">${escapeHtml(sCur)}→${escapeHtml(bk.currency)}</span>` : ''}</td></tr>`;
   }).join('')}</tbody></table></div>`;
+}
+
+/* ── Aperçus au survol (landing) : vraie simulation avec les données démo,
+   pas une icône statique — canvases dédiés (préfixe showcase-) pour ne
+   jamais entrer en collision avec les canvases du vrai dashboard (préfixe mod-). ── */
+const MODULE_BODY_IDS = ['evolution','monthly','category','formatbar','best','worst','recent','summary','roi','itm',
+  'periodProfit','stakeBreakdown','platformBreakdown','heatmap','durationCorrelation','variance','riskOfRuin',
+  'moveDownAlert','buyinsReserve','streaks','tiltSessions','bb100'];
+const SHOWCASE_TREND_MODULES = ['evolution','monthly','periodProfit','durationCorrelation'];
+const SHOWCASE_BREAKDOWN_KEYS = {
+  category: s => CAT_LABEL[s.category] || s.category,
+  formatbar: s => FMT_LABEL[s.format] || s.format,
+  stakeBreakdown: s => stakeTier(s.buyIn),
+  platformBreakdown: s => s.site || '—',
+};
+function demoModulePreviewData(){
+  if (!state.bankrolls.length) return null;
+  const bk = state.bankrolls.reduce((best, b) => getSessionsFor(b.id).length > getSessionsFor(best.id).length ? b : best, state.bankrolls[0]);
+  return { bk, sessions: getSessionsFor(bk.id) };
+}
+function showcaseModuleBody(id){
+  const demo = demoModulePreviewData();
+  if (!demo) return null;
+  const { bk, sessions } = demo;
+  if (SHOWCASE_TREND_MODULES.includes(id) || SHOWCASE_BREAKDOWN_KEYS[id]) {
+    return `<div class="chart-box sm"><canvas id="showcase-${id}-chart"></canvas></div>`;
+  }
+  if (MODULE_BODY_IDS.includes(id)) return moduleBodyHtml(id, bk, sessions);
+  return null;
+}
+function drawShowcaseCharts(){
+  const demo = demoModulePreviewData();
+  if (!demo || !demo.sessions.length) return;
+  const { bk, sessions } = demo;
+  SHOWCASE_TREND_MODULES.forEach(id => drawShowcaseTrendChart(`showcase-${id}-chart`, bk, sessions));
+  Object.keys(SHOWCASE_BREAKDOWN_KEYS).forEach(id => drawShowcaseBreakdownChart(`showcase-${id}-chart`, sessions, SHOWCASE_BREAKDOWN_KEYS[id]));
+}
+function drawShowcaseTrendChart(canvasId, bk, sessions){
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  destroyChart(canvasId);
+  let running = bk.start;
+  const data = sessions.map(s => { running += sessionProfit(s); return Math.round(running * 100) / 100; });
+  const trendGood = data[data.length - 1] >= bk.start;
+  charts[canvasId] = new Chart(canvas, {
+    type: 'line',
+    data: { labels: data.map((_, i) => i), datasets: [{ data, borderColor: trendGood ? GOOD : CRITICAL, borderWidth: 2, pointRadius: 0, tension: .3, fill: true,
+      backgroundColor: (ctx) => { const g = ctx.chart.ctx.createLinearGradient(0, 0, 0, 90); const c = trendGood ? '8,191,47' : '230,103,103'; g.addColorStop(0, `rgba(${c},0.25)`); g.addColorStop(1, `rgba(${c},0)`); return g; } }] },
+    options: { responsive: true, maintainAspectRatio: false, animation: false, plugins: { legend: { display: false }, tooltip: { enabled: false } }, scales: { x: { display: false }, y: { display: false } } }
+  });
+}
+function drawShowcaseBreakdownChart(canvasId, sessions, keyFn){
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  destroyChart(canvasId);
+  const counts = {};
+  sessions.forEach(s => { const k = keyFn(s); counts[k] = (counts[k] || 0) + 1; });
+  const labels = Object.keys(counts);
+  const data = labels.map(l => counts[l]);
+  charts[canvasId] = new Chart(canvas, {
+    type: 'bar',
+    data: { labels, datasets: [{ data, backgroundColor: 'rgba(8,191,47,0.55)', borderRadius: 3, maxBarThickness: 22 }] },
+    options: { responsive: true, maintainAspectRatio: false, animation: false, plugins: { legend: { display: false }, tooltip: { enabled: false } }, scales: { x: { display: false }, y: { display: false } } }
+  });
 }
 
 function drawModuleChart(id, bk, sessions){
@@ -3996,16 +4217,23 @@ function moduleThumb(id){
 function renderModuleShowcase(){
   const el = document.getElementById('module-showcase-grid');
   if (!el) return;
-  el.innerHTML = Object.keys(MODULE_SIZE).map(id => `
+  el.innerHTML = Object.keys(MODULE_SIZE).map(id => {
+    const body = showcaseModuleBody(id);
+    const previewContent = body
+      ? `<div class="msc-preview-sim">${body}</div>`
+      : `<div class="msc-preview-thumb">${moduleThumb(id)}</div>`;
+    return `
     <div class="module-showcase-card">
       <div class="msc-thumb">${moduleThumb(id)}</div>
       <div class="msc-title" data-i18n="mod_${id}_title">${t('mod_'+id+'_title')}</div>
       <div class="msc-preview">
-        <div class="msc-preview-thumb">${moduleThumb(id)}</div>
+        ${previewContent}
         <div class="msc-preview-title" data-i18n="mod_${id}_title">${t('mod_'+id+'_title')}</div>
         <div class="msc-preview-desc" data-i18n="mod_${id}_desc">${t('mod_'+id+'_desc')}</div>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
+  drawShowcaseCharts();
 }
 function openCustomizeModal(){
   ensureLayout();
