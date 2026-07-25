@@ -2683,7 +2683,9 @@ const I18N = {
     settings_trusted_devices_title:'Appareils de confiance',
     settings_trusted_devices_desc:'Ces appareils ne redemandent pas de code MFA à la connexion. Retirez un appareil pour exiger à nouveau le code dessus.',
     settings_trusted_devices_empty:'Aucun appareil de confiance pour le moment.',
+    settings_trusted_devices_error:"Impossible de charger la liste des appareils de confiance.",
     settings_trusted_devices_added:'Ajouté le {date}', settings_trusted_devices_remove:'Retirer', device_current:'(cet appareil)',
+    toast_trust_device_error:"Connexion réussie, mais impossible d'enregistrer cet appareil comme fiable. Le code sera redemandé à la prochaine connexion.",
     settings_account_export:'Exporter mes données', settings_account_export_desc:'Téléchargez une copie complète de vos bankrolls et sessions (droit à la portabilité des données).',
     settings_account_export_json:'Exporter en JSON', settings_account_export_csv:'Exporter les sessions en CSV',
     settings_account_delete:'Supprimer mon compte', settings_account_delete_desc:'Supprime définitivement votre compte et toutes vos données (bankrolls, sessions, préférences). Action irréversible.',
@@ -2934,7 +2936,9 @@ const I18N = {
     settings_trusted_devices_title:'Trusted devices',
     settings_trusted_devices_desc:"These devices skip the MFA code at login. Remove a device to require the code there again.",
     settings_trusted_devices_empty:'No trusted device yet.',
+    settings_trusted_devices_error:'Could not load the trusted devices list.',
     settings_trusted_devices_added:'Added on {date}', settings_trusted_devices_remove:'Remove', device_current:'(this device)',
+    toast_trust_device_error:"Signed in, but this device couldn't be saved as trusted. You'll be asked for the code again next time.",
     settings_account_export:'Export my data', settings_account_export_desc:'Download a full copy of your bankrolls and sessions (data portability right).',
     settings_account_export_json:'Export as JSON', settings_account_export_csv:'Export sessions as CSV',
     settings_account_delete:'Delete my account', settings_account_delete_desc:'Permanently deletes your account and all your data (bankrolls, sessions, preferences). This action is irreversible.',
@@ -5190,12 +5194,26 @@ async function onAuthSignedIn(session){
   } catch (e) { /* échec du contrôle MFA lui-même : on ne bloque pas la connexion pour ça */ }
   await completeSignIn(session);
 }
-async function checkMfaChallengeNeeded(){
+// Renvoie TOUS les facteurs TOTP vérifiés, pas seulement le premier — plusieurs
+// enrôlements successifs (tests, ré-inscription après un code raté...) peuvent
+// laisser plusieurs facteurs "verified" en base. Ne regarder que data.totp[0]
+// faisait qu'on pouvait désactiver un facteur pendant qu'un autre, plus ancien
+// et orphelin (plus aucune entrée correspondante dans l'appli d'authentification
+// de l'utilisateur), restait actif et redéclenchait le défi à la connexion
+// suivante avec un facteur pour lequel aucun code valide n'existe plus.
+async function listVerifiedTotpFactors(){
   const { data, error } = await supabase.auth.mfa.listFactors();
-  if (error) return false;
-  const verified = (data.totp && data.totp[0]) || (data.all || []).find(f => f.factor_type === 'totp' && f.status === 'verified');
-  if (!verified) return false;
-  mfaChallengeFactorId = verified.id;
+  if (error) throw error;
+  const merged = new Map();
+  (data.totp || []).forEach(f => { if (f.status === 'verified') merged.set(f.id, f); });
+  (data.all || []).forEach(f => { if (f.factor_type === 'totp' && f.status === 'verified') merged.set(f.id, f); });
+  return Array.from(merged.values());
+}
+async function checkMfaChallengeNeeded(){
+  let factors;
+  try { factors = await listVerifiedTotpFactors(); } catch (e) { return false; }
+  if (!factors.length) return false;
+  mfaChallengeFactorId = factors[0].id;
   const trusted = await isDeviceTrusted(currentUser.id, getOrCreateDeviceId());
   return !trusted;
 }
@@ -5228,13 +5246,20 @@ async function submitMfaChallenge(){
     if (challengeErr) throw challengeErr;
     const { error: verifyErr } = await supabase.auth.mfa.verify({ factorId: mfaChallengeFactorId, challengeId: challenge.id, code });
     if (verifyErr) throw verifyErr;
+    let trustFailed = false;
     if (document.getElementById('mfa-trust-device').checked) {
-      await trustCurrentDevice(currentUser.id, getOrCreateDeviceId());
+      trustFailed = !(await trustCurrentDevice(currentUser.id, getOrCreateDeviceId()));
     }
     document.getElementById('mfa-challenge-overlay').hidden = true;
     const session = pendingSignInSession;
     pendingSignInSession = null;
     await completeSignIn(session);
+    // Ne bloque jamais la connexion pour ça (l'utilisateur vient de prouver son
+    // identité), mais le prévient explicitement plutôt que de le laisser croire
+    // que l'appareil est désormais de confiance alors que rien n'a été
+    // enregistré (voir trustCurrentDevice — la cause la plus probable est que
+    // la table trusted_devices n'existe pas encore en base, SUPABASE_SETUP.md §9).
+    if (trustFailed) showToast(t('toast_trust_device_error'), 'error');
   } catch (e) {
     feedback.className = 'account-feedback error';
     feedback.textContent = t('settings_account_mfa_invalid_code');
@@ -5266,17 +5291,24 @@ function deviceLabel(){
 async function isDeviceTrusted(userId, deviceId){
   try {
     const { data, error } = await supabase.from('trusted_devices').select('id').eq('user_id', userId).eq('device_id', deviceId).maybeSingle();
-    if (error) return false;
+    if (error) { console.warn('isDeviceTrusted:', error); return false; }
     return !!data;
-  } catch (e) { return false; }
+  } catch (e) { console.warn('isDeviceTrusted:', e); return false; }
 }
+// Renvoie true/false plutôt que d'avaler l'erreur en silence — sinon la case
+// "faire confiance à cet appareil" semble fonctionner (cochée, aucune erreur
+// visible) alors que rien n'a été enregistré (ex. table trusted_devices pas
+// encore créée en base, voir SUPABASE_SETUP.md §9), et le MFA est redemandé
+// à chaque connexion sans que l'utilisateur comprenne pourquoi.
 async function trustCurrentDevice(userId, deviceId){
   try {
-    await supabase.from('trusted_devices').upsert(
+    const { error } = await supabase.from('trusted_devices').upsert(
       { user_id: userId, device_id: deviceId, label: deviceLabel(), last_seen_at: new Date().toISOString() },
       { onConflict: 'user_id,device_id' }
     );
-  } catch (e) {}
+    if (error) { console.warn('trustCurrentDevice:', error); return false; }
+    return true;
+  } catch (e) { console.warn('trustCurrentDevice:', e); return false; }
 }
 async function renderTrustedDevices(){
   const el = document.getElementById('trusted-devices-list');
@@ -5296,7 +5328,8 @@ async function renderTrustedDevices(){
         <button class="btn-ghost btn-sm" onclick="removeTrustedDevice('${d.id}')">${t('settings_trusted_devices_remove')}</button>
       </div>`).join('');
   } catch (e) {
-    el.innerHTML = '';
+    console.warn('renderTrustedDevices:', e);
+    el.innerHTML = `<p class="form-hint" style="color:var(--critical)">${t('settings_trusted_devices_error')}</p>`;
   }
 }
 async function removeTrustedDevice(id){
@@ -5890,16 +5923,10 @@ async function refreshMfaStatus(){
   const statusEl = document.getElementById('mfa-status');
   if (!statusEl || !window.supabase) return;
   try {
-    const { data, error } = await supabase.auth.mfa.listFactors();
-    if (error) throw error;
-    // data.totp ne contient normalement que les facteurs déjà vérifiés, mais on
-    // retombe sur data.all (filtré) au cas où — évite de réafficher "à activer"
-    // pour un compte où le MFA est en réalité déjà actif et fonctionnel.
-    const verified = (data.totp && data.totp[0])
-      || (data.all || []).find(f => f.factor_type === 'totp' && f.status === 'verified');
-    if (verified) {
+    const factors = await listVerifiedTotpFactors();
+    if (factors.length) {
       statusEl.innerHTML = `<span style="color:var(--good)">✓ ${t('settings_account_mfa_enabled')}</span>`;
-      statusEl.insertAdjacentHTML('beforeend', ` <button class="btn-ghost btn-sm" onclick="disableMfa('${verified.id}')">${t('settings_account_mfa_disable')}</button>`);
+      statusEl.insertAdjacentHTML('beforeend', ` <button class="btn-ghost btn-sm" onclick="disableMfa()">${t('settings_account_mfa_disable')}</button>`);
       document.getElementById('mfa-enroll-flow').hidden = true;
     } else {
       statusEl.innerHTML = `<button class="btn-primary btn-sm" onclick="startMfaEnroll()">${t('settings_account_mfa_enable')}</button>`;
@@ -5952,10 +5979,17 @@ async function confirmMfaEnroll(){
   }
 }
 
-async function disableMfa(factorId){
+async function disableMfa(){
   const statusEl = document.getElementById('mfa-status');
   try {
-    await supabase.auth.mfa.unenroll({ factorId });
+    // Désinscrit TOUS les facteurs TOTP vérifiés, pas seulement le premier
+    // affiché — sinon un facteur orphelin issu d'un enrôlement précédent
+    // reste actif et redéclenche le défi MFA à la connexion suivante alors
+    // que l'utilisateur pense avoir désactivé le MFA.
+    const factors = await listVerifiedTotpFactors();
+    for (const f of factors) {
+      await supabase.auth.mfa.unenroll({ factorId: f.id });
+    }
     refreshMfaStatus();
   } catch (e) {
     statusEl.textContent = (e && e.message) || t('auth_err_generic');
