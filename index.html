@@ -419,6 +419,12 @@
 
   /* ── FINAL CTA ── */
   #final-cta { text-align: center; background: linear-gradient(135deg, #001a04 0%, #003d0e 100%); border-top: 1px solid rgba(8,191,47,0.25); border-bottom: 1px solid rgba(8,191,47,0.25); }
+  /* Ce bandeau reste volontairement sombre dans les deux thèmes (bannière de
+     marque) — le texte est donc fixé en clair plutôt que lié à --text-wall/
+     --grey, qui s'inversent en mode clair et devenaient illisibles (texte
+     sombre sur fond sombre). */
+  #final-cta .section-title { color: #F1FFF5; }
+  #final-cta .section-sub { color: #B9CFC0; }
   .cta-inner { max-width: 680px; margin: 0 auto; }
 
   /* ── FOOTER ── */
@@ -517,6 +523,9 @@
   .module-card.dragging { opacity: .35; }
   .module-card.drag-over { border-color: var(--green); box-shadow: 0 0 0 2px rgba(8,191,47,0.15) inset; }
   .module-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.1rem; gap: .8rem; }
+  .module-head-left { display: flex; align-items: center; gap: .7rem; min-width: 0; }
+  .module-head-icon { width: 34px; height: 34px; flex-shrink: 0; background: var(--black); border: 1px solid var(--border); border-radius: 8px; padding: 6px; display: flex; align-items: center; justify-content: center; }
+  .module-head-icon svg { width: 100%; height: 100%; }
   .module-head-left h3 { font-size: 0.92rem; font-weight: 700; color: var(--text); }
   .module-head-left .sub { font-size: 0.75rem; color: var(--grey); margin-top: 2px; }
   .module-head-actions { display: flex; align-items: center; gap: .4rem; flex-shrink: 0; }
@@ -690,7 +699,6 @@
   .profit-preview { padding: 0.8rem 1rem; border-radius: 8px; background: rgba(255,255,255,0.02); border: 1px solid var(--border); font-size: 0.85rem; color: var(--grey); display: flex; justify-content: space-between; align-items: center; }
   .profit-preview .val { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; }
 
-  .stats-table-wrap { background: var(--black-card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-top: 1.2rem; }
 
   /* ── SETTINGS ── */
   .settings-tabs { display: flex; gap: 0.4rem; border-bottom: 1px solid var(--border); margin-bottom: 1.6rem; max-width: 900px; }
@@ -1545,10 +1553,6 @@
           <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><circle cx="16" cy="14.5" r="1.4"/></svg>
           <span data-i18n="nav_bankrolls">Bankrolls</span>
         </a>
-        <a class="app-nav-link" data-appnav="stats" href="#/app/stats" data-link>
-          <svg class="icon" viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M4 19h16"/></svg>
-          <span data-i18n="nav_stats">Statistiques</span>
-        </a>
         <a class="app-nav-link" data-appnav="settings" href="#/app/settings" data-link>
           <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
           <span data-i18n="nav_settings">Paramètres</span>
@@ -1657,16 +1661,6 @@
         <div class="app-content" id="bankrolls-content"><!-- filled by JS --></div>
       </section>
 
-      <!-- STATS -->
-      <section class="app-section" id="section-stats" hidden>
-        <div class="app-topbar">
-          <h1 data-i18n="nav_stats">Statistiques</h1>
-          <div class="app-topbar-actions">
-            <select class="select" id="stats-bankroll-select"></select>
-          </div>
-        </div>
-        <div class="app-content" id="stats-content"><!-- filled by JS --></div>
-      </section>
 
       <!-- SETTINGS -->
       <section class="app-section" id="section-settings" hidden>
@@ -2057,8 +2051,9 @@
           <input class="input" type="date" id="session-date" onchange="onSessionDateChange()" />
         </div>
         <div class="form-group">
-          <label for="session-time">Heure (optionnel)</label>
+          <label for="session-time">Heure de début (optionnel)</label>
           <input class="input" type="time" id="session-time" />
+          <p class="form-hint">Sert uniquement à la heatmap jour/heure. Pour une session sur plusieurs jours ou avec des pauses, laissez l'heure de début et mettez dans la durée le temps de jeu réel (pauses exclues).</p>
         </div>
       </div>
       <div class="form-row">
@@ -2072,6 +2067,7 @@
             <input type="checkbox" id="session-tilt" />
             <span>Session marquée « tilt »</span>
           </label>
+          <p class="form-hint">À cocher si vous avez joué sous le coup de l'émotion (frustration, fatigue...). Ces sessions sont isolées dans le module dédié pour voir si le tilt affecte vraiment vos résultats.</p>
         </div>
       </div>
       <div class="form-row" id="session-cash-fields" hidden>
@@ -2483,7 +2479,7 @@ const I18N = {
     app_back_site:'Retour au site',
     public_profile_anonymous:'Joueur Pokelo', public_profile_member_since:'Membre depuis',
     public_profile_not_found:'Ce profil est introuvable ou n\'est pas public.',
-    nav_dashboard:'Dashboard', nav_sessions:'Sessions', nav_bankrolls:'Bankrolls', nav_stats:'Statistiques', nav_settings:'Paramètres',
+    nav_dashboard:'Dashboard', nav_sessions:'Sessions', nav_bankrolls:'Bankrolls', nav_settings:'Paramètres',
     btn_new_session:'Nouvelle session', btn_new_bankroll:'Nouvelle bankroll', btn_customize:'Personnaliser', btn_save:'Enregistrer',
     fx_loading:'Calcul du taux de change…', fx_unavailable:'Taux de change indisponible pour cette devise — montant pris tel quel.',
     fx_rate_label:'Taux appliqué :', fx_in_bankroll:'dans la bankroll',
@@ -2712,7 +2708,7 @@ const I18N = {
     app_back_site:'Back to site',
     public_profile_anonymous:'Pokelo player', public_profile_member_since:'Member since',
     public_profile_not_found:'This profile could not be found or is not public.',
-    nav_dashboard:'Dashboard', nav_sessions:'Sessions', nav_bankrolls:'Bankrolls', nav_stats:'Statistics', nav_settings:'Settings',
+    nav_dashboard:'Dashboard', nav_sessions:'Sessions', nav_bankrolls:'Bankrolls', nav_settings:'Settings',
     btn_new_session:'New session', btn_new_bankroll:'New bankroll', btn_customize:'Customize', btn_save:'Save',
     fx_loading:'Fetching exchange rate…', fx_unavailable:'Exchange rate unavailable for this currency — amount used as-is.',
     fx_rate_label:'Rate applied:', fx_in_bankroll:'in the bankroll',
@@ -3329,12 +3325,12 @@ window.addEventListener('hashchange', router);
 
 function appRouter(hash){
   const sub = hash.replace(/^#\/app\/?/, '') || 'dashboard';
-  const map = { '': 'dashboard', 'dashboard':'dashboard', 'sessions':'sessions', 'bankrolls':'bankrolls', 'stats':'stats', 'settings':'settings', 'admin':'admin' };
+  const map = { '': 'dashboard', 'dashboard':'dashboard', 'sessions':'sessions', 'bankrolls':'bankrolls', 'settings':'settings', 'admin':'admin' };
   let section = map[sub] || 'dashboard';
   // Le lien "Admin" n'est qu'un confort d'UI : l'accès réel est revérifié
   // côté serveur par api/admin-stats.js, jamais décidé ici.
   if (section === 'admin' && currentUserRole !== 'admin') section = 'dashboard';
-  ['dashboard','sessions','bankrolls','stats','settings','admin'].forEach(s => {
+  ['dashboard','sessions','bankrolls','settings','admin'].forEach(s => {
     document.getElementById('section-'+s).hidden = (s !== section);
   });
   document.querySelectorAll('.app-nav-link').forEach(a => a.classList.toggle('active', a.dataset.appnav === section));
@@ -3342,7 +3338,6 @@ function appRouter(hash){
   if (section === 'dashboard') renderDashboard();
   if (section === 'sessions') renderSessions();
   if (section === 'bankrolls') renderBankrolls();
-  if (section === 'stats') renderStats();
   if (section === 'settings') renderSettingsPage();
   if (section === 'admin') renderAdminPanel();
   document.getElementById('app-sidebar').classList.remove('open');
@@ -3925,7 +3920,7 @@ document.addEventListener('mousemove', function(e){
    ══════════════════════════════════════════════════════════════ */
 function populateBankrollSelects(){
   const opts = state.bankrolls.map(b => `<option value="${b.id}">${escapeHtml(b.name)}</option>`).join('');
-  ['session-bankroll','dashboard-bankroll-select','stats-bankroll-select'].forEach(id=>{
+  ['session-bankroll','dashboard-bankroll-select'].forEach(id=>{
     const el = document.getElementById(id);
     if (!el) return;
     const prev = el.value;
@@ -3936,15 +3931,12 @@ function populateBankrollSelects(){
     currentBankrollScope = state.bankrolls[0] ? state.bankrolls[0].id : null;
   }
   if (document.getElementById('dashboard-bankroll-select')) document.getElementById('dashboard-bankroll-select').value = currentBankrollScope || '';
-  if (document.getElementById('stats-bankroll-select')) document.getElementById('stats-bankroll-select').value = currentBankrollScope || '';
 }
 document.addEventListener('change', function(e){
-  if (e.target.id === 'dashboard-bankroll-select' || e.target.id === 'stats-bankroll-select') {
+  if (e.target.id === 'dashboard-bankroll-select') {
     currentBankrollScope = e.target.value;
     document.getElementById('dashboard-bankroll-select').value = currentBankrollScope;
-    document.getElementById('stats-bankroll-select').value = currentBankrollScope;
     if (!document.getElementById('section-dashboard').hidden) renderDashboard();
-    if (!document.getElementById('section-stats').hidden) renderStats();
   }
 });
 
@@ -4059,7 +4051,10 @@ function moduleCardHtml(id, bk, sessions){
   const extra = id === 'recent' ? `<a href="#/app/sessions" data-link class="btn-ghost btn-sm">${t('btn_see_all')}</a>` : '';
   return `<div class="module-card" data-size="${meta.size}" data-mod="${id}">
     <div class="module-head">
-      <div class="module-head-left"><h3>${meta.title}</h3><div class="sub">${meta.desc}</div></div>
+      <div class="module-head-left">
+        <div class="module-head-icon">${moduleThumb(id)}</div>
+        <div><h3>${meta.title}</h3><div class="sub">${meta.desc}</div></div>
+      </div>
       <div class="module-head-actions">
         <span class="module-drag-handle" draggable="true" title="Glisser pour déplacer">
           <svg class="icon" style="width:16px;height:16px" viewBox="0 0 24 24"><circle cx="9" cy="6" r="1.2"/><circle cx="15" cy="6" r="1.2"/><circle cx="9" cy="12" r="1.2"/><circle cx="15" cy="12" r="1.2"/><circle cx="9" cy="18" r="1.2"/><circle cx="15" cy="18" r="1.2"/></svg>
@@ -5696,14 +5691,13 @@ function resetColors(){
   refreshAllViewsAfterSettingsChange();
 }
 function refreshAllViewsAfterSettingsChange(){
-  const active = ['dashboard','sessions','bankrolls','stats'].find(sName => {
+  const active = ['dashboard','sessions','bankrolls'].find(sName => {
     const el = document.getElementById('section-'+sName);
     return el && !el.hidden;
   });
   if (active === 'dashboard') renderDashboard();
   if (active === 'sessions') renderSessionsTable();
   if (active === 'bankrolls') renderBankrolls();
-  if (active === 'stats') renderStats();
   if (!document.getElementById('view-landing').hidden) {
     renderPreviewTab(document.querySelector('.preview-tab.active')?.dataset.tab || 'dashboard');
     drawHeroCharts();
@@ -5889,65 +5883,6 @@ function confirmDeleteBankroll(id){
 }
 
 /* ══════════════════════════════════════════════════════════════
-   POKELO — app: STATS
-   ══════════════════════════════════════════════════════════════ */
-function renderStats(){
-  const el = document.getElementById('stats-content');
-  if (!state.bankrolls.length) {
-    el.innerHTML = emptyStateHtml('bankrolls', 'Aucune donnée à analyser', 'Créez une bankroll et enregistrez quelques sessions pour débloquer vos statistiques.', 'openBankrollModal()', 'Créer une bankroll');
-    return;
-  }
-  const bk = getBankroll(currentBankrollScope) || state.bankrolls[0];
-  const sessions = getSessionsFor(bk.id);
-  if (!sessions.length) {
-    el.innerHTML = emptyStateHtml('bankrolls', 'Pas encore de session', `Enregistrez une première session pour ${escapeHtml(bk.name)}.`, 'openSessionModal()', 'Nouvelle session');
-    return;
-  }
-  el.innerHTML = `
-    <div class="card-row">
-      <div class="chart-card"><div class="chart-card-head"><h3>Sessions par type</h3></div><div class="chart-box sm"><canvas id="statsCatChart"></canvas></div></div>
-      <div class="chart-card"><div class="chart-card-head"><h3>Profit live vs online</h3></div><div class="chart-box sm"><canvas id="statsFormatChart"></canvas></div></div>
-    </div>
-    <div class="stats-table-wrap">${statsBreakdownTable(sessions, bk)}</div>
-  `;
-  drawStatsCharts(sessions, bk);
-}
-function statsBreakdownTable(sessions, bk){
-  const cats = ['tournament','cash','expresso'];
-  const rows = cats.map(cat=>{
-    const list = sessions.filter(s=>s.category===cat);
-    if (!list.length) return null;
-    const invested = list.reduce((s,x)=>s+x.buyIn,0);
-    const profit = list.reduce((s,x)=>s+sessionProfit(x),0);
-    const roi = invested ? (profit/invested*100) : 0;
-    return `<tr><td><span class="badge badge-${cat}">${CAT_LABEL[cat]}</span></td><td>${list.length}</td><td>${fmtMoney(invested, bk.currency)}</td>
-      <td class="cell-profit ${profit>=0?'pos':'neg'}">${fmtSigned(profit, bk.currency)}</td><td>${roi>=0?'+':''}${fmtNum(roi)} %</td></tr>`;
-  }).filter(Boolean).join('');
-  return `<table class="data-table"><thead><tr><th>${t('th_type')}</th><th>${t('th_sessions_count')}</th><th>${t('th_invested')}</th><th>${t('th_result')}</th><th>${t('th_roi')}</th></tr></thead><tbody>${rows}</tbody></table>`;
-}
-function drawStatsCharts(sessions, bk){
-  destroyChart('statsCat');
-  const cats = ['tournament','cash','expresso'];
-  const counts = cats.map(c=> sessions.filter(s=>s.category===c).length);
-  charts.statsCat = new Chart(document.getElementById('statsCatChart'), {
-    type:'doughnut',
-    data:{ labels: cats.map(c=>CAT_LABEL[c]), datasets:[{ data:counts, backgroundColor:cats.map(c=>CAT_COLOR[c]), borderColor:'#111111', borderWidth:3 }] },
-    options:{ responsive:true, maintainAspectRatio:false, cutout:'66%',
-      plugins:{ legend:{ position:'bottom', labels:{ color:'#8A8A8A', boxWidth:10, boxHeight:10, padding:14, font:{size:11} } } } }
-  });
-  destroyChart('statsFormat');
-  const fmts = ['live','online'];
-  const profits = fmts.map(f=> Math.round(sessions.filter(s=>s.format===f).reduce((s,x)=>s+sessionProfit(x),0)*100)/100);
-  charts.statsFormat = new Chart(document.getElementById('statsFormatChart'), {
-    type:'bar',
-    data:{ labels: fmts.map(f=>FMT_LABEL[f]), datasets:[{ data:profits, backgroundColor:[FMT_COLOR.live, FMT_COLOR.online], borderRadius:6, maxBarThickness:60 }] },
-    options:{ responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label:(c)=> fmtSigned(c.parsed.y, bk.currency) } } },
-      scales:{ x:{ grid:{display:false}, ticks:{ color:'#8A8A8A' } }, y:{ grid:{ color:'rgba(255,255,255,0.05)' }, ticks:{ color:'#8A8A8A', font:{size:10} } } } }
-  });
-}
-
-/* ══════════════════════════════════════════════════════════════
    POKELO — modals: bankroll
    ══════════════════════════════════════════════════════════════ */
 function openBankrollModal(id){
@@ -5974,10 +5909,9 @@ function saveBankroll(){
   }
   state.isDemo = false;
   saveState(); closeBankrollModal(); populateBankrollSelects();
-  const active = ['dashboard','sessions','bankrolls','stats'].find(s=>!document.getElementById('section-'+s).hidden);
+  const active = ['dashboard','sessions','bankrolls'].find(s=>!document.getElementById('section-'+s).hidden);
   if (active === 'bankrolls') renderBankrolls();
   if (active === 'dashboard') renderDashboard();
-  if (active === 'stats') renderStats();
   if (!id && wasEmpty && !state.presetPromptShown) openPresetPrompt();
 }
 
@@ -6116,10 +6050,9 @@ function saveQuickLog(){
   state.sessions.push(payload);
   state.isDemo = false;
   saveState(); closeQuickLogModal();
-  const active = ['dashboard','sessions','bankrolls','stats'].find(s=>!document.getElementById('section-'+s).hidden);
+  const active = ['dashboard','sessions','bankrolls'].find(s=>!document.getElementById('section-'+s).hidden);
   if (active === 'sessions') renderSessions();
   if (active === 'dashboard') renderDashboard();
-  if (active === 'stats') renderStats();
 }
 
 function openSessionModal(id){
@@ -6204,10 +6137,9 @@ async function saveSession(){
   }
   state.isDemo = false;
   saveState(); closeSessionModal();
-  const active = ['dashboard','sessions','bankrolls','stats'].find(s=>!document.getElementById('section-'+s).hidden);
+  const active = ['dashboard','sessions','bankrolls'].find(s=>!document.getElementById('section-'+s).hidden);
   if (active === 'sessions') renderSessions();
   if (active === 'dashboard') renderDashboard();
-  if (active === 'stats') renderStats();
 }
 
 /* ══════════════════════════════════════════════════════════════
