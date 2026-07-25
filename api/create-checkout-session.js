@@ -51,8 +51,8 @@ module.exports = async (req, res) => {
       line_items: [{ price: priceId, quantity: 1 }],
       customer_email: user.email,
       client_reference_id: user.id,
-      success_url: `${origin}/#/app/settings?checkout=success`,
-      cancel_url: `${origin}/#/app/settings?checkout=cancelled`,
+      success_url: `${origin}/#/app/account?checkout=success`,
+      cancel_url: `${origin}/#/app/account?checkout=cancelled`,
     };
     // discounts et allow_promotion_codes sont mutuellement exclusifs côté Stripe :
     // remise de parrainage automatique, sinon on laisse la place à un code promo

@@ -701,10 +701,6 @@
 
 
   /* ── SETTINGS ── */
-  .settings-tabs { display: flex; gap: 0.4rem; border-bottom: 1px solid var(--border); margin-bottom: 1.6rem; max-width: 900px; }
-  .settings-tab { background: none; border: none; color: var(--grey); font-size: 0.86rem; font-weight: 600; padding: 0.7rem 1rem; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color .15s, border-color .15s; }
-  .settings-tab:hover { color: var(--text); }
-  .settings-tab.active { color: var(--green); border-color: var(--green); }
   .settings-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem; max-width: 900px; }
   .settings-card { background: var(--black-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem 1.5rem; }
   .settings-card h3 { font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; }
@@ -852,7 +848,7 @@
     <li><a href="#pricing" data-link data-i18n="nav_pricing">Tarifs</a></li>
     <li><a href="#/blog" data-link data-i18n="nav_blog">Blog</a></li>
     <li><a href="#/calendrier" data-link data-i18n="nav_calendar">Calendrier</a></li>
-    <li><a href="#/account" data-link class="nav-cta" data-i18n="nav_open_app">Se connecter</a></li>
+    <li><a href="#/account" data-link class="nav-cta" id="landing-nav-cta">Se connecter</a></li>
   </ul>
   <button class="nav-burger" id="burger" aria-label="Menu" onclick="toggleMenu()">
     <span></span><span></span><span></span>
@@ -865,7 +861,7 @@
   <a href="#pricing" data-link onclick="closeMenu()" data-i18n="nav_pricing">Tarifs</a>
   <a href="#/blog" data-link onclick="closeMenu()" data-i18n="nav_blog">Blog</a>
   <a href="#/calendrier" data-link onclick="closeMenu()" data-i18n="nav_calendar">Calendrier</a>
-  <a href="#/account" data-link class="nav-cta" onclick="closeMenu()" data-i18n="nav_open_app">Se connecter</a>
+  <a href="#/account" data-link class="nav-cta" onclick="closeMenu()" id="landing-nav-cta-mobile">Se connecter</a>
 </div>
 
 <!-- ══════════════ VIEW : LANDING ══════════════ -->
@@ -1271,7 +1267,7 @@
         <a href="#features" data-link data-i18n="nav_features">Fonctionnalités</a>
         <a href="#preview" data-link data-i18n="nav_product">Le produit</a>
         <a href="#pricing" data-link data-i18n="nav_pricing">Tarifs</a>
-        <a href="#/account" data-link data-i18n="nav_open_app">Se connecter</a>
+        <a href="#/account" data-link id="landing-nav-cta-footer">Se connecter</a>
       </div>
       <div class="footer-col">
         <h5 data-i18n="footer_resources">Ressources</h5>
@@ -1555,7 +1551,7 @@
         </a>
         <a class="app-nav-link" data-appnav="settings" href="#/app/settings" data-link>
           <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
-          <span data-i18n="nav_settings">Paramètres</span>
+          <span data-i18n="settings_display_title">Affichage</span>
         </a>
         <a class="app-nav-link" data-appnav="admin" href="#/app/admin" data-link id="app-nav-admin" hidden>
           <svg class="icon" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V5l-8-3Z"/><path d="M9 12l2 2 4-4"/></svg>
@@ -1566,6 +1562,10 @@
         <a class="install-app-btn" onclick="triggerInstallPrompt()" hidden style="margin-bottom:.6rem;">
           <svg class="icon" style="width:16px;height:16px" viewBox="0 0 24 24"><path d="M12 3v13M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>
           <span data-i18n="install_app">Installer l'app</span>
+        </a>
+        <a class="app-nav-link" data-appnav="account" href="#/app/account" data-link id="account-settings-link" hidden style="margin-bottom:.3rem;">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg>
+          <span data-i18n="nav_my_account">Mon compte</span>
         </a>
         <div class="account-status" id="account-status" hidden>
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:.35rem;">
@@ -1663,18 +1663,14 @@
 
 
       <!-- SETTINGS -->
-      <section class="app-section" id="section-settings" hidden>
+      <!-- ACCOUNT -->
+      <section class="app-section" id="section-account" hidden>
         <div class="app-topbar">
-          <h1 data-i18n="settings_title">Paramètres</h1>
+          <h1 data-i18n="settings_account_title">Compte</h1>
         </div>
         <div class="app-content">
-          <div class="settings-tabs">
-            <button type="button" class="settings-tab active" data-tab="display" onclick="setSettingsTab('display')" data-i18n="settings_tab_display">Affichage</button>
-            <button type="button" class="settings-tab" data-tab="account" onclick="setSettingsTab('account')" data-i18n="settings_tab_account">Compte</button>
-          </div>
-          <div class="settings-grid" id="settings-tab-account" hidden>
+          <div class="settings-grid" id="settings-tab-account">
             <div class="settings-card" style="grid-column: 1 / -1;">
-              <h3 data-i18n="settings_account_title">Compte</h3>
               <div id="settings-account-loggedout">
                 <p class="settings-desc" data-i18n="settings_account_loggedout_desc">Connectez-vous pour synchroniser vos données dans le cloud et gérer la sécurité de votre compte.</p>
                 <a class="btn-primary btn-sm" href="#/account" data-link data-i18n="account_tab_login">Connexion</a>
@@ -1775,6 +1771,15 @@
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <!-- DISPLAY / PERSONNALISATION -->
+      <section class="app-section" id="section-settings" hidden>
+        <div class="app-topbar">
+          <h1 data-i18n="settings_display_title">Affichage</h1>
+        </div>
+        <div class="app-content">
           <div class="settings-grid" id="settings-tab-display">
             <div class="settings-card">
               <h3 data-i18n="settings_lang_title">Langue</h3>
@@ -2403,7 +2408,7 @@ function refreshLabelDicts(){
    ══════════════════════════════════════════════════════════════ */
 const I18N = {
   fr: {
-    nav_features:'Fonctionnalités', nav_product:'Le produit', nav_pricing:'Tarifs', nav_blog:'Blog', nav_calendar:'Calendrier', nav_open_app:"Se connecter",
+    nav_features:'Fonctionnalités', nav_product:'Le produit', nav_pricing:'Tarifs', nav_blog:'Blog', nav_calendar:'Calendrier', nav_open_app:"Se connecter", nav_my_dashboard:'Mon dashboard',
     hero_badge:'Multi-devises · gestion du risque intégrée',
     hero_title_1:'Votre bankroll,', hero_title_2:'sous contrôle.',
     hero_sub:"Pokelo enregistre vos <strong>tournois</strong>, <strong>cash games</strong> et <strong>expressos</strong>, en <strong>live</strong> comme en <strong>online</strong>, dans la devise de votre choix — et transforme tout ça en graphiques clairs pour progresser sereinement.",
@@ -2479,7 +2484,7 @@ const I18N = {
     app_back_site:'Retour au site',
     public_profile_anonymous:'Joueur Pokelo', public_profile_member_since:'Membre depuis',
     public_profile_not_found:'Ce profil est introuvable ou n\'est pas public.',
-    nav_dashboard:'Dashboard', nav_sessions:'Sessions', nav_bankrolls:'Bankrolls', nav_settings:'Paramètres',
+    nav_dashboard:'Dashboard', nav_sessions:'Sessions', nav_bankrolls:'Bankrolls', nav_my_account:'Mon compte',
     btn_new_session:'Nouvelle session', btn_new_bankroll:'Nouvelle bankroll', btn_customize:'Personnaliser', btn_save:'Enregistrer',
     fx_loading:'Calcul du taux de change…', fx_unavailable:'Taux de change indisponible pour cette devise — montant pris tel quel.',
     fx_rate_label:'Taux appliqué :', fx_in_bankroll:'dans la bankroll',
@@ -2588,8 +2593,8 @@ const I18N = {
     admin_promo_months:'Nombre de mois', admin_promo_max_redemptions:'Utilisations max (optionnel)', admin_promo_code:'Code personnalisé (optionnel)',
     admin_promo_submit:'Créer le code', admin_promo_success:'Code créé : {code}',
     plan_per_month:'mois',
-    pt_feat_bankrolls:'Bankrolls', pt_feat_sessions:'Sessions', pt_feat_game_types:'Tournois, cash game, expressos',
-    pt_feat_stats:'Statistiques', pt_feat_export:'Export des données (CSV/JSON)', pt_feat_modular_dashboard:'Dashboard modulaire (drag & drop)',
+    pt_feat_bankrolls:'Bankrolls', pt_feat_sessions:'Sessions', pt_feat_game_types:'Tournois & cash game', pt_feat_expresso:'Expresso / Spin & Go',
+    pt_feat_stats:'Statistiques', pt_feat_export:'Export CSV', pt_feat_modular_dashboard:'Dashboard modulaire (drag & drop)', pt_feat_content:'Guides, blog & calendrier des événements',
     pt_feat_cloud_sync:'Sauvegarde & synchronisation cloud', pt_feat_pwa:'Application installable (PWA)', pt_feat_support:'Support',
     pt_feat_group_view:'Vue consolidée multi-joueurs', pt_feat_roles:'Gestion des accès par rôle', pt_feat_billing:'Facturation centralisée',
     pt_val_1_bankroll:'1', pt_val_unlimited:'Illimité', pt_val_basic:'De base', pt_val_advanced:'Avancées',
@@ -2600,6 +2605,10 @@ const I18N = {
     toast_sync_error:'La synchronisation a échoué. Vos changements seront réessayés automatiquement.',
     toast_cloud_pull_error:'Impossible de récupérer vos données depuis le cloud. Vérifiez votre connexion.',
     toast_profile_public_updated:'Visibilité du profil mise à jour.',
+    upgrade_bankroll_limit:'Le plan gratuit est limité à 1 bankroll. Passez à Pokelo Pro (Mon compte) pour en créer davantage.',
+    upgrade_expresso:'Les sessions Expresso / Spin & Go sont réservées à Pokelo Pro.',
+    upgrade_export_csv:"L'export CSV est réservé à Pokelo Pro — l'export JSON reste disponible gratuitement.",
+    upgrade_dashboard_customize:'La personnalisation du dashboard (ajout, retrait, réorganisation des modules) est réservée à Pokelo Pro.',
     toast_account_deleted:'Votre compte a été supprimé définitivement.',
     toast_export_ready:'Export téléchargé.',
     networth_title:'Patrimoine total',
@@ -2617,7 +2626,7 @@ const I18N = {
     empty_no_module_text:'Aucun module actif. Cliquez sur « Personnaliser » pour en ajouter.',
     th_date:'Date', th_type:'Type', th_format:'Format', th_buyin:'Mise', th_cashout:'Gain', th_result:'Résultat', th_bankroll:'Bankroll',
     th_sessions_count:'Sessions', th_invested:'Investi', th_roi:'ROI',
-    settings_title:'Paramètres', settings_tab_display:'Affichage', settings_tab_account:'Compte',
+    settings_display_title:'Affichage',
     settings_lang_title:'Langue', settings_lang_desc:'Langue de l\'interface de Pokelo.',
     settings_theme_title:'Thème', settings_theme_desc:'Apparence claire ou sombre de l\'application.',
     settings_theme_dark:'Sombre', settings_theme_light:'Clair',
@@ -2632,7 +2641,7 @@ const I18N = {
     empty_no_sessions_bankroll:'Aucune session pour cette bankroll.', empty_no_sessions_filter:'Aucune session ne correspond à ces filtres.',
   },
   en: {
-    nav_features:'Features', nav_product:'Product', nav_pricing:'Pricing', nav_blog:'Blog', nav_calendar:'Calendar', nav_open_app:'Log in',
+    nav_features:'Features', nav_product:'Product', nav_pricing:'Pricing', nav_blog:'Blog', nav_calendar:'Calendar', nav_open_app:'Log in', nav_my_dashboard:'My dashboard',
     hero_badge:'Multi-currency · built-in risk management',
     hero_title_1:'Your bankroll,', hero_title_2:'under control.',
     hero_sub:"Pokelo logs your <strong>tournaments</strong>, <strong>cash games</strong> and <strong>Spin & Go's</strong>, both <strong>live</strong> and <strong>online</strong>, in the currency of your choice — and turns it all into clear charts so you can play with a level head.",
@@ -2708,7 +2717,7 @@ const I18N = {
     app_back_site:'Back to site',
     public_profile_anonymous:'Pokelo player', public_profile_member_since:'Member since',
     public_profile_not_found:'This profile could not be found or is not public.',
-    nav_dashboard:'Dashboard', nav_sessions:'Sessions', nav_bankrolls:'Bankrolls', nav_settings:'Settings',
+    nav_dashboard:'Dashboard', nav_sessions:'Sessions', nav_bankrolls:'Bankrolls', nav_my_account:'My account',
     btn_new_session:'New session', btn_new_bankroll:'New bankroll', btn_customize:'Customize', btn_save:'Save',
     fx_loading:'Fetching exchange rate…', fx_unavailable:'Exchange rate unavailable for this currency — amount used as-is.',
     fx_rate_label:'Rate applied:', fx_in_bankroll:'in the bankroll',
@@ -2817,8 +2826,8 @@ const I18N = {
     admin_promo_months:'Number of months', admin_promo_max_redemptions:'Max redemptions (optional)', admin_promo_code:'Custom code (optional)',
     admin_promo_submit:'Create code', admin_promo_success:'Code created: {code}',
     plan_per_month:'month',
-    pt_feat_bankrolls:'Bankrolls', pt_feat_sessions:'Sessions', pt_feat_game_types:'Tournaments, cash game, Spin & Go',
-    pt_feat_stats:'Statistics', pt_feat_export:'Data export (CSV/JSON)', pt_feat_modular_dashboard:'Modular dashboard (drag & drop)',
+    pt_feat_bankrolls:'Bankrolls', pt_feat_sessions:'Sessions', pt_feat_game_types:'Tournaments & cash game', pt_feat_expresso:'Expresso / Spin & Go',
+    pt_feat_stats:'Statistics', pt_feat_export:'CSV export', pt_feat_modular_dashboard:'Modular dashboard (drag & drop)', pt_feat_content:'Guides, blog & event calendar',
     pt_feat_cloud_sync:'Cloud backup & sync', pt_feat_pwa:'Installable app (PWA)', pt_feat_support:'Support',
     pt_feat_group_view:'Consolidated multi-player view', pt_feat_roles:'Role-based access', pt_feat_billing:'Centralized billing',
     pt_val_1_bankroll:'1', pt_val_unlimited:'Unlimited', pt_val_basic:'Basic', pt_val_advanced:'Advanced',
@@ -2829,6 +2838,10 @@ const I18N = {
     toast_sync_error:'Sync failed. Your changes will be retried automatically.',
     toast_cloud_pull_error:'Could not fetch your data from the cloud. Check your connection.',
     toast_profile_public_updated:'Profile visibility updated.',
+    upgrade_bankroll_limit:'The free plan is limited to 1 bankroll. Upgrade to Pokelo Pro (My account) to create more.',
+    upgrade_expresso:'Expresso / Spin & Go sessions are a Pokelo Pro feature.',
+    upgrade_export_csv:'CSV export is a Pokelo Pro feature — JSON export remains free.',
+    upgrade_dashboard_customize:'Dashboard customization (adding, removing, reordering modules) is a Pokelo Pro feature.',
     toast_account_deleted:'Your account has been permanently deleted.',
     toast_export_ready:'Export downloaded.',
     networth_title:'Total net worth',
@@ -2846,7 +2859,7 @@ const I18N = {
     empty_no_module_text:'No active module. Click "Customize" to add one.',
     th_date:'Date', th_type:'Type', th_format:'Format', th_buyin:'Buy-in', th_cashout:'Cash-out', th_result:'Result', th_bankroll:'Bankroll',
     th_sessions_count:'Sessions', th_invested:'Invested', th_roi:'ROI',
-    settings_title:'Settings', settings_tab_display:'Display', settings_tab_account:'Account',
+    settings_display_title:'Display',
     settings_lang_title:'Language', settings_lang_desc:'Language of the Pokelo interface.',
     settings_theme_title:'Theme', settings_theme_desc:'Light or dark appearance of the app.',
     settings_theme_dark:'Dark', settings_theme_light:'Light',
@@ -2872,6 +2885,24 @@ function applyStaticI18n(){
   });
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
     el.setAttribute('placeholder', t(el.getAttribute('data-i18n-placeholder')));
+  });
+  updateLandingNavCta();
+}
+// Le bouton "Se connecter" de la landing devient "Mon dashboard" une fois
+// connecté — pas de data-i18n ici (son texte dépend aussi de currentUser,
+// pas seulement de la langue), donc on le pilote entièrement depuis ce point
+// unique appelé à chaque rafraîchissement i18n (langue, login, logout...).
+function updateLandingNavCta(){
+  ['landing-nav-cta', 'landing-nav-cta-mobile', 'landing-nav-cta-footer'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (currentUser) {
+      el.setAttribute('href', '#/app');
+      el.textContent = t('nav_my_dashboard');
+    } else {
+      el.setAttribute('href', '#/account');
+      el.textContent = t('nav_open_app');
+    }
   });
 }
 
@@ -3325,12 +3356,12 @@ window.addEventListener('hashchange', router);
 
 function appRouter(hash){
   const sub = hash.replace(/^#\/app\/?/, '') || 'dashboard';
-  const map = { '': 'dashboard', 'dashboard':'dashboard', 'sessions':'sessions', 'bankrolls':'bankrolls', 'settings':'settings', 'admin':'admin' };
+  const map = { '': 'dashboard', 'dashboard':'dashboard', 'sessions':'sessions', 'bankrolls':'bankrolls', 'settings':'settings', 'account':'account', 'admin':'admin' };
   let section = map[sub] || 'dashboard';
   // Le lien "Admin" n'est qu'un confort d'UI : l'accès réel est revérifié
   // côté serveur par api/admin-stats.js, jamais décidé ici.
   if (section === 'admin' && currentUserRole !== 'admin') section = 'dashboard';
-  ['dashboard','sessions','bankrolls','settings','admin'].forEach(s => {
+  ['dashboard','sessions','bankrolls','settings','account','admin'].forEach(s => {
     document.getElementById('section-'+s).hidden = (s !== section);
   });
   document.querySelectorAll('.app-nav-link').forEach(a => a.classList.toggle('active', a.dataset.appnav === section));
@@ -3339,6 +3370,7 @@ function appRouter(hash){
   if (section === 'sessions') renderSessions();
   if (section === 'bankrolls') renderBankrolls();
   if (section === 'settings') renderSettingsPage();
+  if (section === 'account') renderAccountSettings();
   if (section === 'admin') renderAdminPanel();
   document.getElementById('app-sidebar').classList.remove('open');
 }
@@ -3967,6 +3999,7 @@ const DASHBOARD_PRESETS = {
   casualLive: ['recent','evolution','summary','heatmap','tiltSessions','roi'],
 };
 function applyPreset(name){
+  if (!isPremium()) { showToast(t('upgrade_dashboard_customize'), 'error'); return; }
   const preset = DASHBOARD_PRESETS[name];
   if (!preset) return;
   state.dashboardLayout = preset.slice();
@@ -4056,13 +4089,13 @@ function moduleCardHtml(id, bk, sessions){
         <div><h3>${meta.title}</h3><div class="sub">${meta.desc}</div></div>
       </div>
       <div class="module-head-actions">
-        <span class="module-drag-handle" draggable="true" title="Glisser pour déplacer">
+        ${isPremium() ? `<span class="module-drag-handle" draggable="true" title="Glisser pour déplacer">
           <svg class="icon" style="width:16px;height:16px" viewBox="0 0 24 24"><circle cx="9" cy="6" r="1.2"/><circle cx="15" cy="6" r="1.2"/><circle cx="9" cy="12" r="1.2"/><circle cx="15" cy="12" r="1.2"/><circle cx="9" cy="18" r="1.2"/><circle cx="15" cy="18" r="1.2"/></svg>
-        </span>
+        </span>` : ''}
         ${extra}
-        <button class="module-remove-btn" onclick="removeModule('${id}')" aria-label="Retirer">
+        ${isPremium() ? `<button class="module-remove-btn" onclick="removeModule('${id}')" aria-label="Retirer">
           <svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
-        </button>
+        </button>` : ''}
       </div>
     </div>
     ${moduleBodyHtml(id, bk, sessions)}
@@ -4659,6 +4692,7 @@ function renderModuleShowcase(){
     </div>`).join('');
 }
 function openCustomizeModal(){
+  if (!isPremium()) { showToast(t('upgrade_dashboard_customize'), 'error'); return; }
   ensureLayout();
   renderCustomizeLists();
   document.getElementById('customize-modal-overlay').hidden = false;
@@ -4692,14 +4726,17 @@ function lockedModuleChipHtml(id){
   </div>`;
 }
 function addModule(id){
+  if (!isPremium()) { showToast(t('upgrade_dashboard_customize'), 'error'); return; }
   if (!state.dashboardLayout.includes(id)) state.dashboardLayout.push(id);
   saveState(); renderCustomizeLists(); refreshDashboardIfActive();
 }
 function removeModule(id){
+  if (!isPremium()) { showToast(t('upgrade_dashboard_customize'), 'error'); return; }
   state.dashboardLayout = state.dashboardLayout.filter(x=>x!==id);
   saveState(); renderCustomizeLists(); refreshDashboardIfActive();
 }
 function moveModuleTo(id, targetId, zone){
+  if (!isPremium()) return;
   state.dashboardLayout = state.dashboardLayout.filter(x=>x!==id);
   if (zone === 'layout') {
     let idx = targetId ? state.dashboardLayout.indexOf(targetId) : -1;
@@ -4808,11 +4845,14 @@ let cloudSyncPromise = null;
 let syncDebounceTimer = null;
 
 // Préparation Stripe (voir STRIPE_SETUP.md) : aucun module n'est verrouillé par
-// défaut — ajouter des identifiants de module ici est une décision produit à
-// prendre volontairement, pas une valeur imposée par cette préparation technique.
-const PREMIUM_MODULES = [];
+// Différenciateurs plan gratuit / Pokelo Pro (décision produit) :
+//  - 1 bankroll max en gratuit, illimité en Pro
+//  - Expresso/Spin&Go réservé à Pro (tournois et cash game restent gratuits)
+//  - Export CSV réservé à Pro (export JSON conservé gratuit, portabilité RGPD)
+//  - Personnalisation du dashboard (ajout/retrait/réordonnancement de modules)
+//    réservée à Pro ; le plan gratuit garde un dashboard par défaut fixe
+const FREE_BANKROLL_LIMIT = 1;
 function isPremium(){ return currentPlan && currentPlan !== 'free'; }
-function isPremiumModule(moduleId){ return PREMIUM_MODULES.includes(moduleId); }
 
 function setAccountTab(tab){
   document.querySelectorAll('.account-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
@@ -5026,18 +5066,22 @@ async function signOutUser(){
   router();
 }
 function updateAccountUI(){
+  updateLandingNavCta();
   const statusEl = document.getElementById('account-status');
   const loginLink = document.getElementById('account-login-link');
+  const accountLink = document.getElementById('account-settings-link');
   if (!statusEl || !loginLink) return;
   if (currentUser) {
     statusEl.hidden = false;
     loginLink.hidden = true;
+    if (accountLink) accountLink.hidden = false;
     const emailEl = document.getElementById('account-status-email');
     if (emailEl) emailEl.textContent = currentUser.email;
     updateSidebarAvatar();
   } else {
     statusEl.hidden = true;
     loginLink.hidden = false;
+    if (accountLink) accountLink.hidden = true;
   }
   updateAdminNavVisibility();
 }
@@ -5074,7 +5118,6 @@ function initSupabaseAuth(){
    ══════════════════════════════════════════════════════════════ */
 function renderSettingsPage(){
   ensureLayout();
-  setSettingsTab(currentSettingsTab);
   if (!state.settings) state.settings = defaultSettings();
   const s = state.settings;
   document.querySelectorAll('#settings-lang-seg button').forEach(b => b.classList.toggle('active', b.dataset.val === s.lang));
@@ -5085,17 +5128,6 @@ function renderSettingsPage(){
     const el = document.getElementById('color-'+k);
     if (el) el.value = s.colors[k];
   });
-  renderAccountSettings();
-}
-
-let currentSettingsTab = 'display';
-function setSettingsTab(tab){
-  currentSettingsTab = tab;
-  document.querySelectorAll('.settings-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
-  const displayGrid = document.getElementById('settings-tab-display');
-  const accountGrid = document.getElementById('settings-tab-account');
-  if (displayGrid) displayGrid.hidden = tab !== 'display';
-  if (accountGrid) accountGrid.hidden = tab !== 'account';
 }
 
 function renderAccountSettings(){
@@ -5375,6 +5407,8 @@ const PRICING_FEATURES = [
   { key: 'pt_feat_bankrolls', values: ['pt_val_1_bankroll', 'pt_val_unlimited', 'pt_val_unlimited'] },
   { key: 'pt_feat_sessions', values: ['pt_val_unlimited', 'pt_val_unlimited', 'pt_val_unlimited'] },
   { key: 'pt_feat_game_types', values: [true, true, true] },
+  { key: 'pt_feat_expresso', values: [false, true, true] },
+  { key: 'pt_feat_content', values: [true, true, true] },
   { key: 'pt_feat_stats', values: ['pt_val_basic', 'pt_val_advanced', 'pt_val_advanced'] },
   { key: 'pt_feat_export', values: [false, true, true] },
   { key: 'pt_feat_modular_dashboard', values: [false, true, true] },
@@ -5617,6 +5651,7 @@ function exportDataJson(){
 }
 // csvEscape : voir js/pure-utils.js
 function exportDataCsv(){
+  if (!isPremium()) { showToast(t('upgrade_export_csv'), 'error'); return; }
   const cols = ['date','bankroll','type','format','devise','tauxChange','miseEngagee','gainTotal','resultat','site','variante','dureeMin','tilt','notes'];
   const rows = [cols.join(';')];
   state.sessions.slice().sort((a,b)=>a.date.localeCompare(b.date)).forEach(s => {
@@ -5886,6 +5921,10 @@ function confirmDeleteBankroll(id){
    POKELO — modals: bankroll
    ══════════════════════════════════════════════════════════════ */
 function openBankrollModal(id){
+  if (!id && !isPremium() && state.bankrolls.length >= FREE_BANKROLL_LIMIT) {
+    showToast(t('upgrade_bankroll_limit'), 'error');
+    return;
+  }
   document.getElementById('bankroll-id').value = id || '';
   document.getElementById('bankroll-modal-title').textContent = id ? 'Modifier la bankroll' : 'Nouvelle bankroll';
   const bk = id ? getBankroll(id) : null;
@@ -5912,7 +5951,7 @@ function saveBankroll(){
   const active = ['dashboard','sessions','bankrolls'].find(s=>!document.getElementById('section-'+s).hidden);
   if (active === 'bankrolls') renderBankrolls();
   if (active === 'dashboard') renderDashboard();
-  if (!id && wasEmpty && !state.presetPromptShown) openPresetPrompt();
+  if (!id && wasEmpty && !state.presetPromptShown && isPremium()) openPresetPrompt();
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -5925,6 +5964,7 @@ function setSegmented(containerId, val){
 document.addEventListener('click', function(e){
   const seg = e.target.closest('#session-type-seg button, #session-format-seg button, #quicklog-type-seg button, #quicklog-format-seg button');
   if (!seg) return;
+  if (seg.dataset.val === 'expresso' && !isPremium()) { showToast(t('upgrade_expresso'), 'error'); return; }
   const parent = seg.parentElement;
   parent.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
   seg.classList.add('active');

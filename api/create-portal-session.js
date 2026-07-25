@@ -34,7 +34,7 @@ module.exports = async (req, res) => {
     const origin = req.headers.origin || `https://${req.headers.host}`;
     const portalSession = await stripeRequest('billing_portal/sessions', STRIPE_SECRET_KEY, {
       customer: customerId,
-      return_url: `${origin}/#/app/settings`,
+      return_url: `${origin}/#/app/account`,
     });
 
     res.status(200).json({ url: portalSession.url });
