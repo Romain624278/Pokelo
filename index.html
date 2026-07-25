@@ -5542,8 +5542,8 @@ async function renderAdminPanel(){
     const token = session && session.access_token;
     if (!token) throw new Error('no-session');
     const res = await fetch('/api/admin-stats', { headers: { Authorization: `Bearer ${token}` } });
-    if (!res.ok) throw new Error('admin-stats-failed');
-    const data = await res.json();
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(`${res.status} ${data.error || 'admin-stats-failed'}${data.detail ? ' — ' + data.detail : ''}`);
     if (feedback) feedback.hidden = true;
 
     document.getElementById('admin-stat-users').textContent = data.totalUsers;
@@ -5569,7 +5569,8 @@ async function renderAdminPanel(){
         </tr>`).join('');
     }
   } catch (e) {
-    if (feedback) { feedback.className = 'account-feedback error'; feedback.textContent = t('admin_load_error'); }
+    console.warn('Admin stats failed:', e);
+    if (feedback) { feedback.className = 'account-feedback error'; feedback.textContent = t('admin_load_error') + (e && e.message ? ` (${e.message})` : ''); }
   }
 }
 
@@ -5877,7 +5878,8 @@ async function startCheckout(priceId, btn){
     location.href = data.url;
   } catch (e) {
     console.warn('Stripe checkout failed:', e);
-    showToast(t('toast_checkout_error'), 'error');
+    const detail = e && e.message && e.message !== 'checkout-failed' ? ` (${e.message})` : '';
+    showToast(t('toast_checkout_error') + detail, 'error');
     if (btn) { btn.disabled = false; btn.textContent = btn.dataset.origText || t('price_cta_subscribe'); }
   }
 }
