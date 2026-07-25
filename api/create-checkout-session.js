@@ -3,7 +3,7 @@
 //   STRIPE_SECRET_KEY, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
 //   STRIPE_COUPON_REFERRAL30 (optionnel — voir STRIPE_SETUP.md, système de parrainage)
 // Voir STRIPE_SETUP.md pour la marche à suivre complète (compte Stripe, Price ID, etc.).
-const { stripeRequest, getSupabaseUser, fetchProfileFields } = require('./_stripe-helpers');
+const { stripeRequest, getSupabaseUser, fetchProfileFields, logServerError } = require('./_stripe-helpers');
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
@@ -26,9 +26,11 @@ module.exports = async (req, res) => {
     return;
   }
 
+  let userId = null;
   try {
     const user = await getSupabaseUser(SUPABASE_URL, SERVICE_ROLE_KEY, accessToken);
     if (!user) { res.status(401).json({ error: 'Invalid or expired session' }); return; }
+    userId = user.id;
 
     // Parrainage : -30% sur le premier mois si l'utilisateur a été parrainé, n'a
     // jamais souscrit avant (plan === 'free') et n'a pas déjà consommé cette remise.
@@ -62,6 +64,7 @@ module.exports = async (req, res) => {
 
     res.status(200).json({ url: session.url });
   } catch (e) {
+    await logServerError(SUPABASE_URL, SERVICE_ROLE_KEY, 'create-checkout-session', String(e && e.message || e), { priceId }, userId);
     res.status(502).json({ error: 'Stripe error', detail: String(e && e.message || e) });
   }
 };

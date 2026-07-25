@@ -269,3 +269,40 @@ remise -30% au checkout, créditer le mois offert) vit côté serveur dans
 `api/create-checkout-session.js` et `api/stripe-webhook.js` — jamais dans le
 client, pour qu'un utilisateur ne puisse pas se créditer lui-même. Voir
 STRIPE_SETUP.md §6 pour le coupon Stripe à créer.
+
+## 8. Rôle admin (visibilité globale + alertes d'erreur)
+
+À exécuter dans Supabase (SQL Editor) — ajoute un rôle par utilisateur et une
+table de journalisation des erreurs serveur (webhook Stripe, checkout,
+parrainage), consultable uniquement par un compte admin :
+
+```sql
+alter table public.profiles
+  add column if not exists role text not null default 'user';
+
+create table if not exists public.error_logs (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz default now(),
+  source text not null,
+  message text not null,
+  context jsonb,
+  user_id uuid references public.profiles(id)
+);
+
+alter table public.error_logs enable row level security;
+
+-- Personne ne peut lire error_logs directement, même connecté : la table
+-- n'est accessible que via la clé service_role (api/admin-stats.js), qui
+-- contourne RLS et vérifie elle-même profiles.role = 'admin' avant de
+-- répondre. Aucune policy SELECT n'est donc ajoutée volontairement.
+
+-- Passer un compte en administrateur (remplacer l'email) :
+update public.profiles set role = 'admin' where email = 'romain.desgres26@gmail.com';
+```
+
+`role` n'est écrit que par vous-même via cette requête SQL manuelle — le
+client (`syncPushToCloudRun`) ne l'inclut jamais dans ses upserts, donc un
+utilisateur ne peut pas se l'attribuer lui-même. `api/admin-stats.js`
+revérifie systématiquement `role` côté serveur avant de renvoyer quoi que ce
+soit ; le fait que le menu admin s'affiche côté client n'est qu'un confort
+d'UI, jamais le contrôle d'accès réel.

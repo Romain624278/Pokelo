@@ -76,6 +76,25 @@ async function fetchProfileFields(supabaseUrl, serviceRoleKey, userId, fields){
   return rows[0] || null;
 }
 
+// Journalise une erreur serveur sur un chemin sensible (webhook Stripe,
+// checkout, crédit de parrainage) — jamais bloquant : une erreur ici est
+// avalée pour ne jamais faire échouer l'appelant à cause du logging lui-même.
+// Consultable uniquement via api/admin-stats.js (réservé au rôle admin).
+async function logServerError(supabaseUrl, serviceRoleKey, source, message, context, userId){
+  try {
+    await fetch(`${supabaseUrl}/rest/v1/error_logs`, {
+      method: 'POST',
+      headers: {
+        apikey: serviceRoleKey,
+        Authorization: `Bearer ${serviceRoleKey}`,
+        'Content-Type': 'application/json',
+        Prefer: 'return=minimal',
+      },
+      body: JSON.stringify({ source, message: String(message).slice(0, 2000), context: context || null, user_id: userId || null }),
+    });
+  } catch (e) { /* ne jamais faire échouer l'appelant à cause du logging */ }
+}
+
 function verifyStripeSignature(rawBody, sigHeader, secret){
   if (!sigHeader) return false;
   const parts = sigHeader.split(',').reduce((acc, part) => {
@@ -104,4 +123,4 @@ function getRawBody(req){
   });
 }
 
-module.exports = { stripeRequest, stripeGet, getSupabaseUser, fetchProfileFields, verifyStripeSignature, getRawBody };
+module.exports = { stripeRequest, stripeGet, getSupabaseUser, fetchProfileFields, logServerError, verifyStripeSignature, getRawBody };

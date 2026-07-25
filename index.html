@@ -1551,6 +1551,10 @@
           <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
           <span data-i18n="nav_settings">Paramètres</span>
         </a>
+        <a class="app-nav-link" data-appnav="admin" href="#/app/admin" data-link id="app-nav-admin" hidden>
+          <svg class="icon" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V5l-8-3Z"/><path d="M9 12l2 2 4-4"/></svg>
+          <span data-i18n="nav_admin">Admin</span>
+        </a>
       </nav>
       <div class="app-sidebar-bottom">
         <a class="install-app-btn" onclick="triggerInstallPrompt()" hidden style="margin-bottom:.6rem;">
@@ -1842,6 +1846,43 @@
             </div>
           </div>
         </div>
+      </section>
+
+      <!-- ADMIN -->
+      <section class="app-section" id="section-admin" hidden>
+        <div class="app-topbar">
+          <h1 data-i18n="nav_admin">Admin</h1>
+        </div>
+        <div class="summary-grid" id="admin-stats-grid" style="margin-bottom:1.6rem;">
+          <div class="mini-stat-tile">
+            <div class="mst-label" data-i18n="admin_total_users">Utilisateurs</div>
+            <div class="mst-val" id="admin-stat-users">—</div>
+          </div>
+          <div class="mini-stat-tile">
+            <div class="mst-label" data-i18n="admin_plan_pro">Pro</div>
+            <div class="mst-val" id="admin-stat-pro">—</div>
+          </div>
+          <div class="mini-stat-tile">
+            <div class="mst-label" data-i18n="admin_signups_30d">Inscriptions (30j)</div>
+            <div class="mst-val" id="admin-stat-signups30">—</div>
+          </div>
+          <div class="mini-stat-tile">
+            <div class="mst-label" data-i18n="admin_referral_rewards">Mois offerts (parrainage)</div>
+            <div class="mst-val" id="admin-stat-referrals">—</div>
+          </div>
+        </div>
+        <div class="settings-card">
+          <h3 data-i18n="admin_errors_title">Dernières erreurs serveur</h3>
+          <p class="settings-desc" data-i18n="admin_errors_desc">Webhook Stripe, création de session de paiement, crédit de parrainage — surveillez ici les échecs silencieux.</p>
+          <div class="table-wrap">
+            <table class="data-table" id="admin-errors-table">
+              <thead><tr><th data-i18n="admin_errors_col_date">Date</th><th data-i18n="admin_errors_col_source">Source</th><th data-i18n="admin_errors_col_message">Message</th></tr></thead>
+              <tbody id="admin-errors-tbody"></tbody>
+            </table>
+          </div>
+          <p class="form-hint" id="admin-errors-empty" hidden data-i18n="admin_errors_empty">Aucune erreur récente. Tout va bien.</p>
+        </div>
+        <div class="account-feedback" id="admin-feedback" hidden></div>
       </section>
     </div>
   </div>
@@ -2485,6 +2526,11 @@ const I18N = {
     settings_referral_title:'Parrainage',
     settings_referral_desc:'Invitez des amis avec votre lien : ils obtiennent -30% sur leur premier mois Pro, et vous recevez 1 mois offert dès qu\'ils s\'abonnent (si vous êtes abonné Pro).',
     settings_referral_stats:'{count} ami(s) inscrit(s) avec votre code · {rewards} mois offert(s) reçu(s)',
+    nav_admin:'Admin',
+    admin_total_users:'Utilisateurs', admin_plan_pro:'Abonnés payants', admin_signups_30d:'Inscriptions (30j)', admin_referral_rewards:'Mois offerts (parrainage)',
+    admin_errors_title:'Dernières erreurs serveur', admin_errors_desc:"Webhook Stripe, création de session de paiement, crédit de parrainage — surveillez ici les échecs silencieux.",
+    admin_errors_col_date:'Date', admin_errors_col_source:'Source', admin_errors_col_message:'Message',
+    admin_errors_empty:'Aucune erreur récente. Tout va bien.', admin_load_error:"Impossible de charger les statistiques admin.",
     plan_per_month:'mois',
     pt_feat_bankrolls:'Bankrolls', pt_feat_sessions:'Sessions', pt_feat_game_types:'Tournois, cash game, expressos',
     pt_feat_stats:'Statistiques', pt_feat_export:'Export des données (CSV/JSON)', pt_feat_modular_dashboard:'Dashboard modulaire (drag & drop)',
@@ -2700,6 +2746,11 @@ const I18N = {
     settings_referral_title:'Referral program',
     settings_referral_desc:'Invite friends with your link: they get 30% off their first Pro month, and you get 1 month free as soon as they subscribe (if you have Pokelo Pro).',
     settings_referral_stats:'{count} friend(s) signed up with your code · {rewards} free month(s) received',
+    nav_admin:'Admin',
+    admin_total_users:'Users', admin_plan_pro:'Paying subscribers', admin_signups_30d:'Signups (30d)', admin_referral_rewards:'Free months (referral)',
+    admin_errors_title:'Recent server errors', admin_errors_desc:'Stripe webhook, checkout session creation, referral crediting — monitor silent failures here.',
+    admin_errors_col_date:'Date', admin_errors_col_source:'Source', admin_errors_col_message:'Message',
+    admin_errors_empty:'No recent errors. All good.', admin_load_error:'Could not load admin stats.',
     plan_per_month:'month',
     pt_feat_bankrolls:'Bankrolls', pt_feat_sessions:'Sessions', pt_feat_game_types:'Tournaments, cash game, Spin & Go',
     pt_feat_stats:'Statistics', pt_feat_export:'Data export (CSV/JSON)', pt_feat_modular_dashboard:'Modular dashboard (drag & drop)',
@@ -3208,9 +3259,12 @@ window.addEventListener('hashchange', router);
 
 function appRouter(hash){
   const sub = hash.replace(/^#\/app\/?/, '') || 'dashboard';
-  const map = { '': 'dashboard', 'dashboard':'dashboard', 'sessions':'sessions', 'bankrolls':'bankrolls', 'stats':'stats', 'settings':'settings' };
-  const section = map[sub] || 'dashboard';
-  ['dashboard','sessions','bankrolls','stats','settings'].forEach(s => {
+  const map = { '': 'dashboard', 'dashboard':'dashboard', 'sessions':'sessions', 'bankrolls':'bankrolls', 'stats':'stats', 'settings':'settings', 'admin':'admin' };
+  let section = map[sub] || 'dashboard';
+  // Le lien "Admin" n'est qu'un confort d'UI : l'accès réel est revérifié
+  // côté serveur par api/admin-stats.js, jamais décidé ici.
+  if (section === 'admin' && currentUserRole !== 'admin') section = 'dashboard';
+  ['dashboard','sessions','bankrolls','stats','settings','admin'].forEach(s => {
     document.getElementById('section-'+s).hidden = (s !== section);
   });
   document.querySelectorAll('.app-nav-link').forEach(a => a.classList.toggle('active', a.dataset.appnav === section));
@@ -3220,6 +3274,7 @@ function appRouter(hash){
   if (section === 'bankrolls') renderBankrolls();
   if (section === 'stats') renderStats();
   if (section === 'settings') renderSettingsPage();
+  if (section === 'admin') renderAdminPanel();
   document.getElementById('app-sidebar').classList.remove('open');
 }
 
@@ -4681,6 +4736,7 @@ let currentUser = null;
 let currentPlan = 'free';
 let currentPlanPeriodEnd = null;
 let currentReferralCode = null;
+let currentUserRole = 'user';
 let cloudSyncInFlight = false;
 let cloudSyncQueued = false;
 let cloudSyncPromise = null;
@@ -4866,6 +4922,7 @@ async function onAuthSignedIn(session){
         currentPlan = cloud.profile.plan || 'free';
         currentPlanPeriodEnd = cloud.profile.stripe_current_period_end || null;
         currentReferralCode = cloud.profile.referral_code || null;
+        currentUserRole = cloud.profile.role || 'user';
         state.profile = {
           displayName: cloud.profile.display_name || '',
           avatarUrl: cloud.profile.avatar_url || '',
@@ -4880,6 +4937,7 @@ async function onAuthSignedIn(session){
     showToast(t('toast_cloud_pull_error'), 'error');
   }
   applySettingsToDOM();
+  updateAdminNavVisibility();
   populateBankrollSelects();
   router();
   hideAppLoadingSkeleton();
@@ -4894,6 +4952,7 @@ async function signOutUser(){
   currentPlan = 'free';
   currentPlanPeriodEnd = null;
   currentReferralCode = null;
+  currentUserRole = 'user';
   localStorage.removeItem(STORAGE_KEY);
   state = seedDemoState();
   updateAccountUI();
@@ -4915,6 +4974,11 @@ function updateAccountUI(){
     statusEl.hidden = true;
     loginLink.hidden = false;
   }
+  updateAdminNavVisibility();
+}
+function updateAdminNavVisibility(){
+  const el = document.getElementById('app-nav-admin');
+  if (el) el.hidden = currentUserRole !== 'admin';
 }
 function initSupabaseAuth(){
   if (!window.supabase) { authCheckComplete = true; router(); return; }
@@ -5027,6 +5091,45 @@ function copyReferralLink(){
   if (!input.value) return;
   input.select();
   navigator.clipboard?.writeText(input.value).then(() => showToast(t('settings_account_link_copied'), 'success')).catch(() => {});
+}
+
+/* ══════════════════════════════════════════════════════════════
+   POKELO — panneau admin (rôle admin uniquement, revérifié côté serveur)
+   ══════════════════════════════════════════════════════════════ */
+async function renderAdminPanel(){
+  const feedback = document.getElementById('admin-feedback');
+  if (feedback) { feedback.hidden = false; feedback.className = 'account-feedback'; feedback.textContent = t('account_loading'); }
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    const token = session && session.access_token;
+    if (!token) throw new Error('no-session');
+    const res = await fetch('/api/admin-stats', { headers: { Authorization: `Bearer ${token}` } });
+    if (!res.ok) throw new Error('admin-stats-failed');
+    const data = await res.json();
+    if (feedback) feedback.hidden = true;
+
+    document.getElementById('admin-stat-users').textContent = data.totalUsers;
+    document.getElementById('admin-stat-pro').textContent = (data.planCounts.pro || 0) + (data.planCounts.team || 0);
+    document.getElementById('admin-stat-signups30').textContent = data.signups30d;
+    document.getElementById('admin-stat-referrals').textContent = data.referralRewardsGiven;
+
+    const tbody = document.getElementById('admin-errors-tbody');
+    const emptyEl = document.getElementById('admin-errors-empty');
+    if (!data.recentErrors.length) {
+      tbody.innerHTML = '';
+      if (emptyEl) emptyEl.hidden = false;
+    } else {
+      if (emptyEl) emptyEl.hidden = true;
+      tbody.innerHTML = data.recentErrors.map(err => `
+        <tr>
+          <td>${escapeHtml(new Date(err.created_at).toLocaleString(state.settings.lang === 'en' ? 'en-US' : 'fr-FR'))}</td>
+          <td>${escapeHtml(err.source)}</td>
+          <td>${escapeHtml(err.message)}</td>
+        </tr>`).join('');
+    }
+  } catch (e) {
+    if (feedback) { feedback.className = 'account-feedback error'; feedback.textContent = t('admin_load_error'); }
+  }
 }
 
 function renderProfileSettings(){
@@ -5422,6 +5525,7 @@ async function deleteMyAccount(){
     currentPlan = 'free';
     currentPlanPeriodEnd = null;
     currentReferralCode = null;
+    currentUserRole = 'user';
     localStorage.removeItem(STORAGE_KEY);
     state = seedDemoState();
     updateAccountUI();

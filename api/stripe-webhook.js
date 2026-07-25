@@ -5,7 +5,7 @@
 //   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
 // Le body doit rester brut (non parsé) pour vérifier la signature Stripe — d'où
 // `bodyParser: false` ci-dessous.
-const { stripeGet, stripeRequest, fetchProfileFields, verifyStripeSignature, getRawBody } = require('./_stripe-helpers');
+const { stripeGet, stripeRequest, fetchProfileFields, logServerError, verifyStripeSignature, getRawBody } = require('./_stripe-helpers');
 
 module.exports.config = { api: { bodyParser: false } };
 
@@ -56,6 +56,7 @@ async function creditReferralIfNeeded(supabaseUrl, serviceRoleKey, stripeSecretK
     });
   } catch (e) {
     console.error('Crédit de parrainage échoué :', e);
+    await logServerError(supabaseUrl, serviceRoleKey, 'referral-credit', String(e && e.message || e), null, referredUserId);
   }
 }
 
@@ -109,6 +110,7 @@ module.exports = async (req, res) => {
     }
     res.status(200).json({ received: true });
   } catch (e) {
+    await logServerError(SUPABASE_URL, SERVICE_ROLE_KEY, 'stripe-webhook', String(e && e.message || e), { eventType: event && event.type });
     res.status(500).json({ error: 'Webhook handling failed', detail: String(e && e.message || e) });
   }
 };
