@@ -297,7 +297,7 @@ alter table public.error_logs enable row level security;
 -- répondre. Aucune policy SELECT n'est donc ajoutée volontairement.
 
 -- Passer un compte en administrateur (remplacer l'email) :
-update public.profiles set role = 'admin' where email = 'romain.desgres26@gmail.com';
+update public.profiles set role = 'admin' where email = 'contact@pokelo.fr';
 ```
 
 `role` n'est écrit que par vous-même via cette requête SQL manuelle — le
@@ -306,3 +306,16 @@ utilisateur ne peut pas se l'attribuer lui-même. `api/admin-stats.js`
 revérifie systématiquement `role` côté serveur avant de renvoyer quoi que ce
 soit ; le fait que le menu admin s'affiche côté client n'est qu'un confort
 d'UI, jamais le contrôle d'accès réel.
+
+Le panneau admin (`#/app/admin`) permet aussi :
+- **Attribuer/retirer Pokelo Pro** à un compte par email (`api/admin-grant-plan.js`)
+  — modifie uniquement `profiles.plan`, ne touche jamais aux champs `stripe_*` :
+  si ce joueur souscrit un jour un vrai abonnement, le webhook Stripe reprend
+  la main normalement.
+- **Créer un coupon + code promo Stripe** (`api/admin-create-promo.js`) —
+  utilise directement l'API Stripe (`STRIPE_SECRET_KEY`), le code généré
+  fonctionne immédiatement grâce à `allow_promotion_codes` déjà actif sur le
+  Checkout (voir STRIPE_SETUP.md §5ter).
+
+Les deux revérifient `role === 'admin'` côté serveur avant d'agir, comme
+`api/admin-stats.js`.
