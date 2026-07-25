@@ -32,6 +32,12 @@ self.addEventListener('fetch', (event) => {
   const url = event.request.url;
   if (event.request.method !== 'GET') return;
   if (url.includes('api.frankfurter.app')) return; // toujours réseau, jamais de cache
+  // Jamais de cache pour nos propres endpoints /api/* : ce sont des réponses
+  // authentifiées (via en-tête Authorization, jamais reflété dans l'URL/le
+  // cache Cache Storage). Un cache-first ici renverrait la réponse d'un
+  // premier utilisateur à un second utilisateur connecté ensuite sur le même
+  // navigateur/appareil (ex. poste partagé) — fuite de données entre comptes.
+  if (new URL(url, self.location.origin).pathname.startsWith('/api/')) return;
 
   const isAppShell = event.request.mode === 'navigate' || url.endsWith('/index.html') || url.endsWith('/');
   if (isAppShell) {

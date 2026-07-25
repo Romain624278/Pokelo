@@ -5619,12 +5619,24 @@ async function submitAdminCreatePromo(){
   }
 }
 
+// L'avatar est toujours généré côté client via canvas.toDataURL('image/jpeg')
+// (voir onAvatarFileSelected), donc toujours de la forme data:image/...;base64,...
+// Mais avatar_url est lu tel quel depuis la base (profiles.avatar_url), que la
+// policy RLS ne protège que par propriétaire — pas par contenu. Un appel direct
+// à l'API Supabase (hors client) pourrait donc y écrire n'importe quelle chaîne.
+// Comme ce profil est affiché publiquement via #/u/<id> (profil partagé), on
+// revalide ce format avant de l'injecter dans un attribut src pour empêcher une
+// XSS stockée (ex. avatar_url = '" onerror="...') qui toucherait tout visiteur
+// du lien de partage, pas seulement le propriétaire du compte.
+function isSafeAvatarUrl(url){
+  return typeof url === 'string' && /^data:image\/(png|jpe?g|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(url);
+}
 function renderProfileSettings(){
   if (!state.profile) state.profile = defaultProfile();
   const p = state.profile;
   const preview = document.getElementById('profile-avatar-preview');
   if (preview) {
-    if (p.avatarUrl) {
+    if (isSafeAvatarUrl(p.avatarUrl)) {
       preview.innerHTML = `<img src="${p.avatarUrl}" alt="" />`;
     } else {
       const initial = (p.displayName || currentUser.email || '?').trim().charAt(0).toUpperCase();
@@ -5645,7 +5657,7 @@ function renderProfileSettings(){
 function updateSidebarAvatar(){
   const el = document.getElementById('account-status-avatar');
   if (!el || !state.profile) return;
-  if (state.profile.avatarUrl) el.innerHTML = `<img src="${state.profile.avatarUrl}" alt="" />`;
+  if (isSafeAvatarUrl(state.profile.avatarUrl)) el.innerHTML = `<img src="${state.profile.avatarUrl}" alt="" />`;
   else el.innerHTML = '';
 }
 
@@ -5720,7 +5732,7 @@ async function renderPublicProfile(userId){
     const joined = data.createdAt ? new Date(data.createdAt).toLocaleDateString(state.settings.lang === 'en' ? 'en-US' : 'fr-FR', { month: 'long', year: 'numeric' }) : '';
     card.innerHTML = `
       <div class="profile-avatar" style="width:88px;height:88px;font-size:2rem;margin:0 auto 1.2rem;">
-        ${data.avatarUrl ? `<img src="${data.avatarUrl}" alt="" />` : `<span>${escapeHtml(initial)}</span>`}
+        ${isSafeAvatarUrl(data.avatarUrl) ? `<img src="${data.avatarUrl}" alt="" />` : `<span>${escapeHtml(initial)}</span>`}
       </div>
       <h1 class="article-title" style="text-align:center;font-size:1.4rem;">${escapeHtml(data.displayName || t('public_profile_anonymous'))}</h1>
       ${joined ? `<p style="text-align:center;color:var(--grey);font-size:.85rem;margin-top:.3rem;">${t('public_profile_member_since')} ${joined}</p>` : ''}

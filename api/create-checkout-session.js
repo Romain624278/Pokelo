@@ -17,6 +17,13 @@ module.exports = async (req, res) => {
 
   const { priceId } = req.body || {};
   if (!priceId) { res.status(400).json({ error: 'Missing priceId' }); return; }
+  // N'accepter que nos propres Price ID Pro/Équipe : sans cette liste, un
+  // appelant pourrait envoyer n'importe quel priceId existant sur le compte
+  // Stripe (ex. un prix de test à 1€ jamais destiné au public) et obtenir
+  // malgré tout le plan Pro, car planForPriceId() dans stripe-webhook.js
+  // suppose "Pro" pour tout prix qu'il ne reconnaît pas.
+  const ALLOWED_PRICE_IDS = [process.env.STRIPE_PRICE_PRO, process.env.STRIPE_PRICE_TEAM].filter(Boolean);
+  if (!ALLOWED_PRICE_IDS.includes(priceId)) { res.status(400).json({ error: 'Invalid priceId' }); return; }
 
   const SUPABASE_URL = process.env.SUPABASE_URL;
   const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;

@@ -95,7 +95,7 @@ async function logServerError(supabaseUrl, serviceRoleKey, source, message, cont
   } catch (e) { /* ne jamais faire échouer l'appelant à cause du logging */ }
 }
 
-function verifyStripeSignature(rawBody, sigHeader, secret){
+function verifyStripeSignature(rawBody, sigHeader, secret, toleranceSeconds){
   if (!sigHeader) return false;
   const parts = sigHeader.split(',').reduce((acc, part) => {
     const idx = part.indexOf('=');
@@ -111,7 +111,14 @@ function verifyStripeSignature(rawBody, sigHeader, secret){
   const sigBuffer = Buffer.from(signature, 'utf8');
   const expBuffer = Buffer.from(expected, 'utf8');
   if (sigBuffer.length !== expBuffer.length) return false;
-  return crypto.timingSafeEqual(sigBuffer, expBuffer);
+  if (!crypto.timingSafeEqual(sigBuffer, expBuffer)) return false;
+  // Rejette un webhook signé mais rejoué tel quel bien plus tard (une requête
+  // interceptée puis renvoyée des heures après reste, sinon, valide pour
+  // toujours puisque la signature ne dépend que du corps et du timestamp qu'il
+  // contient). Tolérance de 5 min par défaut, comme recommandé par Stripe.
+  const toleranceMs = (toleranceSeconds || 300) * 1000;
+  if (Math.abs(Date.now() - Number(timestamp) * 1000) > toleranceMs) return false;
+  return true;
 }
 
 function getRawBody(req){

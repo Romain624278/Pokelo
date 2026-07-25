@@ -32,10 +32,16 @@ module.exports = async (req, res) => {
     const row = Array.isArray(body) ? body[0] : null;
     if (!row) { res.status(404).json({ error: 'Not found' }); return; }
 
+    // avatar_url doit toujours être une data URL image générée côté client
+    // (canvas.toDataURL) — la policy RLS ne protège que par propriétaire, pas
+    // par contenu, donc on revalide ici avant de la renvoyer à des visiteurs
+    // anonymes pour ne jamais republier une valeur arbitraire écrite en base.
+    const isSafeAvatarUrl = typeof row.avatar_url === 'string' && /^data:image\/(png|jpe?g|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(row.avatar_url);
+
     res.setHeader('Cache-Control', 'public, max-age=60');
     res.status(200).json({
       displayName: row.display_name || '',
-      avatarUrl: row.avatar_url || '',
+      avatarUrl: isSafeAvatarUrl ? row.avatar_url : '',
       createdAt: row.created_at || null,
     });
   } catch (e) {
