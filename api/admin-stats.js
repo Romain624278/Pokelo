@@ -23,13 +23,26 @@ module.exports = async (req, res) => {
     if (!caller || caller.role !== 'admin') { res.status(403).json({ error: 'Forbidden' }); return; }
 
     const headers = { apikey: SERVICE_ROLE_KEY, Authorization: `Bearer ${SERVICE_ROLE_KEY}` };
-    const [profilesRes, errorsRes] = await Promise.all([
-      fetch(`${SUPABASE_URL}/rest/v1/profiles?select=plan,created_at,referral_reward_claimed`, { headers }),
+    const [profilesRes, errorsRes, bankrollsRes, sessionsRes] = await Promise.all([
+      fetch(`${SUPABASE_URL}/rest/v1/profiles?select=id,email,plan,role,created_at,stripe_customer_id,stripe_current_period_end,referral_reward_claimed&order=created_at.desc`, { headers }),
       fetch(`${SUPABASE_URL}/rest/v1/error_logs?select=*&order=created_at.desc&limit=20`, { headers }),
+      fetch(`${SUPABASE_URL}/rest/v1/bankrolls?select=user_id`, { headers }),
+      fetch(`${SUPABASE_URL}/rest/v1/sessions?select=user_id,created_at&order=created_at.desc`, { headers }),
     ]);
     if (!profilesRes.ok) throw new Error('Supabase profiles query failed');
     const profiles = await profilesRes.json();
     const errors = errorsRes.ok ? await errorsRes.json() : [];
+    const bankrolls = bankrollsRes.ok ? await bankrollsRes.json() : [];
+    const sessions = sessionsRes.ok ? await sessionsRes.json() : [];
+
+    const bankrollCountByUser = {};
+    bankrolls.forEach(b => { bankrollCountByUser[b.user_id] = (bankrollCountByUser[b.user_id] || 0) + 1; });
+    const sessionCountByUser = {};
+    const lastSessionByUser = {};
+    sessions.forEach(s => {
+      sessionCountByUser[s.user_id] = (sessionCountByUser[s.user_id] || 0) + 1;
+      if (!lastSessionByUser[s.user_id]) lastSessionByUser[s.user_id] = s.created_at;
+    });
 
     const now = Date.now();
     const days = n => now - n * 24 * 60 * 60 * 1000;
@@ -43,6 +56,18 @@ module.exports = async (req, res) => {
       if (p.referral_reward_claimed) referralRewardsGiven++;
     });
 
+    const users = profiles.slice(0, 200).map(p => ({
+      email: p.email,
+      plan: p.plan || 'free',
+      role: p.role || 'user',
+      createdAt: p.created_at,
+      hasStripeCustomer: !!p.stripe_customer_id,
+      periodEnd: p.stripe_current_period_end,
+      bankrollCount: bankrollCountByUser[p.id] || 0,
+      sessionCount: sessionCountByUser[p.id] || 0,
+      lastSessionAt: lastSessionByUser[p.id] || null,
+    }));
+
     res.status(200).json({
       totalUsers: profiles.length,
       planCounts,
@@ -50,6 +75,7 @@ module.exports = async (req, res) => {
       signups30d,
       referralRewardsGiven,
       recentErrors: errors,
+      users,
     });
   } catch (e) {
     res.status(502).json({ error: 'Query failed', detail: String(e && e.message || e) });

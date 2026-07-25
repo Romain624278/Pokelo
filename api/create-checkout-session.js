@@ -36,13 +36,20 @@ module.exports = async (req, res) => {
     // jamais souscrit avant (plan === 'free') et n'a pas déjà consommé cette remise.
     // Le parrain doit actuellement être Pro/Équipe (vérifié ici, pas seulement au
     // moment où le code a été renseigné à l'inscription).
+    // Isolé dans son propre try/catch : si les colonnes de parrainage n'existent
+    // pas encore en base (migration SUPABASE_SETUP.md §7 non exécutée), le
+    // checkout doit quand même fonctionner — juste sans remise automatique.
     let discountCoupon = null;
-    const profile = await fetchProfileFields(SUPABASE_URL, SERVICE_ROLE_KEY, user.id, 'plan,referred_by_user_id,referral_discount_used');
-    if (profile && profile.plan === 'free' && !profile.referral_discount_used && profile.referred_by_user_id && process.env.STRIPE_COUPON_REFERRAL30) {
-      const referrer = await fetchProfileFields(SUPABASE_URL, SERVICE_ROLE_KEY, profile.referred_by_user_id, 'plan');
-      if (referrer && referrer.plan && referrer.plan !== 'free') {
-        discountCoupon = process.env.STRIPE_COUPON_REFERRAL30;
+    try {
+      const profile = await fetchProfileFields(SUPABASE_URL, SERVICE_ROLE_KEY, user.id, 'plan,referred_by_user_id,referral_discount_used');
+      if (profile && profile.plan === 'free' && !profile.referral_discount_used && profile.referred_by_user_id && process.env.STRIPE_COUPON_REFERRAL30) {
+        const referrer = await fetchProfileFields(SUPABASE_URL, SERVICE_ROLE_KEY, profile.referred_by_user_id, 'plan');
+        if (referrer && referrer.plan && referrer.plan !== 'free') {
+          discountCoupon = process.env.STRIPE_COUPON_REFERRAL30;
+        }
       }
+    } catch (refErr) {
+      await logServerError(SUPABASE_URL, SERVICE_ROLE_KEY, 'create-checkout-session-referral', String(refErr && refErr.message || refErr), { priceId }, userId).catch(() => {});
     }
 
     const origin = req.headers.origin || `https://${req.headers.host}`;

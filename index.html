@@ -159,10 +159,13 @@
   }
   .nav-links a:hover { color: var(--green); }
   .nav-cta {
-    background: var(--green); color: var(--black) !important; padding: 0.5rem 1.3rem;
+    /* Fond vert fixe dans les deux thèmes : le texte doit donc rester fixe
+       lui aussi, jamais lié à --black/--text-wall qui s'inversent en mode
+       clair et rendaient ce bouton illisible. */
+    background: var(--green); color: #0a0a0a !important; padding: 0.5rem 1.3rem;
     border-radius: 6px; font-weight: 700 !important; transition: background 0.2s !important;
   }
-  .nav-cta:hover { background: var(--green-hov); color: var(--text-wall) !important; }
+  .nav-cta:hover { background: var(--green-hov); color: #F1FFF5 !important; }
 
   .nav-burger {
     display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 6px;
@@ -695,6 +698,16 @@
   .tilt-check { display: flex; align-items: center; gap: 8px; height: 42px; padding: 0 0.8rem; background: var(--black); border: 1px solid var(--border); border-radius: 7px; cursor: pointer; font-size: 0.84rem; color: var(--text); }
   .tilt-check input { accent-color: var(--critical); width: 15px; height: 15px; cursor: pointer; }
   .tilt-check:has(input:checked) { border-color: var(--critical); background: color-mix(in srgb, var(--critical) 8%, var(--black)); }
+  .device-row { display: flex; align-items: center; justify-content: space-between; gap: .8rem; padding: .7rem .9rem; background: var(--black); border: 1px solid var(--border); border-radius: 8px; margin-bottom: .5rem; }
+  .device-label { font-size: .85rem; color: var(--text); font-weight: 600; }
+  .device-current { font-size: .64rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--green); background: rgba(8,191,47,0.12); padding: .12rem .5rem; border-radius: 100px; margin-left: .4rem; }
+  .pro-crown { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; margin-left: .35rem; cursor: pointer; vertical-align: middle; }
+  .pro-crown svg { width: 100%; height: 100%; color: #F5B700; }
+  .pro-crown:hover svg { transform: scale(1.15); }
+  /* Couronnes statiques (déjà dans le HTML) : masquées par défaut, révélées
+     uniquement pour un compte non-Pro via la classe posée par applySettingsToDOM. */
+  .pro-crown-inline { display: none; }
+  body:not(.is-pro) .pro-crown-inline { display: inline-flex; }
   .form-group .input, .form-group .select, .form-group .textarea { width: 100%; }
   .profit-preview { padding: 0.8rem 1rem; border-radius: 8px; background: rgba(255,255,255,0.02); border: 1px solid var(--border); font-size: 0.85rem; color: var(--grey); display: flex; justify-content: space-between; align-items: center; }
   .profit-preview .val { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; }
@@ -1623,6 +1636,7 @@
             <button class="btn-ghost btn-sm" onclick="openCustomizeModal()">
               <svg class="icon" style="width:16px;height:16px" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
               <span data-i18n="btn_customize">Personnaliser</span>
+              <span class="pro-crown-inline"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 18h14l1.4-8.4-4.4 2.6-3-5.2-3 5.2-4.4-2.6L5 18Z"/></svg></span>
             </button>
             <button class="btn-primary btn-sm" onclick="openSessionModal()">
               <svg class="icon" style="width:16px;height:16px" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
@@ -1711,6 +1725,7 @@
                   <button class="btn-ghost btn-sm" id="settings-account-manage-plan-btn" onclick="openBillingPortal()" hidden data-i18n="settings_account_manage_plan">Gérer mon abonnement</button>
                   <div class="account-feedback" id="account-plan-feedback" hidden></div>
                   <a href="#pricing" data-link class="settings-plan-link" data-i18n="settings_account_view_plans">Voir les plans disponibles</a>
+                  <p class="form-hint" id="settings-account-role-label" style="margin-top:.5rem;"></p>
                 </div>
                 <div class="settings-account-row">
                   <label data-i18n="settings_referral_title">Parrainage</label>
@@ -1755,11 +1770,16 @@
                   <div class="account-feedback" id="account-mfa-feedback" hidden></div>
                 </div>
                 <div class="settings-account-row">
+                  <label data-i18n="settings_trusted_devices_title">Appareils de confiance</label>
+                  <p class="settings-desc" data-i18n="settings_trusted_devices_desc">Ces appareils ne redemandent pas de code MFA à la connexion. Retirez un appareil pour exiger à nouveau le code dessus.</p>
+                  <div id="trusted-devices-list"></div>
+                </div>
+                <div class="settings-account-row">
                   <label data-i18n="settings_account_export">Exporter mes données</label>
                   <p class="settings-desc" data-i18n="settings_account_export_desc">Téléchargez une copie complète de vos bankrolls et sessions (droit à la portabilité des données).</p>
                   <div class="form-row">
                     <button class="btn-ghost btn-sm" onclick="exportDataJson()" data-i18n="settings_account_export_json">Exporter en JSON</button>
-                    <button class="btn-ghost btn-sm" onclick="exportDataCsv()" data-i18n="settings_account_export_csv">Exporter les sessions en CSV</button>
+                    <button class="btn-ghost btn-sm" onclick="exportDataCsv()"><span data-i18n="settings_account_export_csv">Exporter les sessions en CSV</span><span class="pro-crown-inline"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 18h14l1.4-8.4-4.4 2.6-3-5.2-3 5.2-4.4-2.6L5 18Z"/></svg></span></button>
                   </div>
                 </div>
                 <div class="settings-account-row">
@@ -1840,6 +1860,26 @@
               <button class="btn-ghost btn-sm" style="margin-top:1.2rem" onclick="resetColors()" data-i18n="settings_reset_colors">Réinitialiser les couleurs</button>
             </div>
             <div class="settings-card">
+              <h3><span data-i18n="settings_stakes_title">Seuils de stakes</span><span class="pro-crown-inline"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 18h14l1.4-8.4-4.4 2.6-3-5.2-3 5.2-4.4-2.6L5 18Z"/></svg></span></h3>
+              <p class="settings-desc" data-i18n="settings_stakes_desc">Personnalisez les paliers utilisés pour classer vos sessions (Micro / Low / Mid / High).</p>
+              <div class="form-row" style="align-items:center">
+                <label style="display:flex;align-items:center;gap:.4rem;font-size:.85rem;color:var(--grey)">
+                  <span data-i18n="stake_tier_micro">Micro jusqu'à</span>
+                  <input type="number" class="input" style="width:90px" id="stake-threshold-micro" min="0" step="0.01" onclick="handleStakeInputGuard(event)" onfocus="handleStakeInputGuard(event)" onchange="updateStakeThreshold('micro', this.value)">
+                </label>
+                <label style="display:flex;align-items:center;gap:.4rem;font-size:.85rem;color:var(--grey)">
+                  <span data-i18n="stake_tier_low">Low jusqu'à</span>
+                  <input type="number" class="input" style="width:90px" id="stake-threshold-low" min="0" step="0.01" onclick="handleStakeInputGuard(event)" onfocus="handleStakeInputGuard(event)" onchange="updateStakeThreshold('low', this.value)">
+                </label>
+                <label style="display:flex;align-items:center;gap:.4rem;font-size:.85rem;color:var(--grey)">
+                  <span data-i18n="stake_tier_mid">Mid jusqu'à</span>
+                  <input type="number" class="input" style="width:90px" id="stake-threshold-mid" min="0" step="0.01" onclick="handleStakeInputGuard(event)" onfocus="handleStakeInputGuard(event)" onchange="updateStakeThreshold('mid', this.value)">
+                </label>
+              </div>
+              <p class="form-hint" data-i18n="settings_stakes_hint">Au-delà du seuil Mid, les sessions sont classées en High.</p>
+              <button class="btn-ghost btn-sm" style="margin-top:1.2rem" onclick="resetStakeThresholds()" data-i18n="settings_reset_stakes">Réinitialiser les seuils</button>
+            </div>
+            <div class="settings-card">
               <h3 data-i18n="settings_install_title">Installer Pokelo</h3>
               <p class="settings-desc" data-i18n="settings_install_desc">Ajoutez Pokelo à votre écran d'accueil pour un accès en un tap, comme une vraie app.</p>
               <button class="btn-primary btn-sm install-app-btn" onclick="triggerInstallPrompt()" hidden data-i18n="install_app">Installer l'app</button>
@@ -1871,6 +1911,29 @@
             <div class="mst-label" data-i18n="admin_referral_rewards">Mois offerts (parrainage)</div>
             <div class="mst-val" id="admin-stat-referrals">—</div>
           </div>
+        </div>
+        <div class="settings-card">
+          <h3 data-i18n="admin_users_title">Comptes &amp; mouvements</h3>
+          <p class="settings-desc" data-i18n="admin_users_desc">Vue d'ensemble de tous les comptes : plan, activité, statut Stripe.</p>
+          <div class="form-row" style="margin-bottom:.8rem">
+            <input class="input" id="admin-users-search" placeholder="Rechercher un e-mail…" oninput="renderAdminUsersTable()" />
+          </div>
+          <div class="table-wrap">
+            <table class="data-table" id="admin-users-table">
+              <thead><tr>
+                <th data-i18n="admin_users_col_email">E-mail</th>
+                <th data-i18n="admin_users_col_plan">Plan</th>
+                <th data-i18n="admin_users_col_role">Rôle</th>
+                <th data-i18n="admin_users_col_created">Créé le</th>
+                <th data-i18n="admin_users_col_bankrolls">Bankrolls</th>
+                <th data-i18n="admin_users_col_sessions">Sessions</th>
+                <th data-i18n="admin_users_col_last_session">Dernière session</th>
+                <th data-i18n="admin_users_col_stripe">Stripe</th>
+              </tr></thead>
+              <tbody id="admin-users-tbody"></tbody>
+            </table>
+          </div>
+          <p class="form-hint" id="admin-users-empty" hidden data-i18n="admin_users_empty">Aucun compte ne correspond à cette recherche.</p>
         </div>
         <div class="settings-card">
           <h3 data-i18n="admin_grant_title">Attribuer Pokelo Pro</h3>
@@ -1995,7 +2058,7 @@
           <div class="segmented" id="quicklog-type-seg">
             <button type="button" data-val="tournament" class="active">Tournoi</button>
             <button type="button" data-val="cash">Cash</button>
-            <button type="button" data-val="expresso">Expresso</button>
+            <button type="button" data-val="expresso">Expresso<span class="pro-crown-inline"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 18h14l1.4-8.4-4.4 2.6-3-5.2-3 5.2-4.4-2.6L5 18Z"/></svg></span></button>
           </div>
         </div>
         <div class="form-group">
@@ -2039,7 +2102,7 @@
           <div class="segmented" id="session-type-seg">
             <button type="button" data-val="tournament" class="active">Tournoi</button>
             <button type="button" data-val="cash">Cash Game</button>
-            <button type="button" data-val="expresso">Expresso</button>
+            <button type="button" data-val="expresso">Expresso<span class="pro-crown-inline"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 18h14l1.4-8.4-4.4 2.6-3-5.2-3 5.2-4.4-2.6L5 18Z"/></svg></span></button>
           </div>
         </div>
         <div class="form-group">
@@ -2233,6 +2296,50 @@
 
 <div class="toast-container" id="toast-container" aria-live="polite"></div>
 
+<!-- ══════════════ MODAL : FEATURE POKELO PRO ══════════════ -->
+<div class="modal-overlay" id="pro-feature-modal-overlay" hidden onclick="if(event.target===this) closeProFeatureModal()">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 style="display:flex;align-items:center;gap:.5rem;">
+        <svg class="icon" style="width:20px;height:20px;color:#F5B700" viewBox="0 0 24 24" fill="currentColor"><path d="M5 18h14l1.4-8.4-4.4 2.6-3-5.2-3 5.2-4.4-2.6L5 18Z"/></svg>
+        <span data-i18n="pro_modal_title">Fonctionnalité Pokelo Pro</span>
+      </h3>
+      <button class="icon-btn" onclick="closeProFeatureModal()" aria-label="Fermer"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <p id="pro-feature-modal-text"></p>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-ghost" onclick="closeProFeatureModal()" data-i18n="pro_modal_close">Fermer</button>
+      <a href="#pricing" data-link class="btn-primary btn-sm" onclick="closeProFeatureModal()" data-i18n="pro_modal_cta">Découvrir Pokelo Pro</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MODAL : DÉFI MFA (à chaque connexion, sauf appareil de confiance) ══════════════ -->
+<div class="modal-overlay" id="mfa-challenge-overlay" hidden>
+  <div class="modal">
+    <div class="modal-head">
+      <h3 data-i18n="mfa_challenge_title">Vérification en deux étapes</h3>
+    </div>
+    <div class="modal-body">
+      <p class="settings-desc" data-i18n="mfa_challenge_desc">Entrez le code à 6 chiffres généré par votre application d'authentification.</p>
+      <div class="form-group">
+        <input class="input" id="mfa-challenge-code" placeholder="000000" maxlength="6" inputmode="numeric" autocomplete="one-time-code" />
+      </div>
+      <label class="tilt-check">
+        <input type="checkbox" id="mfa-trust-device" checked />
+        <span data-i18n="mfa_trust_device">Faire confiance à cet appareil (ne plus redemander le code ici)</span>
+      </label>
+      <div class="account-feedback" id="mfa-challenge-feedback" hidden></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-ghost" onclick="cancelMfaChallenge()" data-i18n="settings_account_mfa_cancel">Annuler</button>
+      <button class="btn-primary btn-sm" onclick="submitMfaChallenge()" data-i18n="settings_account_mfa_confirm">Confirmer</button>
+    </div>
+  </div>
+</div>
+
 <script src="js/pure-utils.js"></script>
 <script>
 /* ══════════════════════════════════════════════════════════════
@@ -2373,14 +2480,17 @@ function pickCurrency(selectId, code){
 }
 
 const DEFAULT_COLORS = { tournament:'#08BF2F', cash:'#3987e5', expresso:'#c98500', live:'#08BF2F', online:'#9085e9', good:'#08BF2F', critical:'#e66767' };
+const DEFAULT_STAKE_THRESHOLDS = { micro:5, low:25, mid:100 };
 function defaultSettings(){
-  return { lang:'fr', theme:'dark', dateFormat:'fr-long', colors: Object.assign({}, DEFAULT_COLORS) };
+  return { lang:'fr', theme:'dark', dateFormat:'fr-long', colors: Object.assign({}, DEFAULT_COLORS), stakeThresholds: Object.assign({}, DEFAULT_STAKE_THRESHOLDS) };
 }
 function applySettingsToDOM(){
+  document.body.classList.toggle('is-pro', isPremium());
   if (!state.settings) state.settings = defaultSettings();
   const s = state.settings;
   const c = Object.assign({}, DEFAULT_COLORS, s.colors);
   s.colors = c;
+  s.stakeThresholds = Object.assign({}, DEFAULT_STAKE_THRESHOLDS, s.stakeThresholds);
   document.documentElement.setAttribute('data-theme', s.theme === 'light' ? 'light' : 'dark');
   document.documentElement.setAttribute('lang', s.lang === 'en' ? 'en' : 'fr');
   const root = document.documentElement.style;
@@ -2562,6 +2672,12 @@ const I18N = {
     settings_account_mfa_secret_hint:'Ou entrez ce code manuellement dans votre application : {secret}',
     settings_account_mfa_verified:'Double authentification activée avec succès.',
     settings_account_mfa_invalid_code:'Code invalide. Vérifiez l\'heure de votre appareil et réessayez.',
+    mfa_challenge_title:'Vérification en deux étapes', mfa_challenge_desc:"Entrez le code à 6 chiffres généré par votre application d'authentification.",
+    mfa_trust_device:'Faire confiance à cet appareil (ne plus redemander le code ici)',
+    settings_trusted_devices_title:'Appareils de confiance',
+    settings_trusted_devices_desc:'Ces appareils ne redemandent pas de code MFA à la connexion. Retirez un appareil pour exiger à nouveau le code dessus.',
+    settings_trusted_devices_empty:'Aucun appareil de confiance pour le moment.',
+    settings_trusted_devices_added:'Ajouté le {date}', settings_trusted_devices_remove:'Retirer', device_current:'(cet appareil)',
     settings_account_export:'Exporter mes données', settings_account_export_desc:'Téléchargez une copie complète de vos bankrolls et sessions (droit à la portabilité des données).',
     settings_account_export_json:'Exporter en JSON', settings_account_export_csv:'Exporter les sessions en CSV',
     settings_account_delete:'Supprimer mon compte', settings_account_delete_desc:'Supprime définitivement votre compte et toutes vos données (bankrolls, sessions, préférences). Action irréversible.',
@@ -2572,6 +2688,7 @@ const I18N = {
     settings_account_plan:'Plan actuel', settings_account_plan_free:'Gratuit', settings_account_plan_pro:'Pro', settings_account_plan_team:'Équipe',
     settings_account_manage_plan:'Gérer mon abonnement',
     settings_account_view_plans:'Voir les plans disponibles',
+    settings_account_role_admin:'✓ Statut administrateur actif sur ce compte.',
     settings_account_next_billing:'Prochain débit le {date}',
     settings_account_profile:'Profil', settings_account_avatar_upload:'Changer la photo', settings_account_avatar_remove:'Retirer',
     settings_account_save:'Enregistrer', settings_account_profile_saved:'Profil mis à jour.',
@@ -2585,6 +2702,10 @@ const I18N = {
     admin_errors_title:'Dernières erreurs serveur', admin_errors_desc:"Webhook Stripe, création de session de paiement, crédit de parrainage — surveillez ici les échecs silencieux.",
     admin_errors_col_date:'Date', admin_errors_col_source:'Source', admin_errors_col_message:'Message',
     admin_errors_empty:'Aucune erreur récente. Tout va bien.', admin_load_error:"Impossible de charger les statistiques admin.",
+    admin_users_title:'Comptes & mouvements', admin_users_desc:"Vue d'ensemble de tous les comptes : plan, activité, statut Stripe.",
+    admin_users_col_email:'E-mail', admin_users_col_plan:'Plan', admin_users_col_role:'Rôle', admin_users_col_created:'Créé le',
+    admin_users_col_bankrolls:'Bankrolls', admin_users_col_sessions:'Sessions', admin_users_col_last_session:'Dernière session', admin_users_col_stripe:'Stripe',
+    admin_users_empty:'Aucun compte ne correspond à cette recherche.',
     admin_grant_title:'Attribuer Pokelo Pro', admin_grant_desc:"Donne ou retire un plan directement, sans passer par un vrai abonnement Stripe — utile pour offrir un accès à un joueur.",
     admin_grant_submit:'Appliquer', admin_grant_success:'{email} est maintenant sur le plan {plan}.', admin_grant_not_found:'Aucun compte avec cette adresse e-mail.',
     admin_promo_title:'Créer un code promo', admin_promo_desc:'Crée un coupon Stripe utilisable directement sur la page de paiement (champ « Code promo »).',
@@ -2603,12 +2724,16 @@ const I18N = {
     plan_feat_unlimited_bankrolls:'Bankrolls illimitées', plan_feat_modular_dashboard:'Dashboard modulaire', plan_feat_advanced_stats:'Statistiques avancées',
     plan_feat_all_pro:'Tout Pro, multi-joueurs', plan_feat_group_view:'Vue de groupe', plan_feat_roles:'Gestion des rôles',
     toast_sync_error:'La synchronisation a échoué. Vos changements seront réessayés automatiquement.',
+    toast_checkout_error:"Impossible d'ouvrir la page de paiement pour le moment. Réessayez dans quelques instants ou contactez le support.",
     toast_cloud_pull_error:'Impossible de récupérer vos données depuis le cloud. Vérifiez votre connexion.',
     toast_profile_public_updated:'Visibilité du profil mise à jour.',
-    upgrade_bankroll_limit:'Le plan gratuit est limité à 1 bankroll. Passez à Pokelo Pro (Mon compte) pour en créer davantage.',
-    upgrade_expresso:'Les sessions Expresso / Spin & Go sont réservées à Pokelo Pro.',
-    upgrade_export_csv:"L'export CSV est réservé à Pokelo Pro — l'export JSON reste disponible gratuitement.",
-    upgrade_dashboard_customize:'La personnalisation du dashboard (ajout, retrait, réorganisation des modules) est réservée à Pokelo Pro.',
+    pro_modal_title:'Fonctionnalité Pokelo Pro', pro_modal_close:'Fermer', pro_modal_cta:'Découvrir Pokelo Pro',
+    pro_modal_generic:'Cette fonctionnalité est réservée aux abonnés Pokelo Pro.',
+    pro_modal_bankrolls:'Le plan gratuit est limité à 1 bankroll. Passez à Pokelo Pro pour en créer autant que vous voulez.',
+    pro_modal_expresso:'Le suivi des sessions Expresso / Spin & Go est réservé à Pokelo Pro.',
+    pro_modal_export:"L'export CSV est réservé à Pokelo Pro — l'export JSON reste disponible gratuitement.",
+    pro_modal_dashboard:'La personnalisation du dashboard (ajout, retrait, réorganisation des modules) est réservée à Pokelo Pro.',
+    pro_modal_stakes:'La personnalisation des paliers de stakes est réservée à Pokelo Pro.',
     toast_account_deleted:'Votre compte a été supprimé définitivement.',
     toast_export_ready:'Export téléchargé.',
     networth_title:'Patrimoine total',
@@ -2635,6 +2760,9 @@ const I18N = {
     settings_colors_formats_title:'Couleurs des formats', settings_colors_formats_desc:'Personnalisez la couleur associée au live et à l\'online.',
     settings_colors_results_title:'Couleurs des résultats', settings_colors_results_desc:'Couleur utilisée pour les résultats positifs et négatifs.',
     settings_reset_colors:'Réinitialiser les couleurs', settings_positive:'Résultats positifs', settings_negative:'Résultats négatifs',
+    settings_stakes_title:'Seuils de stakes', settings_stakes_desc:'Personnalisez les paliers utilisés pour classer vos sessions (Micro / Low / Mid / High).',
+    stake_tier_micro:"Micro jusqu'à", stake_tier_low:"Low jusqu'à", stake_tier_mid:"Mid jusqu'à",
+    settings_stakes_hint:'Au-delà du seuil Mid, les sessions sont classées en High.', settings_reset_stakes:'Réinitialiser les seuils',
     label_tournament:'Tournoi', label_cash:'Cash Game', label_expresso:'Expresso', label_live:'Live', label_online:'Online',
     settings_saved:'Préférences enregistrées',
     module_bank_all_active:'Tous les modules sont actifs.', module_bank_empty_layout:'Aucun module actif.<br>Glissez-en un ici.',
@@ -2795,6 +2923,12 @@ const I18N = {
     settings_account_mfa_secret_hint:'Or enter this code manually in your app: {secret}',
     settings_account_mfa_verified:'Two-factor authentication enabled successfully.',
     settings_account_mfa_invalid_code:'Invalid code. Check your device\'s clock and try again.',
+    mfa_challenge_title:'Two-step verification', mfa_challenge_desc:'Enter the 6-digit code from your authenticator app.',
+    mfa_trust_device:"Trust this device (don't ask for a code here again)",
+    settings_trusted_devices_title:'Trusted devices',
+    settings_trusted_devices_desc:"These devices skip the MFA code at login. Remove a device to require the code there again.",
+    settings_trusted_devices_empty:'No trusted device yet.',
+    settings_trusted_devices_added:'Added on {date}', settings_trusted_devices_remove:'Remove', device_current:'(this device)',
     settings_account_export:'Export my data', settings_account_export_desc:'Download a full copy of your bankrolls and sessions (data portability right).',
     settings_account_export_json:'Export as JSON', settings_account_export_csv:'Export sessions as CSV',
     settings_account_delete:'Delete my account', settings_account_delete_desc:'Permanently deletes your account and all your data (bankrolls, sessions, preferences). This action is irreversible.',
@@ -2805,6 +2939,7 @@ const I18N = {
     settings_account_plan:'Current plan', settings_account_plan_free:'Free', settings_account_plan_pro:'Pro', settings_account_plan_team:'Team',
     settings_account_manage_plan:'Manage my subscription',
     settings_account_view_plans:'View available plans',
+    settings_account_role_admin:'✓ Administrator status active on this account.',
     settings_account_next_billing:'Next billing on {date}',
     settings_account_profile:'Profile', settings_account_avatar_upload:'Change photo', settings_account_avatar_remove:'Remove',
     settings_account_save:'Save', settings_account_profile_saved:'Profile updated.',
@@ -2818,6 +2953,10 @@ const I18N = {
     admin_errors_title:'Recent server errors', admin_errors_desc:'Stripe webhook, checkout session creation, referral crediting — monitor silent failures here.',
     admin_errors_col_date:'Date', admin_errors_col_source:'Source', admin_errors_col_message:'Message',
     admin_errors_empty:'No recent errors. All good.', admin_load_error:'Could not load admin stats.',
+    admin_users_title:'Accounts & activity', admin_users_desc:'Overview of every account: plan, activity, Stripe status.',
+    admin_users_col_email:'Email', admin_users_col_plan:'Plan', admin_users_col_role:'Role', admin_users_col_created:'Created',
+    admin_users_col_bankrolls:'Bankrolls', admin_users_col_sessions:'Sessions', admin_users_col_last_session:'Last session', admin_users_col_stripe:'Stripe',
+    admin_users_empty:'No account matches this search.',
     admin_grant_title:'Grant Pokelo Pro', admin_grant_desc:"Give or remove a plan directly, without a real Stripe subscription — useful to comp access for a player.",
     admin_grant_submit:'Apply', admin_grant_success:'{email} is now on the {plan} plan.', admin_grant_not_found:'No account with this email address.',
     admin_promo_title:'Create a promo code', admin_promo_desc:'Creates a Stripe coupon usable directly at checkout (the "Promo code" field).',
@@ -2836,12 +2975,16 @@ const I18N = {
     plan_feat_unlimited_bankrolls:'Unlimited bankrolls', plan_feat_modular_dashboard:'Modular dashboard', plan_feat_advanced_stats:'Advanced statistics',
     plan_feat_all_pro:'Everything in Pro, multi-player', plan_feat_group_view:'Group view', plan_feat_roles:'Role management',
     toast_sync_error:'Sync failed. Your changes will be retried automatically.',
+    toast_checkout_error:'Could not open the payment page right now. Try again shortly or contact support.',
     toast_cloud_pull_error:'Could not fetch your data from the cloud. Check your connection.',
     toast_profile_public_updated:'Profile visibility updated.',
-    upgrade_bankroll_limit:'The free plan is limited to 1 bankroll. Upgrade to Pokelo Pro (My account) to create more.',
-    upgrade_expresso:'Expresso / Spin & Go sessions are a Pokelo Pro feature.',
-    upgrade_export_csv:'CSV export is a Pokelo Pro feature — JSON export remains free.',
-    upgrade_dashboard_customize:'Dashboard customization (adding, removing, reordering modules) is a Pokelo Pro feature.',
+    pro_modal_title:'Pokelo Pro feature', pro_modal_close:'Close', pro_modal_cta:'Discover Pokelo Pro',
+    pro_modal_generic:'This feature is reserved for Pokelo Pro subscribers.',
+    pro_modal_bankrolls:'The free plan is limited to 1 bankroll. Upgrade to Pokelo Pro to create as many as you want.',
+    pro_modal_expresso:'Tracking Expresso / Spin & Go sessions is a Pokelo Pro feature.',
+    pro_modal_export:'CSV export is a Pokelo Pro feature — JSON export remains free.',
+    pro_modal_dashboard:'Dashboard customization (adding, removing, reordering modules) is a Pokelo Pro feature.',
+    pro_modal_stakes:'Customizing stake tiers is a Pokelo Pro feature.',
     toast_account_deleted:'Your account has been permanently deleted.',
     toast_export_ready:'Export downloaded.',
     networth_title:'Total net worth',
@@ -2868,6 +3011,9 @@ const I18N = {
     settings_colors_formats_title:'Format colors', settings_colors_formats_desc:'Customize the color associated with live and online.',
     settings_colors_results_title:'Result colors', settings_colors_results_desc:'Color used for positive and negative results.',
     settings_reset_colors:'Reset colors', settings_positive:'Positive results', settings_negative:'Negative results',
+    settings_stakes_title:'Stake tiers', settings_stakes_desc:'Customize the thresholds used to classify your sessions (Micro / Low / Mid / High).',
+    stake_tier_micro:'Micro up to', stake_tier_low:'Low up to', stake_tier_mid:'Mid up to',
+    settings_stakes_hint:'Above the Mid threshold, sessions are classified as High.', settings_reset_stakes:'Reset thresholds',
     label_tournament:'Tournament', label_cash:'Cash Game', label_expresso:'Spin & Go', label_live:'Live', label_online:'Online',
     settings_saved:'Preferences saved',
     module_bank_all_active:'All modules are active.', module_bank_empty_layout:'No active module.<br>Drag one here.',
@@ -3999,7 +4145,7 @@ const DASHBOARD_PRESETS = {
   casualLive: ['recent','evolution','summary','heatmap','tiltSessions','roi'],
 };
 function applyPreset(name){
-  if (!isPremium()) { showToast(t('upgrade_dashboard_customize'), 'error'); return; }
+  if (!isPremium()) { showProFeatureModal('dashboard'); return; }
   const preset = DASHBOARD_PRESETS[name];
   if (!preset) return;
   state.dashboardLayout = preset.slice();
@@ -4070,7 +4216,7 @@ function renderDashboardModules(bk, sessions){
   const grid = document.getElementById('dashboard-modules');
   if (!grid) return;
   if (!state.dashboardLayout.length) {
-    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><p>Aucun module actif. Cliquez sur « Personnaliser » pour en ajouter.</p><button class="btn-primary btn-sm" onclick="openCustomizeModal()">Personnaliser</button></div>`;
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><p>Aucun module actif. Cliquez sur « Personnaliser » pour en ajouter.</p><button class="btn-primary btn-sm" onclick="openCustomizeModal()">Personnaliser${proCrownHtml('dashboard')}</button></div>`;
     return;
   }
   grid.innerHTML = state.dashboardLayout.map(id => moduleCardHtml(id, bk, sessions)).join('');
@@ -4158,9 +4304,10 @@ function meanStdDev(values){
   return { mean, stddev: Math.sqrt(variance) };
 }
 function stakeTier(buyIn){
-  if (buyIn <= 5) return 'micro';
-  if (buyIn <= 25) return 'low';
-  if (buyIn <= 100) return 'mid';
+  const th = (state.settings && state.settings.stakeThresholds) || DEFAULT_STAKE_THRESHOLDS;
+  if (buyIn <= th.micro) return 'micro';
+  if (buyIn <= th.low) return 'low';
+  if (buyIn <= th.mid) return 'mid';
   return 'high';
 }
 function longestStreak(sessions, wantWin){
@@ -4692,7 +4839,7 @@ function renderModuleShowcase(){
     </div>`).join('');
 }
 function openCustomizeModal(){
-  if (!isPremium()) { showToast(t('upgrade_dashboard_customize'), 'error'); return; }
+  if (!isPremium()) { showProFeatureModal('dashboard'); return; }
   ensureLayout();
   renderCustomizeLists();
   document.getElementById('customize-modal-overlay').hidden = false;
@@ -4726,12 +4873,12 @@ function lockedModuleChipHtml(id){
   </div>`;
 }
 function addModule(id){
-  if (!isPremium()) { showToast(t('upgrade_dashboard_customize'), 'error'); return; }
+  if (!isPremium()) { showProFeatureModal('dashboard'); return; }
   if (!state.dashboardLayout.includes(id)) state.dashboardLayout.push(id);
   saveState(); renderCustomizeLists(); refreshDashboardIfActive();
 }
 function removeModule(id){
-  if (!isPremium()) { showToast(t('upgrade_dashboard_customize'), 'error'); return; }
+  if (!isPremium()) { showProFeatureModal('dashboard'); return; }
   state.dashboardLayout = state.dashboardLayout.filter(x=>x!==id);
   saveState(); renderCustomizeLists(); refreshDashboardIfActive();
 }
@@ -4853,6 +5000,21 @@ let syncDebounceTimer = null;
 //    réservée à Pro ; le plan gratuit garde un dashboard par défaut fixe
 const FREE_BANKROLL_LIMIT = 1;
 function isPremium(){ return currentPlan && currentPlan !== 'free'; }
+
+const PRO_CROWN_ICON = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 18h14l1.4-8.4-4.4 2.6-3-5.2-3 5.2-4.4-2.6L5 18Z"/></svg>';
+// Petite couronne cliquable à afficher à côté de toute fonctionnalité Pro
+// pour un utilisateur gratuit — jamais rendue pour un compte déjà Pro.
+function proCrownHtml(featureKey){
+  return isPremium() ? '' : `<span class="pro-crown" onclick="showProFeatureModal('${featureKey}')" title="${t('pro_modal_title')}">${PRO_CROWN_ICON}</span>`;
+}
+function showProFeatureModal(featureKey){
+  const el = document.getElementById('pro-feature-modal-text');
+  if (el) el.textContent = t('pro_modal_' + featureKey) || t('pro_modal_generic');
+  document.getElementById('pro-feature-modal-overlay').hidden = false;
+}
+function closeProFeatureModal(){
+  document.getElementById('pro-feature-modal-overlay').hidden = true;
+}
 
 function setAccountTab(tab){
   document.querySelectorAll('.account-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
@@ -4978,6 +5140,7 @@ async function syncPushToCloudRun(){
     await supabase.from('profiles').upsert({
       id: userId, email: currentUser.email, lang: state.settings.lang, theme: state.settings.theme,
       date_format: state.settings.dateFormat, colors: state.settings.colors,
+      stake_thresholds: state.settings.stakeThresholds,
       dashboard_layout: state.dashboardLayout,
       display_name: profile.displayName || null, avatar_url: profile.avatarUrl || null, is_public: !!profile.isPublic,
     });
@@ -5002,10 +5165,140 @@ function hideAppLoadingSkeleton(){
   const el = document.getElementById('app-loading-overlay');
   if (el) el.hidden = true;
 }
+let pendingSignInSession = null;
+let mfaChallengeFactorId = null;
 async function onAuthSignedIn(session){
   currentUser = session.user;
   authCheckComplete = true;
   updateAccountUI();
+  // MFA à chaque connexion, sauf sur un appareil marqué de confiance — le mot
+  // de passe seul (aal1) ne suffit alors pas à continuer : on bloque sur un
+  // écran de code avant de charger quoi que ce soit côté compte.
+  try {
+    const needsMfa = await checkMfaChallengeNeeded();
+    if (needsMfa) {
+      pendingSignInSession = session;
+      showMfaChallengeScreen();
+      return;
+    }
+  } catch (e) { /* échec du contrôle MFA lui-même : on ne bloque pas la connexion pour ça */ }
+  await completeSignIn(session);
+}
+async function checkMfaChallengeNeeded(){
+  const { data, error } = await supabase.auth.mfa.listFactors();
+  if (error) return false;
+  const verified = (data.totp && data.totp[0]) || (data.all || []).find(f => f.factor_type === 'totp' && f.status === 'verified');
+  if (!verified) return false;
+  mfaChallengeFactorId = verified.id;
+  const trusted = await isDeviceTrusted(currentUser.id, getOrCreateDeviceId());
+  return !trusted;
+}
+function showMfaChallengeScreen(){
+  hideAppLoadingSkeleton();
+  const code = document.getElementById('mfa-challenge-code');
+  const feedback = document.getElementById('mfa-challenge-feedback');
+  const trust = document.getElementById('mfa-trust-device');
+  if (code) code.value = '';
+  if (feedback) feedback.hidden = true;
+  if (trust) trust.checked = true;
+  document.getElementById('mfa-challenge-overlay').hidden = false;
+}
+async function cancelMfaChallenge(){
+  document.getElementById('mfa-challenge-overlay').hidden = true;
+  pendingSignInSession = null;
+  if (window.supabase) await supabase.auth.signOut().catch(() => {});
+  currentUser = null;
+  currentUserRole = 'user';
+  authCheckComplete = true;
+  updateAccountUI();
+  router();
+}
+async function submitMfaChallenge(){
+  const feedback = document.getElementById('mfa-challenge-feedback');
+  const code = document.getElementById('mfa-challenge-code').value.trim();
+  feedback.hidden = false; feedback.className = 'account-feedback'; feedback.textContent = t('account_loading');
+  try {
+    const { data: challenge, error: challengeErr } = await supabase.auth.mfa.challenge({ factorId: mfaChallengeFactorId });
+    if (challengeErr) throw challengeErr;
+    const { error: verifyErr } = await supabase.auth.mfa.verify({ factorId: mfaChallengeFactorId, challengeId: challenge.id, code });
+    if (verifyErr) throw verifyErr;
+    if (document.getElementById('mfa-trust-device').checked) {
+      await trustCurrentDevice(currentUser.id, getOrCreateDeviceId());
+    }
+    document.getElementById('mfa-challenge-overlay').hidden = true;
+    const session = pendingSignInSession;
+    pendingSignInSession = null;
+    await completeSignIn(session);
+  } catch (e) {
+    feedback.className = 'account-feedback error';
+    feedback.textContent = t('settings_account_mfa_invalid_code');
+  }
+}
+function getOrCreateDeviceId(){
+  let id = localStorage.getItem('pokelo_device_id');
+  if (!id) {
+    id = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : (uid() + uid());
+    localStorage.setItem('pokelo_device_id', id);
+  }
+  return id;
+}
+function deviceLabel(){
+  const ua = navigator.userAgent || '';
+  let os = 'Appareil';
+  if (/Windows/i.test(ua)) os = 'Windows';
+  else if (/Mac OS/i.test(ua)) os = 'Mac';
+  else if (/Android/i.test(ua)) os = 'Android';
+  else if (/iPhone|iPad/i.test(ua)) os = 'iOS';
+  else if (/Linux/i.test(ua)) os = 'Linux';
+  let browser = '';
+  if (/Edg\//i.test(ua)) browser = 'Edge';
+  else if (/Chrome\//i.test(ua)) browser = 'Chrome';
+  else if (/Firefox\//i.test(ua)) browser = 'Firefox';
+  else if (/Safari\//i.test(ua)) browser = 'Safari';
+  return browser ? `${os} · ${browser}` : os;
+}
+async function isDeviceTrusted(userId, deviceId){
+  try {
+    const { data, error } = await supabase.from('trusted_devices').select('id').eq('user_id', userId).eq('device_id', deviceId).maybeSingle();
+    if (error) return false;
+    return !!data;
+  } catch (e) { return false; }
+}
+async function trustCurrentDevice(userId, deviceId){
+  try {
+    await supabase.from('trusted_devices').upsert(
+      { user_id: userId, device_id: deviceId, label: deviceLabel(), last_seen_at: new Date().toISOString() },
+      { onConflict: 'user_id,device_id' }
+    );
+  } catch (e) {}
+}
+async function renderTrustedDevices(){
+  const el = document.getElementById('trusted-devices-list');
+  if (!el || !currentUser || !window.supabase) return;
+  try {
+    const { data, error } = await supabase.from('trusted_devices').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
+    if (error) throw error;
+    if (!data || !data.length) { el.innerHTML = `<p class="form-hint">${t('settings_trusted_devices_empty')}</p>`; return; }
+    const currentDeviceId = getOrCreateDeviceId();
+    const locale = state.settings.lang === 'en' ? 'en-US' : 'fr-FR';
+    el.innerHTML = data.map(d => `
+      <div class="device-row">
+        <div>
+          <div class="device-label">${escapeHtml(d.label || 'Appareil')}${d.device_id === currentDeviceId ? ` <span class="device-current">${t('device_current')}</span>` : ''}</div>
+          <div class="form-hint">${t('settings_trusted_devices_added').replace('{date}', new Date(d.created_at).toLocaleDateString(locale))}</div>
+        </div>
+        <button class="btn-ghost btn-sm" onclick="removeTrustedDevice('${d.id}')">${t('settings_trusted_devices_remove')}</button>
+      </div>`).join('');
+  } catch (e) {
+    el.innerHTML = '';
+  }
+}
+async function removeTrustedDevice(id){
+  try { await supabase.from('trusted_devices').delete().eq('id', id); } catch (e) {}
+  renderTrustedDevices();
+}
+async function completeSignIn(session){
+  currentUser = session.user;
   showAppLoadingSkeleton();
   try {
     const cloud = await pullFromCloud(currentUser.id);
@@ -5033,6 +5326,7 @@ async function onAuthSignedIn(session){
           lang: cloud.profile.lang || 'fr', theme: cloud.profile.theme || 'dark',
           dateFormat: cloud.profile.date_format || 'fr-long',
           colors: Object.assign({}, DEFAULT_COLORS, cloud.profile.colors || {}),
+          stakeThresholds: Object.assign({}, DEFAULT_STAKE_THRESHOLDS, cloud.profile.stake_thresholds || {}),
         });
         state.dashboardLayout = Array.isArray(cloud.profile.dashboard_layout) && cloud.profile.dashboard_layout.length
           ? cloud.profile.dashboard_layout : DEFAULT_LAYOUT.slice();
@@ -5136,6 +5430,11 @@ function renderSettingsPage(){
     const el = document.getElementById('color-'+k);
     if (el) el.value = s.colors[k];
   });
+  const th = Object.assign({}, DEFAULT_STAKE_THRESHOLDS, s.stakeThresholds);
+  ['micro','low','mid'].forEach(k => {
+    const el = document.getElementById('stake-threshold-'+k);
+    if (el) el.value = th[k];
+  });
 }
 
 function renderAccountSettings(){
@@ -5167,9 +5466,12 @@ function renderAccountSettings(){
   }
   const manageBtn = document.getElementById('settings-account-manage-plan-btn');
   if (manageBtn) manageBtn.hidden = !isPremium();
+  const roleLabelEl = document.getElementById('settings-account-role-label');
+  if (roleLabelEl) roleLabelEl.textContent = currentUserRole === 'admin' ? t('settings_account_role_admin') : '';
   renderProfileSettings();
   renderReferralSettings();
   refreshMfaStatus();
+  renderTrustedDevices();
 }
 
 function renderReferralSettings(){
@@ -5200,6 +5502,32 @@ function copyReferralLink(){
 /* ══════════════════════════════════════════════════════════════
    POKELO — panneau admin (rôle admin uniquement, revérifié côté serveur)
    ══════════════════════════════════════════════════════════════ */
+let adminUsersCache = [];
+function renderAdminUsersTable(){
+  const tbody = document.getElementById('admin-users-tbody');
+  const emptyEl = document.getElementById('admin-users-empty');
+  if (!tbody) return;
+  const q = (document.getElementById('admin-users-search').value || '').trim().toLowerCase();
+  const locale = state.settings.lang === 'en' ? 'en-US' : 'fr-FR';
+  const rows = adminUsersCache.filter(u => !q || (u.email || '').toLowerCase().includes(q));
+  if (!rows.length) {
+    tbody.innerHTML = '';
+    if (emptyEl) emptyEl.hidden = false;
+    return;
+  }
+  if (emptyEl) emptyEl.hidden = true;
+  tbody.innerHTML = rows.map(u => `
+    <tr>
+      <td>${escapeHtml(u.email || '—')}</td>
+      <td>${escapeHtml(u.plan)}</td>
+      <td>${escapeHtml(u.role)}</td>
+      <td>${u.createdAt ? escapeHtml(new Date(u.createdAt).toLocaleDateString(locale)) : '—'}</td>
+      <td>${u.bankrollCount}</td>
+      <td>${u.sessionCount}</td>
+      <td>${u.lastSessionAt ? escapeHtml(new Date(u.lastSessionAt).toLocaleDateString(locale)) : '—'}</td>
+      <td>${u.hasStripeCustomer ? '✓' : '—'}</td>
+    </tr>`).join('');
+}
 async function renderAdminPanel(){
   const feedback = document.getElementById('admin-feedback');
   if (feedback) { feedback.hidden = false; feedback.className = 'account-feedback'; feedback.textContent = t('account_loading'); }
@@ -5216,6 +5544,9 @@ async function renderAdminPanel(){
     document.getElementById('admin-stat-pro').textContent = (data.planCounts.pro || 0) + (data.planCounts.team || 0);
     document.getElementById('admin-stat-signups30').textContent = data.signups30d;
     document.getElementById('admin-stat-referrals').textContent = data.referralRewardsGiven;
+
+    adminUsersCache = data.users || [];
+    renderAdminUsersTable();
 
     const tbody = document.getElementById('admin-errors-tbody');
     const emptyEl = document.getElementById('admin-errors-empty');
@@ -5452,7 +5783,7 @@ function pricingCtaCell(plan, highlight){
   }
   if (plan.priceId) {
     const cls = plan.featured ? 'btn-primary' : 'btn-secondary';
-    return `<button class="${cls} btn-sm" onclick="startCheckout('${plan.priceId}')" data-i18n="price_cta_subscribe">${t('price_cta_subscribe')}</button>`;
+    return `<button class="${cls} btn-sm" onclick="startCheckout('${plan.priceId}', this)">${t('price_cta_subscribe')}</button>`;
   }
   const cls = plan.featured ? 'btn-primary' : 'btn-secondary';
   return `<button class="${cls} btn-sm" disabled data-i18n="price_cta_soon">${t('price_cta_soon')}</button>`;
@@ -5512,7 +5843,8 @@ async function openBillingPortal(){
   }
 }
 
-async function startCheckout(priceId){
+async function startCheckout(priceId, btn){
+  if (btn) { btn.disabled = true; btn.dataset.origText = btn.textContent; btn.textContent = t('account_loading'); }
   try {
     const { data: { session } } = await supabase.auth.getSession();
     const token = session && session.access_token;
@@ -5522,11 +5854,13 @@ async function startCheckout(priceId){
       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({ priceId }),
     });
-    const data = await res.json();
-    if (!res.ok || !data.url) throw new Error(data.error || 'checkout-failed');
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.url) throw new Error((data && data.error) || 'checkout-failed');
     location.href = data.url;
   } catch (e) {
     console.warn('Stripe checkout failed:', e);
+    showToast(t('toast_checkout_error'), 'error');
+    if (btn) { btn.disabled = false; btn.textContent = btn.dataset.origText || t('price_cta_subscribe'); }
   }
 }
 
@@ -5659,7 +5993,7 @@ function exportDataJson(){
 }
 // csvEscape : voir js/pure-utils.js
 function exportDataCsv(){
-  if (!isPremium()) { showToast(t('upgrade_export_csv'), 'error'); return; }
+  if (!isPremium()) { showProFeatureModal('export'); return; }
   const cols = ['date','bankroll','type','format','devise','tauxChange','miseEngagee','gainTotal','resultat','site','variante','dureeMin','tilt','notes'];
   const rows = [cols.join(';')];
   state.sessions.slice().sort((a,b)=>a.date.localeCompare(b.date)).forEach(s => {
@@ -5730,6 +6064,32 @@ function resetColors(){
   state.settings.colors = Object.assign({}, DEFAULT_COLORS);
   saveState();
   applySettingsToDOM();
+  renderSettingsPage();
+  refreshAllViewsAfterSettingsChange();
+}
+function handleStakeInputGuard(e){
+  if (isPremium()) return;
+  e.preventDefault();
+  e.target.blur();
+  showProFeatureModal('stakes');
+}
+function updateStakeThreshold(key, val){
+  if (!isPremium()) { showProFeatureModal('stakes'); renderSettingsPage(); return; }
+  if (!state.settings) state.settings = defaultSettings();
+  const th = Object.assign({}, DEFAULT_STAKE_THRESHOLDS, state.settings.stakeThresholds);
+  const n = Number(val);
+  if (Number.isFinite(n) && n > 0) th[key] = Math.round(n * 100) / 100;
+  if (th.low <= th.micro) th.low = th.micro + 0.01;
+  if (th.mid <= th.low) th.mid = th.low + 0.01;
+  state.settings.stakeThresholds = th;
+  saveState();
+  renderSettingsPage();
+  refreshAllViewsAfterSettingsChange();
+}
+function resetStakeThresholds(){
+  if (!isPremium()) { showProFeatureModal('stakes'); return; }
+  state.settings.stakeThresholds = Object.assign({}, DEFAULT_STAKE_THRESHOLDS);
+  saveState();
   renderSettingsPage();
   refreshAllViewsAfterSettingsChange();
 }
@@ -5930,7 +6290,7 @@ function confirmDeleteBankroll(id){
    ══════════════════════════════════════════════════════════════ */
 function openBankrollModal(id){
   if (!id && !isPremium() && state.bankrolls.length >= FREE_BANKROLL_LIMIT) {
-    showToast(t('upgrade_bankroll_limit'), 'error');
+    showProFeatureModal('bankrolls');
     return;
   }
   document.getElementById('bankroll-id').value = id || '';
@@ -5972,7 +6332,7 @@ function setSegmented(containerId, val){
 document.addEventListener('click', function(e){
   const seg = e.target.closest('#session-type-seg button, #session-format-seg button, #quicklog-type-seg button, #quicklog-format-seg button');
   if (!seg) return;
-  if (seg.dataset.val === 'expresso' && !isPremium()) { showToast(t('upgrade_expresso'), 'error'); return; }
+  if (seg.dataset.val === 'expresso' && !isPremium()) { showProFeatureModal('expresso'); return; }
   const parent = seg.parentElement;
   parent.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
   seg.classList.add('active');

@@ -34,6 +34,7 @@ create table public.profiles (
   date_format text default 'fr-long',
   colors jsonb default '{}'::jsonb,
   dashboard_layout jsonb default '["evolution","monthly","recent"]'::jsonb,
+  stake_thresholds jsonb default '{}'::jsonb,
   created_at timestamptz default now()
 );
 
@@ -319,3 +320,47 @@ Le panneau admin (`#/app/admin`) permet aussi :
 
 Les deux revérifient `role === 'admin'` côté serveur avant d'agir, comme
 `api/admin-stats.js`.
+
+## 9. Appareils de confiance (MFA à chaque connexion)
+
+À exécuter dans Supabase (SQL Editor) — le MFA est désormais redemandé à
+chaque connexion, sauf sur un appareil que l'utilisateur a explicitement
+marqué de confiance après un code réussi :
+
+```sql
+create table if not exists public.trusted_devices (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references public.profiles(id) on delete cascade,
+  device_id text not null,
+  label text,
+  created_at timestamptz default now(),
+  last_seen_at timestamptz default now(),
+  unique (user_id, device_id)
+);
+
+alter table public.trusted_devices enable row level security;
+
+create policy "trusted_devices: owner only" on public.trusted_devices
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+```
+
+Le client lit/écrit directement cette table via le client Supabase (comme
+`bankrolls`/`sessions`) — la policy RLS garantit qu'un utilisateur ne peut
+voir/modifier que ses propres appareils. `device_id` est un identifiant
+aléatoire généré et stocké dans `localStorage` (pas un fingerprint) : il
+identifie ce navigateur précis, pas la personne.
+
+## 10. Seuils de stakes personnalisés (Pokelo Pro)
+
+Si la table `profiles` a été créée avant l'ajout de cette fonctionnalité, il
+manque la colonne `stake_thresholds` — à exécuter dans Supabase (SQL Editor) :
+
+```sql
+alter table public.profiles
+  add column if not exists stake_thresholds jsonb default '{}'::jsonb;
+```
+
+Sans cette colonne, PostgREST rejette l'upsert `profiles` en entier (colonne
+inconnue) : plus aucun réglage (langue, thème, couleurs, dashboard) ne se
+synchronise tant que la migration n'est pas faite. Exécutez cette requête dès
+que possible après la mise à jour du code.
