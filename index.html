@@ -5009,6 +5009,18 @@ async function onAuthSignedIn(session){
   showAppLoadingSkeleton();
   try {
     const cloud = await pullFromCloud(currentUser.id);
+    // Le plan/rôle/code de parrainage doivent toujours refléter le cloud dès
+    // la connexion, indépendamment de la fusion bankrolls/sessions ci-dessous
+    // — sinon un compte sans bankroll cloud (ex. un compte admin fraîchement
+    // créé, jamais utilisé pour du suivi de bankroll) pouvait garder le rôle
+    // par défaut 'user' toute la session si le navigateur avait encore des
+    // données locales d'un autre compte (branche syncPushToCloud ci-dessous).
+    if (cloud.profile) {
+      currentPlan = cloud.profile.plan || 'free';
+      currentPlanPeriodEnd = cloud.profile.stripe_current_period_end || null;
+      currentReferralCode = cloud.profile.referral_code || null;
+      currentUserRole = cloud.profile.role || 'user';
+    }
     const hasCloudData = cloud.bankrolls.length > 0;
     const hasLocalRealData = state.bankrolls.length > 0 && !state.isDemo;
     if (!hasCloudData && hasLocalRealData) {
@@ -5024,10 +5036,6 @@ async function onAuthSignedIn(session){
         });
         state.dashboardLayout = Array.isArray(cloud.profile.dashboard_layout) && cloud.profile.dashboard_layout.length
           ? cloud.profile.dashboard_layout : DEFAULT_LAYOUT.slice();
-        currentPlan = cloud.profile.plan || 'free';
-        currentPlanPeriodEnd = cloud.profile.stripe_current_period_end || null;
-        currentReferralCode = cloud.profile.referral_code || null;
-        currentUserRole = cloud.profile.role || 'user';
         state.profile = {
           displayName: cloud.profile.display_name || '',
           avatarUrl: cloud.profile.avatar_url || '',
