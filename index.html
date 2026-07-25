@@ -2281,7 +2281,13 @@
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<!-- defer : Chart.js n'est utilisé que dans le dashboard (#/app), jamais sur la
+     landing/blog/légal — un utilisateur non connecté n'atteint jamais un appel
+     à new Chart(...) pendant le parsing initial (le routeur redirige vers
+     #/account de façon synchrone), et côté connecté le premier dessin de
+     graphique n'arrive qu'après l'aller-retour réseau de complétion du login,
+     largement après que ce script différé ait fini de s'exécuter. -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" defer></script>
 <script type="module">
   import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.8';
   try {
