@@ -364,3 +364,22 @@ Sans cette colonne, PostgREST rejette l'upsert `profiles` en entier (colonne
 inconnue) : plus aucun réglage (langue, thème, couleurs, dashboard) ne se
 synchronise tant que la migration n'est pas faite. Exécutez cette requête dès
 que possible après la mise à jour du code.
+
+## 11. Proposition MFA à la première connexion
+
+À exécuter dans Supabase (SQL Editor) — sans cette colonne, l'écran "Sécuriser
+votre compte" (activer le MFA ou passer) est réaffiché à **chaque** connexion
+au lieu d'une seule fois, puisque le client ne peut pas savoir s'il a déjà été
+présenté à ce compte :
+
+```sql
+alter table public.profiles
+  add column if not exists mfa_setup_prompted boolean not null default false;
+```
+
+Comportement : à la première connexion d'un compte sans facteur MFA vérifié,
+un écran propose de l'activer ou de reporter ("Plus tard"). Dans les deux cas,
+`mfa_setup_prompted` passe à `true` et l'écran ne réapparaît plus. Si
+l'utilisateur a choisi "Plus tard" (ou a fermé sans configurer), un
+avertissement discret reste visible dans Paramètres → Mon compte, au niveau du
+bouton d'activation du MFA, jusqu'à ce qu'il l'active réellement.

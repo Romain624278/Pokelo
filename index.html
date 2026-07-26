@@ -683,7 +683,7 @@
      soit confirmée, aucun élément du dashboard (montants, graphiques) ne doit
      être visible même partiellement. Un flou seul laisse encore deviner des
      chiffres à fort contraste (vert/rouge des résultats). */
-  #mfa-challenge-overlay { background: var(--black); backdrop-filter: none; }
+  #mfa-challenge-overlay, #mfa-setup-prompt-overlay { background: var(--black); backdrop-filter: none; }
   .modal { background: var(--black-card); border: 1px solid var(--border); border-radius: 14px; width: 100%; max-width: 560px; max-height: 88vh; overflow-y: auto; box-shadow: 0 30px 80px rgba(0,0,0,0.5); }
   .modal-head { display: flex; align-items: center; justify-content: space-between; padding: 1.3rem 1.6rem; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--black-card); z-index: 1; }
   .modal-head h3 { font-size: 1.05rem; font-weight: 700; color: var(--text); }
@@ -2359,6 +2359,23 @@
   </div>
 </div>
 
+<!-- ══════════════ MODAL : PROPOSITION MFA (première connexion uniquement) ══════════════ -->
+<div class="modal-overlay" id="mfa-setup-prompt-overlay" hidden>
+  <div class="modal">
+    <div class="modal-head">
+      <h3 data-i18n="mfa_setup_prompt_title">Sécuriser votre compte</h3>
+    </div>
+    <div class="modal-body">
+      <p class="settings-desc" data-i18n="mfa_setup_prompt_desc">Activez la vérification en deux étapes (MFA) pour protéger votre compte et vos données de bankroll. Vous pourrez la configurer à tout moment depuis les paramètres.</p>
+      <div class="account-feedback" id="mfa-setup-prompt-feedback" hidden></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-ghost" onclick="skipMfaSetup()" data-i18n="mfa_setup_prompt_skip">Plus tard</button>
+      <button class="btn-primary btn-sm" onclick="chooseMfaSetupNow()" data-i18n="mfa_setup_prompt_configure">Configurer maintenant</button>
+    </div>
+  </div>
+</div>
+
 <script src="js/pure-utils.js"></script>
 <script>
 /* ══════════════════════════════════════════════════════════════
@@ -2692,6 +2709,9 @@ const I18N = {
     settings_account_mfa_invalid_code:'Code invalide. Vérifiez l\'heure de votre appareil et réessayez.',
     mfa_challenge_title:'Vérification en deux étapes', mfa_challenge_desc:"Entrez le code à 6 chiffres généré par votre application d'authentification.",
     mfa_trust_device:'Faire confiance à cet appareil (ne plus redemander le code ici)',
+    mfa_setup_prompt_title:'Sécuriser votre compte', mfa_setup_prompt_desc:'Activez la vérification en deux étapes (MFA) pour protéger votre compte et vos données de bankroll. Vous pourrez la configurer à tout moment depuis les paramètres.',
+    mfa_setup_prompt_skip:'Plus tard', mfa_setup_prompt_configure:'Configurer maintenant',
+    settings_account_mfa_warning:"Vous n'avez pas activé la double authentification — votre compte est moins protégé.",
     settings_trusted_devices_title:'Appareils de confiance',
     settings_trusted_devices_desc:'Ces appareils ne redemandent pas de code MFA à la connexion. Retirez un appareil pour exiger à nouveau le code dessus.',
     settings_trusted_devices_empty:'Aucun appareil de confiance pour le moment.',
@@ -2944,6 +2964,9 @@ const I18N = {
     settings_account_mfa_invalid_code:'Invalid code. Check your device\'s clock and try again.',
     mfa_challenge_title:'Two-step verification', mfa_challenge_desc:'Enter the 6-digit code from your authenticator app.',
     mfa_trust_device:"Trust this device (don't ask for a code here again)",
+    mfa_setup_prompt_title:'Secure your account', mfa_setup_prompt_desc:'Enable two-step verification (MFA) to protect your account and bankroll data. You can set it up at any time from settings.',
+    mfa_setup_prompt_skip:'Later', mfa_setup_prompt_configure:'Set up now',
+    settings_account_mfa_warning:"You haven't enabled two-factor authentication — your account is less protected.",
     settings_trusted_devices_title:'Trusted devices',
     settings_trusted_devices_desc:"These devices skip the MFA code at login. Remove a device to require the code there again.",
     settings_trusted_devices_empty:'No trusted device yet.',
@@ -5184,21 +5207,37 @@ function hideAppLoadingSkeleton(){
 }
 let pendingSignInSession = null;
 let mfaChallengeFactorId = null;
+let mfaSetupPrompted = false;
 async function onAuthSignedIn(session){
   currentUser = session.user;
   authCheckComplete = true;
   updateAccountUI();
   // MFA à chaque connexion, sauf sur un appareil marqué de confiance — le mot
   // de passe seul (aal1) ne suffit alors pas à continuer : on bloque sur un
-  // écran de code avant de charger quoi que ce soit côté compte.
+  // écran de code avant de charger quoi que ce soit côté compte. Si aucun
+  // facteur n'est configuré, on propose l'activation une seule fois (première
+  // connexion) plutôt que de bloquer sur un défi qui n'a pas lieu d'être.
   try {
-    const needsMfa = await checkMfaChallengeNeeded();
-    if (needsMfa) {
-      pendingSignInSession = session;
-      showMfaChallengeScreen();
-      return;
+    let factors = [];
+    try { factors = await listVerifiedTotpFactors(); } catch (e) { console.warn('listVerifiedTotpFactors:', e); factors = []; }
+    if (factors.length) {
+      mfaChallengeFactorId = factors[0].id;
+      const trusted = await isDeviceTrusted(currentUser.id, getOrCreateDeviceId());
+      if (!trusted) {
+        pendingSignInSession = session;
+        showMfaChallengeScreen();
+        return;
+      }
+    } else {
+      const prompted = await fetchMfaSetupPrompted(currentUser.id);
+      if (!prompted) {
+        pendingSignInSession = session;
+        showMfaSetupPromptScreen();
+        return;
+      }
+      mfaSetupPrompted = true;
     }
-  } catch (e) { /* échec du contrôle MFA lui-même : on ne bloque pas la connexion pour ça */ }
+  } catch (e) { console.warn('Contrôle MFA à la connexion échoué :', e); /* on ne bloque pas la connexion pour ça */ }
   await completeSignIn(session);
 }
 // Renvoie TOUS les facteurs TOTP vérifiés, pas seulement le premier — plusieurs
@@ -5216,13 +5255,43 @@ async function listVerifiedTotpFactors(){
   (data.all || []).forEach(f => { if (f.factor_type === 'totp' && f.status === 'verified') merged.set(f.id, f); });
   return Array.from(merged.values());
 }
-async function checkMfaChallengeNeeded(){
-  let factors;
-  try { factors = await listVerifiedTotpFactors(); } catch (e) { return false; }
-  if (!factors.length) return false;
-  mfaChallengeFactorId = factors[0].id;
-  const trusted = await isDeviceTrusted(currentUser.id, getOrCreateDeviceId());
-  return !trusted;
+// Lu séparément (avant le pull complet de completeSignIn) pour décider s'il
+// faut proposer l'activation du MFA à cette connexion. `false` par défaut
+// (colonne manquante, erreur réseau...) : on préfère proposer une fois de
+// trop plutôt que de ne jamais informer un compte non protégé.
+async function fetchMfaSetupPrompted(userId){
+  try {
+    const { data, error } = await supabase.from('profiles').select('mfa_setup_prompted').eq('id', userId).maybeSingle();
+    if (error) throw error;
+    return !!(data && data.mfa_setup_prompted);
+  } catch (e) { console.warn('fetchMfaSetupPrompted:', e); return false; }
+}
+async function markMfaSetupPrompted(){
+  mfaSetupPrompted = true;
+  if (!currentUser || !window.supabase) return;
+  try { await supabase.from('profiles').update({ mfa_setup_prompted: true }).eq('id', currentUser.id); }
+  catch (e) { console.warn('markMfaSetupPrompted:', e); }
+}
+function showMfaSetupPromptScreen(){
+  hideAppLoadingSkeleton();
+  const feedback = document.getElementById('mfa-setup-prompt-feedback');
+  if (feedback) feedback.hidden = true;
+  document.getElementById('mfa-setup-prompt-overlay').hidden = false;
+}
+async function chooseMfaSetupNow(){
+  document.getElementById('mfa-setup-prompt-overlay').hidden = true;
+  await markMfaSetupPrompted();
+  const session = pendingSignInSession;
+  pendingSignInSession = null;
+  await completeSignIn(session);
+  location.hash = '#/app/account';
+}
+async function skipMfaSetup(){
+  document.getElementById('mfa-setup-prompt-overlay').hidden = true;
+  await markMfaSetupPrompted();
+  const session = pendingSignInSession;
+  pendingSignInSession = null;
+  await completeSignIn(session);
 }
 function showMfaChallengeScreen(){
   hideAppLoadingSkeleton();
@@ -5359,6 +5428,7 @@ async function completeSignIn(session){
       currentPlanPeriodEnd = cloud.profile.stripe_current_period_end || null;
       currentReferralCode = cloud.profile.referral_code || null;
       currentUserRole = cloud.profile.role || 'user';
+      mfaSetupPrompted = !!cloud.profile.mfa_setup_prompted;
     }
     const hasCloudData = cloud.bankrolls.length > 0;
     const hasLocalRealData = state.bankrolls.length > 0 && !state.isDemo;
@@ -5406,6 +5476,7 @@ async function signOutUser(){
   currentPlanPeriodEnd = null;
   currentReferralCode = null;
   currentUserRole = 'user';
+  mfaSetupPrompted = false;
   localStorage.removeItem(STORAGE_KEY);
   state = seedDemoState();
   updateAccountUI();
@@ -5954,6 +6025,10 @@ async function refreshMfaStatus(){
       document.getElementById('mfa-enroll-flow').hidden = true;
     } else {
       statusEl.innerHTML = `<button class="btn-primary btn-sm" onclick="startMfaEnroll()">${t('settings_account_mfa_enable')}</button>`;
+      if (mfaSetupPrompted) {
+        statusEl.insertAdjacentHTML('beforeend', `<p class="form-hint" style="color:var(--amber);margin-top:.6rem">⚠ ${t('settings_account_mfa_warning')}</p>`);
+      }
+      document.getElementById('mfa-enroll-flow').hidden = true;
     }
   } catch (e) {
     statusEl.textContent = t('account_error_offline');
