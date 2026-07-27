@@ -6258,7 +6258,7 @@ async function submitAdminCreatePromo(){
   const code = document.getElementById('admin-promo-code').value;
   feedback.hidden = false; feedback.className = 'account-feedback'; feedback.textContent = t('account_loading');
   try {
-    const data = await adminAuthedFetch('/api/admin-create-promo', { percentOff, duration, durationInMonths, maxRedemptions, code });
+    const data = await adminAuthedFetch('/api/admin-promos', { action: 'create', percentOff, duration, durationInMonths, maxRedemptions, code });
     feedback.className = 'account-feedback';
     feedback.textContent = t('admin_promo_success').replace('{code}', data.code);
     document.getElementById('admin-promo-code').value = '';
@@ -6274,7 +6274,7 @@ async function renderAdminPromosTable(){
   const emptyEl = document.getElementById('admin-promos-empty');
   if (!tbody) return;
   try {
-    const data = await adminAuthedFetch('/api/admin-list-promos', null, 'GET');
+    const data = await adminAuthedFetch('/api/admin-promos', null, 'GET');
     const promos = data.promos || [];
     if (!promos.length) {
       tbody.innerHTML = '';
@@ -6301,7 +6301,7 @@ async function renderAdminPromosTable(){
 
 async function deactivatePromoCode(id){
   try {
-    await adminAuthedFetch('/api/admin-deactivate-promo', { id });
+    await adminAuthedFetch('/api/admin-promos', { action: 'deactivate', id });
     renderAdminPromosTable();
   } catch (e) {
     showToast(t('admin_load_error'), 'error');
@@ -6313,7 +6313,7 @@ async function renderAdminSupportTable(){
   const emptyEl = document.getElementById('admin-support-empty');
   if (!tbody) return;
   try {
-    const data = await adminAuthedFetch('/api/admin-list-support', null, 'GET');
+    const data = await adminAuthedFetch('/api/admin-support', null, 'GET');
     const messages = data.messages || [];
     if (!messages.length) {
       tbody.innerHTML = '';
@@ -6340,7 +6340,7 @@ async function renderAdminSupportTable(){
 }
 async function toggleSupportMessageStatus(id, status){
   try {
-    await adminAuthedFetch('/api/admin-mark-support-read', { id, status });
+    await adminAuthedFetch('/api/admin-support', { id, status });
     renderAdminSupportTable();
   } catch (e) {
     showToast(t('admin_load_error'), 'error');

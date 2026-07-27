@@ -333,10 +333,13 @@ Le panneau admin (`#/app/admin`) permet aussi :
   — modifie uniquement `profiles.plan`, ne touche jamais aux champs `stripe_*` :
   si ce joueur souscrit un jour un vrai abonnement, le webhook Stripe reprend
   la main normalement.
-- **Créer un coupon + code promo Stripe** (`api/admin-create-promo.js`) —
-  utilise directement l'API Stripe (`STRIPE_SECRET_KEY`), le code généré
-  fonctionne immédiatement grâce à `allow_promotion_codes` déjà actif sur le
-  Checkout (voir STRIPE_SETUP.md §5ter).
+- **Créer/lister/désactiver un coupon + code promo Stripe** (`api/admin-promos.js`,
+  GET = liste, POST `{action:'create'|'deactivate', ...}`) — utilise
+  directement l'API Stripe (`STRIPE_SECRET_KEY`), le code généré fonctionne
+  immédiatement grâce à `allow_promotion_codes` déjà actif sur le Checkout
+  (voir STRIPE_SETUP.md §5ter). Regroupé dans un seul fichier (au lieu de 3
+  endpoints séparés) pour rester sous la limite de 12 fonctions serverless
+  du plan Hobby Vercel.
 
 Les deux revérifient `role === 'admin'` côté serveur avant d'agir, comme
 `api/admin-stats.js`.
@@ -548,7 +551,7 @@ Deux fonctions Vercel :
   message. Si un jeton d'accès est fourni (utilisateur connecté), `user_id`
   et `email` sont renseignés automatiquement ; sinon le visiteur saisit son
   email dans le formulaire.
-- `api/admin-list-support.js` — réservée au rôle admin (même garde que
-  `api/admin-list-promos.js`), liste les messages pour le panneau admin.
-- `api/admin-mark-support-read.js` — réservée au rôle admin, bascule le
-  statut `new`/`read` d'un message.
+- `api/admin-support.js` — réservée au rôle admin (GET = liste, POST
+  `{id, status}` = bascule le statut `new`/`read`). Regroupé en un seul
+  fichier (au lieu de 2 endpoints séparés) pour rester sous la limite de 12
+  fonctions serverless du plan Hobby Vercel.
