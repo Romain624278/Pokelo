@@ -707,7 +707,7 @@
   .pro-crown:hover svg { transform: scale(1.15); }
   /* Couronnes statiques (déjà dans le HTML) : masquées par défaut, révélées
      uniquement pour un compte non-Pro via la classe posée par applySettingsToDOM. */
-  .pro-crown-inline { display: none; }
+  .pro-crown-inline { display: none; cursor: pointer; }
   body:not(.is-pro) .pro-crown-inline { display: inline-flex; }
   .form-group .input, .form-group .select, .form-group .textarea { width: 100%; }
   .profit-preview { padding: 0.8rem 1rem; border-radius: 8px; background: rgba(255,255,255,0.02); border: 1px solid var(--border); font-size: 0.85rem; color: var(--grey); display: flex; justify-content: space-between; align-items: center; }
@@ -1685,6 +1685,7 @@
             <button class="btn-primary btn-sm" onclick="openBankrollModal()">
               <svg class="icon" style="width:16px;height:16px" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
               <span data-i18n="btn_new_bankroll">Nouvelle bankroll</span>
+              <span class="pro-crown" id="bankroll-limit-crown" onclick="event.stopPropagation();showProFeatureModal('bankrolls')" title="Pokelo Pro" hidden><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 18h14l1.4-8.4-4.4 2.6-3-5.2-3 5.2-4.4-2.6L5 18Z"/></svg></span>
             </button>
           </div>
         </div>
@@ -1892,14 +1893,17 @@
                 <label>
                   <span data-i18n="stake_tier_micro">Micro jusqu'à</span>
                   <input type="number" class="input" id="stake-threshold-micro" min="0" step="0.01" onclick="handleStakeInputGuard(event)" onfocus="handleStakeInputGuard(event)" onchange="updateStakeThreshold('micro', this.value)">
+                  <span class="pro-crown-inline" onclick="event.stopPropagation();showProFeatureModal('stakes')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 18h14l1.4-8.4-4.4 2.6-3-5.2-3 5.2-4.4-2.6L5 18Z"/></svg></span>
                 </label>
                 <label>
                   <span data-i18n="stake_tier_low">Low jusqu'à</span>
                   <input type="number" class="input" id="stake-threshold-low" min="0" step="0.01" onclick="handleStakeInputGuard(event)" onfocus="handleStakeInputGuard(event)" onchange="updateStakeThreshold('low', this.value)">
+                  <span class="pro-crown-inline" onclick="event.stopPropagation();showProFeatureModal('stakes')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 18h14l1.4-8.4-4.4 2.6-3-5.2-3 5.2-4.4-2.6L5 18Z"/></svg></span>
                 </label>
                 <label>
                   <span data-i18n="stake_tier_mid">Mid jusqu'à</span>
                   <input type="number" class="input" id="stake-threshold-mid" min="0" step="0.01" onclick="handleStakeInputGuard(event)" onfocus="handleStakeInputGuard(event)" onchange="updateStakeThreshold('mid', this.value)">
+                  <span class="pro-crown-inline" onclick="event.stopPropagation();showProFeatureModal('stakes')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 18h14l1.4-8.4-4.4 2.6-3-5.2-3 5.2-4.4-2.6L5 18Z"/></svg></span>
                 </label>
               </div>
               <p class="form-hint" data-i18n="settings_stakes_hint">Au-delà du seuil Mid, les sessions sont classées en High.</p>
@@ -2535,6 +2539,7 @@ function defaultSettings(){
 }
 function applySettingsToDOM(){
   document.body.classList.toggle('is-pro', isPremium());
+  updateBankrollLimitCrown();
   if (!state.settings) state.settings = defaultSettings();
   const s = state.settings;
   const c = Object.assign({}, DEFAULT_COLORS, s.colors);
@@ -6461,7 +6466,18 @@ function confirmDeleteSession(id){
 /* ══════════════════════════════════════════════════════════════
    POKELO — app: BANKROLLS
    ══════════════════════════════════════════════════════════════ */
+// Le bouton "Nouvelle bankroll" reste utilisable pour la 1ère bankroll même
+// en gratuit : la couronne ne doit donc apparaître qu'une fois la limite
+// atteinte, pas systématiquement comme pour une feature 100% Pro — d'où un
+// toggle dédié plutôt que la classe CSS pro-crown-inline (qui ne dépend que
+// du plan, pas du nombre de bankrolls déjà créées).
+function updateBankrollLimitCrown(){
+  const el = document.getElementById('bankroll-limit-crown');
+  if (!el || !state) return;
+  el.hidden = isPremium() || state.bankrolls.length < FREE_BANKROLL_LIMIT;
+}
 function renderBankrolls(){
+  updateBankrollLimitCrown();
   const el = document.getElementById('bankrolls-content');
   if (!state.bankrolls.length) {
     el.innerHTML = emptyStateHtml('bankrolls', 'Aucune bankroll pour le moment', 'Créez une bankroll pour commencer à suivre vos résultats — devise libre, solde de départ personnalisé.', 'openBankrollModal()', 'Créer une bankroll');
