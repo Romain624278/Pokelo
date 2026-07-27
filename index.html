@@ -734,9 +734,11 @@
   .settings-account-row:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
   .settings-account-row > label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text); margin-bottom: 0.4rem; }
   .settings-account-row .form-row { display: flex; gap: 0.6rem; flex-wrap: wrap; }
-  .phone-input-row { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.6rem; }
+  .phone-input-row { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.6rem; }
   .phone-input-row #account-phone-country { flex: 0 0 auto; min-width: 200px; }
   .phone-input-row #account-phone-number { flex: 1; min-width: 140px; }
+  .phone-flag-preview { flex: 0 0 auto; width: 28px; height: 19px; border-radius: 3px; overflow: hidden; border: 1px solid var(--border); }
+  .phone-flag-preview svg { width: 100%; height: 100%; display: block; }
   .settings-account-row .form-row .input { flex: 1; min-width: 180px; }
   #mfa-status { font-size: 0.85rem; color: var(--text); margin-bottom: 0.6rem; }
   #mfa-enroll-flow { display: flex; flex-direction: column; gap: 0.6rem; align-items: flex-start; margin-top: 0.8rem; }
@@ -1740,7 +1742,8 @@
                   <label data-i18n="settings_account_phone">Numéro de téléphone</label>
                   <p class="settings-desc" data-i18n="settings_account_phone_desc">Optionnel — utile pour vous contacter en cas de problème sur votre compte.</p>
                   <div class="phone-input-row">
-                    <select class="input" id="account-phone-country"></select>
+                    <span class="phone-flag-preview" id="account-phone-flag"></span>
+                    <select class="input" id="account-phone-country" onchange="updateAccountPhoneFlag()"></select>
                     <input class="input" type="tel" id="account-phone-number" placeholder="6 12 34 56 78" />
                     <button class="btn-ghost btn-sm" onclick="saveAccountPhone()" data-i18n="settings_account_save">Enregistrer</button>
                   </div>
@@ -3841,6 +3844,49 @@ const FLAG_SVG = {
   MC: `<rect width="30" height="10" fill="#CE1126"/><rect y="10" width="30" height="10" fill="#fff"/>`,
   ME: `<rect width="30" height="20" fill="#D40000"/><rect x="0.8" y="0.8" width="28.4" height="18.4" fill="none" stroke="#D4AF37" stroke-width="1.4"/><circle cx="15" cy="10" r="4" fill="none" stroke="#D4AF37" stroke-width="1.2"/>`,
   BE: `<rect width="10" height="20" fill="#000"/><rect x="10" width="10" height="20" fill="#FDDA24"/><rect x="20" width="10" height="20" fill="#EF3340"/>`,
+  // Ensemble étendu pour le sélecteur d'indicatif téléphonique (132 pays) —
+  // représentations simplifiées (bandes/croix), dans le même esprit que les
+  // drapeaux ci-dessus. Un pays non couvert retombe sur le rectangle neutre
+  // de flagSvg() plutôt que d'afficher un drapeau inexact.
+  DE: `<rect width="30" height="6.67" fill="#000"/><rect y="6.67" width="30" height="6.67" fill="#DD0000"/><rect y="13.33" width="30" height="6.67" fill="#FFCE00"/>`,
+  ES: `<rect width="30" height="5" fill="#AA151B"/><rect y="5" width="30" height="10" fill="#F1BF00"/><rect y="15" width="30" height="5" fill="#AA151B"/>`,
+  PT: `<rect width="12" height="20" fill="#006600"/><rect x="12" width="18" height="20" fill="#FF0000"/>`,
+  NL: `<rect width="30" height="6.67" fill="#AE1C28"/><rect y="6.67" width="30" height="6.67" fill="#fff"/><rect y="13.33" width="30" height="6.67" fill="#21468B"/>`,
+  CH: `<rect width="30" height="20" fill="#D52B1E"/><rect x="12.5" y="5" width="5" height="10" fill="#fff"/><rect x="9" y="8.5" width="12" height="3" fill="#fff"/>`,
+  AT: `<rect width="30" height="6.67" fill="#ED2939"/><rect y="6.67" width="30" height="6.67" fill="#fff"/><rect y="13.33" width="30" height="6.67" fill="#ED2939"/>`,
+  DK: `<rect width="30" height="20" fill="#C60C30"/><rect x="9" width="3" height="20" fill="#fff"/><rect y="8" width="30" height="4" fill="#fff"/>`,
+  SE: `<rect width="30" height="20" fill="#005293"/><rect x="9" width="3" height="20" fill="#FECC02"/><rect y="8" width="30" height="4" fill="#FECC02"/>`,
+  NO: `<rect width="30" height="20" fill="#EF2B2D"/><rect x="8" width="4" height="20" fill="#fff"/><rect y="8" width="30" height="4" fill="#fff"/><rect x="9" width="2" height="20" fill="#002868"/><rect y="9" width="30" height="2" fill="#002868"/>`,
+  FI: `<rect width="30" height="20" fill="#fff"/><rect x="9" width="3" height="20" fill="#003580"/><rect y="8" width="30" height="4" fill="#003580"/>`,
+  IS: `<rect width="30" height="20" fill="#003897"/><rect x="8" width="4" height="20" fill="#fff"/><rect y="8" width="30" height="4" fill="#fff"/><rect x="9" width="2" height="20" fill="#D72828"/><rect y="9" width="30" height="2" fill="#D72828"/>`,
+  PL: `<rect width="30" height="10" fill="#fff"/><rect y="10" width="30" height="10" fill="#DC143C"/>`,
+  HU: `<rect width="30" height="6.67" fill="#CE2939"/><rect y="6.67" width="30" height="6.67" fill="#fff"/><rect y="13.33" width="30" height="6.67" fill="#477050"/>`,
+  RO: `<rect width="10" height="20" fill="#002B7F"/><rect x="10" width="10" height="20" fill="#FCD116"/><rect x="20" width="10" height="20" fill="#CE1126"/>`,
+  BG: `<rect width="30" height="6.67" fill="#fff"/><rect y="6.67" width="30" height="6.67" fill="#00966E"/><rect y="13.33" width="30" height="6.67" fill="#D62612"/>`,
+  GR: `<rect width="30" height="20" fill="#0D5EAF"/><rect y="2.2" width="30" height="2.2" fill="#fff"/><rect y="6.7" width="30" height="2.2" fill="#fff"/><rect y="11.1" width="30" height="2.2" fill="#fff"/><rect y="15.6" width="30" height="2.2" fill="#fff"/><rect width="11" height="11" fill="#0D5EAF"/><rect x="4.2" width="2.6" height="11" fill="#fff"/><rect y="4.2" width="11" height="2.6" fill="#fff"/>`,
+  RU: `<rect width="30" height="6.67" fill="#fff"/><rect y="6.67" width="30" height="6.67" fill="#0039A6"/><rect y="13.33" width="30" height="6.67" fill="#D52B1E"/>`,
+  UA: `<rect width="30" height="10" fill="#005BBB"/><rect y="10" width="30" height="10" fill="#FFD500"/>`,
+  CA: `<rect width="7.5" height="20" fill="#FF0000"/><rect x="7.5" width="15" height="20" fill="#fff"/><rect x="22.5" width="7.5" height="20" fill="#FF0000"/><path d="M15 5l1.4 3 3-1-1.5 3 2.1 1-2.1 1 1.5 3-3-1L15 17l-1.4-3-3 1 1.5-3-2.1-1 2.1-1-1.5-3 3 1Z" fill="#FF0000"/>`,
+  MX: `<rect width="10" height="20" fill="#006847"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#CE1126"/>`,
+  BR: `<rect width="30" height="20" fill="#009B3A"/><path d="M15 3 27 10 15 17 3 10Z" fill="#FEDF00"/><circle cx="15" cy="10" r="3.6" fill="#002776"/>`,
+  JP: `<rect width="30" height="20" fill="#fff"/><circle cx="15" cy="10" r="5.5" fill="#BC002D"/>`,
+  CN: `<rect width="30" height="20" fill="#DE2910"/><path d="M6 4l1 3h3l-2.4 1.8.9 3-2.5-1.8-2.5 1.8.9-3L2 7h3Z" fill="#FFDE00"/>`,
+  IN: `<rect width="30" height="6.67" fill="#FF9933"/><rect y="6.67" width="30" height="6.67" fill="#fff"/><rect y="13.33" width="30" height="6.67" fill="#138808"/><circle cx="15" cy="10" r="2.2" fill="none" stroke="#000080" stroke-width="0.5"/>`,
+  MA: `<rect width="30" height="20" fill="#C1272D"/><path d="M15 6l1.2 3.6h3.8l-3 2.4 1.2 3.6-3-2.2-3 2.2 1.2-3.6-3-2.4h3.8Z" fill="none" stroke="#006233" stroke-width="0.8"/>`,
+  TN: `<rect width="30" height="20" fill="#E70013"/><circle cx="15" cy="10" r="5" fill="#fff"/><circle cx="15" cy="10" r="3" fill="#E70013"/>`,
+  TR: `<rect width="30" height="20" fill="#E30A17"/><circle cx="12" cy="10" r="4" fill="#fff"/><circle cx="13.3" cy="10" r="3.3" fill="#E30A17"/>`,
+  LU: `<rect width="30" height="6.67" fill="#ED2939"/><rect y="6.67" width="30" height="6.67" fill="#fff"/><rect y="13.33" width="30" height="6.67" fill="#00A1DE"/>`,
+  HR: `<rect width="30" height="6.67" fill="#FF0000"/><rect y="6.67" width="30" height="6.67" fill="#fff"/><rect y="13.33" width="30" height="6.67" fill="#171796"/>`,
+  RS: `<rect width="30" height="6.67" fill="#C6363C"/><rect y="6.67" width="30" height="6.67" fill="#0C4076"/><rect y="13.33" width="30" height="6.67" fill="#fff"/>`,
+  SK: `<rect width="30" height="6.67" fill="#fff"/><rect y="6.67" width="30" height="6.67" fill="#0B4EA2"/><rect y="13.33" width="30" height="6.67" fill="#EE1C25"/>`,
+  SI: `<rect width="30" height="6.67" fill="#fff"/><rect y="6.67" width="30" height="6.67" fill="#005CE7"/><rect y="13.33" width="30" height="6.67" fill="#ED1C24"/>`,
+  LT: `<rect width="30" height="6.67" fill="#FDB913"/><rect y="6.67" width="30" height="6.67" fill="#006A44"/><rect y="13.33" width="30" height="6.67" fill="#C1272D"/>`,
+  LV: `<rect width="30" height="8" fill="#9E3039"/><rect y="8" width="30" height="4" fill="#fff"/><rect y="12" width="30" height="8" fill="#9E3039"/>`,
+  EE: `<rect width="30" height="6.67" fill="#0072CE"/><rect y="6.67" width="30" height="6.67" fill="#000"/><rect y="13.33" width="30" height="6.67" fill="#fff"/>`,
+  MT: `<rect width="15" height="20" fill="#fff"/><rect x="15" width="15" height="20" fill="#CF142B"/>`,
+  AD: `<rect width="10" height="20" fill="#0018A8"/><rect x="10" width="10" height="20" fill="#FEDD00"/><rect x="20" width="10" height="20" fill="#D50032"/>`,
+  LI: `<rect width="30" height="10" fill="#002B7F"/><rect y="10" width="30" height="10" fill="#CE1126"/>`,
+  ZA: `<rect width="30" height="20" fill="#007847"/><rect width="30" height="9" fill="#000C8A"/><rect y="11" width="30" height="9" fill="#DE3831"/><path d="M0 0 12 10 0 20Z" fill="#fff"/><path d="M0 2 10 10 0 18Z" fill="#FFB612"/>`,
 };
 function flagSvg(code){
   return `<svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg">${FLAG_SVG[code] || '<rect width="30" height="20" fill="var(--border)"/>'}</svg>`;
@@ -3900,16 +3946,13 @@ const PHONE_COUNTRIES = [
   ['GE','995','Géorgie','Georgia'],['AM','374','Arménie','Armenia'],['AZ','994','Azerbaïdjan','Azerbaijan'],
   ['KZ','7','Kazakhstan','Kazakhstan'],['UZ','998','Ouzbékistan','Uzbekistan'],
 ];
-// Un <option> natif n'affiche que du texte (pas de SVG/image par item dans
-// aucun navigateur courant) : le drapeau passe donc par l'emoji Unicode,
-// dérivé du code ISO à la volée (deux "regional indicator symbols"), sans
-// devoir fournir un SVG par pays.
-function flagEmoji(isoCode){
-  return isoCode.toUpperCase().replace(/./g, c => String.fromCodePoint(c.charCodeAt(0) + 127397));
-}
 function phoneCountryLabel(entry){
+  // Pas d'emoji ici : un <option> natif n'affiche que du texte, et le rendu
+  // des emoji drapeau est peu fiable sur Windows (souvent un simple code
+  // pays au lieu du drapeau). Le vrai drapeau (SVG, cohérent avec le
+  // calendrier) est affiché à côté du champ via updateAccountPhoneFlag().
   const lang = (state.settings && state.settings.lang === 'en') ? 3 : 2;
-  return `${flagEmoji(entry[0])} ${entry[lang]} (+${entry[1]})`;
+  return `${entry[lang]} (+${entry[1]})`;
 }
 function countryName(code){
   const lang = (state.settings && state.settings.lang === 'en') ? 'en' : 'fr';
@@ -5534,7 +5577,19 @@ async function removeTrustedDevice(id){
   try { await supabase.from('trusted_devices').delete().eq('id', id); } catch (e) {}
   renderTrustedDevices();
 }
+// Verrou de ré-entrance : deux déclencheurs de connexion peuvent se
+// chevaucher (voir initSupabaseAuth) et lancer chacun leur propre pull cloud
+// en parallèle. Sans ce verrou, le dernier des deux à finir écrase l'état
+// posé par l'autre — scénario observé : bankrolls/sessions qui semblent
+// disparaître après une déconnexion/reconnexion alors que rien n'a été
+// supprimé côté base (juste un overwrite local par un pull concurrent).
+let completeSignInInFlight = null;
 async function completeSignIn(session){
+  if (completeSignInInFlight) return completeSignInInFlight;
+  completeSignInInFlight = completeSignInRun(session);
+  try { await completeSignInInFlight; } finally { completeSignInInFlight = null; }
+}
+async function completeSignInRun(session){
   currentUser = session.user;
   showAppLoadingSkeleton();
   try {
@@ -5635,7 +5690,16 @@ function updateAdminNavVisibility(){
 function initSupabaseAuth(){
   if (!window.supabase) { authCheckComplete = true; router(); return; }
   if (stateLoadedFromCache) showAppLoadingSkeleton();
+  // supabase-js déclenche aussi onAuthStateChange dès l'abonnement ci-dessous
+  // pour la session déjà restaurée (comportement documenté, pas un bug de la
+  // lib) — sans ce garde, cette session initiale déclenchait un DEUXIÈME
+  // onAuthSignedIn en parallèle de celui-ci, chacun lançant son propre pull
+  // cloud ; le dernier à répondre écrasait l'état posé par l'autre, ce qui
+  // pouvait faire "disparaître" bankrolls/sessions à la reconnexion sans
+  // qu'aucune donnée ne soit réellement supprimée côté Supabase.
+  let initialCheckDone = false;
   supabase.auth.getSession().then(({ data }) => {
+    initialCheckDone = true;
     if (data.session) {
       onAuthSignedIn(data.session);
     } else {
@@ -5651,6 +5715,7 @@ function initSupabaseAuth(){
     }
   });
   supabase.auth.onAuthStateChange((event, session) => {
+    if (!initialCheckDone) return;
     if (event === 'SIGNED_IN' && session && (!currentUser || currentUser.id !== session.user.id)) onAuthSignedIn(session);
     if (event === 'SIGNED_OUT') { currentUser = null; authCheckComplete = true; updateAccountUI(); router(); }
   });
@@ -5966,6 +6031,13 @@ function populateAccountPhoneCountrySelect(){
   sel.innerHTML = sorted.map(entry => `<option value="${entry[0]}">${escapeHtml(phoneCountryLabel(entry))}</option>`).join('');
   const current = (state.profile && state.profile.phoneCountry) || 'FR';
   if ([...sel.options].some(o => o.value === current)) sel.value = current;
+  updateAccountPhoneFlag();
+}
+function updateAccountPhoneFlag(){
+  const sel = document.getElementById('account-phone-country');
+  const flagEl = document.getElementById('account-phone-flag');
+  if (!sel || !flagEl) return;
+  flagEl.innerHTML = flagSvg(sel.value);
 }
 function saveAccountPhone(){
   if (!state.profile) state.profile = defaultProfile();
@@ -6280,6 +6352,15 @@ async function confirmMfaEnroll(){
     feedback.className = 'account-feedback'; feedback.textContent = t('settings_account_mfa_verified');
     mfaEnrollFactorId = null;
     document.getElementById('mfa-enroll-flow').hidden = true;
+    // Mise à jour optimiste immédiate plutôt que de dépendre d'un nouveau
+    // listFactors() : le verify() qui vient de réussir EST la preuve que le
+    // facteur est désormais vérifié, pas besoin d'attendre que le serveur le
+    // confirme une seconde fois — sans ça le bouton pouvait rester sur
+    // "Activer" un bon moment si la lecture fraîche accusait un léger retard.
+    const statusEl = document.getElementById('mfa-status');
+    if (statusEl) {
+      statusEl.innerHTML = `<span style="color:var(--good)">✓ ${t('settings_account_mfa_enabled')}</span> <button class="btn-ghost btn-sm" onclick="disableMfa()">${t('settings_account_mfa_disable')}</button>`;
+    }
     refreshMfaStatus();
   } catch (e) {
     feedback.className = 'account-feedback error';
