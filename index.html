@@ -3867,9 +3867,16 @@ const PHONE_COUNTRIES = [
   ['GE','995','Géorgie','Georgia'],['AM','374','Arménie','Armenia'],['AZ','994','Azerbaïdjan','Azerbaijan'],
   ['KZ','7','Kazakhstan','Kazakhstan'],['UZ','998','Ouzbékistan','Uzbekistan'],
 ];
+// Un <option> natif n'affiche que du texte (pas de SVG/image par item dans
+// aucun navigateur courant) : le drapeau passe donc par l'emoji Unicode,
+// dérivé du code ISO à la volée (deux "regional indicator symbols"), sans
+// devoir fournir un SVG par pays.
+function flagEmoji(isoCode){
+  return isoCode.toUpperCase().replace(/./g, c => String.fromCodePoint(c.charCodeAt(0) + 127397));
+}
 function phoneCountryLabel(entry){
   const lang = (state.settings && state.settings.lang === 'en') ? 3 : 2;
-  return `${entry[lang]} (+${entry[1]})`;
+  return `${flagEmoji(entry[0])} ${entry[lang]} (+${entry[1]})`;
 }
 function countryName(code){
   const lang = (state.settings && state.settings.lang === 'en') ? 'en' : 'fr';
