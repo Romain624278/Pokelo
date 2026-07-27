@@ -641,7 +641,8 @@
   table.data-table tr:hover td { background: rgba(8,191,47,0.03); }
   .cell-profit.pos { color: var(--good); font-weight: 700; }
   .cell-profit.neg { color: var(--critical); font-weight: 700; }
-  .fx-tag { font-size: 0.65rem; font-weight: 600; color: var(--grey); background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 0.1rem 0.4rem; border-radius: 100px; white-space: nowrap; }
+  .fx-tag { font-size: 0.65rem; font-weight: 600; color: var(--grey); background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 0.1rem 0.4rem; border-radius: 100px; white-space: nowrap; margin-left: 0.5rem; }
+  .cell-profit { white-space: nowrap; }
   .row-actions { display: flex; gap: 0.4rem; justify-content: flex-end; }
 
   .badge { display: inline-flex; align-items: center; gap: 5px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; padding: 0.28rem 0.65rem; border-radius: 100px; text-transform: uppercase; }
@@ -2016,6 +2017,24 @@
           <div class="account-feedback" id="admin-promo-feedback" hidden></div>
         </div>
         <div class="settings-card">
+          <h3 data-i18n="admin_promo_list_title">Codes promo existants</h3>
+          <p class="settings-desc" data-i18n="admin_promo_list_desc">Tous les codes créés depuis ce panneau, avec la possibilité de les désactiver.</p>
+          <div class="table-wrap">
+            <table class="data-table" id="admin-promos-table">
+              <thead><tr>
+                <th data-i18n="admin_promo_col_code">Code</th>
+                <th data-i18n="admin_promo_col_discount">Réduction</th>
+                <th data-i18n="admin_promo_col_duration">Durée</th>
+                <th data-i18n="admin_promo_col_uses">Utilisations</th>
+                <th data-i18n="admin_promo_col_status">Statut</th>
+                <th></th>
+              </tr></thead>
+              <tbody id="admin-promos-tbody"></tbody>
+            </table>
+          </div>
+          <p class="form-hint" id="admin-promos-empty" hidden data-i18n="admin_promo_list_empty">Aucun code promo créé pour le moment.</p>
+        </div>
+        <div class="settings-card">
           <h3 data-i18n="admin_errors_title">Dernières erreurs serveur</h3>
           <p class="settings-desc" data-i18n="admin_errors_desc">Webhook Stripe, création de session de paiement, crédit de parrainage — surveillez ici les échecs silencieux.</p>
           <div class="table-wrap">
@@ -2459,11 +2478,14 @@ async function fetchFxRate(url, to){
   try {
     const res = await fetch(url, { signal: controller.signal });
     clearTimeout(timeout);
-    if (!res.ok) return null;
+    if (!res.ok) { console.warn('fetchFxRate: non-ok response', res.status, url); return null; }
     const data = await res.json();
-    return (data && data.rates && typeof data.rates[to] === 'number') ? data.rates[to] : null;
+    const rate = (data && data.rates && typeof data.rates[to] === 'number') ? data.rates[to] : null;
+    if (rate == null) console.warn('fetchFxRate: no rate in response', data, url);
+    return rate;
   } catch(e) {
     clearTimeout(timeout);
+    console.warn('fetchFxRate: request failed', e, url);
     return null;
   }
 }
@@ -2772,6 +2794,9 @@ const I18N = {
     admin_promo_duration_once:'Une fois (1er mois)', admin_promo_duration_repeating:'Plusieurs mois', admin_promo_duration_forever:'À vie',
     admin_promo_months:'Nombre de mois', admin_promo_max_redemptions:'Utilisations max (optionnel)', admin_promo_code:'Code personnalisé (optionnel)',
     admin_promo_submit:'Créer le code', admin_promo_success:'Code créé : {code}',
+    admin_promo_list_title:'Codes promo existants', admin_promo_list_desc:'Tous les codes créés depuis ce panneau, avec la possibilité de les désactiver.',
+    admin_promo_col_code:'Code', admin_promo_col_discount:'Réduction', admin_promo_col_duration:'Durée', admin_promo_col_uses:'Utilisations', admin_promo_col_status:'Statut',
+    admin_promo_list_empty:'Aucun code promo créé pour le moment.', admin_promo_active:'Actif', admin_promo_inactive:'Désactivé', admin_promo_deactivate:'Désactiver',
     plan_per_month:'mois',
     pt_feat_bankrolls:'Bankrolls', pt_feat_sessions:'Sessions', pt_feat_game_types:'Tournois & cash game', pt_feat_expresso:'Expresso / Spin & Go',
     pt_feat_stats:'Statistiques', pt_feat_export:'Export CSV', pt_feat_modular_dashboard:'Dashboard modulaire (drag & drop)', pt_feat_content:'Guides, blog & calendrier des événements',
@@ -3028,6 +3053,9 @@ const I18N = {
     admin_promo_duration_once:'Once (1st month)', admin_promo_duration_repeating:'Several months', admin_promo_duration_forever:'Forever',
     admin_promo_months:'Number of months', admin_promo_max_redemptions:'Max redemptions (optional)', admin_promo_code:'Custom code (optional)',
     admin_promo_submit:'Create code', admin_promo_success:'Code created: {code}',
+    admin_promo_list_title:'Existing promo codes', admin_promo_list_desc:'All codes created from this panel, with the option to deactivate them.',
+    admin_promo_col_code:'Code', admin_promo_col_discount:'Discount', admin_promo_col_duration:'Duration', admin_promo_col_uses:'Uses', admin_promo_col_status:'Status',
+    admin_promo_list_empty:'No promo code created yet.', admin_promo_active:'Active', admin_promo_inactive:'Deactivated', admin_promo_deactivate:'Deactivate',
     plan_per_month:'month',
     pt_feat_bankrolls:'Bankrolls', pt_feat_sessions:'Sessions', pt_feat_game_types:'Tournaments & cash game', pt_feat_expresso:'Expresso / Spin & Go',
     pt_feat_stats:'Statistics', pt_feat_export:'CSV export', pt_feat_modular_dashboard:'Modular dashboard (drag & drop)', pt_feat_content:'Guides, blog & event calendar',
@@ -5744,6 +5772,7 @@ function renderAdminUsersTable(){
 async function renderAdminPanel(){
   const feedback = document.getElementById('admin-feedback');
   if (feedback) { feedback.hidden = false; feedback.className = 'account-feedback'; feedback.textContent = t('account_loading'); }
+  renderAdminPromosTable();
   try {
     const { data: { session } } = await supabase.auth.getSession();
     const token = session && session.access_token;
@@ -5781,20 +5810,33 @@ async function renderAdminPanel(){
   }
 }
 
-async function adminAuthedFetch(url, body){
+async function adminAuthedFetch(url, body, method){
   const { data: { session } } = await supabase.auth.getSession();
   const token = session && session.access_token;
   if (!token) throw new Error('no-session');
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
+  const opts = { method: method || 'POST', headers: { Authorization: `Bearer ${token}` } };
+  if (opts.method !== 'GET') {
+    opts.headers['Content-Type'] = 'application/json';
+    opts.body = JSON.stringify(body);
+  }
+  const res = await fetch(url, opts);
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(data.error || 'request-failed');
   return data;
 }
 
+async function refreshOwnPlanIfSelfGranted(grantedEmail){
+  if (!currentUser || !grantedEmail || grantedEmail.toLowerCase() !== currentUser.email.toLowerCase()) return;
+  try {
+    const { data, error } = await supabase.from('profiles').select('plan,stripe_current_period_end').eq('id', currentUser.id).maybeSingle();
+    if (error || !data) return;
+    currentPlan = data.plan || 'free';
+    currentPlanPeriodEnd = data.stripe_current_period_end || null;
+    applySettingsToDOM();
+    renderAccountSettings();
+    refreshAllViewsAfterSettingsChange();
+  } catch (e) { console.warn('refreshOwnPlanIfSelfGranted:', e); }
+}
 async function submitAdminGrantPlan(){
   const feedback = document.getElementById('admin-grant-feedback');
   const email = document.getElementById('admin-grant-email').value.trim();
@@ -5808,6 +5850,12 @@ async function submitAdminGrantPlan(){
     feedback.textContent = t('admin_grant_success').replace('{email}', data.email).replace('{plan}', t('settings_account_plan_' + data.plan));
     document.getElementById('admin-grant-email').value = '';
     renderAdminPanel();
+    // Un admin qui s'attribue un plan à lui-même ne le voit sinon prendre
+    // effet qu'à la prochaine connexion : currentPlan n'est chargé qu'au
+    // login (completeSignIn), jamais rafraîchi en direct autrement. Sans ce
+    // rafraîchissement ciblé, les popups "réservé à Pokelo Pro" continuent
+    // de bloquer alors que la base est déjà à jour.
+    await refreshOwnPlanIfSelfGranted(data.email);
   } catch (e) {
     feedback.className = 'account-feedback error';
     feedback.textContent = e.message === 'No account with this email' ? t('admin_grant_not_found') : t('admin_load_error');
@@ -5827,9 +5875,49 @@ async function submitAdminCreatePromo(){
     feedback.className = 'account-feedback';
     feedback.textContent = t('admin_promo_success').replace('{code}', data.code);
     document.getElementById('admin-promo-code').value = '';
+    renderAdminPromosTable();
   } catch (e) {
     feedback.className = 'account-feedback error';
     feedback.textContent = t('admin_load_error');
+  }
+}
+
+async function renderAdminPromosTable(){
+  const tbody = document.getElementById('admin-promos-tbody');
+  const emptyEl = document.getElementById('admin-promos-empty');
+  if (!tbody) return;
+  try {
+    const data = await adminAuthedFetch('/api/admin-list-promos', null, 'GET');
+    const promos = data.promos || [];
+    if (!promos.length) {
+      tbody.innerHTML = '';
+      if (emptyEl) emptyEl.hidden = false;
+      return;
+    }
+    if (emptyEl) emptyEl.hidden = true;
+    const durationLabels = { once: t('admin_promo_duration_once'), repeating: t('admin_promo_duration_repeating'), forever: t('admin_promo_duration_forever') };
+    tbody.innerHTML = promos.map(p => `
+      <tr>
+        <td>${escapeHtml(p.code)}</td>
+        <td>${p.percentOff != null ? p.percentOff + '%' : '—'}</td>
+        <td>${durationLabels[p.duration] || escapeHtml(p.duration || '—')}</td>
+        <td>${p.timesRedeemed}${p.maxRedemptions ? ' / ' + p.maxRedemptions : ''}</td>
+        <td>${p.active ? `<span style="color:var(--good)">${t('admin_promo_active')}</span>` : `<span style="color:var(--grey)">${t('admin_promo_inactive')}</span>`}</td>
+        <td>${p.active ? `<button class="btn-ghost btn-sm" onclick="deactivatePromoCode('${p.id}')">${t('admin_promo_deactivate')}</button>` : ''}</td>
+      </tr>`).join('');
+  } catch (e) {
+    console.warn('renderAdminPromosTable:', e);
+    tbody.innerHTML = '';
+    if (emptyEl) { emptyEl.hidden = false; emptyEl.textContent = t('admin_load_error'); }
+  }
+}
+
+async function deactivatePromoCode(id){
+  try {
+    await adminAuthedFetch('/api/admin-deactivate-promo', { id });
+    renderAdminPromosTable();
+  } catch (e) {
+    showToast(t('admin_load_error'), 'error');
   }
 }
 
