@@ -5288,9 +5288,10 @@ async function pullFromCloud(userId){
   // contrôle, une erreur réseau/RLS transformait silencieusement `data` en
   // liste vide, et le prochain sync interprétait ça comme "tout a été supprimé
   // localement" et effaçait les vraies données côté cloud.
-  if (profileRes.error) throw profileRes.error;
-  if (bankrollsRes.error) throw bankrollsRes.error;
-  if (sessionsRes.error) throw sessionsRes.error;
+  if (profileRes.error) { console.warn('pullFromCloud: profiles error', profileRes.error); throw profileRes.error; }
+  if (bankrollsRes.error) { console.warn('pullFromCloud: bankrolls error', bankrollsRes.error); throw bankrollsRes.error; }
+  if (sessionsRes.error) { console.warn('pullFromCloud: sessions error', sessionsRes.error); throw sessionsRes.error; }
+  console.warn('pullFromCloud: fetched', { userId, profile: profileRes.data, bankrollCount: (bankrollsRes.data||[]).length, sessionCount: (sessionsRes.data||[]).length });
   return { profile: profileRes.data, bankrolls: bankrollsRes.data || [], sessions: sessionsRes.data || [] };
 }
 function syncPushToCloud(){
@@ -5666,6 +5667,7 @@ async function completeSignInRun(session){
     }
     const hasCloudData = cloud.bankrolls.length > 0;
     const hasLocalRealData = state.bankrolls.length > 0 && !state.isDemo;
+    console.warn('completeSignIn: branch decision', { hasCloudData, hasLocalRealData, cloudBankrolls: cloud.bankrolls.length, localBankrolls: state.bankrolls.length, isDemo: state.isDemo, plan: currentPlan });
     if (!hasCloudData && hasLocalRealData) {
       await syncPushToCloud();
     } else {
