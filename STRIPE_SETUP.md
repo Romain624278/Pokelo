@@ -32,9 +32,17 @@ côté code peut être activé en quelques minutes une fois le compte Stripe cr�
 3. Répéter pour "Pokelo Équipe" si besoin (ex. 14€/mois).
 4. **Developers → API keys** : récupérer la clé secrète (`sk_test_...` en test,
    `sk_live_...` en prod) — ne jamais l'exposer côté client.
-5. **Developers → Webhooks → Add endpoint** : URL = `https://pokelo.fr/api/stripe-webhook`,
-   événements à écouter : `checkout.session.completed`, `customer.subscription.updated`,
-   `customer.subscription.deleted`. Noter le "Signing secret" (`whsec_...`).
+5. **Developers → Webhooks → Add endpoint** : URL = domaine **canonique** exact
+   du site (celui qui reste dans la barre d'adresse une fois la page chargée,
+   sans redirection) + `/api/stripe-webhook` — ex. `https://www.pokelo.fr/api/stripe-webhook`
+   si `pokelo.fr` redirige vers `www.pokelo.fr` côté Vercel (Domains). Si l'URL
+   du webhook pointe vers le domaine qui redirige plutôt que vers le domaine
+   canonique, Vercel répond 308 à Stripe avant même d'exécuter la fonction —
+   l'événement échoue silencieusement et `profiles.plan` n'est jamais mis à
+   jour après paiement (bug vécu en prod, corrigé en changeant l'URL du
+   webhook). Événements à écouter : `checkout.session.completed`,
+   `customer.subscription.updated`, `customer.subscription.deleted`. Noter le
+   "Signing secret" (`whsec_...`).
 
 ## 2. Variables d'environnement Vercel (Settings → Environment Variables)
 
