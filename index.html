@@ -215,7 +215,10 @@
   .hero-sub strong { color: var(--text); font-weight: 600; }
   .hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 4.5rem; }
   .btn-primary, .btn-secondary { border-radius: 6px; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; padding: 0.85rem 2.2rem; transition: background 0.2s, transform 0.15s, border-color .2s, color .2s; }
-  .btn-primary { background: var(--green); color: var(--black); border: 1px solid var(--green); }
+  /* Fond vert fixe dans les deux thèmes : le texte doit donc rester fixe lui
+     aussi, jamais lié à --black qui s'inverse en mode clair (devient
+     #f5f7f5, quasi-blanc sur fond vert clair — contraste ~2.4:1, illisible). */
+  .btn-primary { background: var(--green); color: #0a0a0a; border: 1px solid var(--green); }
   .btn-primary:hover { background: var(--green-hov); border-color: var(--green-hov); transform: translateY(-2px); }
   .btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--border); font-weight: 500; }
   .btn-secondary:hover { border-color: var(--green); color: var(--green); }
@@ -257,7 +260,7 @@
   @media (prefers-reduced-motion: reduce) { .stat-marquee-track { animation: none; } }
 
   /* ── FEATURES (bento, immersive) ── */
-  #features { background: var(--black-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+  #features { background: radial-gradient(ellipse 65% 55% at 12% 0%, rgba(8,191,47,0.055) 0%, transparent 60%), radial-gradient(ellipse 55% 45% at 92% 100%, rgba(8,191,47,0.04) 0%, transparent 60%), var(--black-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
   .feat-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: minmax(168px, auto); gap: 1.1rem; margin-top: 3.5rem; max-width: 1180px; }
   .feat-card { padding: 1.7rem; background: var(--black); border: 1px solid var(--border); border-radius: var(--radius); transition: border-color .25s, transform .25s, box-shadow .25s; position: relative; overflow: hidden; }
   .feat-card:not(.big) { display: flex; flex-direction: column; justify-content: center; }
@@ -290,12 +293,12 @@
   .step:hover { transform: translateY(-4px); }
   .step-node { width: 52px; height: 52px; border-radius: 50%; background: var(--black-card); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--green); margin-bottom: 1.3rem; position: relative; z-index: 1; transition: box-shadow .3s, border-color .3s; }
   .step:hover .step-node { border-color: var(--green); box-shadow: 0 0 0 6px rgba(8,191,47,0.08), 0 0 24px rgba(8,191,47,0.25); }
-  .step-num { position: absolute; top: -8px; right: -8px; width: 22px; height: 22px; border-radius: 50%; background: var(--green); color: var(--black); font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; }
+  .step-num { position: absolute; top: -8px; right: -8px; width: 22px; height: 22px; border-radius: 50%; background: var(--green); color: #0a0a0a; font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; }
   .step h3 { font-size: 0.98rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; }
   .step p { font-size: 0.83rem; color: var(--grey); line-height: 1.5; }
 
   /* ── PREVIEW (product screenshot) ── */
-  #preview { background: var(--black); }
+  #preview { background: radial-gradient(ellipse 60% 50% at 88% 8%, rgba(8,191,47,0.05) 0%, transparent 60%), radial-gradient(ellipse 60% 45% at 8% 95%, rgba(0,61,14,0.22) 0%, transparent 60%), var(--black); }
   .preview-bullets { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 2.6rem; max-width: 1140px; }
   .preview-bullet { display: flex; align-items: flex-start; gap: 8px; font-size: 0.83rem; color: var(--grey); line-height: 1.4; }
   .preview-bullet svg { width: 16px; height: 16px; color: var(--green); flex-shrink: 0; margin-top: 2px; }
@@ -334,12 +337,12 @@
   @media (max-width: 640px) { .module-showcase-grid { grid-template-columns: repeat(2, 1fr); } }
 
   /* ── PRICING ── */
-  #pricing { background: var(--black-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  #pricing { background: radial-gradient(ellipse 60% 50% at 10% 100%, rgba(8,191,47,0.05) 0%, transparent 60%), radial-gradient(ellipse 55% 45% at 90% 0%, rgba(8,191,47,0.04) 0%, transparent 60%), var(--black-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
   .pricing-toggle { display: inline-flex; align-items: center; gap: .7rem; margin-top: 1.6rem; font-size: .85rem; color: var(--grey); }
   .price-note { text-align: center; margin-top: 2.2rem; font-size: .78rem; color: var(--grey); max-width: 1140px; }
 
   /* ── TESTIMONIAL / TRUST ── */
-  #trust { background: var(--black-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  #trust { background: radial-gradient(ellipse 60% 55% at 85% 100%, rgba(8,191,47,0.05) 0%, transparent 60%), radial-gradient(ellipse 55% 45% at 12% 0%, rgba(8,191,47,0.04) 0%, transparent 60%), var(--black-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
   .trust-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.3rem; margin-top: 3.5rem; max-width: 1140px; }
   .trust-card { padding: 1.8rem; background: var(--black); border: 1px solid var(--border); border-radius: var(--radius); }
   .trust-quote { font-size: 0.92rem; color: var(--text); line-height: 1.6; margin-bottom: 1.2rem; }
@@ -347,7 +350,11 @@
   .trust-name { font-size: 0.85rem; font-weight: 700; color: var(--text); }
   .trust-role { font-size: 0.75rem; color: var(--grey); }
   .trust-footer { display: flex; align-items: center; gap: 0.8rem; }
-  .trust-avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 0.9rem; letter-spacing: 0.03em; color: var(--text-wall); flex-shrink: 0; border: 1px solid rgba(255,255,255,0.1); }
+  /* Fond toujours sombre (mélangé avec le littéral fixe #111 dans le style
+     inline ci-dessous, jamais avec une variable de thème) : le texte doit
+     donc rester clair et fixe lui aussi, jamais lié à --text-wall qui
+     s'inverse en mode clair et devenait illisible. */
+  .trust-avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 0.9rem; letter-spacing: 0.03em; color: #F1FFF5; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.1); }
 
   /* ── BLOG PREVIEW / BLOG LIST ── */
   .blog-filter-tabs { display: flex; gap: .6rem; margin-top: 2.4rem; flex-wrap: wrap; }
@@ -456,7 +463,7 @@
   .app-sidebar-bottom a { font-size: 0.8rem; color: var(--grey); text-decoration: none; display: flex; align-items: center; gap: 8px; cursor: pointer; }
   .app-sidebar-bottom a:hover { color: var(--green); }
 
-  .app-main { flex: 1; min-width: 0; margin-left: 240px; min-height: 100vh; display: flex; flex-direction: column; position: relative; }
+  .app-main { flex: 1; min-width: 0; margin-left: 240px; min-height: 100vh; display: flex; flex-direction: column; position: relative; background: radial-gradient(ellipse 55% 45% at 90% 0%, rgba(8,191,47,0.045) 0%, transparent 55%), radial-gradient(ellipse 50% 40% at 5% 100%, rgba(8,191,47,0.035) 0%, transparent 55%), var(--black); }
   .app-loading-overlay { position: absolute; inset: 0; z-index: 50; background: var(--black); padding: 2rem 2.4rem; display: flex; flex-direction: column; gap: 1.2rem; }
   .app-loading-overlay .sk-row { display: flex; gap: 1rem; }
   .skeleton-block { border-radius: 12px; background: linear-gradient(90deg, var(--black-card) 25%, rgba(255,255,255,0.05) 37%, var(--black-card) 63%); background-size: 400% 100%; animation: skeleton-shimmer 1.4s ease infinite; }
@@ -474,7 +481,7 @@
   .app-topbar-actions { display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap; }
   .app-content { padding: 2rem; flex: 1; }
   .app-mobile-topbar { display: none; }
-  .quick-log-fab { position: fixed; right: 1.6rem; bottom: 1.6rem; width: 56px; height: 56px; border-radius: 50%; background: var(--green); color: var(--black); border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 10px 30px rgba(8,191,47,0.35); z-index: 55; transition: transform .15s, background .15s; }
+  .quick-log-fab { position: fixed; right: 1.6rem; bottom: 1.6rem; width: 56px; height: 56px; border-radius: 50%; background: var(--green); color: #0a0a0a; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 10px 30px rgba(8,191,47,0.35); z-index: 55; transition: transform .15s, background .15s; }
   .quick-log-fab:hover { background: var(--green-hov); transform: scale(1.06); }
   .quick-log-fab svg { width: 24px; height: 24px; stroke-width: 2.4; }
   .quick-result-input { display: flex; align-items: center; gap: .6rem; }
@@ -501,6 +508,9 @@
   .stat-tile .st-val.pos { color: var(--good); }
   .stat-tile .st-val.neg { color: var(--critical); }
   .stat-tile .st-sub { font-size: 0.72rem; color: var(--grey); margin-top: 0.2rem; }
+  .stat-tile-enter { animation: statTileIn 0.5s ease-out backwards; }
+  @keyframes statTileIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  @media (prefers-reduced-motion: reduce) { .stat-tile-enter { animation: none; } }
 
   .card-row { display: grid; grid-template-columns: 1.5fr 1fr; gap: 1.2rem; margin-bottom: 1.2rem; align-items: stretch; }
   .chart-card { background: var(--black-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem 1.5rem; }
@@ -556,7 +566,10 @@
   .alert-text { font-size: .82rem; color: var(--grey); line-height: 1.5; }
   .heatmap-grid { display: flex; flex-direction: column; gap: 3px; }
   .heatmap-row { display: grid; grid-template-columns: 44px repeat(6, 1fr); gap: 3px; }
-  .heatmap-cell { aspect-ratio: 1.6; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: .68rem; color: var(--black); font-weight: 700; }
+  /* --good/--critical sont des couleurs fixes (non liées au thème) : le texte
+     doit donc rester fixe lui aussi plutôt que suivre --black, qui s'inverse
+     en mode clair et rendait les cellules quasi illisibles. */
+  .heatmap-cell { aspect-ratio: 1.6; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: .68rem; color: #0a0a0a; font-weight: 700; }
   .heatmap-cell.good { background: var(--good); }
   .heatmap-cell.critical { background: var(--critical); }
   .heatmap-cell.empty { background: rgba(255,255,255,0.04); }
@@ -677,6 +690,8 @@
   .fx-info.loading { color: var(--grey); font-style: italic; }
   .fx-info.error { color: var(--critical); }
   .fx-info.ok strong { color: var(--text); }
+  .fx-manual-row { display: inline-flex; align-items: center; gap: 6px; margin-top: 0.4rem; color: var(--text); }
+  .fx-manual-row input { width: 90px; padding: 0.3rem 0.5rem; font-size: 0.85rem; border-radius: 5px; border: 1px solid var(--border); background: var(--black-card); color: var(--text); }
 
   /* Modal */
   .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 2rem; }
@@ -694,6 +709,10 @@
   .form-group label { display: block; font-size: 0.78rem; color: var(--grey); margin-bottom: 0.4rem; font-weight: 600; }
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
   .form-hint { font-size: 0.72rem; color: var(--grey); margin-top: 0.35rem; }
+  .form-section-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--grey); margin: 1.5rem 0 0.7rem; font-weight: 700; border-top: 1px solid var(--border); padding-top: 1.3rem; }
+  .form-section-label:first-child { margin-top: 0; border-top: none; padding-top: 0; }
+  .field-info { display: inline-flex; width: 14px; height: 14px; color: var(--grey); cursor: help; vertical-align: -2px; margin-left: 4px; }
+  .field-info:hover { color: var(--green); }
   .settings-plan-link { display: inline-block; font-size: 0.78rem; color: var(--grey); text-decoration: underline; text-underline-offset: 2px; margin-top: 0.7rem; cursor: pointer; }
   .settings-plan-link:hover { color: var(--text); }
   .tilt-check-group { display: flex; flex-direction: column; }
@@ -770,7 +789,7 @@
   .pricing-table thead th.featured { border-top: 2px solid var(--green); border-radius: 12px 12px 0 0; padding-top: 1.2rem; }
   .pricing-table tfoot td.featured { border-bottom: 2px solid var(--green); border-radius: 0 0 12px 12px; }
   .pricing-table th.featured .pt-plan-name { font-size: 1.65rem; color: var(--text-wall); }
-  .pt-featured-badge { display: inline-block; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--black); margin-top: 0.45rem; background: var(--green); padding: 0.28rem 0.7rem; border-radius: 100px; }
+  .pt-featured-badge { display: inline-block; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #0a0a0a; margin-top: 0.45rem; background: var(--green); padding: 0.28rem 0.7rem; border-radius: 100px; }
   .pt-check { color: var(--green); width: 19px; height: 19px; }
   .pt-dash { color: var(--grey); opacity: 0.4; }
   .pricing-table tfoot td { border-bottom: none; padding-top: 1.4rem; }
@@ -1306,6 +1325,7 @@
         <a href="#/blog" data-link data-i18n="nav_blog">Blog</a>
         <a href="#/calendrier" data-link data-i18n="nav_calendar">Calendrier poker 2026</a>
         <a href="#how" data-link data-i18n="hero_cta_secondary">Comment ça marche</a>
+        <a onclick="openSupportModal();return false;" data-i18n="footer_support">Contact / Support</a>
       </div>
       <div class="footer-col">
         <h5 data-i18n="footer_legal">Légal</h5>
@@ -1735,6 +1755,11 @@
                         <input class="input" id="profile-share-link" readonly />
                         <button class="btn-ghost btn-sm" onclick="copyProfileLink()" data-i18n="settings_account_copy_link">Copier le lien</button>
                       </div>
+                      <label class="switch-row" style="margin-top:0.8rem">
+                        <input type="checkbox" id="profile-public-stats-toggle" onchange="togglePublicStats(this.checked)" />
+                        <span data-i18n="settings_account_public_stats_toggle">Afficher mes statistiques de jeu (winrate, volume, répartition)</span>
+                      </label>
+                      <p class="form-hint" data-i18n="settings_account_public_stats_hint">Aucun montant en euros n'est jamais affiché — uniquement des pourcentages et des volumes.</p>
                     </div>
                   </div>
                 </div>
@@ -2038,6 +2063,24 @@
           <p class="form-hint" id="admin-promos-empty" hidden data-i18n="admin_promo_list_empty">Aucun code promo créé pour le moment.</p>
         </div>
         <div class="settings-card">
+          <h3 data-i18n="admin_support_title">Messages de support</h3>
+          <p class="settings-desc" data-i18n="admin_support_desc">Messages envoyés depuis le formulaire de contact du site (avec ou sans compte).</p>
+          <div class="table-wrap">
+            <table class="data-table" id="admin-support-table">
+              <thead><tr>
+                <th data-i18n="admin_support_col_date">Date</th>
+                <th data-i18n="admin_support_col_category">Type</th>
+                <th data-i18n="admin_support_col_email">Email</th>
+                <th data-i18n="admin_support_col_message">Message</th>
+                <th data-i18n="admin_support_col_status">Statut</th>
+                <th></th>
+              </tr></thead>
+              <tbody id="admin-support-tbody"></tbody>
+            </table>
+          </div>
+          <p class="form-hint" id="admin-support-empty" hidden data-i18n="admin_support_empty">Aucun message de support pour le moment.</p>
+        </div>
+        <div class="settings-card">
           <h3 data-i18n="admin_errors_title">Dernières erreurs serveur</h3>
           <p class="settings-desc" data-i18n="admin_errors_desc">Webhook Stripe, création de session de paiement, crédit de parrainage — surveillez ici les échecs silencieux.</p>
           <div class="table-wrap">
@@ -2148,6 +2191,8 @@
         <label>Bankroll</label>
         <select class="select" id="session-bankroll" onchange="onSessionBankrollChange()"></select>
       </div>
+
+      <p class="form-section-label">Type de session</p>
       <div class="form-row">
         <div class="form-group">
           <label>Type</label>
@@ -2165,15 +2210,28 @@
           </div>
         </div>
       </div>
+      <div class="form-row" id="session-cash-fields" hidden>
+        <div class="form-group">
+          <label for="session-bb">Grosse blinde / BB (optionnel)</label>
+          <input class="input" type="number" step="0.01" id="session-bb" placeholder="Ex. 0.5" />
+        </div>
+        <div class="form-group">
+          <label for="session-hands">Mains jouées (optionnel)</label>
+          <input class="input" type="number" id="session-hands" placeholder="Ex. 320" />
+        </div>
+      </div>
+
+      <p class="form-section-label">Quand</p>
       <div class="form-row">
         <div class="form-group">
           <label for="session-date">Date</label>
           <input class="input" type="date" id="session-date" onchange="onSessionDateChange()" />
         </div>
         <div class="form-group">
-          <label for="session-time">Heure de début (optionnel)</label>
+          <label for="session-time">Heure de début (optionnel)
+            <svg class="icon field-info" viewBox="0 0 24 24" title="Sert uniquement à la heatmap jour/heure. Pour une session sur plusieurs jours ou avec des pauses, laissez l'heure de début et mettez dans la durée le temps de jeu réel (pauses exclues)."><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.01"/></svg>
+          </label>
           <input class="input" type="time" id="session-time" />
-          <p class="form-hint">Sert uniquement à la heatmap jour/heure. Pour une session sur plusieurs jours ou avec des pauses, laissez l'heure de début et mettez dans la durée le temps de jeu réel (pauses exclues).</p>
         </div>
       </div>
       <div class="form-row">
@@ -2186,20 +2244,12 @@
           <label class="tilt-check">
             <input type="checkbox" id="session-tilt" />
             <span>Session marquée « tilt »</span>
+            <svg class="icon field-info" viewBox="0 0 24 24" title="À cocher si vous avez joué sous le coup de l'émotion (frustration, fatigue...). Ces sessions sont isolées dans le module dédié pour voir si le tilt affecte vraiment vos résultats."><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.01"/></svg>
           </label>
-          <p class="form-hint">À cocher si vous avez joué sous le coup de l'émotion (frustration, fatigue...). Ces sessions sont isolées dans le module dédié pour voir si le tilt affecte vraiment vos résultats.</p>
         </div>
       </div>
-      <div class="form-row" id="session-cash-fields" hidden>
-        <div class="form-group">
-          <label for="session-bb">Grosse blinde / BB (optionnel)</label>
-          <input class="input" type="number" step="0.01" id="session-bb" placeholder="Ex. 0.5" />
-        </div>
-        <div class="form-group">
-          <label for="session-hands">Mains jouées (optionnel)</label>
-          <input class="input" type="number" id="session-hands" placeholder="Ex. 320" />
-        </div>
-      </div>
+
+      <p class="form-section-label">Résultat</p>
       <div class="form-group">
         <label>Devise de la session</label>
         <div class="currency-select" id="session-currency-select" data-value="EUR">
@@ -2229,6 +2279,8 @@
         </div>
         <div class="form-hint" id="session-profit-converted" hidden></div>
       </div>
+
+      <p class="form-section-label">Détails (optionnel)</p>
       <div class="form-row">
         <div class="form-group">
           <label for="session-site">Site / lieu (optionnel)</label>
@@ -2370,6 +2422,41 @@
     <div class="modal-foot">
       <button class="btn-ghost" onclick="closeProFeatureModal()" data-i18n="pro_modal_close">Fermer</button>
       <a href="#pricing" data-link class="btn-primary btn-sm" onclick="closeProFeatureModal()" data-i18n="pro_modal_cta">Découvrir Pokelo Pro</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MODAL : SUPPORT (mini QCM + message, avec ou sans compte) ══════════════ -->
+<div class="modal-overlay" id="support-modal-overlay" hidden onclick="if(event.target===this) closeSupportModal()">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 data-i18n="support_modal_title">Contacter le support</h3>
+      <button class="icon-btn" onclick="closeSupportModal()" aria-label="Fermer"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body" id="support-modal-form">
+      <p class="form-hint" data-i18n="support_modal_intro">Décrivez votre demande, on vous répond dès que possible. Vous pouvez aussi écrire directement à <strong>contact@pokelo.fr</strong>.</p>
+      <div class="form-group">
+        <label data-i18n="support_modal_category">Type de demande</label>
+        <select class="select" id="support-category">
+          <option value="bug" data-i18n="support_cat_bug">Un bug / problème technique</option>
+          <option value="billing" data-i18n="support_cat_billing">Facturation / abonnement</option>
+          <option value="suggestion" data-i18n="support_cat_suggestion">Une suggestion</option>
+          <option value="other" data-i18n="support_cat_other">Autre</option>
+        </select>
+      </div>
+      <div class="form-group" id="support-email-group">
+        <label data-i18n="support_modal_email">Votre email (pour vous répondre)</label>
+        <input class="input" type="email" id="support-email" placeholder="vous@exemple.com" />
+      </div>
+      <div class="form-group">
+        <label data-i18n="support_modal_message">Message</label>
+        <textarea class="textarea" id="support-message" rows="5" maxlength="4000" data-i18n-placeholder="support_modal_message_placeholder" placeholder="Décrivez votre demande en détail…"></textarea>
+      </div>
+      <div class="account-feedback" id="support-modal-feedback" hidden></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-ghost" onclick="closeSupportModal()" data-i18n="pro_modal_close">Fermer</button>
+      <button class="btn-primary btn-sm" id="support-submit-btn" onclick="submitSupportMessage()" data-i18n="support_modal_send">Envoyer</button>
     </div>
   </div>
 </div>
@@ -2659,6 +2746,15 @@ const I18N = {
     cta_tag:'Prêt ?', cta_title:'Commencez à suivre<br>votre bankroll aujourd\'hui',
     cta_sub:'Gratuit pour commencer, sans carte bancaire.', cta_button:'Créer un compte gratuit',
     footer_product:'Produit', footer_resources:'Ressources', footer_legal:'Légal', footer_rights:'Tous droits réservés.', footer_tagline:'Le poker responsable commence par une bonne gestion de bankroll.',
+    footer_support:'Contact / Support',
+    support_modal_title:'Contacter le support', support_modal_intro:'Décrivez votre demande, on vous répond dès que possible. Vous pouvez aussi écrire directement à contact@pokelo.fr.',
+    support_modal_category:'Type de demande', support_cat_bug:'Un bug / problème technique', support_cat_billing:'Facturation / abonnement',
+    support_cat_suggestion:'Une suggestion', support_cat_other:'Autre',
+    support_modal_email:'Votre email (pour vous répondre)', support_modal_message:'Message',
+    support_modal_message_placeholder:'Décrivez votre demande en détail…', support_modal_send:'Envoyer',
+    support_modal_success:'Message envoyé, merci ! On revient vers vous rapidement.',
+    support_modal_error:'Erreur lors de l\'envoi — réessayez ou écrivez à contact@pokelo.fr.',
+    support_modal_error_empty:'Merci de décrire votre demande.',
     blog_hero_tag:'Blog Pokelo', blog_hero_title:'Bankroll management<br>&amp; stratégie poker', blog_hero_sub:'Des tutos courts, sans blabla, pour mieux gérer votre argent de jeu.',
     blog_filter_all:'Tous', blog_filter_guide:'Progresser', blog_filter_news:'Actualités',
     calendar_tag:'Gratuit', calendar_title:'Le calendrier du poker mondial 2026',
@@ -2672,9 +2768,16 @@ const I18N = {
     app_back_site:'Retour au site',
     public_profile_anonymous:'Joueur Pokelo', public_profile_member_since:'Membre depuis',
     public_profile_not_found:'Ce profil est introuvable ou n\'est pas public.',
+    public_profile_stat_sessions:'Sessions enregistrées', public_profile_stat_winrate:'Winrate',
+    public_profile_stat_breakdown:'Répartition', public_profile_cat_tournament:'Tournoi',
+    public_profile_cat_cash:'Cash Game', public_profile_cat_expresso:'Expresso',
+    public_profile_fmt_live:'Live', public_profile_fmt_online:'Online',
+    settings_account_public_stats_toggle:'Afficher mes statistiques de jeu (winrate, volume, répartition)',
+    settings_account_public_stats_hint:'Aucun montant en euros n\'est jamais affiché — uniquement des pourcentages et des volumes.',
     nav_dashboard:'Dashboard', nav_sessions:'Sessions', nav_bankrolls:'Bankrolls', nav_my_account:'Mon compte',
     btn_new_session:'Nouvelle session', btn_new_bankroll:'Nouvelle bankroll', btn_customize:'Personnaliser', btn_save:'Enregistrer',
-    fx_loading:'Calcul du taux de change…', fx_unavailable:'Taux de change indisponible pour cette devise — montant pris tel quel.',
+    fx_loading:'Calcul du taux de change…', fx_unavailable:'Taux de change indisponible pour cette devise.',
+    fx_manual_prompt:'Saisissez le taux manuellement :', fx_manual_placeholder:'ex. 1.08',
     fx_rate_label:'Taux appliqué :', fx_in_bankroll:'dans la bankroll',
     stat_balance:'Solde actuel', stat_profit:'Profit total', stat_roi:'ROI', stat_sessions:'Sessions', stat_winrate:'Winrate',
     stat_since_creation:'depuis la création', stat_roi_sub:'sur la mise totale engagée', stat_recorded:'enregistrées', stat_winning:'sessions gagnantes',
@@ -2786,6 +2889,10 @@ const I18N = {
     admin_errors_title:'Dernières erreurs serveur', admin_errors_desc:"Webhook Stripe, création de session de paiement, crédit de parrainage — surveillez ici les échecs silencieux.",
     admin_errors_col_date:'Date', admin_errors_col_source:'Source', admin_errors_col_message:'Message',
     admin_errors_empty:'Aucune erreur récente. Tout va bien.', admin_load_error:"Impossible de charger les statistiques admin.",
+    admin_support_title:'Messages de support', admin_support_desc:'Messages envoyés depuis le formulaire de contact du site (avec ou sans compte).',
+    admin_support_col_date:'Date', admin_support_col_category:'Type', admin_support_col_email:'Email', admin_support_col_message:'Message', admin_support_col_status:'Statut',
+    admin_support_empty:'Aucun message de support pour le moment.', admin_support_status_new:'Nouveau', admin_support_status_read:'Traité',
+    admin_support_mark_read:'Marquer traité', admin_support_mark_new:'Marquer nouveau',
     admin_users_title:'Comptes & mouvements', admin_users_desc:"Vue d'ensemble de tous les comptes : plan, activité, statut Stripe.",
     admin_users_col_email:'E-mail', admin_users_col_plan:'Plan', admin_users_col_role:'Rôle', admin_users_col_created:'Créé le',
     admin_users_col_bankrolls:'Bankrolls', admin_users_col_sessions:'Sessions', admin_users_col_last_session:'Dernière session', admin_users_col_stripe:'Stripe',
@@ -2919,6 +3026,15 @@ const I18N = {
     cta_tag:'Ready?', cta_title:'Start tracking<br>your bankroll today',
     cta_sub:'Free to start, no credit card required.', cta_button:'Create a free account',
     footer_product:'Product', footer_resources:'Resources', footer_legal:'Legal', footer_rights:'All rights reserved.', footer_tagline:'Responsible poker starts with solid bankroll management.',
+    footer_support:'Contact / Support',
+    support_modal_title:'Contact support', support_modal_intro:'Describe your request, we\'ll get back to you as soon as possible. You can also write directly to contact@pokelo.fr.',
+    support_modal_category:'Request type', support_cat_bug:'A bug / technical issue', support_cat_billing:'Billing / subscription',
+    support_cat_suggestion:'A suggestion', support_cat_other:'Other',
+    support_modal_email:'Your email (to reply to you)', support_modal_message:'Message',
+    support_modal_message_placeholder:'Describe your request in detail…', support_modal_send:'Send',
+    support_modal_success:'Message sent, thank you! We\'ll get back to you shortly.',
+    support_modal_error:'Error sending message — try again or write to contact@pokelo.fr.',
+    support_modal_error_empty:'Please describe your request.',
     blog_hero_tag:'Pokelo Blog', blog_hero_title:'Bankroll management<br>&amp; poker strategy', blog_hero_sub:'Short, no-fluff tutorials to better manage your poker money.',
     blog_filter_all:'All', blog_filter_guide:'Improve', blog_filter_news:'News',
     calendar_tag:'Free', calendar_title:'The 2026 world poker calendar',
@@ -2932,9 +3048,16 @@ const I18N = {
     app_back_site:'Back to site',
     public_profile_anonymous:'Pokelo player', public_profile_member_since:'Member since',
     public_profile_not_found:'This profile could not be found or is not public.',
+    public_profile_stat_sessions:'Sessions logged', public_profile_stat_winrate:'Winrate',
+    public_profile_stat_breakdown:'Breakdown', public_profile_cat_tournament:'Tournament',
+    public_profile_cat_cash:'Cash Game', public_profile_cat_expresso:'Expresso',
+    public_profile_fmt_live:'Live', public_profile_fmt_online:'Online',
+    settings_account_public_stats_toggle:'Show my game stats (winrate, volume, breakdown)',
+    settings_account_public_stats_hint:'No amount in euros is ever shown — only percentages and volumes.',
     nav_dashboard:'Dashboard', nav_sessions:'Sessions', nav_bankrolls:'Bankrolls', nav_my_account:'My account',
     btn_new_session:'New session', btn_new_bankroll:'New bankroll', btn_customize:'Customize', btn_save:'Save',
-    fx_loading:'Fetching exchange rate…', fx_unavailable:'Exchange rate unavailable for this currency — amount used as-is.',
+    fx_loading:'Fetching exchange rate…', fx_unavailable:'Exchange rate unavailable for this currency.',
+    fx_manual_prompt:'Enter the rate manually:', fx_manual_placeholder:'e.g. 1.08',
     fx_rate_label:'Rate applied:', fx_in_bankroll:'in the bankroll',
     stat_balance:'Current balance', stat_profit:'Total profit', stat_roi:'ROI', stat_sessions:'Sessions', stat_winrate:'Win rate',
     stat_since_creation:'since creation', stat_roi_sub:'on total amount staked', stat_recorded:'recorded', stat_winning:'winning sessions',
@@ -3046,6 +3169,10 @@ const I18N = {
     admin_errors_title:'Recent server errors', admin_errors_desc:'Stripe webhook, checkout session creation, referral crediting — monitor silent failures here.',
     admin_errors_col_date:'Date', admin_errors_col_source:'Source', admin_errors_col_message:'Message',
     admin_errors_empty:'No recent errors. All good.', admin_load_error:'Could not load admin stats.',
+    admin_support_title:'Support messages', admin_support_desc:'Messages sent from the site\'s contact form (with or without an account).',
+    admin_support_col_date:'Date', admin_support_col_category:'Type', admin_support_col_email:'Email', admin_support_col_message:'Message', admin_support_col_status:'Status',
+    admin_support_empty:'No support messages yet.', admin_support_status_new:'New', admin_support_status_read:'Resolved',
+    admin_support_mark_read:'Mark resolved', admin_support_mark_new:'Mark new',
     admin_users_title:'Accounts & activity', admin_users_desc:'Overview of every account: plan, activity, Stripe status.',
     admin_users_col_email:'Email', admin_users_col_plan:'Plan', admin_users_col_role:'Role', admin_users_col_created:'Created',
     admin_users_col_bankrolls:'Bankrolls', admin_users_col_sessions:'Sessions', admin_users_col_last_session:'Last session', admin_users_col_stripe:'Stripe',
@@ -3447,7 +3574,7 @@ const STORAGE_KEY = 'pokelo_state_v1';
 let state = null;
 
 function defaultProfile(){
-  return { displayName: '', avatarUrl: '', isPublic: false, phone: '', phoneCountry: '' };
+  return { displayName: '', avatarUrl: '', isPublic: false, publicShowStats: false, phone: '', phoneCountry: '' };
 }
 function defaultState(){
   return { bankrolls: [], sessions: [], isDemo: false, demoDismissed: false, dashboardLayout: DEFAULT_LAYOUT.slice(), settings: defaultSettings(), profile: defaultProfile(), deletedBankrollIds: [], deletedSessionIds: [] };
@@ -4180,9 +4307,42 @@ function drawHeroCharts(){
 /* ══════════════════════════════════════════════════════════════
    POKELO — landing: interactive "Le produit" preview tabs
    ══════════════════════════════════════════════════════════════ */
+const PREVIEW_TABS_ORDER = ['dashboard', 'sessions', 'bankrolls', 'stats'];
+let previewAutoCycleTimer = null;
 function setPreviewTab(tab, btn){
   document.querySelectorAll('.preview-tab').forEach(b => b.classList.toggle('active', b === btn));
   renderPreviewTab(tab);
+  restartPreviewAutoCycle();
+}
+// Fait défiler automatiquement les onglets Dashboard/Sessions/Bankrolls/
+// Statistiques pendant que la section "Le produit" est visible à l'écran —
+// un visiteur qui scrolle sans cliquer voit quand même les 4 écrans plutôt
+// qu'une capture figée. S'arrête hors-écran et respecte prefers-reduced-motion.
+function restartPreviewAutoCycle(){
+  clearInterval(previewAutoCycleTimer);
+  if (!previewAutoCycleVisible) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  previewAutoCycleTimer = setInterval(() => {
+    const buttons = Array.from(document.querySelectorAll('.preview-tab'));
+    if (!buttons.length) return;
+    const activeIdx = Math.max(0, buttons.findIndex(b => b.classList.contains('active')));
+    const nextIdx = (activeIdx + 1) % buttons.length;
+    document.querySelectorAll('.preview-tab').forEach(b => b.classList.toggle('active', b === buttons[nextIdx]));
+    renderPreviewTab(PREVIEW_TABS_ORDER[nextIdx]);
+  }, 5000);
+}
+let previewAutoCycleVisible = false;
+function initPreviewAutoCycle(){
+  const shell = document.querySelector('#preview .preview-shell');
+  if (!shell) return;
+  new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      previewAutoCycleVisible = e.isIntersecting;
+      restartPreviewAutoCycle();
+    });
+  }, { threshold: 0.2 }).observe(shell);
+  shell.addEventListener('mouseenter', () => clearInterval(previewAutoCycleTimer));
+  shell.addEventListener('mouseleave', () => restartPreviewAutoCycle());
 }
 function renderPreviewTab(tab){
   const grid = document.getElementById('preview-grid');
@@ -4190,12 +4350,12 @@ function renderPreviewTab(tab){
   if (tab === 'dashboard') {
     grid.className = 'preview-grid';
     grid.innerHTML = `
-      <div class="preview-card">
+      <div class="preview-card stat-tile-enter" style="animation-delay:0ms">
         <h4>Évolution de bankroll</h4>
         <div class="preview-line"><canvas id="previewLineChart"></canvas></div>
         <div class="preview-annotation">Solde cumulé sur les 30 derniers jours : <strong>tendance haussière</strong>, portée par les sessions online.</div>
       </div>
-      <div class="preview-card">
+      <div class="preview-card stat-tile-enter" style="animation-delay:60ms">
         <h4>Répartition par format</h4>
         <div class="preview-donut"><canvas id="previewDonutChart"></canvas></div>
         <div class="preview-annotation">Les <strong>tournois</strong> représentent près de la moitié de vos sessions ce mois-ci.</div>
@@ -4204,7 +4364,7 @@ function renderPreviewTab(tab){
   } else if (tab === 'sessions') {
     grid.className = 'preview-grid full';
     grid.innerHTML = `
-      <div class="preview-card">
+      <div class="preview-card stat-tile-enter" style="animation-delay:0ms">
         <h4>Dernières sessions</h4>
         <table class="preview-mini-table"><thead><tr><th>Date</th><th>Bankroll</th><th>Type</th><th>Format</th><th>Résultat</th></tr></thead><tbody>
           <tr><td>12 juil.</td><td>Bankroll Online</td><td><span class="badge badge-cash">Cash Game</span></td><td><span class="badge badge-online">Online</span></td><td class="cell-profit pos">+13,53 €</td></tr>
@@ -4217,7 +4377,7 @@ function renderPreviewTab(tab){
   } else if (tab === 'bankrolls') {
     grid.className = 'preview-grid full';
     grid.innerHTML = `
-      <div class="preview-card">
+      <div class="preview-card stat-tile-enter" style="animation-delay:0ms">
         <h4>Vos bankrolls</h4>
         <div class="preview-mini-cards">
           <div class="preview-mini-bk"><span class="n"><span class="bk-dot" style="background:${BK_PALETTE[0]}"></span>Bankroll Online — EUR</span><span class="v">2 480 €</span></div>
@@ -4229,12 +4389,12 @@ function renderPreviewTab(tab){
   } else if (tab === 'stats') {
     grid.className = 'preview-grid';
     grid.innerHTML = `
-      <div class="preview-card">
+      <div class="preview-card stat-tile-enter" style="animation-delay:0ms">
         <h4>Sessions par type</h4>
         <div class="preview-donut"><canvas id="previewStatsDonut"></canvas></div>
         <div class="preview-annotation">Vue d'ensemble de votre <strong>volume de jeu</strong> par type de session.</div>
       </div>
-      <div class="preview-card">
+      <div class="preview-card stat-tile-enter" style="animation-delay:60ms">
         <h4>Profit live vs online</h4>
         <div class="preview-donut"><canvas id="previewStatsBar"></canvas></div>
         <div class="preview-annotation">Comparez objectivement où votre jeu est <strong>le plus rentable</strong>.</div>
@@ -4388,16 +4548,43 @@ function renderDashboard(){
     ${state.isDemo && !state.demoDismissed ? demoBannerHtml() : ''}
     ${moveDown && !moveDown.healthy ? riskBannerHtml(moveDown) : ''}
     <div class="stat-grid">
-      <div class="stat-tile"><div class="st-label">${t('stat_balance')}</div><div class="st-val">${fmtMoney(balance, bk.currency)}</div><div class="st-sub">${escapeHtml(bk.name)}</div></div>
-      <div class="stat-tile"><div class="st-label">${t('stat_profit')}</div><div class="st-val ${profit>=0?'pos':'neg'}">${fmtSigned(profit, bk.currency)}</div><div class="st-sub">${t('stat_since_creation')}</div></div>
-      <div class="stat-tile"><div class="st-label">${t('stat_roi')}</div><div class="st-val ${roi>=0?'pos':'neg'}">${roi>=0?'+':''}${fmtNum(roi)} %</div><div class="st-sub">${t('stat_roi_sub')}</div></div>
-      <div class="stat-tile"><div class="st-label">${t('stat_sessions')}</div><div class="st-val">${sessions.length}</div><div class="st-sub">${t('stat_recorded')}</div></div>
-      <div class="stat-tile"><div class="st-label">${t('stat_winrate')}</div><div class="st-val">${fmtNum(winrate)} %</div><div class="st-sub">${t('stat_winning')}</div></div>
-      <div class="stat-tile"><div class="st-label">${t('mod_riskOfRuin_title')}</div><div class="st-val ${ror?ror.tone:''}">${ror?fmtNum(ror.ror)+' %':'—'}</div><div class="st-sub">${t('ror_hint_short')}</div></div>
+      <div class="stat-tile stat-tile-enter" style="animation-delay:0ms"><div class="st-label">${t('stat_balance')}</div><div class="st-val" id="stat-val-balance"></div><div class="st-sub">${escapeHtml(bk.name)}</div></div>
+      <div class="stat-tile stat-tile-enter" style="animation-delay:40ms"><div class="st-label">${t('stat_profit')}</div><div class="st-val ${profit>=0?'pos':'neg'}" id="stat-val-profit"></div><div class="st-sub">${t('stat_since_creation')}</div></div>
+      <div class="stat-tile stat-tile-enter" style="animation-delay:80ms"><div class="st-label">${t('stat_roi')}</div><div class="st-val ${roi>=0?'pos':'neg'}" id="stat-val-roi"></div><div class="st-sub">${t('stat_roi_sub')}</div></div>
+      <div class="stat-tile stat-tile-enter" style="animation-delay:120ms"><div class="st-label">${t('stat_sessions')}</div><div class="st-val" id="stat-val-sessions"></div><div class="st-sub">${t('stat_recorded')}</div></div>
+      <div class="stat-tile stat-tile-enter" style="animation-delay:160ms"><div class="st-label">${t('stat_winrate')}</div><div class="st-val" id="stat-val-winrate"></div><div class="st-sub">${t('stat_winning')}</div></div>
+      <div class="stat-tile stat-tile-enter" style="animation-delay:200ms"><div class="st-label">${t('mod_riskOfRuin_title')}</div><div class="st-val ${ror?ror.tone:''}" id="stat-val-ror"></div><div class="st-sub">${t('ror_hint_short')}</div></div>
     </div>
     <div class="modules-grid" id="dashboard-modules"></div>
   `;
+  animateStatValue(document.getElementById('stat-val-balance'), balance, v => fmtMoney(v, bk.currency));
+  animateStatValue(document.getElementById('stat-val-profit'), profit, v => fmtSigned(v, bk.currency));
+  animateStatValue(document.getElementById('stat-val-roi'), roi, v => (v>=0?'+':'') + fmtNum(v) + ' %');
+  animateStatValue(document.getElementById('stat-val-sessions'), sessions.length, v => String(Math.round(v)));
+  animateStatValue(document.getElementById('stat-val-winrate'), winrate, v => fmtNum(v) + ' %');
+  animateStatValue(document.getElementById('stat-val-ror'), ror ? ror.ror : 0, v => ror ? fmtNum(v) + ' %' : '—');
   renderDashboardModules(bk, sessions);
+}
+// Anime un chiffre de 0 vers sa valeur finale (ease-out) plutôt que de
+// l'afficher figé — cohérent avec le reste du site (compteurs animés de la
+// landing) et rend le dashboard moins statique à chaque changement de
+// bankroll/session. Respecte prefers-reduced-motion (affichage instantané).
+function animateStatValue(el, target, formatFn, duration){
+  if (!el) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    el.textContent = formatFn(target);
+    return;
+  }
+  duration = duration || 700;
+  const start = performance.now();
+  function tick(now){
+    const p = Math.min(1, (now - start) / duration);
+    const eased = 1 - Math.pow(1 - p, 3);
+    el.textContent = formatFn(target * eased);
+    if (p < 1) requestAnimationFrame(tick);
+    else el.textContent = formatFn(target);
+  }
+  requestAnimationFrame(tick);
 }
 function riskBannerHtml(moveDown){
   return `<div class="risk-banner">
@@ -4414,16 +4601,17 @@ function renderDashboardModules(bk, sessions){
     grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><p>Aucun module actif. Cliquez sur « Personnaliser » pour en ajouter.</p><button class="btn-primary btn-sm" onclick="openCustomizeModal()">Personnaliser${proCrownHtml('dashboard')}</button></div>`;
     return;
   }
-  grid.innerHTML = state.dashboardLayout.map(id => moduleCardHtml(id, bk, sessions)).join('');
+  grid.innerHTML = state.dashboardLayout.map((id, i) => moduleCardHtml(id, bk, sessions, i)).join('');
   if (sessions.length) {
     state.dashboardLayout.forEach(id => { if (MODULE_HAS_CHART[id]) drawModuleChart(id, bk, sessions); });
   }
 }
 
-function moduleCardHtml(id, bk, sessions){
+function moduleCardHtml(id, bk, sessions, index){
   const meta = moduleMeta(id);
   const extra = id === 'recent' ? `<a href="#/app/sessions" data-link class="btn-ghost btn-sm">${t('btn_see_all')}</a>` : '';
-  return `<div class="module-card" data-size="${meta.size}" data-mod="${id}">
+  const delay = Math.min(index || 0, 8) * 40;
+  return `<div class="module-card stat-tile-enter" style="animation-delay:${delay}ms" data-size="${meta.size}" data-mod="${id}">
     <div class="module-head">
       <div class="module-head-left">
         <div class="module-head-icon">${moduleThumb(id)}</div>
@@ -5211,6 +5399,60 @@ function closeProFeatureModal(){
   document.getElementById('pro-feature-modal-overlay').hidden = true;
 }
 
+function openSupportModal(){
+  document.getElementById('support-modal-overlay').hidden = false;
+  document.getElementById('support-category').value = 'bug';
+  document.getElementById('support-message').value = '';
+  const emailGroup = document.getElementById('support-email-group');
+  const emailInput = document.getElementById('support-email');
+  if (currentUser) {
+    emailGroup.hidden = true;
+    emailInput.value = currentUser.email;
+  } else {
+    emailGroup.hidden = false;
+    emailInput.value = '';
+  }
+  const feedback = document.getElementById('support-modal-feedback');
+  feedback.hidden = true;
+}
+function closeSupportModal(){
+  document.getElementById('support-modal-overlay').hidden = true;
+}
+async function submitSupportMessage(){
+  const category = document.getElementById('support-category').value;
+  const message = document.getElementById('support-message').value.trim();
+  const email = document.getElementById('support-email').value.trim();
+  const feedback = document.getElementById('support-modal-feedback');
+  if (!message) {
+    feedback.hidden = false; feedback.className = 'account-feedback error'; feedback.textContent = t('support_modal_error_empty');
+    return;
+  }
+  const btn = document.getElementById('support-submit-btn');
+  btn.disabled = true;
+  const originalText = btn.textContent;
+  btn.textContent = t('account_loading');
+  try {
+    let token = null;
+    if (currentUser && window.supabase) {
+      const { data: { session } } = await supabase.auth.getSession();
+      token = session && session.access_token;
+    }
+    const headers = { 'Content-Type': 'application/json' };
+    if (token) headers.Authorization = `Bearer ${token}`;
+    const res = await fetch('/api/support-submit', { method: 'POST', headers, body: JSON.stringify({ category, message, email: email || null }) });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || 'failed');
+    feedback.hidden = false; feedback.className = 'account-feedback'; feedback.textContent = t('support_modal_success');
+    document.getElementById('support-message').value = '';
+    setTimeout(closeSupportModal, 1400);
+  } catch (e) {
+    feedback.hidden = false; feedback.className = 'account-feedback error'; feedback.textContent = t('support_modal_error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
+}
+
 function setAccountTab(tab){
   document.querySelectorAll('.account-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
   document.querySelectorAll('.account-panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + tab));
@@ -5369,6 +5611,7 @@ async function syncPushToCloudRun(){
       stake_thresholds: state.settings.stakeThresholds,
       dashboard_layout: state.dashboardLayout,
       display_name: profile.displayName || null, avatar_url: profile.avatarUrl || null, is_public: !!profile.isPublic,
+      public_show_stats: !!profile.publicShowStats,
       phone: profile.phone || null, phone_country: profile.phoneCountry || null,
     });
     if (profileErr) throw profileErr;
@@ -5398,15 +5641,13 @@ function hideAppLoadingSkeleton(){
 let pendingSignInSession = null;
 let mfaChallengeFactorId = null;
 let mfaSetupPrompted = false;
-// Coupe-circuit temporaire : un compte s'est retrouvé bloqué par un défi MFA
-// alors qu'aucun facteur n'était configuré, sans cause identifiée malgré les
-// logs de diagnostic ajoutés (listVerifiedTotpFactors/isDeviceTrusted). Le
-// temps d'investiguer avec les logs de la prochaine tentative, le contrôle
-// MFA à la connexion (défi ET proposition de premier réglage) est désactivé
-// pour tout le monde — repasser à true pour le réactiver. N'affecte pas la
-// gestion du MFA dans Paramètres → Mon compte (activer/désactiver reste
-// utilisable), seul le blocage à la connexion est court-circuité.
-const MFA_LOGIN_GATE_ENABLED = false;
+// Réactivé : la cause du défi MFA fantôme (compte bloqué sans facteur
+// configuré) est désormais connue — le service worker mettait en cache-first
+// TOUTES les requêtes vers *.supabase.co, y compris auth.mfa.listFactors(),
+// qui servait donc une liste de facteurs figée au premier appel. Corrigé
+// dans sw.js (exclusion de *.supabase.co du cache). Voir git log pour
+// l'historique complet de ce coupe-circuit.
+const MFA_LOGIN_GATE_ENABLED = true;
 async function onAuthSignedIn(session){
   currentUser = session.user;
   authCheckComplete = true;
@@ -5686,9 +5927,20 @@ async function completeSignInRun(session){
           displayName: cloud.profile.display_name || '',
           avatarUrl: cloud.profile.avatar_url || '',
           isPublic: !!cloud.profile.is_public,
+          publicShowStats: !!cloud.profile.public_show_stats,
           phone: cloud.profile.phone || '',
           phoneCountry: cloud.profile.phone_country || '',
         };
+        // Rattrapage : le nom saisi à l'inscription est passé en métadonnée
+        // auth (user_metadata.name) mais le trigger handle_new_user() ne l'a
+        // jamais recopié dans profiles.display_name — il restait donc
+        // invisible et "perdu" pour tous les comptes créés avant le correctif
+        // de ce trigger. On le rapatrie une bonne fois ici dès qu'on le
+        // détecte, pour tous les comptes déjà affectés.
+        if (!state.profile.displayName && session.user.user_metadata && session.user.user_metadata.name) {
+          const fallbackName = String(session.user.user_metadata.name).trim().slice(0, 40);
+          if (fallbackName) { state.profile.displayName = fallbackName; scheduleCloudSync(); }
+        }
       }
       state.isDemo = false;
       DB.save(state);
@@ -5907,6 +6159,7 @@ async function renderAdminPanel(){
   const feedback = document.getElementById('admin-feedback');
   if (feedback) { feedback.hidden = false; feedback.className = 'account-feedback'; feedback.textContent = t('account_loading'); }
   renderAdminPromosTable();
+  renderAdminSupportTable();
   try {
     const { data: { session } } = await supabase.auth.getSession();
     const token = session && session.access_token;
@@ -6055,6 +6308,45 @@ async function deactivatePromoCode(id){
   }
 }
 
+async function renderAdminSupportTable(){
+  const tbody = document.getElementById('admin-support-tbody');
+  const emptyEl = document.getElementById('admin-support-empty');
+  if (!tbody) return;
+  try {
+    const data = await adminAuthedFetch('/api/admin-list-support', null, 'GET');
+    const messages = data.messages || [];
+    if (!messages.length) {
+      tbody.innerHTML = '';
+      if (emptyEl) emptyEl.hidden = false;
+      return;
+    }
+    if (emptyEl) emptyEl.hidden = true;
+    const catLabels = { bug: t('support_cat_bug'), billing: t('support_cat_billing'), suggestion: t('support_cat_suggestion'), other: t('support_cat_other') };
+    const locale = state.settings.lang === 'en' ? 'en-US' : 'fr-FR';
+    tbody.innerHTML = messages.map(m => `
+      <tr>
+        <td>${new Date(m.created_at).toLocaleDateString(locale, { day:'2-digit', month:'short', year:'numeric' })}</td>
+        <td>${escapeHtml(catLabels[m.category] || m.category)}</td>
+        <td>${escapeHtml(m.email || '—')}</td>
+        <td style="max-width:320px;white-space:pre-wrap">${escapeHtml(m.message)}</td>
+        <td>${m.status === 'read' ? `<span style="color:var(--grey)">${t('admin_support_status_read')}</span>` : `<span style="color:var(--good)">${t('admin_support_status_new')}</span>`}</td>
+        <td><button class="btn-ghost btn-sm" onclick="toggleSupportMessageStatus('${m.id}','${m.status === 'read' ? 'new' : 'read'}')">${m.status === 'read' ? t('admin_support_mark_new') : t('admin_support_mark_read')}</button></td>
+      </tr>`).join('');
+  } catch (e) {
+    console.warn('renderAdminSupportTable:', e);
+    tbody.innerHTML = '';
+    if (emptyEl) { emptyEl.hidden = false; emptyEl.textContent = t('admin_load_error'); }
+  }
+}
+async function toggleSupportMessageStatus(id, status){
+  try {
+    await adminAuthedFetch('/api/admin-mark-support-read', { id, status });
+    renderAdminSupportTable();
+  } catch (e) {
+    showToast(t('admin_load_error'), 'error');
+  }
+}
+
 // L'avatar est toujours généré côté client via canvas.toDataURL('image/jpeg')
 // (voir onAvatarFileSelected), donc toujours de la forme data:image/...;base64,...
 // Mais avatar_url est lu tel quel depuis la base (profiles.avatar_url), que la
@@ -6085,6 +6377,8 @@ function renderProfileSettings(){
   if (toggle) toggle.checked = !!p.isPublic;
   const linkRow = document.getElementById('profile-share-link-row');
   if (linkRow) linkRow.hidden = !p.isPublic;
+  const statsToggle = document.getElementById('profile-public-stats-toggle');
+  if (statsToggle) statsToggle.checked = !!p.publicShowStats;
   const linkInput = document.getElementById('profile-share-link');
   if (linkInput) linkInput.value = `${location.origin}${location.pathname}#/u/${currentUser.id}`;
   populateAccountPhoneCountrySelect();
@@ -6183,12 +6477,41 @@ function toggleProfilePublic(checked){
     syncPushToCloud().then(() => showToast(t('toast_profile_public_updated'), 'success'));
   }
 }
+function togglePublicStats(checked){
+  if (!state.profile) state.profile = defaultProfile();
+  state.profile.publicShowStats = checked;
+  DB.save(state);
+  renderProfileSettings();
+  if (currentUser) {
+    clearTimeout(syncDebounceTimer);
+    syncPushToCloud().then(() => showToast(t('toast_profile_public_updated'), 'success'));
+  }
+}
 function copyProfileLink(){
   const input = document.getElementById('profile-share-link');
   input.select();
   navigator.clipboard?.writeText(input.value).then(() => showToast(t('settings_account_link_copied'), 'success')).catch(() => {});
 }
 
+function publicProfileStatsHtml(stats){
+  if (!stats || !stats.totalSessions) return '';
+  const catLabels = { tournament: t('public_profile_cat_tournament'), cash: t('public_profile_cat_cash'), expresso: t('public_profile_cat_expresso') };
+  const fmtLabels = { live: t('public_profile_fmt_live'), online: t('public_profile_fmt_online') };
+  const catLine = Object.keys(stats.byCategory || {})
+    .filter(k => stats.byCategory[k] > 0)
+    .map(k => `${catLabels[k] || k} ${stats.byCategory[k]}%`).join(' · ');
+  const fmtLine = Object.keys(stats.byFormat || {})
+    .filter(k => stats.byFormat[k] > 0)
+    .map(k => `${fmtLabels[k] || k} ${stats.byFormat[k]}%`).join(' · ');
+  return `
+    <div style="margin-top:1.4rem;padding-top:1.2rem;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:0.55rem">
+      <div style="display:flex;justify-content:space-between;font-size:.85rem;color:var(--grey)"><span>${t('public_profile_stat_sessions')}</span><strong style="color:var(--text)">${stats.totalSessions}</strong></div>
+      <div style="display:flex;justify-content:space-between;font-size:.85rem;color:var(--grey)"><span>${t('public_profile_stat_winrate')}</span><strong style="color:var(--good)">${stats.winratePct}%</strong></div>
+      ${catLine ? `<div style="font-size:.8rem;color:var(--grey)">${t('public_profile_stat_breakdown')} : ${escapeHtml(catLine)}</div>` : ''}
+      ${fmtLine ? `<div style="font-size:.8rem;color:var(--grey)">${escapeHtml(fmtLine)}</div>` : ''}
+    </div>
+  `;
+}
 async function renderPublicProfile(userId){
   const card = document.getElementById('public-profile-card');
   card.innerHTML = `<p style="color:var(--grey)">${t('account_loading')}</p>`;
@@ -6204,6 +6527,7 @@ async function renderPublicProfile(userId){
       </div>
       <h1 class="article-title" style="text-align:center;font-size:1.4rem;">${escapeHtml(data.displayName || t('public_profile_anonymous'))}</h1>
       ${joined ? `<p style="text-align:center;color:var(--grey);font-size:.85rem;margin-top:.3rem;">${t('public_profile_member_since')} ${joined}</p>` : ''}
+      ${publicProfileStatsHtml(data.stats)}
       <a href="#/" data-link class="btn-secondary" style="justify-content:center;margin-top:1.6rem;">${t('app_back_site')}</a>
     `;
   } catch (e) {
@@ -6901,9 +7225,14 @@ function updateFxPreview(){
   getFxRate(date, sessionCur, bk.currency).then(rate => {
     if (token !== fxPreviewToken) return;
     if (rate == null) {
+      // Devise non couverte par l'API (USDT/OTHER) ou panne réseau ponctuelle :
+      // on ne bloque plus silencieusement sur un taux de 1 (faux dans la
+      // quasi-totalité des cas) — l'utilisateur saisit le taux lui-même et
+      // celui-ci est réutilisé tel quel à l'enregistrement (voir saveSession).
       currentFxRate = 1;
       fxWrap.className = 'fx-info error';
-      fxWrap.textContent = t('fx_unavailable');
+      fxWrap.innerHTML = `${t('fx_unavailable')} ${t('fx_manual_prompt')}
+        <span class="fx-manual-row">1 ${escapeHtml(sessionCur)} = <input type="number" step="0.0001" min="0" id="session-fx-manual" placeholder="${t('fx_manual_placeholder')}" oninput="onManualFxRateInput(this.value)"> ${escapeHtml(bk.currency)}</span>`;
     } else {
       currentFxRate = rate;
       fxWrap.className = 'fx-info ok';
@@ -6911,6 +7240,11 @@ function updateFxPreview(){
     }
     updateProfitPreview();
   });
+}
+function onManualFxRateInput(value){
+  const rate = parseFloat(value);
+  currentFxRate = (rate > 0) ? rate : 1;
+  updateProfitPreview();
 }
 
 function updateProfitPreview(){
@@ -7040,7 +7374,12 @@ async function saveSession(){
     const saveBtn = document.querySelector('#session-modal-overlay .modal-foot .btn-primary');
     if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = t('fx_loading'); }
     const rate = await getFxRate(date, currency, bk.currency);
-    fxRate = (rate == null) ? 1 : rate;
+    // rate==null couvre les devises non supportées par l'API (USDT/OTHER) et
+    // les pannes réseau ponctuelles : on réutilise alors currentFxRate, déjà
+    // résolu par l'aperçu live (updateFxPreview) — y compris une éventuelle
+    // saisie manuelle de l'utilisateur — plutôt que d'écraser silencieusement
+    // avec 1, ce qui faussait le profit converti sans aucun avertissement.
+    fxRate = (rate == null) ? currentFxRate : rate;
     if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = t('btn_save'); }
   }
   const payload = {
@@ -7120,6 +7459,7 @@ document.addEventListener('DOMContentLoaded', function(){
   renderBlogGrid('blog-preview-grid', 3);
   drawHeroCharts();
   renderPreviewTab('dashboard');
+  initPreviewAutoCycle();
   renderModuleShowcase();
   renderPricingTable('pricing-table-landing', { highlightPlanId: null, showCta: true });
   renderStatMarquee();

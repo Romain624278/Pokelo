@@ -215,7 +215,8 @@ profil, le nom d'affichage et le partage de profil public :
 alter table public.profiles
   add column if not exists display_name text,
   add column if not exists avatar_url text,
-  add column if not exists is_public boolean not null default false;
+  add column if not exists is_public boolean not null default false,
+  add column if not exists public_show_stats boolean not null default false;
 ```
 
 Le profil public (`#/u/:id`) ne passe **jamais** par le client Supabase
@@ -225,6 +226,13 @@ La route publique passe par `api/public-profile.js`, qui utilise la clé
 service_role côté serveur et ne renvoie que `display_name` / `avatar_url` /
 `created_at` — jamais l'email ni les données financières. Aucune policy RLS
 supplémentaire n'est donc nécessaire pour cette fonctionnalité.
+
+`public_show_stats` est un opt-in distinct de `is_public` : quand activé,
+`api/public-profile.js` lit aussi `sessions` (via service_role, toujours
+hors RLS côté client) mais n'en renvoie jamais que des agrégats calculés
+côté serveur (nombre de sessions, winrate %, répartition par catégorie/
+format en pourcentages) — jamais `buy_in`/`cashout` bruts, jamais de date,
+lieu ni montant en euros.
 
 ## 7. Parrainage (code, -30% / 1 mois offert)
 
@@ -258,12 +266,24 @@ begin
   if ref_code is not null and length(trim(ref_code)) > 0 then
     select id into ref_user_id from public.profiles where referral_code = upper(trim(ref_code)) limit 1;
   end if;
-  insert into public.profiles (id, email, referral_code, referred_by_user_id)
-  values (new.id, new.email, upper(substr(replace(new.id::text,'-',''),1,8)), ref_user_id);
+  insert into public.profiles (id, email, display_name, referral_code, referred_by_user_id)
+  values (new.id, new.email, nullif(trim(new.raw_user_meta_data->>'name'), ''), upper(substr(replace(new.id::text,'-',''),1,8)), ref_user_id);
   return new;
 end;
 $$ language plpgsql security definer;
 ```
+
+> **Bug corrigé (2026-07-27)** : cette fonction n'a jamais recopié le nom saisi
+> au formulaire d'inscription (`options.data.name` dans `signUp()`, atterrit
+> dans `raw_user_meta_data`) vers `profiles.display_name` — le champ restait
+> vide indéfiniment, donnant l'impression que le nom d'affichage "disparaissait"
+> à la reconnexion alors qu'il n'avait en réalité jamais été enregistré. Si la
+> fonction existe déjà en base avec l'ancienne définition (sans `display_name`),
+> il suffit de relancer ce `create or replace function` — pas besoin de
+> `drop trigger`/`create trigger`, le trigger existant pointe vers la même
+> fonction. Les comptes déjà créés avant ce correctif sont rattrapés
+> automatiquement côté client à la prochaine connexion (voir `completeSignInRun`
+> dans `index.html`), sans action supplémentaire ici.
 
 Le reste de la logique (vérifier que le parrain est bien Pro, appliquer la
 remise -30% au checkout, créditer le mois offert) vit côté serveur dans
@@ -398,3 +418,137 @@ alter table public.profiles
 déroulante (ex. `FR`), `phone` le numéro tel que saisi par l'utilisateur (pas
 de normalisation E.164 stricte). Champ facultatif, jamais requis à
 l'inscription.
+
+## 13. Verrous serveur avant mise en production (critique)
+
+Deux failles trouvées lors de l'audit avant lancement public — **à exécuter
+avant toute publicité du site**, sans quoi elles sont exploitables dès
+aujourd'hui par n'importe quel utilisateur technique, sans avoir besoin de
+passer par l'interface.
+
+### 13a. Auto-attribution du rôle admin / plan Pro (critique)
+
+La policy `profiles: self only` (`auth.uid() = id`) autorise un utilisateur à
+modifier N'IMPORTE QUELLE colonne de sa propre ligne, y compris `role` et
+`plan` — RLS ne contrôle que la ligne (propriétaire), jamais les colonnes.
+Le client ne propose jamais ces champs dans son propre formulaire, mais rien
+n'empêche un appel direct à l'API REST Supabase (avec le propre jeton JWT de
+l'utilisateur) du type :
+
+```
+PATCH /rest/v1/profiles?id=eq.<son-propre-id>
+Body: {"role":"admin","plan":"pro"}
+```
+
+Cette requête est aujourd'hui acceptée. Le trigger ci-dessous neutralise
+silencieusement toute tentative de modifier ces colonnes hors service_role
+(donc hors fonctions serverless admin, qui utilisent la clé service_role et
+restent donc inchangées) :
+
+```sql
+create or replace function public.protect_profile_privileged_columns()
+returns trigger as $$
+begin
+  if auth.role() <> 'service_role' then
+    new.role := old.role;
+    new.plan := old.plan;
+    new.stripe_customer_id := old.stripe_customer_id;
+    new.stripe_subscription_id := old.stripe_subscription_id;
+    new.stripe_subscription_status := old.stripe_subscription_status;
+    new.stripe_current_period_end := old.stripe_current_period_end;
+    new.referral_reward_claimed := old.referral_reward_claimed;
+    new.referral_discount_used := old.referral_discount_used;
+    new.referred_by_user_id := old.referred_by_user_id;
+  end if;
+  return new;
+end;
+$$ language plpgsql security definer;
+
+drop trigger if exists protect_profile_privileged_columns_trigger on public.profiles;
+create trigger protect_profile_privileged_columns_trigger
+  before update on public.profiles
+  for each row execute function public.protect_profile_privileged_columns();
+```
+
+Après ce trigger : un utilisateur peut toujours modifier `display_name`,
+`avatar_url`, `phone`, `colors`, etc. normalement — seules les colonnes
+listées ci-dessus reviennent silencieusement à leur valeur précédente si
+quelqu'un d'autre que le service_role tente de les changer.
+
+### 13b. Limite de bankrolls gratuite contournable (contournement produit)
+
+La limite d'1 bankroll pour le plan gratuit n'est vérifiée que côté client
+(`FREE_BANKROLL_LIMIT` dans `index.html`) — un appel direct à l'API permet
+de créer autant de bankrolls que voulu sans jamais passer Pro :
+
+```sql
+create or replace function public.enforce_bankroll_limit()
+returns trigger as $$
+declare
+  user_plan text;
+  bankroll_count int;
+begin
+  if auth.role() = 'service_role' then
+    return new;
+  end if;
+  select plan into user_plan from public.profiles where id = new.user_id;
+  if user_plan is null or user_plan = 'free' then
+    select count(*) into bankroll_count from public.bankrolls where user_id = new.user_id;
+    if bankroll_count >= 1 then
+      raise exception 'Limite de bankrolls atteinte pour le plan gratuit (1 maximum)';
+    end if;
+  end if;
+  return new;
+end;
+$$ language plpgsql security definer;
+
+drop trigger if exists enforce_bankroll_limit_trigger on public.bankrolls;
+create trigger enforce_bankroll_limit_trigger
+  before insert on public.bankrolls
+  for each row execute function public.enforce_bankroll_limit();
+```
+
+Le `1` en dur dans `bankroll_count >= 1` doit rester synchronisé avec
+`FREE_BANKROLL_LIMIT` côté client si cette valeur change un jour.
+
+Les autres limites "Pro" (export CSV, personnalisation du dashboard,
+catégorie Expresso, seuils de stakes) ne portent que sur la présentation des
+données déjà accessibles au propriétaire (pas de fuite vers un tiers, pas de
+gain de fonctionnalité serveur) — les contourner ne casse rien côté sécurité
+ou modèle de données, seulement l'incitation à passer Pro. Pas de verrou
+serveur ajouté pour celles-ci : le rapport effort/risque ne le justifie pas.
+
+## 14. Canal de support (mini QCM + suivi admin)
+
+À exécuter dans Supabase (SQL Editor) — table des messages envoyés depuis le
+formulaire de contact (accessible même sans compte, depuis le footer du
+site) :
+
+```sql
+create table if not exists public.support_messages (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  user_id uuid references public.profiles(id),
+  email text,
+  category text not null,
+  message text not null,
+  status text not null default 'new'
+);
+
+alter table public.support_messages enable row level security;
+-- Aucune policy client (ni select, ni insert) : la table n'est accessible
+-- que via les fonctions serverless ci-dessous, qui utilisent la clé
+-- service_role. Un visiteur anonyme peut envoyer un message (pas besoin de
+-- compte), mais personne ne peut lire les messages des autres via le client
+-- Supabase, y compris son propre message.
+```
+
+Deux fonctions Vercel :
+- `api/support-submit.js` — publique (pas d'auth requise), insère le
+  message. Si un jeton d'accès est fourni (utilisateur connecté), `user_id`
+  et `email` sont renseignés automatiquement ; sinon le visiteur saisit son
+  email dans le formulaire.
+- `api/admin-list-support.js` — réservée au rôle admin (même garde que
+  `api/admin-list-promos.js`), liste les messages pour le panneau admin.
+- `api/admin-mark-support-read.js` — réservée au rôle admin, bascule le
+  statut `new`/`read` d'un message.

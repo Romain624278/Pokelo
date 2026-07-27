@@ -16,7 +16,7 @@ module.exports = async (req, res) => {
   if (!SUPABASE_URL || !SERVICE_ROLE_KEY) { res.status(500).json({ error: 'Server misconfigured' }); return; }
 
   try {
-    const url = `${SUPABASE_URL}/rest/v1/profiles?id=eq.${encodeURIComponent(userId)}&is_public=is.true&select=display_name,avatar_url,created_at`;
+    const url = `${SUPABASE_URL}/rest/v1/profiles?id=eq.${encodeURIComponent(userId)}&is_public=is.true&select=display_name,avatar_url,created_at,public_show_stats`;
     const profileRes = await fetch(url, {
       headers: { apikey: SERVICE_ROLE_KEY, Authorization: `Bearer ${SERVICE_ROLE_KEY}` },
     });
@@ -38,13 +38,45 @@ module.exports = async (req, res) => {
     // anonymes pour ne jamais republier une valeur arbitraire écrite en base.
     const isSafeAvatarUrl = typeof row.avatar_url === 'string' && /^data:image\/(png|jpe?g|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(row.avatar_url);
 
+    let stats = null;
+    if (row.public_show_stats) {
+      stats = await computePublicStats(SUPABASE_URL, SERVICE_ROLE_KEY, userId);
+    }
+
     res.setHeader('Cache-Control', 'public, max-age=60');
     res.status(200).json({
       displayName: row.display_name || '',
       avatarUrl: isSafeAvatarUrl ? row.avatar_url : '',
       createdAt: row.created_at || null,
+      stats,
     });
   } catch (e) {
     res.status(500).json({ error: 'Unexpected error', detail: String(e && e.message || e) });
   }
 };
+
+// N'agrège et ne renvoie jamais aucun montant (buy_in/cashout) — uniquement des
+// pourcentages et des volumes — même si l'utilisateur a explicitement opté pour
+// l'affichage de ses statistiques publiques. Le detail des sessions (dates,
+// lieux, montants) reste toujours privé.
+async function computePublicStats(SUPABASE_URL, SERVICE_ROLE_KEY, userId){
+  const url = `${SUPABASE_URL}/rest/v1/sessions?user_id=eq.${encodeURIComponent(userId)}&select=category,format,buy_in,cashout`;
+  const sessRes = await fetch(url, {
+    headers: { apikey: SERVICE_ROLE_KEY, Authorization: `Bearer ${SERVICE_ROLE_KEY}` },
+  });
+  if (!sessRes.ok) return null;
+  const rows = await sessRes.json();
+  if (!Array.isArray(rows) || !rows.length) return { totalSessions: 0, winratePct: 0, byCategory: {}, byFormat: {} };
+  const total = rows.length;
+  const wins = rows.filter(s => Number(s.cashout) > Number(s.buy_in)).length;
+  const pct = (n) => Math.round((n / total) * 100);
+  const byCategory = {};
+  const byFormat = {};
+  rows.forEach(s => {
+    if (s.category) byCategory[s.category] = (byCategory[s.category] || 0) + 1;
+    if (s.format) byFormat[s.format] = (byFormat[s.format] || 0) + 1;
+  });
+  Object.keys(byCategory).forEach(k => { byCategory[k] = pct(byCategory[k]); });
+  Object.keys(byFormat).forEach(k => { byFormat[k] = pct(byFormat[k]); });
+  return { totalSessions: total, winratePct: pct(wins), byCategory, byFormat };
+}
