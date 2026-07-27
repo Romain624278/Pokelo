@@ -5208,6 +5208,15 @@ function hideAppLoadingSkeleton(){
 let pendingSignInSession = null;
 let mfaChallengeFactorId = null;
 let mfaSetupPrompted = false;
+// Coupe-circuit temporaire : un compte s'est retrouvé bloqué par un défi MFA
+// alors qu'aucun facteur n'était configuré, sans cause identifiée malgré les
+// logs de diagnostic ajoutés (listVerifiedTotpFactors/isDeviceTrusted). Le
+// temps d'investiguer avec les logs de la prochaine tentative, le contrôle
+// MFA à la connexion (défi ET proposition de premier réglage) est désactivé
+// pour tout le monde — repasser à true pour le réactiver. N'affecte pas la
+// gestion du MFA dans Paramètres → Mon compte (activer/désactiver reste
+// utilisable), seul le blocage à la connexion est court-circuité.
+const MFA_LOGIN_GATE_ENABLED = false;
 async function onAuthSignedIn(session){
   currentUser = session.user;
   authCheckComplete = true;
@@ -5217,27 +5226,29 @@ async function onAuthSignedIn(session){
   // écran de code avant de charger quoi que ce soit côté compte. Si aucun
   // facteur n'est configuré, on propose l'activation une seule fois (première
   // connexion) plutôt que de bloquer sur un défi qui n'a pas lieu d'être.
-  try {
-    let factors = [];
-    try { factors = await listVerifiedTotpFactors(); } catch (e) { console.warn('listVerifiedTotpFactors:', e); factors = []; }
-    if (factors.length) {
-      mfaChallengeFactorId = factors[0].id;
-      const trusted = await isDeviceTrusted(currentUser.id, getOrCreateDeviceId());
-      if (!trusted) {
-        pendingSignInSession = session;
-        showMfaChallengeScreen();
-        return;
+  if (MFA_LOGIN_GATE_ENABLED) {
+    try {
+      let factors = [];
+      try { factors = await listVerifiedTotpFactors(); } catch (e) { console.warn('listVerifiedTotpFactors:', e); factors = []; }
+      if (factors.length) {
+        mfaChallengeFactorId = factors[0].id;
+        const trusted = await isDeviceTrusted(currentUser.id, getOrCreateDeviceId());
+        if (!trusted) {
+          pendingSignInSession = session;
+          showMfaChallengeScreen();
+          return;
+        }
+      } else {
+        const prompted = await fetchMfaSetupPrompted(currentUser.id);
+        if (!prompted) {
+          pendingSignInSession = session;
+          showMfaSetupPromptScreen();
+          return;
+        }
+        mfaSetupPrompted = true;
       }
-    } else {
-      const prompted = await fetchMfaSetupPrompted(currentUser.id);
-      if (!prompted) {
-        pendingSignInSession = session;
-        showMfaSetupPromptScreen();
-        return;
-      }
-      mfaSetupPrompted = true;
-    }
-  } catch (e) { console.warn('Contrôle MFA à la connexion échoué :', e); /* on ne bloque pas la connexion pour ça */ }
+    } catch (e) { console.warn('Contrôle MFA à la connexion échoué :', e); /* on ne bloque pas la connexion pour ça */ }
+  }
   await completeSignIn(session);
 }
 // Renvoie TOUS les facteurs TOTP vérifiés, pas seulement le premier — plusieurs
