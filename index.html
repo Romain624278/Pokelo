@@ -2811,6 +2811,7 @@ const I18N = {
     plan_feat_unlimited_bankrolls:'Bankrolls illimitées', plan_feat_modular_dashboard:'Dashboard modulaire', plan_feat_advanced_stats:'Statistiques avancées',
     plan_feat_all_pro:'Tout Pro, multi-joueurs', plan_feat_group_view:'Vue de groupe', plan_feat_roles:'Gestion des rôles',
     toast_sync_error:'La synchronisation a échoué. Vos changements seront réessayés automatiquement.',
+    toast_sync_error_logout:"Impossible de sauvegarder vos dernières modifications — déconnexion annulée pour ne pas perdre de données. Réessayez dans quelques instants.",
     toast_checkout_error:"Impossible d'ouvrir la page de paiement pour le moment. Réessayez dans quelques instants ou contactez le support.",
     toast_cloud_pull_error:'Impossible de récupérer vos données depuis le cloud. Vérifiez votre connexion.',
     toast_profile_public_updated:'Visibilité du profil mise à jour.',
@@ -3070,6 +3071,7 @@ const I18N = {
     plan_feat_unlimited_bankrolls:'Unlimited bankrolls', plan_feat_modular_dashboard:'Modular dashboard', plan_feat_advanced_stats:'Advanced statistics',
     plan_feat_all_pro:'Everything in Pro, multi-player', plan_feat_group_view:'Group view', plan_feat_roles:'Role management',
     toast_sync_error:'Sync failed. Your changes will be retried automatically.',
+    toast_sync_error_logout:'Could not save your latest changes — sign-out cancelled to avoid data loss. Try again shortly.',
     toast_checkout_error:'Could not open the payment page right now. Try again shortly or contact support.',
     toast_cloud_pull_error:'Could not fetch your data from the cloud. Check your connection.',
     toast_profile_public_updated:'Profile visibility updated.',
@@ -5301,6 +5303,25 @@ function syncPushToCloud(){
 async function syncPushToCloudRun(){
   try {
     const userId = currentUser.id;
+    // Migration : les bankrolls/sessions créées avant le passage de uid() à
+    // newRecordId() ont un id non-UUID, rejeté par les colonnes "uuid" de
+    // Supabase. On les corrige ici avant de pousser plutôt que de perdre ces
+    // enregistrements — en répercutant le nouvel id sur les sessions qui
+    // référençaient l'ancien bankrollId.
+    let idsFixed = false;
+    state.bankrolls.forEach(bk => {
+      if (!isValidUuid(bk.id)) {
+        const oldId = bk.id;
+        bk.id = newRecordId();
+        state.sessions.forEach(s => { if (s.bankrollId === oldId) s.bankrollId = bk.id; });
+        idsFixed = true;
+      }
+    });
+    state.sessions.forEach(s => {
+      if (!isValidUuid(s.id)) { s.id = newRecordId(); idsFixed = true; }
+    });
+    if (idsFixed) DB.save(state);
+
     const bkPayload = state.bankrolls.map(b => ({
       id: b.id, user_id: userId, name: b.name, currency: b.currency, start: b.start, color: b.color,
       created_at: new Date(b.createdAt || Date.now()).toISOString(),
@@ -5313,8 +5334,19 @@ async function syncPushToCloudRun(){
       site: s.site || '', variant: s.variant || '', notes: s.notes || '',
       created_at: new Date(s.createdAt || Date.now()).toISOString(),
     }));
-    if (bkPayload.length) await supabase.from('bankrolls').upsert(bkPayload);
-    if (sessPayload.length) await supabase.from('sessions').upsert(sessPayload);
+    // Les erreurs d'upsert n'étaient jusqu'ici jamais vérifiées : un rejet
+    // Postgres (type invalide, contrainte...) passait totalement inaperçu —
+    // la donnée restait affichée localement (déjà en mémoire) sans jamais
+    // atteindre le cloud, avec perte silencieuse au prochain pull. Toute
+    // erreur ici remonte maintenant au catch plus bas (toast visible).
+    if (bkPayload.length) {
+      const { error } = await supabase.from('bankrolls').upsert(bkPayload);
+      if (error) throw error;
+    }
+    if (sessPayload.length) {
+      const { error } = await supabase.from('sessions').upsert(sessPayload);
+      if (error) throw error;
+    }
     // Suppressions explicites (tombstones) plutôt qu'un diff "ce qui n'est plus
     // présent localement doit être supprimé côté cloud" : cette dernière approche
     // effaçait TOUTES les données distantes si `state` était vidé par erreur
@@ -5330,7 +5362,7 @@ async function syncPushToCloudRun(){
       state.deletedBankrollIds = (state.deletedBankrollIds || []).filter(id => !deletedBankrollIds.includes(id));
     }
     const profile = state.profile || defaultProfile();
-    await supabase.from('profiles').upsert({
+    const { error: profileErr } = await supabase.from('profiles').upsert({
       id: userId, email: currentUser.email, lang: state.settings.lang, theme: state.settings.theme,
       date_format: state.settings.dateFormat, colors: state.settings.colors,
       stake_thresholds: state.settings.stakeThresholds,
@@ -5338,9 +5370,12 @@ async function syncPushToCloudRun(){
       display_name: profile.displayName || null, avatar_url: profile.avatarUrl || null, is_public: !!profile.isPublic,
       phone: profile.phone || null, phone_country: profile.phoneCountry || null,
     });
+    if (profileErr) throw profileErr;
+    return true;
   } catch (e) {
     console.warn('Synchronisation Supabase échouée :', e);
     showToast(t('toast_sync_error'), 'error');
+    return false;
   } finally {
     cloudSyncInFlight = false;
     if (cloudSyncQueued) { cloudSyncQueued = false; return syncPushToCloud(); }
@@ -5506,6 +5541,28 @@ async function submitMfaChallenge(){
     feedback.textContent = t('settings_account_mfa_invalid_code');
   }
 }
+// bankrolls.id et sessions.id sont de vraies colonnes "uuid" côté Supabase
+// (voir SUPABASE_SETUP.md) — uid() (js/pure-utils.js) génère un identifiant
+// court en base36, jamais un UUID valide. Un upsert avec un id pareil est
+// rejeté par Postgres ; comme syncPushToCloudRun() ne vérifiait pas l'erreur
+// de l'upsert (corrigé ci-dessous), l'échec était totalement silencieux :
+// la bankroll/session semblait enregistrée (elle vit en mémoire/localStorage)
+// mais n'atteignait jamais réellement la base — perte de données au prochain
+// pull (ex. après déconnexion/reconnexion), puisque le cloud n'a jamais rien
+// reçu. newRecordId() remplace uid() pour tout ce qui est poussé vers ces
+// deux tables ; isValidUuid() sert à corriger a posteriori les identifiants
+// déjà mal formés créés avant ce correctif (voir migration dans
+// syncPushToCloudRun).
+function newRecordId(){
+  if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    const r = Math.random() * 16 | 0;
+    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+  });
+}
+function isValidUuid(id){
+  return typeof id === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+}
 function getOrCreateDeviceId(){
   let id = localStorage.getItem('pokelo_device_id');
   if (!id) {
@@ -5647,7 +5704,17 @@ async function completeSignInRun(session){
 async function signOutUser(){
   if (currentUser && window.supabase) {
     clearTimeout(syncDebounceTimer);
-    await syncPushToCloud();
+    // N'efface jamais l'état local (plus bas) si la synchronisation d'avant
+    // déconnexion a échoué : le faire quand même a déjà provoqué de vraies
+    // pertes de données (état local remplacé par seedDemoState() alors que
+    // le cloud n'avait jamais reçu les dernières modifications). On préfère
+    // laisser l'utilisateur connecté avec ses données visibles, quitte à ce
+    // qu'il retente, plutôt que de risquer de tout perdre silencieusement.
+    const synced = await syncPushToCloud();
+    if (synced === false) {
+      showToast(t('toast_sync_error_logout'), 'error');
+      return;
+    }
     await supabase.auth.signOut();
   }
   currentUser = null;
@@ -6766,7 +6833,7 @@ function saveBankroll(){
   if (id) {
     const bk = getBankroll(id); bk.name = name; bk.currency = currency; bk.start = start;
   } else {
-    state.bankrolls.push({ id: uid(), name, currency, start, createdAt: Date.now(), color: BK_PALETTE[state.bankrolls.length % BK_PALETTE.length] });
+    state.bankrolls.push({ id: newRecordId(), name, currency, start, createdAt: Date.now(), color: BK_PALETTE[state.bankrolls.length % BK_PALETTE.length] });
   }
   state.isDemo = false;
   saveState(); closeBankrollModal(); populateBankrollSelects();
@@ -6898,7 +6965,7 @@ function saveQuickLog(){
   const amount = Math.abs(parseFloat(document.getElementById('quicklog-amount').value) || 0);
   const net = amount * quickSign;
   const payload = {
-    id: uid(), createdAt: Date.now(),
+    id: newRecordId(), createdAt: Date.now(),
     bankrollId,
     category: getSegVal('quicklog-type-seg'),
     format: getSegVal('quicklog-format-seg'),
@@ -6995,7 +7062,7 @@ async function saveSession(){
   if (id) {
     const s = state.sessions.find(x=>x.id===id); Object.assign(s, payload);
   } else {
-    state.sessions.push(Object.assign({ id: uid(), createdAt: Date.now() }, payload));
+    state.sessions.push(Object.assign({ id: newRecordId(), createdAt: Date.now() }, payload));
   }
   state.isDemo = false;
   saveState(); closeSessionModal();
