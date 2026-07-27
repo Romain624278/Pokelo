@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pokelo-v3';
+const CACHE_NAME = 'pokelo-v4';
 const SHELL_ASSETS = [
   './',
   './index.html',
@@ -38,6 +38,14 @@ self.addEventListener('fetch', (event) => {
   // premier utilisateur à un second utilisateur connecté ensuite sur le même
   // navigateur/appareil (ex. poste partagé) — fuite de données entre comptes.
   if (new URL(url, self.location.origin).pathname.startsWith('/api/')) return;
+  // Jamais de cache non plus pour l'API Supabase (autre origine que le site,
+  // donc pas couvert par l'exclusion /api/ ci-dessus) : les requêtes REST
+  // (bankrolls/sessions/profiles) sont des GET dont l'URL encode le filtre
+  // (ex. ?user_id=eq.<id>) — un cache-first servait indéfiniment la toute
+  // première réponse obtenue pour cette URL exacte (même vide) sans jamais
+  // revérifier le réseau, ce qui donnait l'impression que des bankrolls/
+  // sessions bel et bien enregistrées avaient disparu.
+  if (url.includes('.supabase.co')) return;
 
   const isAppShell = event.request.mode === 'navigate' || url.endsWith('/index.html') || url.endsWith('/');
   if (isAppShell) {
