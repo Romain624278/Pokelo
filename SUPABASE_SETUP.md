@@ -383,3 +383,18 @@ un écran propose de l'activer ou de reporter ("Plus tard"). Dans les deux cas,
 l'utilisateur a choisi "Plus tard" (ou a fermé sans configurer), un
 avertissement discret reste visible dans Paramètres → Mon compte, au niveau du
 bouton d'activation du MFA, jusqu'à ce qu'il l'active réellement.
+
+## 12. Numéro de téléphone du compte
+
+À exécuter dans Supabase (SQL Editor) :
+
+```sql
+alter table public.profiles
+  add column if not exists phone text,
+  add column if not exists phone_country text;
+```
+
+`phone_country` stocke le code ISO du pays sélectionné dans la liste
+déroulante (ex. `FR`), `phone` le numéro tel que saisi par l'utilisateur (pas
+de normalisation E.164 stricte). Champ facultatif, jamais requis à
+l'inscription.

@@ -733,6 +733,9 @@
   .settings-account-row:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
   .settings-account-row > label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text); margin-bottom: 0.4rem; }
   .settings-account-row .form-row { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+  .phone-input-row { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.6rem; }
+  .phone-input-row #account-phone-country { flex: 0 0 auto; min-width: 200px; }
+  .phone-input-row #account-phone-number { flex: 1; min-width: 140px; }
   .settings-account-row .form-row .input { flex: 1; min-width: 180px; }
   #mfa-status { font-size: 0.85rem; color: var(--text); margin-bottom: 0.6rem; }
   #mfa-enroll-flow { display: flex; flex-direction: column; gap: 0.6rem; align-items: flex-start; margin-top: 0.8rem; }
@@ -1730,6 +1733,16 @@
                       </div>
                     </div>
                   </div>
+                </div>
+                <div class="settings-account-row">
+                  <label data-i18n="settings_account_phone">Numéro de téléphone</label>
+                  <p class="settings-desc" data-i18n="settings_account_phone_desc">Optionnel — utile pour vous contacter en cas de problème sur votre compte.</p>
+                  <div class="phone-input-row">
+                    <select class="input" id="account-phone-country"></select>
+                    <input class="input" type="tel" id="account-phone-number" placeholder="6 12 34 56 78" />
+                    <button class="btn-ghost btn-sm" onclick="saveAccountPhone()" data-i18n="settings_account_save">Enregistrer</button>
+                  </div>
+                  <div class="account-feedback" id="account-phone-feedback" hidden></div>
                 </div>
                 <div class="settings-account-row">
                   <label data-i18n="settings_account_plan">Plan actuel</label>
@@ -2731,6 +2744,7 @@ const I18N = {
     settings_account_role_admin:'✓ Statut administrateur actif sur ce compte.',
     settings_account_next_billing:'Prochain débit le {date}',
     settings_account_profile:'Profil', settings_account_avatar_upload:'Changer la photo', settings_account_avatar_remove:'Retirer',
+    settings_account_phone:'Numéro de téléphone', settings_account_phone_desc:'Optionnel — utile pour vous contacter en cas de problème sur votre compte.',
     settings_account_save:'Enregistrer', settings_account_profile_saved:'Profil mis à jour.',
     settings_account_public_toggle:'Rendre mon profil public', settings_account_copy_link:'Copier le lien',
     settings_account_link_copied:'Lien copié dans le presse-papiers.', settings_account_plan_current:'Plan actuel',
@@ -2986,6 +3000,7 @@ const I18N = {
     settings_account_role_admin:'✓ Administrator status active on this account.',
     settings_account_next_billing:'Next billing on {date}',
     settings_account_profile:'Profile', settings_account_avatar_upload:'Change photo', settings_account_avatar_remove:'Remove',
+    settings_account_phone:'Phone number', settings_account_phone_desc:'Optional — useful to reach you if there is an issue with your account.',
     settings_account_save:'Save', settings_account_profile_saved:'Profile updated.',
     settings_account_public_toggle:'Make my profile public', settings_account_copy_link:'Copy link',
     settings_account_link_copied:'Link copied to clipboard.', settings_account_plan_current:'Current plan',
@@ -3394,7 +3409,7 @@ const STORAGE_KEY = 'pokelo_state_v1';
 let state = null;
 
 function defaultProfile(){
-  return { displayName: '', avatarUrl: '', isPublic: false };
+  return { displayName: '', avatarUrl: '', isPublic: false, phone: '', phoneCountry: '' };
 }
 function defaultState(){
   return { bankrolls: [], sessions: [], isDemo: false, demoDismissed: false, dashboardLayout: DEFAULT_LAYOUT.slice(), settings: defaultSettings(), profile: defaultProfile(), deletedBankrollIds: [], deletedSessionIds: [] };
@@ -3801,6 +3816,61 @@ const COUNTRY_NAMES = {
   fr: { US:'États-Unis', FR:'France', KH:'Cambodge', IT:'Italie', KR:'Corée du Sud', IE:'Irlande', CZ:'République tchèque', AU:'Australie', MC:'Monaco', ME:'Monténégro', BE:'Belgique' },
   en: { US:'United States', FR:'France', KH:'Cambodia', IT:'Italy', KR:'South Korea', IE:'Ireland', CZ:'Czech Republic', AU:'Australia', MC:'Monaco', ME:'Montenegro', BE:'Belgium' },
 };
+// Indicatifs téléphoniques internationaux — liste large (pas exhaustive à 195
+// pays) mais couvre les nationalités les plus probables pour un public poker
+// international. [code ISO, indicatif, nom FR, nom EN]
+const PHONE_COUNTRIES = [
+  ['FR','33','France','France'],['BE','32','Belgique','Belgium'],['CH','41','Suisse','Switzerland'],
+  ['LU','352','Luxembourg','Luxembourg'],['MC','377','Monaco','Monaco'],['DE','49','Allemagne','Germany'],
+  ['GB','44','Royaume-Uni','United Kingdom'],['IE','353','Irlande','Ireland'],['ES','34','Espagne','Spain'],
+  ['PT','351','Portugal','Portugal'],['IT','39','Italie','Italy'],['NL','31','Pays-Bas','Netherlands'],
+  ['AT','43','Autriche','Austria'],['DK','45','Danemark','Denmark'],['SE','46','Suède','Sweden'],
+  ['NO','47','Norvège','Norway'],['FI','358','Finlande','Finland'],['IS','354','Islande','Iceland'],
+  ['PL','48','Pologne','Poland'],['CZ','420','République tchèque','Czechia'],['SK','421','Slovaquie','Slovakia'],
+  ['HU','36','Hongrie','Hungary'],['RO','40','Roumanie','Romania'],['BG','359','Bulgarie','Bulgaria'],
+  ['GR','30','Grèce','Greece'],['HR','385','Croatie','Croatia'],['SI','386','Slovénie','Slovenia'],
+  ['RS','381','Serbie','Serbia'],['ME','382','Monténégro','Montenegro'],['MK','389','Macédoine du Nord','North Macedonia'],
+  ['AL','355','Albanie','Albania'],['BA','387','Bosnie-Herzégovine','Bosnia and Herzegovina'],
+  ['EE','372','Estonie','Estonia'],['LV','371','Lettonie','Latvia'],['LT','370','Lituanie','Lithuania'],
+  ['UA','380','Ukraine','Ukraine'],['MD','373','Moldavie','Moldova'],['BY','375','Biélorussie','Belarus'],
+  ['RU','7','Russie','Russia'],['TR','90','Turquie','Turkey'],['CY','357','Chypre','Cyprus'],
+  ['MT','356','Malte','Malta'],['AD','376','Andorre','Andorra'],['LI','423','Liechtenstein','Liechtenstein'],
+  ['US','1','États-Unis','United States'],['CA','1','Canada','Canada'],['MX','52','Mexique','Mexico'],
+  ['BR','55','Brésil','Brazil'],['AR','54','Argentine','Argentina'],['CL','56','Chili','Chile'],
+  ['CO','57','Colombie','Colombia'],['PE','51','Pérou','Peru'],['VE','58','Venezuela','Venezuela'],
+  ['UY','598','Uruguay','Uruguay'],['PY','595','Paraguay','Paraguay'],['BO','591','Bolivie','Bolivia'],
+  ['EC','593','Équateur','Ecuador'],['CR','506','Costa Rica','Costa Rica'],['PA','507','Panama','Panama'],
+  ['DO','1','République dominicaine','Dominican Republic'],['JM','1','Jamaïque','Jamaica'],
+  ['CU','53','Cuba','Cuba'],['GT','502','Guatemala','Guatemala'],['HN','504','Honduras','Honduras'],
+  ['SV','503','Salvador','El Salvador'],['NI','505','Nicaragua','Nicaragua'],
+  ['CN','86','Chine','China'],['JP','81','Japon','Japan'],['KR','82','Corée du Sud','South Korea'],
+  ['IN','91','Inde','India'],['ID','62','Indonésie','Indonesia'],['MY','60','Malaisie','Malaysia'],
+  ['SG','65','Singapour','Singapore'],['TH','66','Thaïlande','Thailand'],['VN','84','Vietnam','Vietnam'],
+  ['PH','63','Philippines','Philippines'],['KH','855','Cambodge','Cambodia'],['LA','856','Laos','Laos'],
+  ['MM','95','Myanmar','Myanmar'],['TW','886','Taïwan','Taiwan'],['HK','852','Hong Kong','Hong Kong'],
+  ['MN','976','Mongolie','Mongolia'],['NP','977','Népal','Nepal'],['BD','880','Bangladesh','Bangladesh'],
+  ['PK','92','Pakistan','Pakistan'],['LK','94','Sri Lanka','Sri Lanka'],['BN','673','Brunei','Brunei'],
+  ['AU','61','Australie','Australia'],['NZ','64','Nouvelle-Zélande','New Zealand'],
+  ['AE','971','Émirats arabes unis','United Arab Emirates'],['SA','966','Arabie saoudite','Saudi Arabia'],
+  ['QA','974','Qatar','Qatar'],['KW','965','Koweït','Kuwait'],['BH','973','Bahreïn','Bahrain'],
+  ['OM','968','Oman','Oman'],['IL','972','Israël','Israel'],['JO','962','Jordanie','Jordan'],
+  ['LB','961','Liban','Lebanon'],['IQ','964','Irak','Iraq'],['IR','98','Iran','Iran'],
+  ['EG','20','Égypte','Egypt'],['MA','212','Maroc','Morocco'],['DZ','213','Algérie','Algeria'],
+  ['TN','216','Tunisie','Tunisia'],['LY','218','Libye','Libya'],['SN','221','Sénégal','Senegal'],
+  ['CI',"225","Côte d'Ivoire","Ivory Coast"],['ML','223','Mali','Mali'],['BF','226','Burkina Faso','Burkina Faso'],
+  ['NE','227','Niger','Niger'],['TG','228','Togo','Togo'],['BJ','229','Bénin','Benin'],
+  ['CM','237','Cameroun','Cameroon'],['GA','241','Gabon','Gabon'],['CD','243','RD Congo','DR Congo'],
+  ['ZA','27','Afrique du Sud','South Africa'],['NG','234','Nigeria','Nigeria'],['GH','233','Ghana','Ghana'],
+  ['KE','254','Kenya','Kenya'],['ET','251','Éthiopie','Ethiopia'],['TZ','255','Tanzanie','Tanzania'],
+  ['UG','256','Ouganda','Uganda'],['RW','250','Rwanda','Rwanda'],['MU','230','Maurice','Mauritius'],
+  ['MG','261','Madagascar','Madagascar'],['ZW','263','Zimbabwe','Zimbabwe'],['ZM','260','Zambie','Zambia'],
+  ['GE','995','Géorgie','Georgia'],['AM','374','Arménie','Armenia'],['AZ','994','Azerbaïdjan','Azerbaijan'],
+  ['KZ','7','Kazakhstan','Kazakhstan'],['UZ','998','Ouzbékistan','Uzbekistan'],
+];
+function phoneCountryLabel(entry){
+  const lang = (state.settings && state.settings.lang === 'en') ? 3 : 2;
+  return `${entry[lang]} (+${entry[1]})`;
+}
 function countryName(code){
   const lang = (state.settings && state.settings.lang === 'en') ? 'en' : 'fr';
   return COUNTRY_NAMES[lang][code] || code;
@@ -5183,6 +5253,7 @@ async function syncPushToCloudRun(){
       stake_thresholds: state.settings.stakeThresholds,
       dashboard_layout: state.dashboardLayout,
       display_name: profile.displayName || null, avatar_url: profile.avatarUrl || null, is_public: !!profile.isPublic,
+      phone: profile.phone || null, phone_country: profile.phoneCountry || null,
     });
   } catch (e) {
     console.warn('Synchronisation Supabase échouée :', e);
@@ -5461,6 +5532,8 @@ async function completeSignIn(session){
           displayName: cloud.profile.display_name || '',
           avatarUrl: cloud.profile.avatar_url || '',
           isPublic: !!cloud.profile.is_public,
+          phone: cloud.profile.phone || '',
+          phoneCountry: cloud.profile.phone_country || '',
         };
       }
       state.isDemo = false;
@@ -5780,7 +5853,32 @@ function renderProfileSettings(){
   if (linkRow) linkRow.hidden = !p.isPublic;
   const linkInput = document.getElementById('profile-share-link');
   if (linkInput) linkInput.value = `${location.origin}${location.pathname}#/u/${currentUser.id}`;
+  populateAccountPhoneCountrySelect();
+  const phoneInput = document.getElementById('account-phone-number');
+  if (phoneInput && document.activeElement !== phoneInput) phoneInput.value = p.phone || '';
   updateSidebarAvatar();
+}
+
+function populateAccountPhoneCountrySelect(){
+  const sel = document.getElementById('account-phone-country');
+  if (!sel) return;
+  const sorted = PHONE_COUNTRIES.slice().sort((a, b) => phoneCountryLabel(a).localeCompare(phoneCountryLabel(b)));
+  sel.innerHTML = sorted.map(entry => `<option value="${entry[0]}">${escapeHtml(phoneCountryLabel(entry))}</option>`).join('');
+  const current = (state.profile && state.profile.phoneCountry) || 'FR';
+  if ([...sel.options].some(o => o.value === current)) sel.value = current;
+}
+function saveAccountPhone(){
+  if (!state.profile) state.profile = defaultProfile();
+  const country = document.getElementById('account-phone-country').value;
+  const rawNumber = document.getElementById('account-phone-number').value.trim();
+  state.profile.phoneCountry = country;
+  // Stocke le numéro tel que saisi (pas de normalisation E.164 stricte : les
+  // formats varient trop selon le pays pour les valider fiablement sans lib
+  // dédiée) — l'indicatif est déjà porté séparément par phoneCountry.
+  state.profile.phone = rawNumber;
+  saveState();
+  const feedback = document.getElementById('account-phone-feedback');
+  feedback.hidden = false; feedback.className = 'account-feedback'; feedback.textContent = t('settings_account_profile_saved');
 }
 
 function updateSidebarAvatar(){
