@@ -271,10 +271,12 @@
   .stat-marquee-item svg { width: 15px; height: 15px; color: var(--green); flex-shrink: 0; }
   @keyframes marquee-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
   @media (prefers-reduced-motion: reduce) { .stat-marquee-track { animation: none; } }
+  .module-marquee-item { display: flex; align-items: center; gap: 12px; padding: 1rem 1.8rem; font-size: 0.82rem; font-weight: 600; color: var(--text); white-space: nowrap; border-right: 1px solid var(--border); }
+  .module-marquee-item svg { width: 40px; height: auto; flex-shrink: 0; }
 
   /* ── FEATURES (bento, immersive) ── */
   #features { background: radial-gradient(ellipse 65% 55% at 12% 0%, rgba(8,191,47,0.055) 0%, transparent 60%), radial-gradient(ellipse 55% 45% at 92% 100%, rgba(8,191,47,0.04) 0%, transparent 60%), var(--black-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
-  .feat-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: minmax(168px, auto); gap: 1.1rem; margin-top: 3.5rem; max-width: 1180px; }
+  .feat-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: minmax(168px, auto); gap: 1.1rem; margin: 3.5rem auto 0; max-width: 1180px; }
   .feat-card { padding: 1.7rem; background: var(--black); border: 1px solid var(--border); border-radius: var(--radius); transition: border-color .25s, transform .25s, box-shadow .25s; position: relative; overflow: hidden; }
   .feat-card:not(.big) { display: flex; flex-direction: column; justify-content: center; }
   .feat-card:hover { border-color: rgba(8,191,47,0.5); transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.35); }
@@ -295,9 +297,19 @@
   .feat-mini-stat { display:flex; align-items:baseline; gap:8px; margin-top:.3rem; position:relative; z-index:1; }
   .feat-mini-stat b { font-family:'Bebas Neue',sans-serif; font-size:1.6rem; color: var(--text-wall); }
   .feat-mini-stat span { font-size:0.72rem; color: var(--grey); }
+  .feat-icon-lg { width: 56px; height: 56px; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.1rem; position: relative; z-index: 1; transition: transform .3s; }
+  .feat-icon-lg svg { width: 28px; height: 28px; }
+  .feat-card:hover .feat-icon-lg { transform: scale(1.08) rotate(-4deg); }
+  .feat-accent-green .feat-icon-lg { background: rgba(8,191,47,0.14); color: var(--green); }
+  .feat-accent-blue .feat-icon-lg { background: color-mix(in srgb, var(--c-cash) 16%, transparent); color: var(--c-cash); }
+  .feat-accent-violet .feat-icon-lg { background: color-mix(in srgb, var(--c-online) 16%, transparent); color: var(--c-online); }
+  .feat-accent-amber .feat-icon-lg { background: color-mix(in srgb, var(--c-expresso) 18%, transparent); color: var(--c-expresso); }
+  .module-marquee-wrap { margin-top: 3rem; text-align: center; }
+  .module-marquee-label { font-size: 0.78rem; color: var(--grey); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; margin-bottom: 1.2rem; }
+  .module-marquee-wrap .stat-marquee { border-radius: 10px; border: 1px solid var(--border); }
 
   /* ── HOW (animated timeline) ── */
-  .how-timeline { position: relative; margin-top: 4.5rem; max-width: 1140px; }
+  .how-timeline { position: relative; margin: 4.5rem auto 0; max-width: 1140px; }
   .how-track { position: absolute; top: 26px; left: 26px; right: 26px; height: 2px; background: rgba(8,191,47,0.15); overflow: hidden; }
   .how-track-fill { position: absolute; inset: 0; background: linear-gradient(90deg, var(--green), rgba(8,191,47,0.3)); transform: scaleX(0); transform-origin: left center; transition: transform 1.4s cubic-bezier(.2,.7,.2,1); }
   .how-timeline.visible .how-track-fill { transform: scaleX(1); }
@@ -311,43 +323,6 @@
   .step p { font-size: 0.83rem; color: var(--grey); line-height: 1.5; }
 
   /* ── PREVIEW (product screenshot) ── */
-  #preview { background: radial-gradient(ellipse 60% 50% at 88% 8%, rgba(8,191,47,0.05) 0%, transparent 60%), radial-gradient(ellipse 60% 45% at 8% 95%, rgba(0,61,14,0.22) 0%, transparent 60%), var(--black); }
-  .preview-bullets { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 2.6rem; max-width: 1140px; }
-  .preview-bullet { display: flex; align-items: flex-start; gap: 8px; font-size: 0.83rem; color: var(--grey); line-height: 1.4; }
-  .preview-bullet svg { width: 16px; height: 16px; color: var(--green); flex-shrink: 0; margin-top: 2px; }
-  .preview-shell { max-width: 1140px; margin-top: 2rem; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; background: var(--black-card); box-shadow: 0 30px 80px rgba(0,0,0,0.4); }
-  .preview-tabsbar { display: flex; gap: .6rem; padding: 1rem 1.3rem; border-bottom: 1px solid var(--border); overflow-x: auto; }
-  .preview-tab { font-size: .75rem; padding: .5rem 1.1rem; border-radius: 100px; border: 1px solid var(--border); color: var(--grey); background: none; cursor: pointer; white-space: nowrap; transition: all .2s; font-weight: 600; }
-  .preview-tab:hover { color: var(--text); border-color: rgba(8,191,47,0.4); }
-  .preview-tab.active { color: var(--green); border-color: var(--green); background: rgba(8,191,47,0.08); }
-  .preview-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 1.2rem; padding: 1.4rem; align-items: start; }
-  .preview-grid.full { grid-template-columns: 1fr; }
-  .preview-card { background: var(--black); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.2rem; }
-  .preview-card h4 { font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; color: var(--grey); margin-bottom: .8rem; }
-  .preview-line { height: 190px; }
-  .preview-donut { height: 190px; display: flex; align-items: center; justify-content: center; }
-  .preview-annotation { margin-top: .7rem; font-size: .78rem; color: var(--grey); line-height: 1.5; padding-top: .7rem; border-top: 1px solid rgba(255,255,255,0.06); }
-  .preview-annotation strong { color: var(--text); }
-  .preview-mini-table { width: 100%; border-collapse: collapse; font-size: .78rem; }
-  .preview-mini-table th { text-align: left; font-size: .64rem; text-transform: uppercase; color: var(--grey); padding: .4rem .5rem; border-bottom: 1px solid var(--border); }
-  .preview-mini-table td { padding: .5rem; border-bottom: 1px solid rgba(255,255,255,0.04); color: var(--text); }
-  .preview-mini-cards { display: flex; flex-direction: column; gap: .7rem; }
-  .preview-mini-bk { display: flex; align-items: center; justify-content: space-between; padding: .8rem .9rem; background: var(--black); border: 1px solid var(--border); border-radius: 8px; }
-  .preview-mini-bk .n { display: flex; align-items: center; gap: 8px; font-size: .85rem; font-weight: 600; color: var(--text); }
-  .preview-mini-bk .v { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: var(--text-wall); }
-
-  .preview-modules { max-width: 1140px; margin-top: 3rem; }
-  .preview-modules-head { max-width: 560px; margin-bottom: 1.6rem; }
-  .preview-modules-head h4 { font-size: 1.05rem; font-weight: 700; color: var(--text); margin-bottom: .4rem; }
-  .preview-modules-head p { font-size: .85rem; color: var(--grey); line-height: 1.5; }
-  .module-showcase-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: .9rem; }
-  .module-showcase-card { position: relative; background: var(--black-card); border: 1px solid var(--border); border-radius: 10px; padding: .9rem .7rem; display: flex; flex-direction: column; align-items: center; gap: .6rem; text-align: center; transition: border-color .2s, transform .2s; }
-  .module-showcase-card:hover { border-color: rgba(8,191,47,0.4); transform: translateY(-3px); }
-  .msc-thumb { width: 100%; height: 34px; }
-  .msc-thumb svg { width: 100%; height: 100%; }
-  .msc-title { font-size: .7rem; color: var(--grey); line-height: 1.3; }
-  @media (max-width: 1100px) { .module-showcase-grid { grid-template-columns: repeat(4, 1fr); } }
-  @media (max-width: 640px) { .module-showcase-grid { grid-template-columns: repeat(2, 1fr); } }
 
   /* ── PRICING ── */
   #pricing { background: radial-gradient(ellipse 60% 50% at 10% 100%, rgba(8,191,47,0.05) 0%, transparent 60%), radial-gradient(ellipse 55% 45% at 90% 0%, rgba(8,191,47,0.04) 0%, transparent 60%), var(--black-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
@@ -356,16 +331,19 @@
 
 
   /* ── BLOG PREVIEW / BLOG LIST ── */
-  .blog-filter-tabs { display: flex; gap: .6rem; margin-top: 2.4rem; flex-wrap: wrap; }
-  .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.3rem; margin-top: 1.6rem; max-width: 1140px; }
+  .blog-filter-tabs { display: flex; gap: .6rem; margin-top: 2.4rem; flex-wrap: wrap; justify-content: center; }
+  .blog-filter-tab { font-size: .75rem; padding: .5rem 1.1rem; border-radius: 100px; border: 1px solid var(--border); color: var(--grey); background: none; cursor: pointer; white-space: nowrap; transition: all .2s; font-weight: 600; }
+  .blog-filter-tab:hover { color: var(--text); border-color: rgba(8,191,47,0.4); }
+  .blog-filter-tab.active { color: var(--green); border-color: var(--green); background: rgba(8,191,47,0.08); }
+  .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.3rem; margin: 1.6rem auto 0; max-width: 1140px; }
 
   /* ── CALENDRIER POKER ── */
   #calendar-hero { padding: 150px 6vw 5rem; }
-  .calendar-filters { display: flex; gap: 1.4rem; margin-top: 2.2rem; flex-wrap: wrap; max-width: 1140px; }
+  .calendar-filters { display: flex; gap: 1.4rem; margin: 2.2rem auto 0; flex-wrap: wrap; max-width: 1140px; }
   .calendar-filter-group { display: flex; flex-direction: column; gap: .4rem; }
   .calendar-filter-group label { font-size: .72rem; color: var(--grey); text-transform: uppercase; letter-spacing: .06em; }
   .calendar-filter-group select { min-width: 200px; }
-  .calendar-list { display: flex; flex-direction: column; gap: .7rem; margin-top: 2rem; max-width: 1140px; }
+  .calendar-list { display: flex; flex-direction: column; gap: .7rem; margin: 2rem auto 0; max-width: 1140px; }
   .calendar-event { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.2rem; background: var(--black-card); border: 1px solid var(--border); border-radius: var(--radius); transition: border-color .2s; }
   .calendar-event:hover { border-color: rgba(8,191,47,0.4); }
   .ce-flag { width: 38px; height: 26px; flex-shrink: 0; border-radius: 4px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
@@ -375,8 +353,14 @@
   .ce-name { font-size: .92rem; font-weight: 700; color: var(--text); }
   .ce-tour { font-size: .64rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--green); background: color-mix(in srgb, var(--green) 14%, transparent); padding: .2rem .55rem; border-radius: 100px; }
   .ce-meta { font-size: .8rem; color: var(--grey); margin-top: .25rem; }
+  .ce-result { display: flex; align-items: center; gap: 8px; margin-top: .55rem; padding-top: .55rem; border-top: 1px solid var(--border); font-size: .82rem; flex-wrap: wrap; }
+  .ce-result svg { width: 15px; height: 15px; color: #F5B700; flex-shrink: 0; }
+  .ce-result-winner { color: var(--text); font-weight: 600; }
+  .ce-result-handle { color: var(--grey); font-weight: 400; }
+  .ce-result-prize { margin-left: auto; color: var(--green); font-weight: 700; white-space: nowrap; }
+  .ce-result-source { width: 100%; font-size: .68rem; color: var(--grey); opacity: .7; }
   .calendar-empty { color: var(--grey); font-size: .88rem; padding: 1rem 0; }
-  .calendar-disclaimer { font-size: .76rem; color: var(--grey); max-width: 1140px; margin-top: 2rem; line-height: 1.5; border-top: 1px solid var(--border); padding-top: 1.4rem; }
+  .calendar-disclaimer { font-size: .76rem; color: var(--grey); max-width: 1140px; margin: 2rem auto 0; line-height: 1.5; border-top: 1px solid var(--border); padding-top: 1.4rem; }
   @media (max-width: 640px) { .calendar-event { flex-wrap: wrap; } }
   .blog-card { background: var(--black-card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; cursor: pointer; transition: border-color .25s, transform .25s; text-decoration: none; display: flex; flex-direction: column; }
   .blog-card:hover { border-color: var(--green); transform: translateY(-4px); }
@@ -391,7 +375,7 @@
   .blog-card-meta { display: flex; align-items: center; gap: 0.8rem; margin-top: 1rem; font-size: 0.72rem; color: var(--grey); }
   .blog-card-meta .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--grey); }
 
-  .faq-list { max-width: 780px; display: flex; flex-direction: column; gap: 0.7rem; margin-top: 2.8rem; }
+  .faq-list { max-width: 780px; display: flex; flex-direction: column; gap: 0.7rem; margin: 2.8rem auto 0; }
   .faq-item { background: var(--black-card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
   .faq-item summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.1rem 1.4rem; font-size: 0.92rem; font-weight: 600; color: var(--text); cursor: pointer; list-style: none; }
   .faq-item summary::-webkit-details-marker { display: none; }
@@ -473,8 +457,7 @@
   .app-topbar, .app-topbar-actions, .app-content,
   .modules-grid, .module-card, .stat-grid, .stat-tile, .card-row, .chart-card,
   .bankroll-grid, .bankroll-card, .feat-grid, .feat-card,
-  .blog-grid, .blog-card, .customize-body, .settings-grid, .settings-card,
-  .preview-grid, .preview-card { min-width: 0; }
+  .blog-grid, .blog-card, .customize-body, .settings-grid, .settings-card { min-width: 0; }
   .app-topbar { position: sticky; top: 0; z-index: 60; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.1rem 2rem; border-bottom: 1px solid var(--border); background: rgba(10,10,10,0.9); backdrop-filter: blur(10px); flex-wrap: wrap; }
   .app-topbar h1 { font-family: 'Bebas Neue', sans-serif; font-size: 1.7rem; letter-spacing: 0.03em; color: var(--text-wall); }
   .app-topbar-actions { display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap; }
@@ -772,7 +755,7 @@
   .switch-row { display: flex; align-items: center; gap: 0.6rem; font-size: 0.85rem; color: var(--text); cursor: pointer; }
   .profile-share-row { margin-top: 1rem; }
   #profile-share-link-row .form-row { margin-top: 0.6rem; }
-  .pricing-table-wrap { overflow-x: auto; margin-top: 2.5rem; max-width: 1140px; }
+  .pricing-table-wrap { overflow-x: auto; margin: 2.5rem auto 0; max-width: 1140px; }
   .pricing-table { width: 100%; border-collapse: collapse; min-width: 660px; }
   .pricing-table th, .pricing-table td { padding: 1rem 1.2rem; text-align: center; border-bottom: 1px solid var(--border); font-size: 0.88rem; color: var(--grey); }
   .pricing-table th:first-child, .pricing-table td:first-child { text-align: left; color: var(--text); font-weight: 600; white-space: nowrap; font-size: 0.85rem; }
@@ -864,8 +847,6 @@
     .how-track { display: none; }
     .hero-mock-body { grid-template-columns: repeat(2, 1fr); }
     .hero-mock-chart { grid-column: span 2; }
-    .preview-grid { grid-template-columns: 1fr; }
-    .preview-bullets { grid-template-columns: 1fr 1fr; }
 
     .app-sidebar { transform: translateX(-100%); transition: transform .25s; }
     .app-sidebar.open { transform: translateX(0); }
@@ -876,7 +857,6 @@
   }
   @media (max-width: 640px) {
     .feat-grid, .blog-grid { grid-template-columns: 1fr; grid-auto-rows: auto; }
-    .preview-bullets { grid-template-columns: 1fr; }
     .feat-card.big, .feat-card.wide { grid-column: span 1; }
     .steps-grid { grid-template-columns: 1fr; row-gap: 1.6rem; }
     .hero-mock-body { grid-template-columns: 1fr 1fr; padding: 1.1rem; }
@@ -907,7 +887,6 @@
   </a>
   <ul class="nav-links">
     <li><a href="#features" data-link data-i18n="nav_features">Fonctionnalités</a></li>
-    <li><a href="#preview" data-link data-i18n="nav_product">Le produit</a></li>
     <li><a href="#pricing" data-link data-i18n="nav_pricing">Tarifs</a></li>
     <li><a href="#/blog" data-link data-i18n="nav_blog">Blog</a></li>
     <li><a href="#/calendrier" data-link data-i18n="nav_calendar">Calendrier</a></li>
@@ -928,7 +907,6 @@
     <button class="nav-icon-btn nav-lang-toggle" onclick="toggleNavLang()" aria-label="Changer de langue" title="Langue">EN</button>
   </div>
   <a href="#features" data-link onclick="closeMenu()" data-i18n="nav_features">Fonctionnalités</a>
-  <a href="#preview" data-link onclick="closeMenu()" data-i18n="nav_product">Le produit</a>
   <a href="#pricing" data-link onclick="closeMenu()" data-i18n="nav_pricing">Tarifs</a>
   <a href="#/blog" data-link onclick="closeMenu()" data-i18n="nav_blog">Blog</a>
   <a href="#/calendrier" data-link onclick="closeMenu()" data-i18n="nav_calendar">Calendrier</a>
@@ -1026,41 +1004,45 @@
       <p class="section-sub" data-i18n="features_sub">Pokelo se concentre sur l'essentiel du bankroll management : enregistrer vite, comprendre vite.</p>
     </div>
     <div class="feat-grid fade-up">
-      <div class="feat-card big">
+      <div class="feat-card big feat-accent-green">
         <div class="feat-live-dot" data-i18n="feat_live_badge">Live preview</div>
-        <h3 data-i18n="feat_big_title">Graphiques dynamiques</h3>
-        <p data-i18n="feat_big_desc">Évolution de bankroll, répartition par format, comparatif live/online : vos données prennent tout leur sens en un coup d'œil.</p>
+        <div class="feat-icon-lg"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="18" rx="1.5"/><rect x="14" y="3" width="7" height="8" rx="1.5"/><rect x="14" y="15" width="7" height="6" rx="1.5"/></svg></div>
+        <h3 data-i18n="feat_modular_title">Dashboard modulaire</h3>
+        <p data-i18n="feat_modular_desc">Choisissez parmi 18 modules d'analyse — bankroll, ROI, heatmap, risque de ruine... — et composez le dashboard qui vous ressemble.</p>
         <div class="feat-mini-stat"><b id="feat-mini-val">+412 €</b><span data-i18n="feat_big_stat_sub">sur les 30 derniers jours</span></div>
         <div class="feat-big-chart"><canvas id="featBigChart"></canvas></div>
       </div>
-      <div class="feat-card">
-        <div class="feat-icon">
+      <div class="feat-card feat-accent-blue">
+        <div class="feat-icon-lg">
           <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
         </div>
-        <h3 data-i18n="feat_bankrolls_title">Bankrolls multiples</h3>
+        <h3 data-i18n="feat_bankrolls_title">Bankrolls illimitées</h3>
         <p data-i18n="feat_bankrolls_desc">Créez autant de bankrolls que nécessaire — online, live, un roll dédié aux MTT — et assignez chaque session à la bonne.</p>
       </div>
-      <div class="feat-card">
-        <div class="feat-icon">
+      <div class="feat-card feat-accent-violet">
+        <div class="feat-icon-lg">
           <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg>
         </div>
-        <h3 data-i18n="feat_currency_title">Devise libre</h3>
+        <h3 data-i18n="feat_currency_title">Multi-devises</h3>
         <p data-i18n="feat_currency_desc">EUR, USD, USDT, jetons de club... indiquez la devise de votre choix pour chaque bankroll, sans conversion imposée.</p>
       </div>
-      <div class="feat-card">
-        <div class="feat-icon">
-          <svg class="icon" viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M4 19h16"/></svg>
+      <div class="feat-card feat-accent-amber">
+        <div class="feat-icon-lg">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="6" r="1.3"/><circle cx="16" cy="6" r="1.3"/><circle cx="9" cy="13" r="1.3"/><circle cx="16" cy="13" r="1.3"/><circle cx="9" cy="20" r="1.3"/><circle cx="16" cy="20" r="1.3"/></svg>
         </div>
-        <h3 data-i18n="feat_types_title">Tournois, cash game, expressos — live &amp; online</h3>
-        <p data-i18n="feat_types_desc">Trois types de session, deux formats de jeu : tout ce que vous jouez trouve sa place, avec ses propres champs.</p>
+        <h3 data-i18n="feat_composed_title">Composé par vous</h3>
+        <p data-i18n="feat_composed_desc">Ajoutez, retirez et réorganisez les modules par glisser-déposer — le dashboard s'adapte à votre façon de jouer, pas l'inverse.</p>
       </div>
-      <div class="feat-card">
-        <div class="feat-icon">
-          <svg class="icon" viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg>
-        </div>
-        <span class="feat-soon-badge" data-i18n="coming_soon">Bientôt disponible</span>
-        <h3 data-i18n="feat_mobile_title">Application mobile iOS &amp; Android</h3>
-        <p data-i18n="feat_mobile_desc">Une app native est en préparation pour logger vos sessions encore plus vite. En attendant, installez Pokelo depuis votre navigateur pour un accès en un tap, comme une vraie app.</p>
+      <div class="feat-card feat-accent-green">
+        <div class="feat-icon-lg"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div>
+        <h3 data-i18n="feat_free_title">Gratuit pour commencer</h3>
+        <p data-i18n="feat_free_desc">Aucune carte bancaire requise. Créez un compte et suivez votre bankroll dès aujourd'hui, sans engagement.</p>
+      </div>
+    </div>
+    <div class="module-marquee-wrap fade-up">
+      <p class="module-marquee-label" data-i18n="module_marquee_label">+ de 18 modules d'analyse, à composer vous-même</p>
+      <div class="stat-marquee" aria-hidden="true">
+        <div class="stat-marquee-track" id="module-marquee-track"></div>
       </div>
     </div>
   </section>
@@ -1111,41 +1093,6 @@
     </div>
   </section>
 
-  <!-- PRODUCT PREVIEW -->
-  <section id="preview">
-    <div class="fade-up">
-      <div class="section-tag" style="color: var(--violet);" data-i18n="preview_tag">Le produit</div>
-      <h2 class="section-title" data-i18n="preview_title">Des vues sobres,<br>pensées pour durer</h2>
-      <div class="divider"></div>
-      <p class="section-sub" data-i18n="preview_sub">Un dashboard sans bruit visuel : les chiffres qui comptent, des graphiques lisibles, et rien d'autre. Explorez les quatre écrans de l'application.</p>
-    </div>
-
-    <div class="preview-bullets fade-up">
-      <div class="preview-bullet"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span data-i18n="preview_bullet1">Filtrez vos sessions par bankroll, type ou format</span></div>
-      <div class="preview-bullet"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span data-i18n="preview_bullet2">Modifiez ou supprimez une session en un clic</span></div>
-      <div class="preview-bullet"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span data-i18n="preview_bullet3">Basculez d'une bankroll à l'autre instantanément</span></div>
-      <div class="preview-bullet"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span data-i18n="preview_bullet4">Composez votre propre dashboard, module par module</span></div>
-    </div>
-
-    <div class="preview-shell fade-up">
-      <div class="preview-tabsbar">
-        <button class="preview-tab active" data-tab="dashboard" onclick="setPreviewTab('dashboard', this)" data-i18n="tab_dashboard">Dashboard</button>
-        <button class="preview-tab" data-tab="sessions" onclick="setPreviewTab('sessions', this)" data-i18n="tab_sessions">Sessions</button>
-        <button class="preview-tab" data-tab="bankrolls" onclick="setPreviewTab('bankrolls', this)" data-i18n="tab_bankrolls">Bankrolls</button>
-        <button class="preview-tab" data-tab="stats" onclick="setPreviewTab('stats', this)" data-i18n="tab_stats">Statistiques</button>
-      </div>
-      <div class="preview-grid" id="preview-grid"><!-- filled by JS: renderPreviewTab() --></div>
-    </div>
-
-    <div class="preview-modules fade-up">
-      <div class="preview-modules-head">
-        <h4 data-i18n="preview_modules_title">Composez votre dashboard, module par module</h4>
-        <p data-i18n="preview_modules_sub">Ajoutez, retirez et réorganisez ces modules par glisser-déposer pour construire la vue qui vous ressemble.</p>
-      </div>
-      <div class="module-showcase-grid" id="module-showcase-grid"><!-- filled by JS --></div>
-    </div>
-  </section>
-
   <!-- PRICING -->
   <section id="pricing">
     <div class="fade-up">
@@ -1167,7 +1114,7 @@
       <p class="section-sub" data-i18n="blog_sub">Des guides courts et concrets sur le bankroll management, écrits pour être appliqués dès la prochaine session.</p>
     </div>
     <div class="blog-grid fade-up" id="blog-preview-grid"><!-- filled by JS from ARTICLES --></div>
-    <div class="fade-up" style="margin-top:2.5rem">
+    <div class="fade-up" style="margin-top:2.5rem;text-align:center">
       <a href="#/blog" data-link class="btn-secondary" data-i18n="blog_see_all">Voir tous les articles</a>
     </div>
   </section>
@@ -1239,9 +1186,9 @@
       <p class="section-sub" data-i18n="blog_hero_sub">Des tutos courts, sans blabla, pour mieux gérer votre argent de jeu.</p>
     </div>
     <div class="blog-filter-tabs fade-up">
-      <button type="button" class="preview-tab active" data-type="all" onclick="setBlogFilter('all')" data-i18n="blog_filter_all">Tous</button>
-      <button type="button" class="preview-tab" data-type="guide" onclick="setBlogFilter('guide')" data-i18n="blog_filter_guide">Progresser</button>
-      <button type="button" class="preview-tab" data-type="news" onclick="setBlogFilter('news')" data-i18n="blog_filter_news">Actualités</button>
+      <button type="button" class="blog-filter-tab active" data-type="all" onclick="setBlogFilter('all')" data-i18n="blog_filter_all">Tous</button>
+      <button type="button" class="blog-filter-tab" data-type="guide" onclick="setBlogFilter('guide')" data-i18n="blog_filter_guide">Progresser</button>
+      <button type="button" class="blog-filter-tab" data-type="news" onclick="setBlogFilter('news')" data-i18n="blog_filter_news">Actualités</button>
     </div>
     <div class="blog-grid fade-up" id="blog-list-grid"><!-- filled by JS --></div>
   </section>
@@ -1311,7 +1258,6 @@
       <div class="footer-col">
         <h5 data-i18n="footer_product">Produit</h5>
         <a href="#features" data-link data-i18n="nav_features">Fonctionnalités</a>
-        <a href="#preview" data-link data-i18n="nav_product">Le produit</a>
         <a href="#pricing" data-link data-i18n="nav_pricing">Tarifs</a>
         <a href="#/account" data-link id="landing-nav-cta-footer">Se connecter</a>
       </div>
@@ -2743,7 +2689,7 @@ function refreshLabelDicts(){
    ══════════════════════════════════════════════════════════════ */
 const I18N = {
   fr: {
-    nav_features:'Fonctionnalités', nav_product:'Le produit', nav_pricing:'Tarifs', nav_blog:'Blog', nav_calendar:'Calendrier', nav_open_app:"Se connecter", nav_my_dashboard:'Mon dashboard',
+    nav_features:'Fonctionnalités', nav_pricing:'Tarifs', nav_blog:'Blog', nav_calendar:'Calendrier', nav_open_app:"Se connecter", nav_my_dashboard:'Mon dashboard',
     hero_badge:'Multi-devises · gestion du risque intégrée',
     hero_title_1:'Votre bankroll,', hero_title_2:'sous contrôle.',
     hero_sub:"Pokelo enregistre vos <strong>tournois</strong>, <strong>cash games</strong> et <strong>expressos</strong>, en <strong>live</strong> comme en <strong>online</strong>, dans la devise de votre choix — et transforme tout ça en graphiques clairs pour progresser sereinement.",
@@ -2751,24 +2697,19 @@ const I18N = {
     hero_stat_bankrolls:'Bankrolls illimitées', hero_stat_currency:'Multi-devises', hero_stat_modular:'Dashboard modulaire', hero_stat_composed:'Composé par vous', hero_stat_start:'Gratuit pour commencer',
     features_tag:'Fonctionnalités', features_title_1:'Tout ce qu\'il faut,', features_title_2:'rien de superflu',
     features_sub:"Pokelo se concentre sur l'essentiel du bankroll management : enregistrer vite, comprendre vite.",
-    feat_live_badge:'Live preview', feat_big_title:'Graphiques dynamiques',
-    feat_big_desc:"Évolution de bankroll, répartition par format, comparatif live/online : vos données prennent tout leur sens en un coup d'œil.",
+    feat_live_badge:'Live preview',
     feat_big_stat_sub:'sur les 30 derniers jours',
-    feat_bankrolls_title:'Bankrolls multiples', feat_bankrolls_desc:'Créez autant de bankrolls que nécessaire — online, live, un roll dédié aux MTT — et assignez chaque session à la bonne.',
-    feat_currency_title:'Devise libre', feat_currency_desc:'EUR, USD, USDT, jetons de club... indiquez la devise de votre choix pour chaque bankroll, sans conversion imposée.',
-    feat_types_title:'Tournois, cash game, expressos — live & online', feat_types_desc:'Trois types de session, deux formats de jeu : tout ce que vous jouez trouve sa place, avec ses propres champs.',
-    feat_mobile_title:'Application mobile iOS & Android', feat_mobile_desc:'Une app native est en préparation pour logger vos sessions encore plus vite. En attendant, installez Pokelo depuis votre navigateur pour un accès en un tap, comme une vraie app.',
+    feat_modular_title:'Dashboard modulaire', feat_modular_desc:"Choisissez parmi 22 modules d'analyse — bankroll, ROI, heatmap, risque de ruine... — et composez le dashboard qui vous ressemble.",
+    feat_bankrolls_title:'Bankrolls illimitées', feat_bankrolls_desc:'Créez autant de bankrolls que nécessaire — online, live, un roll dédié aux MTT — et assignez chaque session à la bonne.',
+    feat_currency_title:'Multi-devises', feat_currency_desc:'EUR, USD, USDT, jetons de club... indiquez la devise de votre choix pour chaque bankroll, sans conversion imposée.',
+    feat_composed_title:'Composé par vous', feat_composed_desc:"Ajoutez, retirez et réorganisez les modules par glisser-déposer — le dashboard s'adapte à votre façon de jouer, pas l'inverse.",
+    feat_free_title:'Gratuit pour commencer', feat_free_desc:'Aucune carte bancaire requise. Créez un compte et suivez votre bankroll dès aujourd\'hui, sans engagement.',
+    module_marquee_label:"22 modules d'analyse, à composer vous-même",
     how_tag:'Fonctionnement', how_title:'Quatre étapes,<br>une meilleure vision',
     step1_title:'Créez vos bankrolls', step1_desc:'Nommez-les, choisissez leur devise, et fixez un solde de départ.',
     step2_title:'Enregistrez vos sessions', step2_desc:'Tournoi, cash game ou expresso, live ou online — en quelques secondes.',
     step3_title:'Suivez vos courbes', step3_desc:'Bankroll, ROI, winrate : tout se met à jour automatiquement.',
     step4_title:'Prenez de meilleures décisions', step4_desc:'Ajustez vos limites de jeu selon des données réelles, pas des impressions.',
-    preview_tag:'Le produit', preview_title:'Des vues sobres,<br>pensées pour durer',
-    preview_sub:"Un dashboard sans bruit visuel : les chiffres qui comptent, des graphiques lisibles, et rien d'autre. Explorez les quatre écrans de l'application.",
-    preview_bullet1:'Filtrez vos sessions par bankroll, type ou format', preview_bullet2:'Modifiez ou supprimez une session en un clic',
-    preview_bullet3:"Basculez d'une bankroll à l'autre instantanément", preview_bullet4:'Composez votre propre dashboard, module par module',
-    tab_dashboard:'Dashboard', tab_sessions:'Sessions', tab_bankrolls:'Bankrolls', tab_stats:'Statistiques',
-    preview_modules_title:'Composez votre dashboard, module par module', preview_modules_sub:'Ajoutez, retirez et réorganisez ces modules par glisser-déposer pour construire la vue qui vous ressemble.',
     pricing_tag:'Tarifs', pricing_title:'Simple, comme<br>le reste de Pokelo',
     pricing_sub:"Un plan gratuit qui couvre l'essentiel, et des formules à venir pour les joueurs les plus exigeants.",
     pricing_note_italic:'Tarifs indicatifs, susceptibles d\'évoluer.',
@@ -2818,7 +2759,8 @@ const I18N = {
     calendar_sub:"Les grands rendez-vous live de l'année, filtrables par pays et par circuit.",
     calendar_filter_country:'Pays', calendar_filter_all_countries:'Tous les pays',
     calendar_filter_tour:'Circuit', calendar_filter_all_tours:'Tous les circuits',
-    calendar_sort_label:'Trier par', calendar_sort_date:'Date', calendar_sort_tour:'Circuit',
+    calendar_sort_label:'Trier par', calendar_sort_date:'Date', calendar_sort_tour:'Circuit', calendar_source_label:'Source',
+    calendar_prizepool_label:'Prize pool', calendar_payout_label:'Gain vainqueur',
     calendar_empty:'Aucun événement ne correspond à ces filtres.',
     calendar_disclaimer:"Dates indicatives fondées sur les annonces officielles des organisateurs au moment de la publication — vérifiez les dates exactes sur le site de l'organisateur avant de réserver un déplacement.",
     article_back:'Retour au blog', article_cta_text:'Mettez ces principes en pratique dès votre prochaine session.', article_cta_button:'Créer un compte gratuit',
@@ -3032,7 +2974,7 @@ const I18N = {
     empty_no_sessions_bankroll:'Aucune session pour cette bankroll.', empty_no_sessions_filter:'Aucune session ne correspond à ces filtres.',
   },
   en: {
-    nav_features:'Features', nav_product:'Product', nav_pricing:'Pricing', nav_blog:'Blog', nav_calendar:'Calendar', nav_open_app:'Log in', nav_my_dashboard:'My dashboard',
+    nav_features:'Features', nav_pricing:'Pricing', nav_blog:'Blog', nav_calendar:'Calendar', nav_open_app:'Log in', nav_my_dashboard:'My dashboard',
     hero_badge:'Multi-currency · built-in risk management',
     hero_title_1:'Your bankroll,', hero_title_2:'under control.',
     hero_sub:"Pokelo logs your <strong>tournaments</strong>, <strong>cash games</strong> and <strong>Spin & Go's</strong>, both <strong>live</strong> and <strong>online</strong>, in the currency of your choice — and turns it all into clear charts so you can play with a level head.",
@@ -3040,24 +2982,19 @@ const I18N = {
     hero_stat_bankrolls:'Unlimited bankrolls', hero_stat_currency:'Multi-currency', hero_stat_modular:'Modular dashboard', hero_stat_composed:'Composed by you', hero_stat_start:'Free to start',
     features_tag:'Features', features_title_1:'Everything you need,', features_title_2:'nothing you don\'t',
     features_sub:'Pokelo focuses on what bankroll management is really about: log fast, understand fast.',
-    feat_live_badge:'Live preview', feat_big_title:'Dynamic charts',
-    feat_big_desc:'Bankroll evolution, breakdown by format, live/online comparison: your data makes sense at a glance.',
+    feat_live_badge:'Live preview',
     feat_big_stat_sub:'over the last 30 days',
-    feat_bankrolls_title:'Multiple bankrolls', feat_bankrolls_desc:'Create as many bankrolls as you need — online, live, a dedicated MTT roll — and assign each session to the right one.',
-    feat_currency_title:'Any currency', feat_currency_desc:'EUR, USD, USDT, club chips... set the currency you want for each bankroll, no forced conversion.',
-    feat_types_title:'Tournaments, cash game, Spin & Go — live & online', feat_types_desc:'Three session types, two game formats: whatever you play has its place, with its own fields.',
-    feat_mobile_title:'iOS & Android mobile app', feat_mobile_desc:'A native app is in the works so you can log sessions even faster. In the meantime, install Pokelo from your browser for one-tap access, just like a real app.',
+    feat_modular_title:'Modular dashboard', feat_modular_desc:'Choose from 22 analytics modules — bankroll, ROI, heatmap, risk of ruin... — and compose the dashboard that fits you.',
+    feat_bankrolls_title:'Unlimited bankrolls', feat_bankrolls_desc:'Create as many bankrolls as you need — online, live, a dedicated MTT roll — and assign each session to the right one.',
+    feat_currency_title:'Multi-currency', feat_currency_desc:'EUR, USD, USDT, club chips... set the currency you want for each bankroll, no forced conversion.',
+    feat_composed_title:'Composed by you', feat_composed_desc:"Add, remove and reorder modules by drag-and-drop — the dashboard adapts to how you play, not the other way around.",
+    feat_free_title:'Free to start', feat_free_desc:'No credit card required. Create an account and start tracking your bankroll today, no commitment.',
+    module_marquee_label:'22 analytics modules, composed by you',
     how_tag:'How it works', how_title:'Four steps,<br>a clearer view',
     step1_title:'Create your bankrolls', step1_desc:'Name them, pick a currency, and set a starting balance.',
     step2_title:'Log your sessions', step2_desc:'Tournament, cash game or Spin & Go, live or online — in seconds.',
     step3_title:'Track your curves', step3_desc:'Bankroll, ROI, win rate: everything updates automatically.',
     step4_title:'Make better decisions', step4_desc:'Adjust your playing limits based on real data, not impressions.',
-    preview_tag:'The product', preview_title:'Sober views,<br>built to last',
-    preview_sub:"A dashboard with no visual noise: the numbers that matter, readable charts, and nothing else. Explore the app's four screens.",
-    preview_bullet1:'Filter your sessions by bankroll, type or format', preview_bullet2:'Edit or delete a session in one click',
-    preview_bullet3:'Switch between bankrolls instantly', preview_bullet4:'Build your own dashboard, module by module',
-    tab_dashboard:'Dashboard', tab_sessions:'Sessions', tab_bankrolls:'Bankrolls', tab_stats:'Statistics',
-    preview_modules_title:'Build your dashboard, module by module', preview_modules_sub:'Add, remove and reorder these modules by drag and drop to build the view that suits you.',
     pricing_tag:'Pricing', pricing_title:'Simple, just like<br>the rest of Pokelo',
     pricing_sub:'A free plan that covers the essentials, with more formulas coming soon for the most demanding players.',
     pricing_note_italic:'Indicative pricing, subject to change.',
@@ -3107,7 +3044,8 @@ const I18N = {
     calendar_sub:"The year's biggest live events, filterable by country and tour.",
     calendar_filter_country:'Country', calendar_filter_all_countries:'All countries',
     calendar_filter_tour:'Tour', calendar_filter_all_tours:'All tours',
-    calendar_sort_label:'Sort by', calendar_sort_date:'Date', calendar_sort_tour:'Tour',
+    calendar_sort_label:'Sort by', calendar_sort_date:'Date', calendar_sort_tour:'Tour', calendar_source_label:'Source',
+    calendar_prizepool_label:'Prize pool', calendar_payout_label:'Winner payout',
     calendar_empty:'No events match these filters.',
     calendar_disclaimer:"Indicative dates based on official organizer announcements at time of publishing — check the organizer's website for exact dates before booking travel.",
     article_back:'Back to blog', article_cta_text:'Put these principles into practice starting your very next session.', article_cta_button:'Create a free account',
@@ -3985,7 +3923,7 @@ function blogCardHtml(a){
 let currentBlogFilter = 'all';
 function setBlogFilter(type){
   currentBlogFilter = type;
-  document.querySelectorAll('.blog-filter-tabs .preview-tab').forEach(b => b.classList.toggle('active', b.dataset.type === type));
+  document.querySelectorAll('.blog-filter-tabs .blog-filter-tab').forEach(b => b.classList.toggle('active', b.dataset.type === type));
   renderBlogGrid('blog-list-grid', null, currentBlogFilter);
 }
 function renderBlogGrid(containerId, limit, filterType){
@@ -4012,23 +3950,38 @@ function renderArticle(slug){
    voir la mention "dates indicatives" affichée sur la page.
    ══════════════════════════════════════════════════════════════ */
 const POKER_CALENDAR_2026 = [
-  { name:'WPT Seminole Hard Rock Lucky Hearts Poker Open', tour:'WPT', country:'US', city:'Hollywood, Floride', start:'2026-01-06', end:'2026-01-20', type:'majeur' },
-  { name:'Partouche Poker Deepstack — La Tour-de-Salvagny', tour:'Partouche', country:'FR', city:'La Tour-de-Salvagny', start:'2026-01-21', end:'2026-01-25', type:'circuit' },
-  { name:'WPT Cambodia', tour:'WPT', country:'KH', city:'Phnom Penh (NagaWorld)', start:'2026-01-21', end:'2026-02-03', type:'majeur' },
-  { name:"PokerStars Open Campione", tour:'PokerStars Open', country:'IT', city:"Campione d'Italia", start:'2026-01-23', end:'2026-02-01', type:'circuit' },
-  { name:'WPT Venetian Las Vegas Spring Championship', tour:'WPT', country:'US', city:'Las Vegas', start:'2026-02-09', end:'2026-02-24', type:'majeur' },
-  { name:'EPT Paris', tour:'EPT', country:'FR', city:'Paris', start:'2026-02-18', end:'2026-03-01', type:'majeur' },
-  { name:'Triton ONE Jeju', tour:'Triton', country:'KR', city:'Jeju', start:'2026-03-05', end:'2026-03-15', type:'highroller' },
-  { name:'Triton Super High Roller Series Jeju', tour:'Triton', country:'KR', city:'Jeju', start:'2026-03-14', end:'2026-04-01', type:'highroller' },
-  { name:'Irish Poker Open', tour:'Irish Poker Open', country:'IE', city:'Dublin', start:'2026-03-26', end:'2026-04-06', type:'majeur' },
-  { name:'WSOP Europe', tour:'WSOP Europe', country:'CZ', city:"Prague (King's Casino)", start:'2026-03-31', end:'2026-04-12', type:'majeur' },
-  { name:'WSOP Circuit — Pasino Partouche', tour:'WSOP Circuit', country:'FR', city:'Aix-en-Provence', start:'2026-04-10', end:'2026-04-21', type:'circuit' },
+  { name:'WPT Seminole Hard Rock Lucky Hearts Poker Open', tour:'WPT', country:'US', city:'Hollywood, Floride', start:'2026-01-06', end:'2026-01-20', type:'majeur',
+    result: { winner:'Giuseppe Iadisernia', prizePool:'3 932 800 $', payout:'611 700 $', source:'CardPlayer, CasinoCityTimes' } },
+  { name:'Partouche Poker Deepstack — La Tour-de-Salvagny', tour:'Partouche', country:'FR', city:'La Tour-de-Salvagny', start:'2026-01-21', end:'2026-01-25', type:'circuit',
+    result: { winner:'Nicolas Reder', prizePool:'124 608 €', payout:'25 000 €', source:'PokerNews FR, Live-Poker.com' } },
+  { name:'WPT Cambodia', tour:'WPT', country:'KH', city:'Phnom Penh (NagaWorld)', start:'2026-01-21', end:'2026-02-03', type:'majeur',
+    result: { winner:'Xiaosheng Zheng', prizePool:'1 500 000 $ GTD', payout:'244 500 $', source:'PokerNews' } },
+  { name:"PokerStars Open Campione", tour:'PokerStars Open', country:'IT', city:"Campione d'Italia", start:'2026-01-23', end:'2026-02-01', type:'circuit',
+    result: { winner:'Elvir Nuhiu', prizePool:'1 518 720 €', payout:'200 640 €', source:'CardPlayer' } },
+  { name:'WPT Venetian Las Vegas Spring Championship', tour:'WPT', country:'US', city:'Las Vegas', start:'2026-02-09', end:'2026-02-24', type:'majeur',
+    result: { winner:'Nicholas Seward', prizePool:'2 244 800 $', payout:'418 700 $', source:'PokerNews' } },
+  { name:'EPT Paris', tour:'EPT', country:'FR', city:'Paris', start:'2026-02-18', end:'2026-03-01', type:'majeur',
+    result: { winner:'Jorge Abreu', handle:'Jorginho88', prizePool:'7 075 200 €', payout:'1 148 600 €', source:'PokerNews, CardPlayer' } },
+  { name:'Triton ONE Jeju', tour:'Triton', country:'KR', city:'Jeju', start:'2026-03-05', end:'2026-03-15', type:'highroller',
+    result: { winner:'Zhao Wenjie', payout:'1 160 000 $', source:'PokerNews, CardPlayer' } },
+  { name:'Triton Super High Roller Series Jeju', tour:'Triton', country:'KR', city:'Jeju', start:'2026-03-14', end:'2026-04-01', type:'highroller',
+    result: { winner:'Ben Tollerene', handle:'Ben86', payout:'3 766 000 $', source:'PokerNews, tritonpokerseries.com' } },
+  { name:'Irish Poker Open', tour:'Irish Poker Open', country:'IE', city:'Dublin', start:'2026-03-26', end:'2026-04-06', type:'majeur',
+    result: { winner:'Narcis Nedelcu', handle:'Narcisus90', prizePool:'4 852 910 €', payout:'336 798 €', source:'PokerNews, PokerWired' } },
+  { name:'WSOP Europe', tour:'WSOP Europe', country:'CZ', city:"Prague (King's Casino)", start:'2026-03-31', end:'2026-04-12', type:'majeur',
+    result: { winner:'Marius Kudzmanas', prizePool:'13 085 000 €', payout:'2 000 000 €', source:'PokerNews, WSOP.com' } },
+  { name:'WSOP Circuit — Pasino Partouche', tour:'WSOP Circuit', country:'FR', city:'Aix-en-Provence', start:'2026-04-10', end:'2026-04-21', type:'circuit',
+    result: { winner:'Matthieu Cartillier', payout:'150 000 €', source:'Pokerology, Texapoker' } },
   { name:'Partouche Poker Deepstack — Divonne-les-Bains', tour:'Partouche', country:'FR', city:'Divonne-les-Bains', start:'2026-04-22', end:'2026-04-26', type:'circuit' },
-  { name:'Aussie Millions', tour:'Aussie Millions', country:'AU', city:'Melbourne (Crown)', start:'2026-04-24', end:'2026-05-10', type:'majeur' },
-  { name:'EPT Monte-Carlo', tour:'EPT', country:'MC', city:'Monte-Carlo', start:'2026-04-30', end:'2026-05-10', type:'majeur' },
-  { name:'Triton Super High Roller Series Montenegro', tour:'Triton', country:'ME', city:'Sveti Stefan', start:'2026-05-13', end:'2026-05-28', type:'highroller' },
+  { name:'Aussie Millions', tour:'Aussie Millions', country:'AU', city:'Melbourne (Crown)', start:'2026-04-24', end:'2026-05-10', type:'majeur',
+    result: { winner:'Malcolm Trayner', prizePool:'7 700 000 AUD', source:'PokerNews, ASGAM' } },
+  { name:'EPT Monte-Carlo', tour:'EPT', country:'MC', city:'Monte-Carlo', start:'2026-04-30', end:'2026-05-10', type:'majeur',
+    result: { winner:'Roman Stoica', prizePool:'4 903 350 €', payout:'825 000 €', source:'PokerNews, igaming.org' } },
+  { name:'Triton Super High Roller Series Montenegro', tour:'Triton', country:'ME', city:'Sveti Stefan', start:'2026-05-13', end:'2026-05-28', type:'highroller',
+    result: { winner:'Danny Tang', prizePool:'15 900 000 $', payout:'3 522 000 $', source:'PokerNews, CardPlayer' } },
   { name:'Riviera Poker Festival', tour:'Partouche', country:'FR', city:'Aix-en-Provence', start:'2026-05-08', end:'2026-08-05', type:'circuit' },
-  { name:'PokerStars Open Namur', tour:'PokerStars Open', country:'BE', city:'Namur', start:'2026-05-27', end:'2026-06-07', type:'circuit' },
+  { name:'PokerStars Open Namur', tour:'PokerStars Open', country:'BE', city:'Namur', start:'2026-05-27', end:'2026-06-07', type:'circuit',
+    result: { winner:'Koen De Visscher', payout:'220 800 €', source:'PokerNews' } },
   { name:'World Series of Poker (WSOP)', tour:'WSOP', country:'US', city:'Las Vegas (Horseshoe & Paris)', start:'2026-05-26', end:'2026-07-15', type:'majeur' },
   { name:'WPT Cambodia — Passport to the World Championship', tour:'WPT', country:'KH', city:'Phnom Penh (NagaWorld)', start:'2026-08-12', end:'2026-08-24', type:'majeur' },
   { name:'Triton Super High Roller Series Jeju', tour:'Triton', country:'KR', city:'Jeju', start:'2026-09-04', end:'2026-09-17', type:'highroller' },
@@ -4219,8 +4172,26 @@ function renderCalendarList(){
           <span class="ce-tour">${escapeHtml(e.tour)}</span>
         </div>
         <div class="ce-meta">${escapeHtml(e.city)}, ${escapeHtml(countryName(e.country))} · ${fmtCalendarRange(e.start, e.end)}</div>
+        ${calendarResultHtml(e.result)}
       </div>
     </div>`).join('');
+}
+// N'affiche un résultat que si des données réelles et vérifiées existent pour
+// l'événement (voir POKER_CALENDAR_2026) — jamais de gagnant/prize pool
+// inventé pour un tournoi réel, même pour un événement déjà terminé dont on
+// n'a pas trouvé de résultat publié fiable.
+function calendarResultHtml(result){
+  if (!result) return '';
+  const prizeParts = [];
+  if (result.prizePool) prizeParts.push(`${t('calendar_prizepool_label')} ${result.prizePool}`);
+  if (result.payout) prizeParts.push(`${t('calendar_payout_label')} ${result.payout}`);
+  return `
+    <div class="ce-result">
+      <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M5 18h14l1.4-8.4-4.4 2.6-3-5.2-3 5.2-4.4-2.6L5 18Z"/></svg>
+      <span class="ce-result-winner">${escapeHtml(result.winner)}${result.handle ? ` <span class="ce-result-handle">(${escapeHtml(result.handle)})</span>` : ''}</span>
+      ${prizeParts.length ? `<span class="ce-result-prize">${escapeHtml(prizeParts.join(' · '))}</span>` : ''}
+      ${result.source ? `<span class="ce-result-source">${t('calendar_source_label')} : ${escapeHtml(result.source)}</span>` : ''}
+    </div>`;
 }
 function renderPokerCalendar(){
   populateCalendarCountryFilter();
@@ -4383,141 +4354,6 @@ function drawHeroCharts(){
         scales:{ x:{display:false}, y:{display:false} }, animation:{ duration: 1400 } }
     });
   }
-}
-
-/* ══════════════════════════════════════════════════════════════
-   POKELO — landing: interactive "Le produit" preview tabs
-   ══════════════════════════════════════════════════════════════ */
-const PREVIEW_TABS_ORDER = ['dashboard', 'sessions', 'bankrolls', 'stats'];
-let previewAutoCycleTimer = null;
-function setPreviewTab(tab, btn){
-  document.querySelectorAll('.preview-tab').forEach(b => b.classList.toggle('active', b === btn));
-  renderPreviewTab(tab);
-  restartPreviewAutoCycle();
-}
-// Fait défiler automatiquement les onglets Dashboard/Sessions/Bankrolls/
-// Statistiques pendant que la section "Le produit" est visible à l'écran —
-// un visiteur qui scrolle sans cliquer voit quand même les 4 écrans plutôt
-// qu'une capture figée. S'arrête hors-écran et respecte prefers-reduced-motion.
-function restartPreviewAutoCycle(){
-  clearInterval(previewAutoCycleTimer);
-  if (!previewAutoCycleVisible) return;
-  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  previewAutoCycleTimer = setInterval(() => {
-    const buttons = Array.from(document.querySelectorAll('.preview-tab'));
-    if (!buttons.length) return;
-    const activeIdx = Math.max(0, buttons.findIndex(b => b.classList.contains('active')));
-    const nextIdx = (activeIdx + 1) % buttons.length;
-    document.querySelectorAll('.preview-tab').forEach(b => b.classList.toggle('active', b === buttons[nextIdx]));
-    renderPreviewTab(PREVIEW_TABS_ORDER[nextIdx]);
-  }, 5000);
-}
-let previewAutoCycleVisible = false;
-function initPreviewAutoCycle(){
-  const shell = document.querySelector('#preview .preview-shell');
-  if (!shell) return;
-  new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      previewAutoCycleVisible = e.isIntersecting;
-      restartPreviewAutoCycle();
-    });
-  }, { threshold: 0.2 }).observe(shell);
-  shell.addEventListener('mouseenter', () => clearInterval(previewAutoCycleTimer));
-  shell.addEventListener('mouseleave', () => restartPreviewAutoCycle());
-}
-function renderPreviewTab(tab){
-  const grid = document.getElementById('preview-grid');
-  if (!grid) return;
-  if (tab === 'dashboard') {
-    grid.className = 'preview-grid';
-    grid.innerHTML = `
-      <div class="preview-card stat-tile-enter" style="animation-delay:0ms">
-        <h4>Évolution de bankroll</h4>
-        <div class="preview-line"><canvas id="previewLineChart"></canvas></div>
-        <div class="preview-annotation">Solde cumulé sur les 30 derniers jours : <strong>tendance haussière</strong>, portée par les sessions online.</div>
-      </div>
-      <div class="preview-card stat-tile-enter" style="animation-delay:60ms">
-        <h4>Répartition par format</h4>
-        <div class="preview-donut"><canvas id="previewDonutChart"></canvas></div>
-        <div class="preview-annotation">Les <strong>tournois</strong> représentent près de la moitié de vos sessions ce mois-ci.</div>
-      </div>`;
-    drawPreviewDashboardCharts();
-  } else if (tab === 'sessions') {
-    grid.className = 'preview-grid full';
-    grid.innerHTML = `
-      <div class="preview-card stat-tile-enter" style="animation-delay:0ms">
-        <h4>Dernières sessions</h4>
-        <table class="preview-mini-table"><thead><tr><th>Date</th><th>Bankroll</th><th>Type</th><th>Format</th><th>Résultat</th></tr></thead><tbody>
-          <tr><td>12 juil.</td><td>Bankroll Online</td><td><span class="badge badge-cash">Cash Game</span></td><td><span class="badge badge-online">Online</span></td><td class="cell-profit pos">+13,53 €</td></tr>
-          <tr><td>10 juil.</td><td>Bankroll Live</td><td><span class="badge badge-tournament">Tournoi</span></td><td><span class="badge badge-live">Live</span></td><td class="cell-profit pos">+64,00 €</td></tr>
-          <tr><td>06 juil.</td><td>Bankroll Online</td><td><span class="badge badge-expresso">Expresso</span></td><td><span class="badge badge-online">Online</span></td><td class="cell-profit neg">-25,00 €</td></tr>
-          <tr><td>03 juil.</td><td>Bankroll Online</td><td><span class="badge badge-cash">Cash Game</span></td><td><span class="badge badge-online">Online</span></td><td class="cell-profit neg">-4,73 €</td></tr>
-        </tbody></table>
-        <div class="preview-annotation">Chaque session se filtre par <strong>bankroll</strong>, <strong>type</strong> ou <strong>format</strong> en un clic, et se modifie sans quitter la liste.</div>
-      </div>`;
-  } else if (tab === 'bankrolls') {
-    grid.className = 'preview-grid full';
-    grid.innerHTML = `
-      <div class="preview-card stat-tile-enter" style="animation-delay:0ms">
-        <h4>Vos bankrolls</h4>
-        <div class="preview-mini-cards">
-          <div class="preview-mini-bk"><span class="n"><span class="bk-dot" style="background:${BK_PALETTE[0]}"></span>Bankroll Online — EUR</span><span class="v">2 480 €</span></div>
-          <div class="preview-mini-bk"><span class="n"><span class="bk-dot" style="background:${BK_PALETTE[1]}"></span>Bankroll Live — EUR</span><span class="v">890 €</span></div>
-          <div class="preview-mini-bk"><span class="n"><span class="bk-dot" style="background:${BK_PALETTE[2]}"></span>Roll Expresso — USDT</span><span class="v">312 USDT</span></div>
-        </div>
-        <div class="preview-annotation">Chaque bankroll a sa <strong>devise</strong> et son <strong>solde de départ</strong> propres — aucune conversion imposée entre elles.</div>
-      </div>`;
-  } else if (tab === 'stats') {
-    grid.className = 'preview-grid';
-    grid.innerHTML = `
-      <div class="preview-card stat-tile-enter" style="animation-delay:0ms">
-        <h4>Sessions par type</h4>
-        <div class="preview-donut"><canvas id="previewStatsDonut"></canvas></div>
-        <div class="preview-annotation">Vue d'ensemble de votre <strong>volume de jeu</strong> par type de session.</div>
-      </div>
-      <div class="preview-card stat-tile-enter" style="animation-delay:60ms">
-        <h4>Profit live vs online</h4>
-        <div class="preview-donut"><canvas id="previewStatsBar"></canvas></div>
-        <div class="preview-annotation">Comparez objectivement où votre jeu est <strong>le plus rentable</strong>.</div>
-      </div>`;
-    drawPreviewStatsCharts();
-  }
-}
-function drawPreviewDashboardCharts(){
-  destroyChart('previewLine');
-  const rand2 = mulberry32(13);
-  let bal2 = 1200; const l2=[]; const d2=[];
-  for(let i=0;i<18;i++){ bal2 += (rand2()-0.35)*70; l2.push(i); d2.push(Math.round(bal2)); }
-  charts.previewLine = new Chart(document.getElementById('previewLineChart'), {
-    type:'line',
-    data:{ labels:l2, datasets:[{ data:d2, borderColor:'#08BF2F', borderWidth:2, pointRadius:0, tension:.35, fill:true,
-      backgroundColor:(ctx)=>{ const g=ctx.chart.ctx.createLinearGradient(0,0,0,190); g.addColorStop(0,'rgba(8,191,47,0.22)'); g.addColorStop(1,'rgba(8,191,47,0)'); return g; } }] },
-    options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false},tooltip:{enabled:false}},
-      scales:{ x:{display:false}, y:{ grid:{color:'rgba(255,255,255,0.05)'}, ticks:{ color:'#8A8A8A', font:{size:10} } } } }
-  });
-  destroyChart('previewDonut');
-  charts.previewDonut = new Chart(document.getElementById('previewDonutChart'), {
-    type:'doughnut',
-    data:{ labels:['Tournoi','Cash Game','Expresso'], datasets:[{ data:[45,35,20], backgroundColor:[CAT_COLOR.tournament,CAT_COLOR.cash,CAT_COLOR.expresso], borderColor:'#111111', borderWidth:3 }] },
-    options:{ responsive:true, maintainAspectRatio:false, cutout:'68%',
-      plugins:{ legend:{ position:'bottom', labels:{ color:'#8A8A8A', boxWidth:10, boxHeight:10, padding:14, font:{size:11} } } } }
-  });
-}
-function drawPreviewStatsCharts(){
-  destroyChart('previewStatsDonut');
-  charts.previewStatsDonut = new Chart(document.getElementById('previewStatsDonut'), {
-    type:'doughnut',
-    data:{ labels:['Tournoi','Cash Game','Expresso'], datasets:[{ data:[38,42,20], backgroundColor:[CAT_COLOR.tournament,CAT_COLOR.cash,CAT_COLOR.expresso], borderColor:'#111111', borderWidth:3 }] },
-    options:{ responsive:true, maintainAspectRatio:false, cutout:'66%',
-      plugins:{ legend:{ position:'bottom', labels:{ color:'#8A8A8A', boxWidth:10, boxHeight:10, padding:14, font:{size:11} } } } }
-  });
-  destroyChart('previewStatsBar');
-  charts.previewStatsBar = new Chart(document.getElementById('previewStatsBar'), {
-    type:'bar',
-    data:{ labels:['Live','Online'], datasets:[{ data:[210,486], backgroundColor:[FMT_COLOR.live, FMT_COLOR.online], borderRadius:6, maxBarThickness:60 }] },
-    options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
-      scales:{ x:{ grid:{display:false}, ticks:{ color:'#8A8A8A' } }, y:{ grid:{ color:'rgba(255,255,255,0.05)' }, ticks:{ color:'#8A8A8A', font:{size:10} } } } }
-  });
 }
 
 /* subtle cursor-follow glow on feature/bento cards */
@@ -5293,14 +5129,13 @@ function moduleThumb(id){
   };
   return thumbs[id] || '';
 }
-function renderModuleShowcase(){
-  const el = document.getElementById('module-showcase-grid');
-  if (!el) return;
-  el.innerHTML = Object.keys(MODULE_SIZE).map(id => `
-    <div class="module-showcase-card">
-      <div class="msc-thumb">${moduleThumb(id)}</div>
-      <div class="msc-title" data-i18n="mod_${id}_title">${t('mod_'+id+'_title')}</div>
-    </div>`).join('');
+function renderModuleMarquee(){
+  const track = document.getElementById('module-marquee-track');
+  if (!track) return;
+  const itemsHtml = Object.keys(MODULE_SIZE).map(id =>
+    `<span class="module-marquee-item">${moduleThumb(id)}<span>${t('mod_'+id+'_title')}</span></span>`
+  ).join('');
+  track.innerHTML = itemsHtml + itemsHtml; // dupliqué pour une boucle continue sans coupure
 }
 function openCustomizeModal(){
   if (!isPremium()) { showProFeatureModal('dashboard'); return; }
@@ -7095,10 +6930,10 @@ function refreshAllViewsAfterSettingsChange(){
   if (active === 'sessions') renderSessionsTable();
   if (active === 'bankrolls') renderBankrolls();
   if (!document.getElementById('view-landing').hidden) {
-    renderPreviewTab(document.querySelector('.preview-tab.active')?.dataset.tab || 'dashboard');
     drawHeroCharts();
     renderPricingTable('pricing-table-landing', { highlightPlanId: null, showCta: true });
     renderStatMarquee();
+    renderModuleMarquee();
   }
 }
 
@@ -7615,9 +7450,7 @@ document.addEventListener('DOMContentLoaded', function(){
   document.getElementById('footer-year').textContent = new Date().getFullYear();
   renderBlogGrid('blog-preview-grid', 3);
   drawHeroCharts();
-  renderPreviewTab('dashboard');
-  initPreviewAutoCycle();
-  renderModuleShowcase();
+  renderModuleMarquee();
   renderPricingTable('pricing-table-landing', { highlightPlanId: null, showCta: true });
   renderStatMarquee();
   playHeroCounters();
