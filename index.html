@@ -166,6 +166,16 @@
     border-radius: 6px; font-weight: 700 !important; transition: background 0.2s !important;
   }
   .nav-cta:hover { background: var(--green-hov); color: #F1FFF5 !important; }
+  .nav-utils { display: flex; align-items: center; gap: 0.5rem; }
+  .nav-icon-btn {
+    display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px;
+    border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--text);
+    cursor: pointer; transition: border-color 0.2s, color 0.2s; font-size: 0.7rem; font-weight: 700;
+    letter-spacing: 0.03em; padding: 0; font-family: inherit;
+  }
+  .nav-icon-btn:hover { border-color: var(--green); color: var(--green); }
+  .nav-icon-btn svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .mobile-menu-utils { display: flex; gap: 0.6rem; padding-bottom: 1.2rem; margin-bottom: 0.6rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
 
   .nav-burger {
     display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 6px;
@@ -187,10 +197,11 @@
 
   /* ── SECTION BASE ── */
   section { padding: 100px 6vw; }
+  section > .fade-up:first-child { text-align: center; }
   .section-tag { display: inline-block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--green); margin-bottom: 1rem; }
   .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.2rem, 5vw, 3.8rem); letter-spacing: 0.04em; color: var(--text-wall); line-height: 1.05; margin-bottom: 1.2rem; }
-  .section-sub { color: var(--grey); font-size: 1rem; max-width: 560px; font-weight: 300; }
-  .divider { width: 48px; height: 3px; background: var(--green); border-radius: 2px; margin: 1.5rem 0; }
+  .section-sub { color: var(--grey); font-size: 1rem; max-width: 560px; font-weight: 300; margin-left: auto; margin-right: auto; }
+  .divider { width: 48px; height: 3px; background: var(--green); border-radius: 2px; margin: 1.5rem auto; }
   .center { text-align: center; margin-left: auto; margin-right: auto; }
 
   /* ── HERO ── */
@@ -247,9 +258,11 @@
   @keyframes hero-chart-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
   @media (prefers-reduced-motion: reduce) { .hero-chart-track { animation: none; } }
   .hero-stats { display: flex; gap: 3rem; justify-content: center; margin-top: 3.5rem; flex-wrap: wrap; position: relative; z-index: 1; }
-  .stat { text-align: center; }
+  .stat { text-align: center; width: 130px; }
   .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.4rem; color: var(--green); line-height: 1; }
   .stat-label { font-size: 0.72rem; color: var(--grey); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 4px; }
+  .stat-icon { width: 30px; height: 30px; margin: 0 auto 10px; color: var(--green); }
+  .stat-icon svg { width: 100%; height: 100%; stroke-width: 1.6; }
 
   .stat-marquee { position: relative; z-index: 1; overflow: hidden; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--black-card); mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
   .stat-marquee-track { display: flex; width: max-content; animation: marquee-scroll 32s linear infinite; }
@@ -341,20 +354,6 @@
   .pricing-toggle { display: inline-flex; align-items: center; gap: .7rem; margin-top: 1.6rem; font-size: .85rem; color: var(--grey); }
   .price-note { text-align: center; margin-top: 2.2rem; font-size: .78rem; color: var(--grey); max-width: 1140px; }
 
-  /* ── TESTIMONIAL / TRUST ── */
-  #trust { background: radial-gradient(ellipse 60% 55% at 85% 100%, rgba(8,191,47,0.05) 0%, transparent 60%), radial-gradient(ellipse 55% 45% at 12% 0%, rgba(8,191,47,0.04) 0%, transparent 60%), var(--black-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-  .trust-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.3rem; margin-top: 3.5rem; max-width: 1140px; }
-  .trust-card { padding: 1.8rem; background: var(--black); border: 1px solid var(--border); border-radius: var(--radius); }
-  .trust-quote { font-size: 0.92rem; color: var(--text); line-height: 1.6; margin-bottom: 1.2rem; }
-  .trust-quote::before { content: '“'; color: var(--green); font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; }
-  .trust-name { font-size: 0.85rem; font-weight: 700; color: var(--text); }
-  .trust-role { font-size: 0.75rem; color: var(--grey); }
-  .trust-footer { display: flex; align-items: center; gap: 0.8rem; }
-  /* Fond toujours sombre (mélangé avec le littéral fixe #111 dans le style
-     inline ci-dessous, jamais avec une variable de thème) : le texte doit
-     donc rester clair et fixe lui aussi, jamais lié à --text-wall qui
-     s'inverse en mode clair et devenait illisible. */
-  .trust-avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 0.9rem; letter-spacing: 0.03em; color: #F1FFF5; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.1); }
 
   /* ── BLOG PREVIEW / BLOG LIST ── */
   .blog-filter-tabs { display: flex; gap: .6rem; margin-top: 2.4rem; flex-wrap: wrap; }
@@ -473,7 +472,7 @@
      can do its job instead of pushing the whole layout wider than the viewport. */
   .app-topbar, .app-topbar-actions, .app-content,
   .modules-grid, .module-card, .stat-grid, .stat-tile, .card-row, .chart-card,
-  .bankroll-grid, .bankroll-card, .feat-grid, .feat-card, .trust-grid, .trust-card,
+  .bankroll-grid, .bankroll-card, .feat-grid, .feat-card,
   .blog-grid, .blog-card, .customize-body, .settings-grid, .settings-card,
   .preview-grid, .preview-card { min-width: 0; }
   .app-topbar { position: sticky; top: 0; z-index: 60; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.1rem 2rem; border-bottom: 1px solid var(--border); background: rgba(10,10,10,0.9); backdrop-filter: blur(10px); flex-wrap: wrap; }
@@ -860,7 +859,6 @@
     section { padding: 70px 5vw; }
     .feat-grid { grid-template-columns: 1fr 1fr; grid-auto-rows: minmax(190px, auto); }
     .feat-card.big { grid-column: span 2; grid-row: span 1; }
-    .trust-grid { grid-template-columns: 1fr 1fr; }
     .blog-grid { grid-template-columns: 1fr 1fr; }
     .steps-grid { grid-template-columns: repeat(2, 1fr); row-gap: 2.2rem; }
     .how-track { display: none; }
@@ -877,7 +875,7 @@
     .bankroll-grid { grid-template-columns: 1fr; }
   }
   @media (max-width: 640px) {
-    .feat-grid, .trust-grid, .blog-grid { grid-template-columns: 1fr; grid-auto-rows: auto; }
+    .feat-grid, .blog-grid { grid-template-columns: 1fr; grid-auto-rows: auto; }
     .preview-bullets { grid-template-columns: 1fr; }
     .feat-card.big, .feat-card.wide { grid-column: span 1; }
     .steps-grid { grid-template-columns: 1fr; row-gap: 1.6rem; }
@@ -913,6 +911,10 @@
     <li><a href="#pricing" data-link data-i18n="nav_pricing">Tarifs</a></li>
     <li><a href="#/blog" data-link data-i18n="nav_blog">Blog</a></li>
     <li><a href="#/calendrier" data-link data-i18n="nav_calendar">Calendrier</a></li>
+    <li class="nav-utils">
+      <button class="nav-icon-btn nav-theme-toggle" onclick="toggleNavTheme()" aria-label="Changer de thème" title="Thème"></button>
+      <button class="nav-icon-btn nav-lang-toggle" onclick="toggleNavLang()" aria-label="Changer de langue" title="Langue">EN</button>
+    </li>
     <li><a href="#/account" data-link class="nav-cta" id="landing-nav-cta">Se connecter</a></li>
   </ul>
   <button class="nav-burger" id="burger" aria-label="Menu" onclick="toggleMenu()">
@@ -921,6 +923,10 @@
 </nav>
 
 <div class="mobile-menu" id="mobileMenu">
+  <div class="mobile-menu-utils">
+    <button class="nav-icon-btn nav-theme-toggle" onclick="toggleNavTheme()" aria-label="Changer de thème" title="Thème"></button>
+    <button class="nav-icon-btn nav-lang-toggle" onclick="toggleNavLang()" aria-label="Changer de langue" title="Langue">EN</button>
+  </div>
   <a href="#features" data-link onclick="closeMenu()" data-i18n="nav_features">Fonctionnalités</a>
   <a href="#preview" data-link onclick="closeMenu()" data-i18n="nav_product">Le produit</a>
   <a href="#pricing" data-link onclick="closeMenu()" data-i18n="nav_pricing">Tarifs</a>
@@ -983,10 +989,26 @@
     </div>
 
     <div class="hero-stats fade-up">
-      <div class="stat"><div class="stat-num">∞</div><div class="stat-label" data-i18n="hero_stat_currency">Devises acceptées</div></div>
-      <div class="stat"><div class="stat-num">3</div><div class="stat-label" data-i18n="hero_stat_formats">Formats de jeu</div></div>
-      <div class="stat"><div class="stat-num">Live/Online</div><div class="stat-label" data-i18n="hero_stat_unified">Suivi unifié</div></div>
-      <div class="stat"><div class="stat-num">0€</div><div class="stat-label" data-i18n="hero_stat_start">Pour commencer</div></div>
+      <div class="stat">
+        <div class="stat-icon"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div>
+        <div class="stat-label" data-i18n="hero_stat_bankrolls">Bankrolls illimitées</div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg></div>
+        <div class="stat-label" data-i18n="hero_stat_currency">Multi-devises</div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="18" rx="1.5"/><rect x="14" y="3" width="7" height="8" rx="1.5"/><rect x="14" y="15" width="7" height="6" rx="1.5"/></svg></div>
+        <div class="stat-label" data-i18n="hero_stat_modular">Dashboard modulaire</div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon"><svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="6" r="1.3"/><circle cx="16" cy="6" r="1.3"/><circle cx="9" cy="13" r="1.3"/><circle cx="16" cy="13" r="1.3"/><circle cx="9" cy="20" r="1.3"/><circle cx="16" cy="20" r="1.3"/></svg></div>
+        <div class="stat-label" data-i18n="hero_stat_composed">Composé par vous</div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div>
+        <div class="stat-label" data-i18n="hero_stat_start">Gratuit pour commencer</div>
+      </div>
     </div>
   </section>
 
@@ -1133,39 +1155,7 @@
       <p class="section-sub"><span data-i18n="pricing_sub">Un plan gratuit qui couvre l'essentiel, et des formules à venir pour les joueurs les plus exigeants.</span> <em style="font-style:normal;color:var(--grey)" data-i18n="pricing_note_italic">Tarifs indicatifs, susceptibles d'évoluer.</em></p>
     </div>
     <div class="pricing-table-wrap fade-up" id="pricing-table-landing"><!-- filled by JS: renderPricingTable() --></div>
-    <p class="price-note center fade-up" data-i18n="price_note">Aucune carte bancaire requise pour le plan Gratuit. Les formules Pro et Équipe sont en préparation.</p>
-  </section>
-
-  <!-- TRUST / TESTIMONIALS -->
-  <section id="trust">
-    <div class="fade-up">
-      <div class="section-tag" style="color: var(--amber);" data-i18n="trust_tag">Retours</div>
-      <h2 class="section-title" data-i18n="trust_title">Pensé par et pour<br>des joueurs réguliers</h2>
-      <div class="divider"></div>
-    </div>
-    <div class="trust-grid fade-up">
-      <div class="trust-card">
-        <p class="trust-quote">Enfin un tracker qui ne me demande pas 15 champs pour logger un expresso. J'enregistre en 10 secondes entre deux tables.</p>
-        <div class="trust-footer">
-          <div class="trust-avatar" style="background:color-mix(in srgb, var(--c-expresso) 30%, #111)">TR</div>
-          <div><div class="trust-name">Thomas R.</div><div class="trust-role">Grinder expresso &amp; cash game online</div></div>
-        </div>
-      </div>
-      <div class="trust-card">
-        <p class="trust-quote">Je gère trois bankrolls différentes (live, online, un roll MTT dédié) — c'est la première fois qu'un outil gère vraiment ça proprement.</p>
-        <div class="trust-footer">
-          <div class="trust-avatar" style="background:color-mix(in srgb, var(--c-online) 30%, #111)">LM</div>
-          <div><div class="trust-name">Léa M.</div><div class="trust-role">Joueuse MTT live &amp; online</div></div>
-        </div>
-      </div>
-      <div class="trust-card">
-        <p class="trust-quote">Le graphique d'évolution m'a fait réaliser que je perdais surtout en live tardif. Ça a changé ma discipline de jeu.</p>
-        <div class="trust-footer">
-          <div class="trust-avatar" style="background:color-mix(in srgb, var(--c-live) 30%, #111)">KB</div>
-          <div><div class="trust-name">Karim B.</div><div class="trust-role">Cash game live</div></div>
-        </div>
-      </div>
-    </div>
+    <p class="price-note center fade-up" data-i18n="price_note">Aucune carte bancaire requise pour le plan Gratuit.</p>
   </section>
 
   <!-- BLOG PREVIEW -->
@@ -1542,7 +1532,7 @@
         <p>L'accès aux fonctionnalités de Pokelo nécessite la création d'un compte (adresse e-mail et mot de passe). L'utilisateur s'engage à fournir des informations exactes et à assurer la confidentialité de ses identifiants. Pokelo se réserve le droit de suspendre ou supprimer un compte en cas d'usage frauduleux ou contraire aux présentes conditions.</p>
 
         <h2>3. Description des offres</h2>
-        <p>Pokelo propose un plan Gratuit sans limite de durée et des plans payants par abonnement (Pro, Équipe) dont le détail des fonctionnalités et tarifs est présenté sur la page <a href="#/" data-link>Tarifs</a>. Les tarifs sont indiqués en euros, toutes taxes applicables comprises le cas échéant.</p>
+        <p>Pokelo propose un plan Gratuit sans limite de durée et un plan payant par abonnement (Pro) dont le détail des fonctionnalités et tarifs est présenté sur la page <a href="#/" data-link>Tarifs</a>. Les tarifs sont indiqués en euros, toutes taxes applicables comprises le cas échéant.</p>
 
         <h2>4. Prix et paiement</h2>
         <p>Les abonnements payants sont facturés de façon récurrente (mensuelle) via notre prestataire de paiement Stripe, qui traite les données de paiement de façon sécurisée — Pokelo n'a à aucun moment accès à vos coordonnées bancaires complètes. Le paiement est exigible dès la souscription puis à chaque échéance jusqu'à résiliation.</p>
@@ -2029,7 +2019,6 @@
             <input class="input" type="email" id="admin-grant-email" placeholder="joueur@exemple.com" />
             <select class="input" id="admin-grant-plan-select" style="max-width:160px;">
               <option value="pro" data-i18n="settings_account_plan_pro">Pro</option>
-              <option value="team" data-i18n="settings_account_plan_team">Équipe</option>
               <option value="free" data-i18n="settings_account_plan_free">Gratuit</option>
             </select>
             <button class="btn-primary btn-sm" onclick="submitAdminGrantPlan()" data-i18n="admin_grant_submit">Appliquer</button>
@@ -2717,6 +2706,31 @@ function applySettingsToDOM(){
   GOOD = c.good; CRITICAL = c.critical;
   refreshLabelDicts();
   applyStaticI18n();
+  updateNavControls();
+}
+// Icônes de thème/langue dans la nav publique (accessibles sans compte) :
+// resynchronisées à chaque applySettingsToDOM(), quel que soit l'endroit qui
+// a déclenché le changement (nav elle-même, ou paramètres du compte une fois
+// connecté), pour ne jamais afficher un état obsolète.
+const NAV_SUN_ICON = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+const NAV_MOON_ICON = '<svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/></svg>';
+function updateNavControls(){
+  const isLight = state.settings && state.settings.theme === 'light';
+  const isEn = state.settings && state.settings.lang === 'en';
+  document.querySelectorAll('.nav-theme-toggle').forEach(btn => {
+    btn.innerHTML = isLight ? NAV_MOON_ICON : NAV_SUN_ICON;
+  });
+  document.querySelectorAll('.nav-lang-toggle').forEach(btn => {
+    btn.textContent = isEn ? 'FR' : 'EN';
+  });
+}
+function toggleNavTheme(){
+  const next = (state.settings && state.settings.theme === 'light') ? 'dark' : 'light';
+  updateSetting('theme', next);
+}
+function toggleNavLang(){
+  const next = (state.settings && state.settings.lang === 'en') ? 'fr' : 'en';
+  updateSetting('lang', next);
 }
 function refreshLabelDicts(){
   const en = state.settings && state.settings.lang === 'en';
@@ -2734,7 +2748,7 @@ const I18N = {
     hero_title_1:'Votre bankroll,', hero_title_2:'sous contrôle.',
     hero_sub:"Pokelo enregistre vos <strong>tournois</strong>, <strong>cash games</strong> et <strong>expressos</strong>, en <strong>live</strong> comme en <strong>online</strong>, dans la devise de votre choix — et transforme tout ça en graphiques clairs pour progresser sereinement.",
     hero_cta_primary:'Créer un compte gratuit', hero_cta_secondary:'Comment ça marche',
-    hero_stat_currency:'Devises acceptées', hero_stat_formats:'Formats de jeu', hero_stat_unified:'Suivi unifié', hero_stat_start:'Pour commencer',
+    hero_stat_bankrolls:'Bankrolls illimitées', hero_stat_currency:'Multi-devises', hero_stat_modular:'Dashboard modulaire', hero_stat_composed:'Composé par vous', hero_stat_start:'Gratuit pour commencer',
     features_tag:'Fonctionnalités', features_title_1:'Tout ce qu\'il faut,', features_title_2:'rien de superflu',
     features_sub:"Pokelo se concentre sur l'essentiel du bankroll management : enregistrer vite, comprendre vite.",
     feat_live_badge:'Live preview', feat_big_title:'Graphiques dynamiques',
@@ -2760,10 +2774,8 @@ const I18N = {
     pricing_note_italic:'Tarifs indicatifs, susceptibles d\'évoluer.',
     price_free_name:'Gratuit', price_free_desc:'Pour suivre sa bankroll sans se poser de questions.',
     price_pro_name:'Pro', price_pro_desc:'Pour les joueurs réguliers qui gèrent plusieurs bankrolls.', price_pro_badge:'Le plus choisi',
-    price_team_name:'Équipe', price_team_desc:'Pour les clubs, staffs de coaching et groupes de joueurs.',
     price_cta_free:'Créer un compte gratuit', price_cta_soon:'Bientôt disponible', price_cta_subscribe:'S\'abonner',
-    price_note:'Aucune carte bancaire requise pour le plan Gratuit. Les formules Pro et Équipe sont en préparation.',
-    trust_tag:'Retours', trust_title:'Pensé par et pour<br>des joueurs réguliers',
+    price_note:'Aucune carte bancaire requise pour le plan Gratuit.',
     blog_tag:'Blog', blog_title:'Apprendre à gérer<br>sa bankroll',
     blog_sub:'Des guides courts et concrets sur le bankroll management, écrits pour être appliqués dès la prochaine session.',
     blog_see_all:'Voir tous les articles',
@@ -2916,7 +2928,7 @@ const I18N = {
     settings_account_delete_confirm_title:'Supprimer mon compte',
     settings_account_delete_confirm_text:'Cette action supprime définitivement votre compte, vos bankrolls, vos sessions et vos préférences. Elle est irréversible et ne peut pas être annulée.',
     settings_account_delete_error:'La suppression a échoué. Réessayez ou contactez le support.',
-    settings_account_plan:'Plan actuel', settings_account_plan_free:'Gratuit', settings_account_plan_pro:'Pro', settings_account_plan_team:'Équipe',
+    settings_account_plan:'Plan actuel', settings_account_plan_free:'Gratuit', settings_account_plan_pro:'Pro',
     settings_account_manage_plan:'Gérer mon abonnement',
     settings_account_view_plans:'Voir les plans disponibles',
     settings_account_role_admin:'✓ Statut administrateur actif sur ce compte.',
@@ -3025,7 +3037,7 @@ const I18N = {
     hero_title_1:'Your bankroll,', hero_title_2:'under control.',
     hero_sub:"Pokelo logs your <strong>tournaments</strong>, <strong>cash games</strong> and <strong>Spin & Go's</strong>, both <strong>live</strong> and <strong>online</strong>, in the currency of your choice — and turns it all into clear charts so you can play with a level head.",
     hero_cta_primary:'Create a free account', hero_cta_secondary:'How it works',
-    hero_stat_currency:'Currencies supported', hero_stat_formats:'Game formats', hero_stat_unified:'Unified tracking', hero_stat_start:'To get started',
+    hero_stat_bankrolls:'Unlimited bankrolls', hero_stat_currency:'Multi-currency', hero_stat_modular:'Modular dashboard', hero_stat_composed:'Composed by you', hero_stat_start:'Free to start',
     features_tag:'Features', features_title_1:'Everything you need,', features_title_2:'nothing you don\'t',
     features_sub:'Pokelo focuses on what bankroll management is really about: log fast, understand fast.',
     feat_live_badge:'Live preview', feat_big_title:'Dynamic charts',
@@ -3051,10 +3063,8 @@ const I18N = {
     pricing_note_italic:'Indicative pricing, subject to change.',
     price_free_name:'Free', price_free_desc:'To track your bankroll without overthinking it.',
     price_pro_name:'Pro', price_pro_desc:'For regular players managing several bankrolls.', price_pro_badge:'Most popular',
-    price_team_name:'Team', price_team_desc:'For clubs, coaching staffs and groups of players.',
     price_cta_free:'Create a free account', price_cta_soon:'Coming soon', price_cta_subscribe:'Subscribe',
-    price_note:'No credit card required for the Free plan. Pro and Team are in the works.',
-    trust_tag:'Feedback', trust_title:'Built by and for<br>regular players',
+    price_note:'No credit card required for the Free plan.',
     blog_tag:'Blog', blog_title:'Learn to manage<br>your bankroll',
     blog_sub:'Short, practical guides on bankroll management, written to be applied from your very next session.',
     blog_see_all:'See all articles',
@@ -3207,7 +3217,7 @@ const I18N = {
     settings_account_delete_confirm_title:'Delete my account',
     settings_account_delete_confirm_text:'This permanently deletes your account, bankrolls, sessions, and preferences. It is irreversible and cannot be undone.',
     settings_account_delete_error:'Deletion failed. Please try again or contact support.',
-    settings_account_plan:'Current plan', settings_account_plan_free:'Free', settings_account_plan_pro:'Pro', settings_account_plan_team:'Team',
+    settings_account_plan:'Current plan', settings_account_plan_free:'Free', settings_account_plan_pro:'Pro',
     settings_account_manage_plan:'Manage my subscription',
     settings_account_view_plans:'View available plans',
     settings_account_role_admin:'✓ Administrator status active on this account.',
@@ -6148,7 +6158,7 @@ function renderAccountSettings(){
   loggedIn.hidden = false;
   const emailEl = document.getElementById('settings-account-current-email');
   if (emailEl) emailEl.textContent = t('settings_account_current_email').replace('{email}', currentUser.email);
-  const planLabels = { free: t('settings_account_plan_free'), pro: t('settings_account_plan_pro'), team: t('settings_account_plan_team') };
+  const planLabels = { free: t('settings_account_plan_free'), pro: t('settings_account_plan_pro') };
   const planLabelEl = document.getElementById('settings-account-plan-label');
   if (planLabelEl) planLabelEl.textContent = planLabels[currentPlan] || planLabels.free;
   const planCardEl = document.getElementById('plan-status-card');
@@ -6616,26 +6626,21 @@ async function renderPublicProfile(userId){
 
 // Price IDs Stripe (publics, pas des secrets — voir STRIPE_SETUP.md).
 const STRIPE_PRICE_PRO = 'price_1Twmy9JY2RG9mZpHGoABcbiD';
-const STRIPE_PRICE_TEAM = null; // à renseigner quand le plan Équipe sera créé dans Stripe
 const PRICING_PLANS = [
   { id: 'free', nameKey: 'price_free_name', price: '0€' },
-  { id: 'pro', nameKey: 'price_pro_name', price: '6€', featured: true, priceId: STRIPE_PRICE_PRO },
-  { id: 'team', nameKey: 'price_team_name', price: '14€', priceId: STRIPE_PRICE_TEAM },
+  { id: 'pro', nameKey: 'price_pro_name', price: '9,90€', featured: true, priceId: STRIPE_PRICE_PRO },
 ];
 const PRICING_FEATURES = [
-  { key: 'pt_feat_bankrolls', values: ['pt_val_1_bankroll', 'pt_val_unlimited', 'pt_val_unlimited'] },
-  { key: 'pt_feat_sessions', values: ['pt_val_unlimited', 'pt_val_unlimited', 'pt_val_unlimited'] },
-  { key: 'pt_feat_game_types', values: [true, true, true] },
-  { key: 'pt_feat_expresso', values: [false, true, true] },
-  { key: 'pt_feat_content', values: [true, true, true] },
-  { key: 'pt_feat_stats', values: ['pt_val_basic', 'pt_val_advanced', 'pt_val_advanced'] },
-  { key: 'pt_feat_export', values: [false, true, true] },
-  { key: 'pt_feat_modular_dashboard', values: [false, true, true] },
-  { key: 'pt_feat_pwa', values: [true, true, true] },
-  { key: 'pt_feat_support', values: ['pt_val_standard', 'pt_val_priority', 'pt_val_priority'] },
-  { key: 'pt_feat_group_view', values: [false, false, true] },
-  { key: 'pt_feat_roles', values: [false, false, true] },
-  { key: 'pt_feat_billing', values: [false, false, true] },
+  { key: 'pt_feat_bankrolls', values: ['pt_val_1_bankroll', 'pt_val_unlimited'] },
+  { key: 'pt_feat_sessions', values: ['pt_val_unlimited', 'pt_val_unlimited'] },
+  { key: 'pt_feat_game_types', values: [true, true] },
+  { key: 'pt_feat_expresso', values: [false, true] },
+  { key: 'pt_feat_content', values: [true, true] },
+  { key: 'pt_feat_stats', values: ['pt_val_basic', 'pt_val_advanced'] },
+  { key: 'pt_feat_export', values: [false, true] },
+  { key: 'pt_feat_modular_dashboard', values: [false, true] },
+  { key: 'pt_feat_pwa', values: [true, true] },
+  { key: 'pt_feat_support', values: ['pt_val_standard', 'pt_val_priority'] },
 ];
 const CHECK_SVG = '<svg class="icon pt-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>';
 const DASH_SVG = '<span class="pt-dash">—</span>';

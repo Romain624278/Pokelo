@@ -1,6 +1,6 @@
-# Pokelo — Branchement Stripe (abonnements Pro / Équipe)
+# Pokelo — Branchement Stripe (abonnement Pro)
 
-Ce document prépare le passage du plan "Pro" (et "Équipe") de "Bientôt disponible"
+Ce document prépare le passage du plan "Pro" de "Bientôt disponible"
 à un vrai abonnement payant. Rien n'est branché en production : il n'y a pas encore
 de compte Stripe, donc rien ne peut débiter qui que ce soit. Ce qui est déjà prêt
 côté code peut être activé en quelques minutes une fois le compte Stripe créé.
@@ -28,11 +28,10 @@ côté code peut être activé en quelques minutes une fois le compte Stripe cr�
 
 1. Créer un compte sur [stripe.com](https://stripe.com) (mode Test d'abord).
 2. **Produits → Ajouter un produit** : "Pokelo Pro", prix récurrent mensuel
-   (ex. 6€/mois). Noter le `Price ID` (commence par `price_...`).
-3. Répéter pour "Pokelo Équipe" si besoin (ex. 14€/mois).
-4. **Developers → API keys** : récupérer la clé secrète (`sk_test_...` en test,
+   (9,90€/mois). Noter le `Price ID` (commence par `price_...`).
+3. **Developers → API keys** : récupérer la clé secrète (`sk_test_...` en test,
    `sk_live_...` en prod) — ne jamais l'exposer côté client.
-5. **Developers → Webhooks → Add endpoint** : URL = domaine **canonique** exact
+4. **Developers → Webhooks → Add endpoint** : URL = domaine **canonique** exact
    du site (celui qui reste dans la barre d'adresse une fois la page chargée,
    sans redirection) + `/api/stripe-webhook` — ex. `https://www.pokelo.fr/api/stripe-webhook`
    si `pokelo.fr` redirige vers `www.pokelo.fr` côté Vercel (Domains). Si l'URL
@@ -106,7 +105,7 @@ Fonctionnement une fois branché :
   Paramètres → Compte → Parrainage), dérivé de son identifiant.
 - À l'inscription, un nouvel utilisateur peut renseigner le code d'un ami.
 - S'il s'abonne à Pro pour la première fois **et** que son parrain est
-  actuellement abonné Pro/Équipe, la remise de 30% s'applique automatiquement
+  actuellement abonné Pro, la remise de 30% s'applique automatiquement
   au checkout (aucune action manuelle du filleul).
 - Une fois l'abonnement du filleul confirmé (webhook), le parrain reçoit un
   crédit de solde Stripe équivalent à 1 mois de Pro, appliqué automatiquement
