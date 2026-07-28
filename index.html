@@ -5870,6 +5870,11 @@ async function completeSignInRun(session){
   populateBankrollSelects();
   router();
   hideAppLoadingSkeleton();
+  // Rattrape une attribution de plan faite côté admin pendant que le compte
+  // était déconnecté (le popup ne s'était alors jamais déclenché) ; démarre
+  // aussi le polling pour la détecter en direct si l'admin agit maintenant.
+  maybeShowProWelcome(currentUser.id, currentPlan);
+  startPlanPolling();
 }
 async function signOutUser(){
   if (currentUser && window.supabase) {
@@ -5887,6 +5892,7 @@ async function signOutUser(){
     }
     await supabase.auth.signOut();
   }
+  stopPlanPolling();
   currentUser = null;
   currentPlan = 'free';
   currentPlanPeriodEnd = null;
@@ -5954,7 +5960,7 @@ function initSupabaseAuth(){
   supabase.auth.onAuthStateChange((event, session) => {
     if (!initialCheckDone) return;
     if (event === 'SIGNED_IN' && session && (!currentUser || currentUser.id !== session.user.id)) onAuthSignedIn(session);
-    if (event === 'SIGNED_OUT') { currentUser = null; authCheckComplete = true; updateAccountUI(); router(); }
+    if (event === 'SIGNED_OUT') { stopPlanPolling(); currentUser = null; authCheckComplete = true; updateAccountUI(); router(); }
   });
 }
 
@@ -6393,9 +6399,13 @@ function toggleProfilePublic(checked){
   // et délibérée — si l'utilisateur quitte la page juste après avoir coché la
   // case, le changement ne doit jamais rester bloqué dans le debounce et donc
   // jamais atteindre Supabase (c'était la cause du partage "cassé").
+  // syncPushToCloud() catche déjà ses erreurs et résout sur false plutôt que de
+  // rejeter — un .then() sans vérifier cette valeur affichait donc "succès"
+  // même quand l'écriture avait échoué côté serveur (ex. colonne manquante),
+  // masquant complètement l'échec réel à l'utilisateur.
   if (currentUser) {
     clearTimeout(syncDebounceTimer);
-    syncPushToCloud().then(() => showToast(t('toast_profile_public_updated'), 'success'));
+    syncPushToCloud().then(ok => showToast(t(ok ? 'toast_profile_public_updated' : 'toast_sync_error'), ok ? 'success' : 'error'));
   }
 }
 function togglePublicStats(checked){
@@ -6405,7 +6415,7 @@ function togglePublicStats(checked){
   renderProfileSettings();
   if (currentUser) {
     clearTimeout(syncDebounceTimer);
-    syncPushToCloud().then(() => showToast(t('toast_profile_public_updated'), 'success'));
+    syncPushToCloud().then(ok => showToast(t(ok ? 'toast_profile_public_updated' : 'toast_sync_error'), ok ? 'success' : 'error'));
   }
 }
 function copyProfileLink(){
@@ -6460,7 +6470,7 @@ async function renderPublicProfile(userId){
 }
 
 // Price IDs Stripe (publics, pas des secrets — voir STRIPE_SETUP.md).
-const STRIPE_PRICE_PRO = 'price_1Twmy9JY2RG9mZpHGoABcbiD';
+const STRIPE_PRICE_PRO = 'price_1TyCKnJY2RG9mZpHD0ibVs8H';
 const PRICING_PLANS = [
   { id: 'free', nameKey: 'price_free_name', price: '0€' },
   { id: 'pro', nameKey: 'price_pro_name', price: '9,90€', featured: true, priceId: STRIPE_PRICE_PRO },
@@ -6625,6 +6635,49 @@ function openProWelcomeModal(){
 function closeProWelcomeModal(){
   document.getElementById('pro-welcome-modal-overlay').hidden = true;
 }
+function planIsPro(plan){ return !!plan && plan !== 'free'; }
+// Déclenche le popup de bienvenue Pro dès qu'on détecte que le plan est passé
+// de gratuit à payant depuis la dernière fois qu'on l'a su pour ce compte —
+// que ce passage vienne d'un paiement Stripe (handleCheckoutReturn) ou d'une
+// attribution manuelle par l'admin (détectée au prochain login via
+// completeSignInRun, ou en direct via startPlanPolling si déjà connecté).
+// Le dernier plan connu est gardé en localStorage (par utilisateur) pour ne
+// jamais rejouer le popup une fois qu'il a déjà été vu pour ce passage-là.
+function maybeShowProWelcome(userId, plan){
+  if (!userId) return;
+  const key = 'pokelo_known_plan_' + userId;
+  try {
+    const lastKnown = localStorage.getItem(key);
+    if (!planIsPro(lastKnown) && planIsPro(plan)) openProWelcomeModal();
+    localStorage.setItem(key, plan || 'free');
+  } catch (e) {}
+}
+let planPollTimer = null;
+// Poll léger (pas de Realtime Supabase à configurer) pour détecter une
+// attribution de plan côté admin pendant qu'on est déjà connecté, sans
+// attendre une reconnexion. 30s = compromis entre réactivité et charge.
+function startPlanPolling(){
+  stopPlanPolling();
+  if (!currentUser || !window.supabase) return;
+  planPollTimer = setInterval(async () => {
+    if (!currentUser || !window.supabase) return;
+    try {
+      const { data, error } = await supabase.from('profiles').select('plan,stripe_current_period_end').eq('id', currentUser.id).maybeSingle();
+      if (error || !data) return;
+      const newPlan = data.plan || 'free';
+      if (newPlan !== currentPlan) {
+        currentPlan = newPlan;
+        currentPlanPeriodEnd = data.stripe_current_period_end || null;
+        applySettingsToDOM();
+        renderAccountSettings();
+      }
+      maybeShowProWelcome(currentUser.id, newPlan);
+    } catch (e) { /* on retente au prochain tick */ }
+  }, 30000);
+}
+function stopPlanPolling(){
+  if (planPollTimer) { clearInterval(planPollTimer); planPollTimer = null; }
+}
 
 // Après un retour de Stripe Checkout (#/app/account?checkout=success|cancelled) :
 // nettoie l'URL tout de suite (évite de redéclencher ce traitement à chaque
@@ -6648,7 +6701,7 @@ async function handleCheckoutReturn(){
       currentPlanPeriodEnd = data.stripe_current_period_end || null;
       applySettingsToDOM();
       renderAccountSettings();
-      openProWelcomeModal();
+      maybeShowProWelcome(currentUser.id, currentPlan);
       return;
     }
     await new Promise(r => setTimeout(r, 1500));
