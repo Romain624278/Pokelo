@@ -116,8 +116,12 @@ Dans **Supabase → Authentication → Providers** :
 1. Activer **Email** (activé par défaut).
 2. Activer **"Confirm email"** pour exiger la vérification d'adresse avant
    connexion (correspond à l'écran "Créer un compte" déjà présent côté app).
-3. Personnaliser les templates d'e-mail (confirmation, reset password) dans
-   **Authentication → Email Templates** — mettre le branding Pokelo.
+3. Personnaliser les templates d'e-mail dans **Authentication → Email
+   Templates** avec le branding Pokelo : coller le HTML de
+   `supabase/email-templates/confirm-signup.html` dans le template
+   "Confirm signup", et celui de `supabase/email-templates/reset-password.html`
+   dans "Reset Password" (chaque fichier contient aussi le sujet suggéré en
+   commentaire). Conservés ici pour ne pas avoir à les régénérer.
 4. Renseigner **Site URL** et **Redirect URLs** avec l'URL Vercel finale
    (ex. `https://pokelo.vercel.app`, plus `http://localhost:3000` en dev).
 

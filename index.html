@@ -541,11 +541,15 @@
   .progress-bar { height: 6px; border-radius: 3px; background: rgba(255,255,255,0.06); overflow: hidden; margin: .7rem 0 .3rem; }
   .progress-bar-fill { height: 100%; background: var(--good); border-radius: 3px; transition: width .4s; }
   .progress-bar-fill.critical { background: var(--critical); }
-  .alert-card { padding: 1rem 1.1rem; border-radius: 9px; border: 1px solid var(--border); }
+  .alert-card { padding: 1rem 1.1rem; border-radius: 9px; border: 1px solid var(--border); position: relative; }
   .alert-card.ok { border-color: rgba(8,191,47,0.35); background: rgba(8,191,47,0.06); }
   .alert-card.warn { border-color: rgba(230,103,103,0.4); background: rgba(230,103,103,0.07); }
-  .alert-title { font-weight: 700; font-size: .9rem; color: var(--text); margin-bottom: .3rem; }
+  .alert-title { font-weight: 700; font-size: .9rem; color: var(--text); margin-bottom: .3rem; padding-right: 1.4rem; }
   .alert-text { font-size: .82rem; color: var(--grey); line-height: 1.5; }
+  .alert-dismiss { position: absolute; top: .7rem; right: .8rem; background: none; border: none; cursor: pointer; color: var(--grey); padding: 2px; line-height: 0; }
+  .alert-dismiss:hover { color: var(--text); }
+  .alert-dismissed-text { font-size: .82rem; color: var(--grey); display: flex; align-items: center; justify-content: space-between; gap: .6rem; }
+  .alert-dismissed-text button { background: none; border: none; color: var(--green); cursor: pointer; font-size: .78rem; font-weight: 600; padding: 0; }
   .heatmap-grid { display: flex; flex-direction: column; gap: 3px; }
   .heatmap-row { display: grid; grid-template-columns: 44px repeat(6, 1fr); gap: 3px; }
   /* --good/--critical sont des couleurs fixes (non liées au thème) : le texte
@@ -2635,7 +2639,7 @@ function pickCurrency(selectId, code){
 const DEFAULT_COLORS = { tournament:'#08BF2F', cash:'#3987e5', expresso:'#c98500', live:'#08BF2F', online:'#9085e9', good:'#08BF2F', critical:'#e66767' };
 const DEFAULT_STAKE_THRESHOLDS = { micro:5, low:25, mid:100 };
 function defaultSettings(){
-  return { lang:'fr', theme:'dark', dateFormat:'fr-long', colors: Object.assign({}, DEFAULT_COLORS), stakeThresholds: Object.assign({}, DEFAULT_STAKE_THRESHOLDS) };
+  return { lang:'fr', theme:'dark', dateFormat:'fr-long', colors: Object.assign({}, DEFAULT_COLORS), stakeThresholds: Object.assign({}, DEFAULT_STAKE_THRESHOLDS), hideMoveDownAlert: false };
 }
 function applySettingsToDOM(){
   document.body.classList.toggle('is-pro', isPremium());
@@ -2823,6 +2827,7 @@ const I18N = {
     ror_hint_short:'estimation simplifiée',
     movedown_ok_title:'Bankroll saine', movedown_ok_text:'Vous avez environ {units} buy-ins en réserve, au-dessus du seuil recommandé ({threshold}). Continuez ainsi.',
     movedown_warn_title:'Envisagez de descendre de stake', movedown_warn_text:'Vous n\'avez qu\'environ {units} buy-ins en réserve, sous le seuil recommandé ({threshold}) pour votre format le plus joué récemment.',
+    movedown_dismiss:'Masquer cette alerte', movedown_dismissed_text:'Alerte move-down masquée.', movedown_show_again:'Réafficher',
     buyins_reserve_hint:'Buy-in moyen récent :', streak_win:'Série de victoires', streak_loss:'Série de défaites',
     tilt_avg_compare:'Résultat moyen en tilt', tilt_vs:'contre', bb100_need_data:'Renseignez au moins la grosse blinde sur vos sessions cash game (les mains sont estimées automatiquement depuis la durée si non renseignées).',
     bb100_hands:'mains jouées', bb100_estimated_note:'mains estimées depuis la durée', heatmap_need_time:'Ajoutez l\'heure de vos sessions pour activer la heatmap.',
@@ -3112,6 +3117,7 @@ const I18N = {
     ror_hint_short:'simplified estimate',
     movedown_ok_title:'Healthy bankroll', movedown_ok_text:'You have about {units} buy-ins in reserve, above the recommended threshold ({threshold}). Keep it up.',
     movedown_warn_title:'Consider moving down in stakes', movedown_warn_text:'You only have about {units} buy-ins in reserve, below the recommended threshold ({threshold}) for your most-played recent format.',
+    movedown_dismiss:'Hide this alert', movedown_dismissed_text:'Move-down alert hidden.', movedown_show_again:'Show again',
     buyins_reserve_hint:'Recent average buy-in:', streak_win:'Winning streak', streak_loss:'Losing streak',
     tilt_avg_compare:'Average result while tilted', tilt_vs:'vs', bb100_need_data:'Add at least the big blind on your cash game sessions (hands are auto-estimated from duration if not provided).',
     bb100_hands:'hands played', bb100_estimated_note:'hands estimated from duration', heatmap_need_time:'Add the time of your sessions to enable the heatmap.',
@@ -4788,12 +4794,34 @@ function renderRiskOfRuinModule(bk, sessions){
   </div>`;
 }
 function renderMoveDownModule(bk, sessions){
+  if (state.settings && state.settings.hideMoveDownAlert) {
+    return `<div class="alert-card">
+      <div class="alert-dismissed-text">
+        <span>${t('movedown_dismissed_text')}</span>
+        <button onclick="setMoveDownAlertHidden(false)">${t('movedown_show_again')}</button>
+      </div>
+    </div>`;
+  }
   const m = computeMoveDown(bk, sessions);
   if (!m) return `<div class="alert-card"><div class="alert-title">${t('mod_moveDownAlert_title')}</div><div class="alert-text">${t('empty_no_data')}</div></div>`;
   return `<div class="alert-card ${m.healthy?'ok':'warn'}">
+    <button class="alert-dismiss" onclick="setMoveDownAlertHidden(true)" title="${t('movedown_dismiss')}" aria-label="${t('movedown_dismiss')}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     <div class="alert-title">${m.healthy ? t('movedown_ok_title') : t('movedown_warn_title')}</div>
     <div class="alert-text">${(m.healthy ? t('movedown_ok_text') : t('movedown_warn_text')).replace('{units}', fmtNum(m.units)).replace('{threshold}', m.threshold)}</div>
   </div>`;
+}
+// Contrairement au reste de la personnalisation du dashboard (ajout/retrait/
+// réorganisation de modules), réservée à Pokelo Pro, cette bascule reste
+// disponible pour tout le monde : ce n'est pas une fonctionnalité de confort,
+// mais la possibilité de ne plus voir un conseil qui ne s'applique pas à sa
+// situation (ex. joueur staké/backé). Stockée localement uniquement (pas
+// encore de colonne profiles dédiée) : ce choix ne suit donc pas encore
+// l'utilisateur d'un appareil à l'autre.
+function setMoveDownAlertHidden(hidden){
+  if (!state.settings) state.settings = defaultSettings();
+  state.settings.hideMoveDownAlert = hidden;
+  saveState();
+  refreshDashboardIfActive();
 }
 function renderBuyinsReserveModule(bk, sessions){
   if (!sessions.length) return `<div class="mini-stat-tile center"><div class="mst-label">${t('mod_buyinsReserve_title')}</div><div class="mst-val">—</div><div class="mst-sub">${t('empty_no_data')}</div></div>`;
