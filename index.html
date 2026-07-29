@@ -554,6 +554,11 @@
   .goal-setup .input { flex: 1; min-width: 0; }
   .goal-edit-link { background: none; border: none; color: var(--grey); cursor: pointer; font-size: .74rem; padding: 0; margin-top: .5rem; text-decoration: underline; }
   .goal-edit-link:hover { color: var(--text); }
+  .goal-card-head { display: flex; align-items: center; justify-content: space-between; }
+  .goal-card-head .goal-edit-link { margin-top: 0; }
+  .goal-progress-row { display: flex; align-items: center; gap: .9rem; margin: .8rem 0 .4rem; }
+  .goal-progress-row .goal-progress-bar-lg { flex: 1; height: 10px; margin: 0; }
+  .goal-progress-pct { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--text-wall); min-width: 3.4em; text-align: right; }
   .heatmap-grid { display: flex; flex-direction: column; gap: 3px; }
   .heatmap-row { display: grid; grid-template-columns: 44px repeat(6, 1fr); gap: 3px; }
   /* --good/--critical sont des couleurs fixes (non liées au thème) : le texte
@@ -1629,7 +1634,7 @@
           <h1 data-i18n="nav_dashboard">Dashboard</h1>
           <div class="app-topbar-actions">
             <select class="select" id="dashboard-bankroll-select"></select>
-            <button class="btn-ghost btn-sm" onclick="openCustomizeModal()">
+            <button class="btn-ghost btn-sm" id="dashboard-customize-btn" onclick="openCustomizeModal()">
               <svg class="icon" style="width:16px;height:16px" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
               <span data-i18n="btn_customize">Personnaliser</span>
               <span class="pro-crown-inline"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 18h14l1.4-8.4-4.4 2.6-3-5.2-3 5.2-4.4-2.6L5 18Z"/></svg></span>
@@ -2106,6 +2111,16 @@
           <input class="input" type="number" step="0.01" id="bankroll-start" placeholder="0" />
         </div>
       </div>
+      <div class="form-group" id="bankroll-focus-group">
+        <label data-i18n="bankroll_focus_label">Orientation (optionnel)</label>
+        <p class="form-hint" data-i18n="bankroll_focus_hint">Pré-sélectionne ce type de session dans le formulaire, et configure le dashboard en conséquence pour votre toute première bankroll.</p>
+        <div class="segmented" id="bankroll-focus-seg">
+          <button type="button" data-val="none" class="active" data-i18n="bankroll_focus_none">Peu importe</button>
+          <button type="button" data-val="tournament">Tournoi</button>
+          <button type="button" data-val="cash">Cash Game</button>
+          <button type="button" data-val="expresso">Expresso<span class="pro-crown-inline"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 18h14l1.4-8.4-4.4 2.6-3-5.2-3 5.2-4.4-2.6L5 18Z"/></svg></span></button>
+        </div>
+      </div>
     </div>
     <div class="modal-foot">
       <button class="btn-ghost" onclick="closeBankrollModal()">Annuler</button>
@@ -2309,6 +2324,11 @@
           <span class="pc-title" data-i18n="preset_casual_live">Casual Live</span>
           <span class="pc-desc" data-i18n="preset_casual_live_desc">Résumé simple, heatmap, tilt</span>
         </button>
+        <button class="preset-choice" onclick="applyPresetFromPrompt('expresso')">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+          <span class="pc-title" data-i18n="preset_expresso">Expresso</span>
+          <span class="pc-desc" data-i18n="preset_expresso_desc">Volume de sessions, variance, risque de ruine</span>
+        </button>
       </div>
       <button class="btn-ghost btn-sm" style="width:100%;justify-content:center;margin-top:1.2rem" onclick="closePresetPrompt()" data-i18n="preset_prompt_skip">Je choisirai plus tard</button>
     </div>
@@ -2346,6 +2366,7 @@
         <button class="btn-ghost btn-sm" onclick="applyPreset('grinderCash')" data-i18n="preset_grinder_cash">Grinder Cash</button>
         <button class="btn-ghost btn-sm" onclick="applyPreset('mtt')" data-i18n="preset_mtt">MTT</button>
         <button class="btn-ghost btn-sm" onclick="applyPreset('casualLive')" data-i18n="preset_casual_live">Casual Live</button>
+        <button class="btn-ghost btn-sm" onclick="applyPreset('expresso')" data-i18n="preset_expresso">Expresso</button>
       </div>
       <div class="customize-body">
         <div class="customize-col">
@@ -2964,8 +2985,11 @@ const I18N = {
     toast_account_deleted:'Votre compte a été supprimé définitivement.',
     toast_export_ready:'Export téléchargé.',
     networth_title:'Patrimoine total',
+    dashboard_all_bankrolls:'Toutes mes bankrolls', all_bankrolls_recent_title:'Sessions récentes (toutes bankrolls)',
     preset_label:'Preset :', preset_grinder_cash:'Grinder Cash', preset_grinder_cash_desc:'Cash game, stakes, salles, discipline',
     preset_mtt:'MTT', preset_mtt_desc:'ITM, streaks, risque de ruine', preset_casual_live:'Casual Live', preset_casual_live_desc:'Résumé simple, heatmap, tilt',
+    preset_expresso:'Expresso', preset_expresso_desc:'Volume de sessions, variance, risque de ruine',
+    bankroll_focus_label:'Orientation (optionnel)', bankroll_focus_hint:'Pré-sélectionne ce type de session dans le formulaire, et configure le dashboard en conséquence pour votre toute première bankroll.', bankroll_focus_none:'Peu importe',
     preset_prompt_title:'Quel type de joueur êtes-vous ?', preset_prompt_text:'On pré-sélectionne les modules les plus utiles pour vous. Modifiable à tout moment depuis « Personnaliser ».',
     preset_prompt_skip:'Je choisirai plus tard',
     quicklog_title:'Log rapide', quicklog_type:'Type', quicklog_format:'Format', quicklog_result:'Résultat net',
@@ -3256,8 +3280,11 @@ const I18N = {
     toast_account_deleted:'Your account has been permanently deleted.',
     toast_export_ready:'Export downloaded.',
     networth_title:'Total net worth',
+    dashboard_all_bankrolls:'All my bankrolls', all_bankrolls_recent_title:'Recent sessions (all bankrolls)',
     preset_label:'Preset:', preset_grinder_cash:'Grinder Cash', preset_grinder_cash_desc:'Cash game, stakes, rooms, discipline',
     preset_mtt:'MTT', preset_mtt_desc:'ITM, streaks, risk of ruin', preset_casual_live:'Casual Live', preset_casual_live_desc:'Simple summary, heatmap, tilt',
+    preset_expresso:'Expresso', preset_expresso_desc:'Session volume, variance, risk of ruin',
+    bankroll_focus_label:'Focus (optional)', bankroll_focus_hint:"Pre-selects this session type in the form, and sets up the dashboard accordingly for your very first bankroll.", bankroll_focus_none:'No preference',
     preset_prompt_title:'What kind of player are you?', preset_prompt_text:'We pre-select the modules most useful to you. Changeable anytime from "Customize".',
     preset_prompt_skip:'I\'ll choose later',
     quicklog_title:'Quick log', quicklog_type:'Type', quicklog_format:'Format', quicklog_result:'Net result',
@@ -4398,19 +4425,25 @@ document.addEventListener('mousemove', function(e){
 /* ══════════════════════════════════════════════════════════════
    POKELO — app: selects
    ══════════════════════════════════════════════════════════════ */
+const ALL_BANKROLLS_SCOPE = '__all__';
 function populateBankrollSelects(){
   const opts = state.bankrolls.map(b => `<option value="${b.id}">${escapeHtml(b.name)}</option>`).join('');
-  ['session-bankroll','dashboard-bankroll-select'].forEach(id=>{
-    const el = document.getElementById(id);
-    if (!el) return;
-    const prev = el.value;
-    el.innerHTML = opts;
-    if (state.bankrolls.some(b=>b.id===prev)) el.value = prev;
-  });
-  if (!currentBankrollScope || !state.bankrolls.some(b=>b.id===currentBankrollScope)) {
+  const sessionEl = document.getElementById('session-bankroll');
+  if (sessionEl) {
+    const prev = sessionEl.value;
+    sessionEl.innerHTML = opts;
+    if (state.bankrolls.some(b=>b.id===prev)) sessionEl.value = prev;
+  }
+  const dashEl = document.getElementById('dashboard-bankroll-select');
+  if (dashEl) {
+    const prev = dashEl.value;
+    dashEl.innerHTML = (state.bankrolls.length > 1 ? `<option value="${ALL_BANKROLLS_SCOPE}">${t('dashboard_all_bankrolls')}</option>` : '') + opts;
+    if (prev === ALL_BANKROLLS_SCOPE || state.bankrolls.some(b=>b.id===prev)) dashEl.value = prev;
+  }
+  if (!currentBankrollScope || (currentBankrollScope !== ALL_BANKROLLS_SCOPE && !state.bankrolls.some(b=>b.id===currentBankrollScope))) {
     currentBankrollScope = state.bankrolls[0] ? state.bankrolls[0].id : null;
   }
-  if (document.getElementById('dashboard-bankroll-select')) document.getElementById('dashboard-bankroll-select').value = currentBankrollScope || '';
+  if (dashEl) dashEl.value = currentBankrollScope || '';
 }
 document.addEventListener('change', function(e){
   if (e.target.id === 'dashboard-bankroll-select') {
@@ -4427,7 +4460,7 @@ const MODULE_SIZE = {
   evolution:'half', monthly:'half', category:'half', formatbar:'half', best:'full', worst:'full', recent:'full',
   summary:'full', roi:'full', itm:'half', periodProfit:'full', stakeBreakdown:'half', platformBreakdown:'half',
   heatmap:'full', durationCorrelation:'half', variance:'half', riskOfRuin:'half', moveDownAlert:'half',
-  buyinsReserve:'half', streaks:'half', tiltSessions:'full', bb100:'half', goals:'half',
+  buyinsReserve:'half', streaks:'half', tiltSessions:'full', bb100:'half', goals:'full',
 };
 const MODULE_HAS_CHART = {
   evolution:true, monthly:true, category:true, formatbar:true, best:false, worst:false, recent:false,
@@ -4445,6 +4478,7 @@ const DASHBOARD_PRESETS = {
   grinderCash: ['recent','evolution','monthly','formatbar','stakeBreakdown','platformBreakdown','buyinsReserve','moveDownAlert'],
   mtt: ['recent','evolution','monthly','itm','periodProfit','streaks','riskOfRuin','best','worst'],
   casualLive: ['recent','evolution','summary','heatmap','tiltSessions','roi'],
+  expresso: ['recent','evolution','monthly','stakeBreakdown','buyinsReserve','riskOfRuin','moveDownAlert'],
 };
 function applyPreset(name){
   if (!isPremium()) { showProFeatureModal('dashboard'); return; }
@@ -4481,6 +4515,9 @@ function renderDashboard(){
     el.innerHTML = emptyStateHtml('bankrolls', 'Créez votre première bankroll', 'Une bankroll regroupe vos sessions (tournois, cash game, expressos) dans une devise donnée.', 'openBankrollModal()', 'Créer une bankroll');
     return;
   }
+  if (currentBankrollScope === ALL_BANKROLLS_SCOPE) { renderAllBankrollsDashboard(); return; }
+  const customizeBtn = document.getElementById('dashboard-customize-btn');
+  if (customizeBtn) customizeBtn.hidden = false;
   const bk = getBankroll(currentBankrollScope) || state.bankrolls[0];
   const sessions = getSessionsFor(bk.id);
   const balance = bankrollBalance(bk.id);
@@ -4511,6 +4548,88 @@ function renderDashboard(){
   animateStatValue(document.getElementById('stat-val-winrate'), winrate, v => fmtNum(v) + ' %');
   animateStatValue(document.getElementById('stat-val-ror'), ror ? ror.ror : 0, v => ror ? fmtNum(v) + ' %' : '—');
   renderDashboardModules(bk, sessions);
+}
+// Vue agrégée "Toutes mes bankrolls" : contrairement au reste du dashboard
+// (scopé à une seule bankroll, une seule devise), celle-ci doit combiner des
+// bankrolls potentiellement dans des devises différentes. On réutilise le
+// même principe de conversion que la carte "Patrimoine total" (taux du jour,
+// pas un taux historique par session) plutôt que de réinventer une logique
+// FX séparée. Les sessions récentes restent affichées dans la devise propre
+// à chaque bankroll (comme dans l'onglet Sessions) au lieu d'un montant
+// converti par session, pour ne pas fabriquer un chiffre approximatif de
+// plus sur des données déjà anciennes.
+async function renderAllBankrollsDashboard(){
+  const el = document.getElementById('dashboard-content');
+  const customizeBtn = document.getElementById('dashboard-customize-btn');
+  if (customizeBtn) customizeBtn.hidden = true;
+  const ref = refNetWorthCurrency();
+  const today = todayStr();
+  const allSessions = state.sessions.slice();
+  el.innerHTML = `
+    ${state.isDemo && !state.demoDismissed ? demoBannerHtml() : ''}
+    <div class="stat-grid">
+      <div class="stat-tile stat-tile-enter" style="animation-delay:0ms"><div class="st-label">${t('stat_balance')}</div><div class="st-val" id="stat-val-balance">…</div><div class="st-sub">${t('dashboard_all_bankrolls')}</div></div>
+      <div class="stat-tile stat-tile-enter" style="animation-delay:40ms"><div class="st-label">${t('stat_profit')}</div><div class="st-val" id="stat-val-profit">…</div><div class="st-sub">${t('stat_since_creation')}</div></div>
+      <div class="stat-tile stat-tile-enter" style="animation-delay:80ms"><div class="st-label">${t('stat_roi')}</div><div class="st-val" id="stat-val-roi">…</div><div class="st-sub">${t('stat_roi_sub')}</div></div>
+      <div class="stat-tile stat-tile-enter" style="animation-delay:120ms"><div class="st-label">${t('stat_sessions')}</div><div class="st-val" id="stat-val-sessions"></div><div class="st-sub">${t('stat_recorded')}</div></div>
+      <div class="stat-tile stat-tile-enter" style="animation-delay:160ms"><div class="st-label">${t('stat_winrate')}</div><div class="st-val" id="stat-val-winrate"></div><div class="st-sub">${t('stat_winning')}</div></div>
+    </div>
+    <div class="modules-grid">
+      <div class="module-card" data-size="full">
+        <div class="module-head"><div class="module-head-left"><div><h3>${t('networth_title')}</h3></div></div></div>
+        ${networthCardHtml()}
+      </div>
+      <div class="module-card" data-size="full">
+        <div class="module-head"><div class="module-head-left"><div><h3>${t('all_bankrolls_recent_title')}</h3></div></div></div>
+        ${sessionsTableAllBankrollsHtml(allSessions.slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,8))}
+      </div>
+    </div>
+  `;
+  animateStatValue(document.getElementById('stat-val-sessions'), allSessions.length, v => String(Math.round(v)));
+  const wins = allSessions.filter(s=>sessionProfit(s) > 0).length;
+  const winrate = allSessions.length ? (wins/allSessions.length*100) : 0;
+  animateStatValue(document.getElementById('stat-val-winrate'), winrate, v => fmtNum(v) + ' %');
+  renderNetWorthCard();
+
+  const parts = await Promise.all(state.bankrolls.map(async bk => {
+    const bal = bankrollBalance(bk.id);
+    const profit = bankrollProfit(bk.id);
+    const buyIn = getSessionsFor(bk.id).reduce((s,x)=>s+convertedBuyIn(x),0);
+    if (bk.currency === ref) return { bal, profit, buyIn, ok: true };
+    const rate = await getFxRate(today, bk.currency, ref);
+    return (rate == null) ? { bal:0, profit:0, buyIn:0, ok: false } : { bal: bal*rate, profit: profit*rate, buyIn: buyIn*rate, ok: true };
+  }));
+  if (currentBankrollScope !== ALL_BANKROLLS_SCOPE) return; // scope changé entre-temps, résultat périmé ignoré
+  const totalBalance = parts.reduce((s,p)=>s+p.bal, 0);
+  const totalProfit = parts.reduce((s,p)=>s+p.profit, 0);
+  const totalBuyIn = parts.reduce((s,p)=>s+p.buyIn, 0);
+  const roi = totalBuyIn > 0 ? (totalProfit/totalBuyIn*100) : 0;
+  const anyFail = parts.some(p=>!p.ok);
+  const balEl = document.getElementById('stat-val-balance');
+  const profitEl = document.getElementById('stat-val-profit');
+  const roiEl = document.getElementById('stat-val-roi');
+  if (balEl) animateStatValue(balEl, totalBalance, v => anyFail ? t('fx_unavailable') : fmtMoney(v, ref));
+  if (profitEl) { profitEl.classList.add(totalProfit>=0?'pos':'neg'); animateStatValue(profitEl, totalProfit, v => anyFail ? t('fx_unavailable') : fmtSigned(v, ref)); }
+  if (roiEl) { roiEl.classList.add(roi>=0?'pos':'neg'); animateStatValue(roiEl, roi, v => (v>=0?'+':'') + fmtNum(v) + ' %'); }
+}
+function sessionsTableAllBankrollsHtml(sessions){
+  if (!sessions.length) return `<div class="empty-state" style="padding:2.5rem 1rem"><p>${t('empty_no_sessions_bankroll')}</p></div>`;
+  return `<div class="table-wrap"><table class="data-table"><thead><tr>
+    <th>${t('th_date')}</th><th>${t('th_bankroll')}</th><th>${t('th_type')}</th><th>${t('th_format')}</th><th>${t('th_buyin')}</th><th>${t('th_result')}</th>
+  </tr></thead><tbody>${sessions.map(s=>{
+    const bk = getBankroll(s.bankrollId); if (!bk) return '';
+    const p = sessionProfit(s);
+    const sCur = s.currency || bk.currency;
+    const converted = sCur !== bk.currency;
+    return `<tr>
+      <td>${fmtDateFr(s.date)}</td>
+      <td><span class="bk-dot" style="background:${bankrollColor(bk)}"></span>${escapeHtml(bk.name)}</td>
+      <td><span class="badge badge-${s.category}">${CAT_LABEL[s.category]}</span></td>
+      <td><span class="badge badge-${s.format}">${FMT_LABEL[s.format]}</span></td>
+      <td>${fmtMoney(s.buyIn, sCur)}</td>
+      <td class="cell-profit ${p>=0?'pos':'neg'}">${fmtSigned(p, bk.currency)}${converted ? ` <span class="fx-tag">${escapeHtml(sCur)}→${escapeHtml(bk.currency)}</span>` : ''}</td>
+    </tr>`;
+  }).join('')}</tbody></table></div>`;
 }
 // Anime un chiffre de 0 vers sa valeur finale (ease-out) plutôt que de
 // l'afficher figé — cohérent avec le reste du site (compteurs animés de la
@@ -4850,12 +4969,16 @@ function renderGoalModule(bk, sessions){
   const bal = bankrollBalance(bk.id);
   const pct = Math.max(0, Math.min(100, (bal/goal)*100));
   const reached = bal >= goal;
-  return `<div class="mini-stat-tile center">
-    <div class="mst-label">${t('mod_goals_title')}</div>
-    <div class="mst-val">${fmtNum(pct)}%</div>
-    <div class="progress-bar"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+  return `<div class="mini-stat-tile goal-card-full">
+    <div class="goal-card-head">
+      <div class="mst-label">${t('mod_goals_title')}</div>
+      <button class="goal-edit-link" onclick="goalEditingBankrollId='${bk.id}'; refreshDashboardIfActive();">${t('goal_edit')}</button>
+    </div>
+    <div class="goal-progress-row">
+      <div class="progress-bar goal-progress-bar-lg"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+      <div class="goal-progress-pct">${fmtNum(pct)}%</div>
+    </div>
     <div class="mst-sub">${fmtMoney(bal, bk.currency)} / ${fmtMoney(goal, bk.currency)}${reached ? ' · ' + t('goal_reached') : ''}</div>
-    <button class="goal-edit-link" onclick="goalEditingBankrollId='${bk.id}'; refreshDashboardIfActive();">${t('goal_edit')}</button>
   </div>`;
 }
 function saveBankrollGoal(bankrollId){
@@ -7294,6 +7417,12 @@ function openBankrollModal(id){
   document.getElementById('bankroll-name').value = bk ? bk.name : '';
   initCurrencySelect('bankroll-currency-select', bk ? bk.currency : 'EUR');
   document.getElementById('bankroll-start').value = bk ? bk.start : '';
+  // L'orientation ne se propose qu'à la création : modifier une bankroll
+  // existante ne doit jamais revenir en arrière sur le dashboard déjà en
+  // place pour ce compte (voir setSegmented plus bas, appliqué seulement
+  // si !id dans saveBankroll).
+  document.getElementById('bankroll-focus-group').hidden = !!id;
+  if (!id) setSegmented('bankroll-focus-seg', 'none');
   document.getElementById('bankroll-modal-overlay').hidden = false;
 }
 function closeBankrollModal(){ document.getElementById('bankroll-modal-overlay').hidden = true; closeAllCurrencyMenus(); }
@@ -7304,17 +7433,33 @@ function saveBankroll(){
   const start = parseFloat(document.getElementById('bankroll-start').value) || 0;
   if (!name) { document.getElementById('bankroll-name').focus(); return; }
   const wasEmpty = state.bankrolls.length === 0;
+  let focus = null;
   if (id) {
     const bk = getBankroll(id); bk.name = name; bk.currency = currency; bk.start = start;
   } else {
-    state.bankrolls.push({ id: newRecordId(), name, currency, start, createdAt: Date.now(), color: BK_PALETTE[state.bankrolls.length % BK_PALETTE.length] });
+    focus = getSegVal('bankroll-focus-seg');
+    if (focus === 'none' || (focus === 'expresso' && !isPremium())) focus = null;
+    state.bankrolls.push({ id: newRecordId(), name, currency, start, createdAt: Date.now(), color: BK_PALETTE[state.bankrolls.length % BK_PALETTE.length], focus });
   }
   state.isDemo = false;
   saveState(); closeBankrollModal(); populateBankrollSelects();
   const active = ['dashboard','sessions','bankrolls'].find(s=>!document.getElementById('section-'+s).hidden);
   if (active === 'bankrolls') renderBankrolls();
   if (active === 'dashboard') renderDashboard();
-  if (!id && wasEmpty && !state.presetPromptShown && isPremium()) openPresetPrompt();
+  // Le preset de dashboard n'est appliqué automatiquement que pour la toute
+  // première bankroll du compte (rien à écraser) : dès la 2e bankroll,
+  // dashboardLayout est déjà partagé/personnalisé et ne doit plus être
+  // reconfiguré silencieusement sous prétexte d'une nouvelle bankroll.
+  if (!id && wasEmpty) {
+    if (focus && DASHBOARD_PRESETS[focus === 'tournament' ? 'mtt' : focus === 'cash' ? 'grinderCash' : 'expresso']) {
+      state.dashboardLayout = DASHBOARD_PRESETS[focus === 'tournament' ? 'mtt' : focus === 'cash' ? 'grinderCash' : 'expresso'].slice();
+      state.presetPromptShown = true;
+      saveState();
+      if (active === 'dashboard') refreshDashboardIfActive();
+    } else if (!state.presetPromptShown && isPremium()) {
+      openPresetPrompt();
+    }
+  }
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -7325,7 +7470,7 @@ function setSegmented(containerId, val){
   c.querySelectorAll('button').forEach(b => b.classList.toggle('active', b.dataset.val === val));
 }
 document.addEventListener('click', function(e){
-  const seg = e.target.closest('#session-type-seg button, #session-format-seg button, #quicklog-type-seg button, #quicklog-format-seg button');
+  const seg = e.target.closest('#session-type-seg button, #session-format-seg button, #quicklog-type-seg button, #quicklog-format-seg button, #bankroll-focus-seg button');
   if (!seg) return;
   if (seg.dataset.val === 'expresso' && !isPremium()) { showProFeatureModal('expresso'); return; }
   const parent = seg.parentElement;
@@ -7474,10 +7619,10 @@ function openSessionModal(id){
   document.getElementById('session-modal-title').textContent = id ? 'Modifier la session' : 'Nouvelle session';
   const s = id ? state.sessions.find(x=>x.id===id) : null;
   populateBankrollSelects();
-  const bankrollId = s ? s.bankrollId : (currentBankrollScope || state.bankrolls[0].id);
+  const bankrollId = s ? s.bankrollId : ((currentBankrollScope && currentBankrollScope !== ALL_BANKROLLS_SCOPE) ? currentBankrollScope : state.bankrolls[0].id);
   document.getElementById('session-bankroll').value = bankrollId;
   const bk = getBankroll(bankrollId);
-  const category = s ? s.category : 'tournament';
+  const category = s ? s.category : ((bk && bk.focus) || 'tournament');
   setSegmented('session-type-seg', category);
   setSegmented('session-format-seg', s ? s.format : 'live');
   document.getElementById('session-cash-fields').hidden = (category !== 'cash');
