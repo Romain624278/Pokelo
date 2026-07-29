@@ -550,6 +550,10 @@
   .alert-dismiss:hover { color: var(--text); }
   .alert-dismissed-text { font-size: .82rem; color: var(--grey); display: flex; align-items: center; justify-content: space-between; gap: .6rem; }
   .alert-dismissed-text button { background: none; border: none; color: var(--green); cursor: pointer; font-size: .78rem; font-weight: 600; padding: 0; }
+  .goal-setup { display: flex; gap: .5rem; margin-top: .5rem; width: 100%; }
+  .goal-setup .input { flex: 1; min-width: 0; }
+  .goal-edit-link { background: none; border: none; color: var(--grey); cursor: pointer; font-size: .74rem; padding: 0; margin-top: .5rem; text-decoration: underline; }
+  .goal-edit-link:hover { color: var(--text); }
   .heatmap-grid { display: flex; flex-direction: column; gap: 3px; }
   .heatmap-row { display: grid; grid-template-columns: 44px repeat(6, 1fr); gap: 3px; }
   /* --good/--critical sont des couleurs fixes (non liées au thème) : le texte
@@ -1044,7 +1048,7 @@
       </div>
     </div>
     <div class="module-marquee-wrap fade-up">
-      <p class="module-marquee-label" data-i18n="module_marquee_label">+ de 18 modules d'analyse, à composer vous-même</p>
+      <p class="module-marquee-label" data-i18n="module_marquee_label">23 modules d'analyse, à composer vous-même</p>
       <div class="stat-marquee" aria-hidden="true">
         <div class="stat-marquee-track" id="module-marquee-track"></div>
       </div>
@@ -2639,7 +2643,7 @@ function pickCurrency(selectId, code){
 const DEFAULT_COLORS = { tournament:'#08BF2F', cash:'#3987e5', expresso:'#c98500', live:'#08BF2F', online:'#9085e9', good:'#08BF2F', critical:'#e66767' };
 const DEFAULT_STAKE_THRESHOLDS = { micro:5, low:25, mid:100 };
 function defaultSettings(){
-  return { lang:'fr', theme:'dark', dateFormat:'fr-long', colors: Object.assign({}, DEFAULT_COLORS), stakeThresholds: Object.assign({}, DEFAULT_STAKE_THRESHOLDS), hideMoveDownAlert: false };
+  return { lang:'fr', theme:'dark', dateFormat:'fr-long', colors: Object.assign({}, DEFAULT_COLORS), stakeThresholds: Object.assign({}, DEFAULT_STAKE_THRESHOLDS), hideMoveDownAlert: false, bankrollGoals: {} };
 }
 function applySettingsToDOM(){
   document.body.classList.toggle('is-pro', isPremium());
@@ -2711,12 +2715,12 @@ const I18N = {
     features_sub:"Pokelo se concentre sur l'essentiel du bankroll management : enregistrer vite, comprendre vite.",
     feat_live_badge:'Live preview',
     feat_big_stat_sub:'sur les 30 derniers jours',
-    feat_modular_title:'Dashboard modulaire', feat_modular_desc:"Choisissez parmi 22 modules d'analyse — bankroll, ROI, heatmap, risque de ruine... — et composez le dashboard qui vous ressemble.",
+    feat_modular_title:'Dashboard modulaire', feat_modular_desc:"Choisissez parmi 23 modules d'analyse — bankroll, ROI, heatmap, risque de ruine... — et composez le dashboard qui vous ressemble.",
     feat_bankrolls_title:'Bankrolls illimitées', feat_bankrolls_desc:'Créez autant de bankrolls que nécessaire — online, live, un roll dédié aux MTT — et assignez chaque session à la bonne.',
     feat_currency_title:'Multi-devises', feat_currency_desc:'EUR, USD, USDT, jetons de club... indiquez la devise de votre choix pour chaque bankroll, sans conversion imposée.',
     feat_composed_title:'Composé par vous', feat_composed_desc:"Ajoutez, retirez et réorganisez les modules par glisser-déposer — le dashboard s'adapte à votre façon de jouer, pas l'inverse.",
     feat_free_title:'Gratuit pour commencer', feat_free_desc:'Aucune carte bancaire requise. Créez un compte et suivez votre bankroll dès aujourd\'hui, sans engagement.',
-    module_marquee_label:"22 modules d'analyse, à composer vous-même",
+    module_marquee_label:"23 modules d'analyse, à composer vous-même",
     how_tag:'Fonctionnement', how_title:'Quatre étapes,<br>une meilleure vision',
     step1_title:'Créez vos bankrolls', step1_desc:'Nommez-les, choisissez leur devise, et fixez un solde de départ.',
     step2_title:'Enregistrez vos sessions', step2_desc:'Tournoi, cash game ou expresso, live ou online — en quelques secondes.',
@@ -2835,8 +2839,9 @@ const I18N = {
     day_labels:'Lun,Mar,Mer,Jeu,Ven,Sam,Dim', period_vs_previous:'Vs période précédente :', unspecified:'Non renseigné',
     coming_soon:'Bientôt disponible',
     locked_moodTracker_title:'Tracker d\'humeur / tilt', locked_moodTracker_desc:'Note subjective post-session corrélée aux résultats',
-    locked_goals_title:'Objectifs', locked_goals_desc:'Cible de bankroll ou de profit avec barre de progression',
     locked_taxExport_title:'Export mensuel/annuel', locked_taxExport_desc:'Pour déclaration fiscale ou reporting perso',
+    mod_goals_title:'Objectif', mod_goals_desc:'Cible de bankroll avec barre de progression',
+    goal_placeholder:'Montant cible', goal_set_btn:'Définir', goal_edit:'Modifier l\'objectif', goal_reached:'objectif atteint',
     locked_multiAccount_title:'Comparatif comptes/joueurs', locked_multiAccount_desc:'Multi-compte ou usage en groupe (coaching, staking)',
     locked_staking_title:'Staking / backing', locked_staking_desc:'Pourcentage détenu, split des gains avec un backer',
     locked_forecast_title:'Prévision de bankroll', locked_forecast_desc:'Projection basée sur le winrate historique (Monte Carlo)',
@@ -2989,6 +2994,7 @@ const I18N = {
     settings_saved:'Préférences enregistrées',
     module_bank_all_active:'Tous les modules sont actifs.', module_bank_empty_layout:'Aucun module actif.<br>Glissez-en un ici.',
     empty_no_sessions_bankroll:'Aucune session pour cette bankroll.', empty_no_sessions_filter:'Aucune session ne correspond à ces filtres.',
+    filter_result_all:'Tous les résultats', filter_result_win:'Gagnantes', filter_result_loss:'Perdantes',
   },
   en: {
     nav_features:'Features', nav_pricing:'Pricing', nav_blog:'Blog', nav_calendar:'Calendar', nav_open_app:'Log in', nav_my_dashboard:'My dashboard',
@@ -3001,12 +3007,12 @@ const I18N = {
     features_sub:'Pokelo focuses on what bankroll management is really about: log fast, understand fast.',
     feat_live_badge:'Live preview',
     feat_big_stat_sub:'over the last 30 days',
-    feat_modular_title:'Modular dashboard', feat_modular_desc:'Choose from 22 analytics modules — bankroll, ROI, heatmap, risk of ruin... — and compose the dashboard that fits you.',
+    feat_modular_title:'Modular dashboard', feat_modular_desc:'Choose from 23 analytics modules — bankroll, ROI, heatmap, risk of ruin... — and compose the dashboard that fits you.',
     feat_bankrolls_title:'Unlimited bankrolls', feat_bankrolls_desc:'Create as many bankrolls as you need — online, live, a dedicated MTT roll — and assign each session to the right one.',
     feat_currency_title:'Multi-currency', feat_currency_desc:'EUR, USD, USDT, club chips... set the currency you want for each bankroll, no forced conversion.',
     feat_composed_title:'Composed by you', feat_composed_desc:"Add, remove and reorder modules by drag-and-drop — the dashboard adapts to how you play, not the other way around.",
     feat_free_title:'Free to start', feat_free_desc:'No credit card required. Create an account and start tracking your bankroll today, no commitment.',
-    module_marquee_label:'22 analytics modules, composed by you',
+    module_marquee_label:'23 analytics modules, composed by you',
     how_tag:'How it works', how_title:'Four steps,<br>a clearer view',
     step1_title:'Create your bankrolls', step1_desc:'Name them, pick a currency, and set a starting balance.',
     step2_title:'Log your sessions', step2_desc:'Tournament, cash game or Spin & Go, live or online — in seconds.',
@@ -3125,7 +3131,8 @@ const I18N = {
     day_labels:'Mon,Tue,Wed,Thu,Fri,Sat,Sun', period_vs_previous:'Vs previous period:', unspecified:'Unspecified',
     coming_soon:'Coming soon',
     locked_moodTracker_title:'Mood / tilt tracker', locked_moodTracker_desc:'Subjective post-session rating correlated to results',
-    locked_goals_title:'Goals', locked_goals_desc:'Bankroll or profit target with a progress bar',
+    mod_goals_title:'Goal', mod_goals_desc:'Bankroll target with a progress bar',
+    goal_placeholder:'Target amount', goal_set_btn:'Set', goal_edit:'Edit goal', goal_reached:'goal reached',
     locked_taxExport_title:'Monthly/yearly export', locked_taxExport_desc:'For tax filing or personal reporting',
     locked_multiAccount_title:'Account/player comparison', locked_multiAccount_desc:'Multi-account or group use (coaching, staking)',
     locked_staking_title:'Staking / backing', locked_staking_desc:'Percentage owned, profit split with a backer',
@@ -3279,6 +3286,7 @@ const I18N = {
     settings_saved:'Preferences saved',
     module_bank_all_active:'All modules are active.', module_bank_empty_layout:'No active module.<br>Drag one here.',
     empty_no_sessions_bankroll:'No sessions for this bankroll.', empty_no_sessions_filter:'No session matches these filters.',
+    filter_result_all:'All results', filter_result_win:'Winning', filter_result_loss:'Losing',
   }
 };
 function t(key){
@@ -4419,16 +4427,16 @@ const MODULE_SIZE = {
   evolution:'half', monthly:'half', category:'half', formatbar:'half', best:'full', worst:'full', recent:'full',
   summary:'full', roi:'full', itm:'half', periodProfit:'full', stakeBreakdown:'half', platformBreakdown:'half',
   heatmap:'full', durationCorrelation:'half', variance:'half', riskOfRuin:'half', moveDownAlert:'half',
-  buyinsReserve:'half', streaks:'half', tiltSessions:'full', bb100:'half',
+  buyinsReserve:'half', streaks:'half', tiltSessions:'full', bb100:'half', goals:'half',
 };
 const MODULE_HAS_CHART = {
   evolution:true, monthly:true, category:true, formatbar:true, best:false, worst:false, recent:false,
   summary:false, roi:false, itm:false, periodProfit:true, stakeBreakdown:true, platformBreakdown:true,
   heatmap:false, durationCorrelation:true, variance:false, riskOfRuin:false, moveDownAlert:false,
-  buyinsReserve:false, streaks:false, tiltSessions:false, bb100:false,
+  buyinsReserve:false, streaks:false, tiltSessions:false, bb100:false, goals:false,
 };
 /* Modules "Bientôt disponible" — visibles dans la banque, non ajoutables */
-const LOCKED_MODULES = ['goals','taxExport','staking'];
+const LOCKED_MODULES = ['taxExport','staking'];
 function moduleMeta(id){
   return { title: t('mod_'+id+'_title'), desc: t('mod_'+id+'_desc'), size: MODULE_SIZE[id], chart: MODULE_HAS_CHART[id] };
 }
@@ -4600,6 +4608,7 @@ function moduleBodyHtml(id, bk, sessions){
     case 'riskOfRuin': return renderRiskOfRuinModule(bk, sessions);
     case 'moveDownAlert': return renderMoveDownModule(bk, sessions);
     case 'buyinsReserve': return renderBuyinsReserveModule(bk, sessions);
+    case 'goals': return renderGoalModule(bk, sessions);
     case 'streaks': return renderStreaksModule(sessions);
     case 'tiltSessions': return renderTiltSessionsModule(bk, sessions);
     case 'bb100': return renderBb100Module(sessions);
@@ -4820,6 +4829,43 @@ function renderMoveDownModule(bk, sessions){
 function setMoveDownAlertHidden(hidden){
   if (!state.settings) state.settings = defaultSettings();
   state.settings.hideMoveDownAlert = hidden;
+  saveState();
+  refreshDashboardIfActive();
+}
+// Toggle en mémoire (pas persisté) : bascule une carte objectif en mode
+// édition le temps de changer la valeur, sans modale dédiée.
+let goalEditingBankrollId = null;
+function renderGoalModule(bk, sessions){
+  const goals = (state.settings && state.settings.bankrollGoals) || {};
+  const goal = goals[bk.id];
+  if (!goal || goalEditingBankrollId === bk.id) {
+    return `<div class="mini-stat-tile center">
+      <div class="mst-label">${t('mod_goals_title')}</div>
+      <div class="goal-setup">
+        <input type="number" min="0" step="1" class="input" id="goal-input-${bk.id}" placeholder="${t('goal_placeholder')}" value="${goal || ''}" />
+        <button class="btn-secondary btn-sm" onclick="saveBankrollGoal('${bk.id}')">${t('goal_set_btn')}</button>
+      </div>
+    </div>`;
+  }
+  const bal = bankrollBalance(bk.id);
+  const pct = Math.max(0, Math.min(100, (bal/goal)*100));
+  const reached = bal >= goal;
+  return `<div class="mini-stat-tile center">
+    <div class="mst-label">${t('mod_goals_title')}</div>
+    <div class="mst-val">${fmtNum(pct)}%</div>
+    <div class="progress-bar"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+    <div class="mst-sub">${fmtMoney(bal, bk.currency)} / ${fmtMoney(goal, bk.currency)}${reached ? ' · ' + t('goal_reached') : ''}</div>
+    <button class="goal-edit-link" onclick="goalEditingBankrollId='${bk.id}'; refreshDashboardIfActive();">${t('goal_edit')}</button>
+  </div>`;
+}
+function saveBankrollGoal(bankrollId){
+  if (!state.settings) state.settings = defaultSettings();
+  if (!state.settings.bankrollGoals) state.settings.bankrollGoals = {};
+  const input = document.getElementById('goal-input-'+bankrollId);
+  const num = Number(input.value);
+  if (num > 0) state.settings.bankrollGoals[bankrollId] = num;
+  else delete state.settings.bankrollGoals[bankrollId];
+  goalEditingBankrollId = null;
   saveState();
   refreshDashboardIfActive();
 }
@@ -5169,6 +5215,11 @@ function moduleThumb(id){
         <rect x="4" y="4" width="20" height="20" rx="10" fill="none" stroke="var(--c-cash)" stroke-width="2.4"/>
         <path d="M30 26 L52 4" stroke="var(--good)" stroke-width="2.4" stroke-linecap="round"/>
         <path d="M46 4h6v6" stroke="var(--good)" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>`,
+    goals: `<svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="18" cy="18" r="14" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="4"/>
+        <circle cx="18" cy="18" r="14" fill="none" stroke="var(--good)" stroke-width="4" stroke-dasharray="66 88" stroke-linecap="round" transform="rotate(-90 18 18)"/>
+        <circle cx="18" cy="18" r="4" fill="var(--good)"/>
       </svg>`,
   };
   return thumbs[id] || '';
@@ -7045,7 +7096,7 @@ function emptyStateHtml(iconKey, title, text, action, cta){
 /* ══════════════════════════════════════════════════════════════
    POKELO — app: SESSIONS
    ══════════════════════════════════════════════════════════════ */
-let sessionFilters = { bankroll:'all', category:'all', format:'all' };
+let sessionFilters = { bankroll:'all', category:'all', format:'all', result:'all' };
 function renderSessions(){
   const el = document.getElementById('sessions-content');
   if (!state.bankrolls.length) {
@@ -7065,12 +7116,18 @@ function renderSessions(){
       <select class="select" id="filter-format" onchange="setSessionFilter('format', this.value)">
         <option value="all">Tous les formats</option><option value="live">Live</option><option value="online">Online</option>
       </select>
+      <select class="select" id="filter-result" onchange="setSessionFilter('result', this.value)">
+        <option value="all">${t('filter_result_all')}</option>
+        <option value="win">${t('filter_result_win')}</option>
+        <option value="loss">${t('filter_result_loss')}</option>
+      </select>
     </div>
     <div id="sessions-table-wrap"></div>
   `;
   document.getElementById('filter-bankroll').value = sessionFilters.bankroll;
   document.getElementById('filter-category').value = sessionFilters.category;
   document.getElementById('filter-format').value = sessionFilters.format;
+  document.getElementById('filter-result').value = sessionFilters.result;
   renderSessionsTable();
 }
 function setSessionFilter(key, val){ sessionFilters[key] = val; renderSessionsTable(); }
@@ -7079,6 +7136,8 @@ function renderSessionsTable(){
   if (sessionFilters.bankroll !== 'all') list = list.filter(s=>s.bankrollId===sessionFilters.bankroll);
   if (sessionFilters.category !== 'all') list = list.filter(s=>s.category===sessionFilters.category);
   if (sessionFilters.format !== 'all') list = list.filter(s=>s.format===sessionFilters.format);
+  if (sessionFilters.result === 'win') list = list.filter(s=>sessionProfit(s) >= 0);
+  if (sessionFilters.result === 'loss') list = list.filter(s=>sessionProfit(s) < 0);
   list.sort((a,b)=> b.date.localeCompare(a.date));
   const wrap = document.getElementById('sessions-table-wrap');
   if (!list.length) { wrap.innerHTML = `<div class="empty-state"><p>${t('empty_no_sessions_filter')}</p></div>`; return; }
