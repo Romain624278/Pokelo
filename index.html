@@ -463,16 +463,6 @@
   .app-topbar-actions { display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap; }
   .app-content { padding: 2rem; flex: 1; }
   .app-mobile-topbar { display: none; }
-  .quick-log-fab { position: fixed; right: 1.6rem; bottom: 1.6rem; width: 56px; height: 56px; border-radius: 50%; background: var(--green); color: #0a0a0a; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 10px 30px rgba(8,191,47,0.35); z-index: 55; transition: transform .15s, background .15s; }
-  .quick-log-fab:hover { background: var(--green-hov); transform: scale(1.06); }
-  .quick-log-fab svg { width: 24px; height: 24px; stroke-width: 2.4; }
-  .quick-result-input { display: flex; align-items: center; gap: .6rem; }
-  .quick-result-input .qr-sign-btn { width: 46px; height: 46px; border-radius: 8px; border: 1px solid var(--border); background: var(--black); color: var(--grey); font-size: 1.4rem; font-weight: 700; cursor: pointer; flex-shrink: 0; transition: all .15s; }
-  .quick-result-input .qr-sign-btn.pos.active { color: var(--good); border-color: var(--good); background: rgba(8,191,47,0.1); }
-  .quick-result-input .qr-sign-btn.neg.active { color: var(--critical); border-color: var(--critical); background: rgba(230,103,103,0.1); }
-  .quick-full-link { display: block; text-align: center; font-size: .78rem; color: var(--grey); margin-top: 1rem; cursor: pointer; }
-  .quick-full-link:hover { color: var(--green); }
-  @media (max-width: 900px) { .quick-log-fab { right: 1.2rem; bottom: 1.2rem; } }
 
   .select, .input, .textarea {
     background: var(--black); border: 1px solid var(--border); color: var(--text);
@@ -1613,9 +1603,6 @@
           <div class="skeleton-block" style="height:180px;flex:1;"></div>
         </div>
       </div>
-      <button class="quick-log-fab" onclick="openQuickLogModal()" aria-label="Log rapide" title="Log rapide">
-        <svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-      </button>
       <div class="app-mobile-topbar">
         <button class="nav-burger" id="app-burger" aria-label="Menu" onclick="toggleAppSidebar()"><span></span><span></span><span></span></button>
         <a class="nav-logo" href="#/" data-link>
@@ -2125,49 +2112,6 @@
     <div class="modal-foot">
       <button class="btn-ghost" onclick="closeBankrollModal()">Annuler</button>
       <button class="btn-primary btn-sm" onclick="saveBankroll()">Enregistrer</button>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════ MODAL : QUICK LOG (logging ultra-rapide) ══════════════ -->
-<div class="modal-overlay" id="quicklog-modal-overlay" hidden onclick="if(event.target===this) closeQuickLogModal()">
-  <div class="modal" style="max-width:420px">
-    <div class="modal-head">
-      <h3 data-i18n="quicklog_title">Log rapide</h3>
-      <button class="icon-btn" onclick="closeQuickLogModal()" aria-label="Fermer"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
-    </div>
-    <div class="modal-body">
-      <div class="form-group">
-        <label data-i18n="th_bankroll">Bankroll</label>
-        <select class="select" id="quicklog-bankroll"></select>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label data-i18n="quicklog_type">Type</label>
-          <div class="segmented" id="quicklog-type-seg">
-            <button type="button" data-val="tournament" class="active">Tournoi</button>
-            <button type="button" data-val="cash">Cash</button>
-            <button type="button" data-val="expresso">Expresso<span class="pro-crown-inline"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 18h14l1.4-8.4-4.4 2.6-3-5.2-3 5.2-4.4-2.6L5 18Z"/></svg></span></button>
-          </div>
-        </div>
-        <div class="form-group">
-          <label data-i18n="quicklog_format">Format</label>
-          <div class="segmented" id="quicklog-format-seg">
-            <button type="button" data-val="live" class="active">Live</button>
-            <button type="button" data-val="online">Online</button>
-          </div>
-        </div>
-      </div>
-      <div class="form-group">
-        <label data-i18n="quicklog_result">Résultat net</label>
-        <div class="quick-result-input">
-          <button type="button" class="qr-sign-btn pos active" onclick="setQuickSign(1)">+</button>
-          <button type="button" class="qr-sign-btn neg" onclick="setQuickSign(-1)">−</button>
-          <input class="input" type="number" step="0.01" min="0" id="quicklog-amount" placeholder="0" style="flex:1" />
-        </div>
-      </div>
-      <button class="btn-primary" style="width:100%;justify-content:center" onclick="saveQuickLog()" data-i18n="btn_save">Enregistrer</button>
-      <a class="quick-full-link" onclick="switchQuickToFull()" data-i18n="quicklog_full_form">Formulaire complet (site, notes, devise...) →</a>
     </div>
   </div>
 </div>
@@ -2992,8 +2936,6 @@ const I18N = {
     bankroll_focus_label:'Orientation (optionnel)', bankroll_focus_hint:'Pré-sélectionne ce type de session dans le formulaire, et configure le dashboard en conséquence pour votre toute première bankroll.', bankroll_focus_none:'Peu importe',
     preset_prompt_title:'Quel type de joueur êtes-vous ?', preset_prompt_text:'On pré-sélectionne les modules les plus utiles pour vous. Modifiable à tout moment depuis « Personnaliser ».',
     preset_prompt_skip:'Je choisirai plus tard',
-    quicklog_title:'Log rapide', quicklog_type:'Type', quicklog_format:'Format', quicklog_result:'Résultat net',
-    quicklog_full_form:'Formulaire complet (site, notes, devise...) →',
     install_app:'Installer l\'app', settings_install_title:'Installer Pokelo',
     settings_install_desc:'Ajoutez Pokelo à votre écran d\'accueil pour un accès en un tap, comme une vraie app.',
     install_ios_hint:'Sur iPhone/iPad : bouton Partager de Safari → « Sur l\'écran d\'accueil ».',
@@ -3287,8 +3229,6 @@ const I18N = {
     bankroll_focus_label:'Focus (optional)', bankroll_focus_hint:"Pre-selects this session type in the form, and sets up the dashboard accordingly for your very first bankroll.", bankroll_focus_none:'No preference',
     preset_prompt_title:'What kind of player are you?', preset_prompt_text:'We pre-select the modules most useful to you. Changeable anytime from "Customize".',
     preset_prompt_skip:'I\'ll choose later',
-    quicklog_title:'Quick log', quicklog_type:'Type', quicklog_format:'Format', quicklog_result:'Net result',
-    quicklog_full_form:'Full form (site, notes, currency...) →',
     install_app:'Install app', settings_install_title:'Install Pokelo',
     settings_install_desc:'Add Pokelo to your home screen for one-tap access, like a real app.',
     install_ios_hint:'On iPhone/iPad: Safari Share button → "Add to Home Screen".',
@@ -3746,6 +3686,13 @@ let currentBankrollScope = null; // for dashboard/stats bankroll selector
 function showView(id){
   VIEWS.forEach(v => document.getElementById(v).hidden = (v !== id));
   document.getElementById('site-footer').hidden = (id === 'view-app');
+  // nav.site-nav est fixed, z-index:100 — au-dessus du propre hamburger/topbar
+  // mobile de l'app (z-index:70). Sans ce masquage, la nav marketing (logo +
+  // burger vers Fonctionnalités/Tarifs/Blog/Calendrier) restait affichée par-
+  // dessus en permanence à l'intérieur de l'app, rendant sur mobile le vrai
+  // hamburger de l'app (qui ouvre Dashboard/Sessions/Bankrolls/Compte/Réglages)
+  // invisible/inatteignable derrière elle.
+  document.querySelector('nav.site-nav').hidden = (id === 'view-app');
 }
 
 function router(){
@@ -7470,7 +7417,7 @@ function setSegmented(containerId, val){
   c.querySelectorAll('button').forEach(b => b.classList.toggle('active', b.dataset.val === val));
 }
 document.addEventListener('click', function(e){
-  const seg = e.target.closest('#session-type-seg button, #session-format-seg button, #quicklog-type-seg button, #quicklog-format-seg button, #bankroll-focus-seg button');
+  const seg = e.target.closest('#session-type-seg button, #session-format-seg button, #bankroll-focus-seg button');
   if (!seg) return;
   if (seg.dataset.val === 'expresso' && !isPremium()) { showProFeatureModal('expresso'); return; }
   const parent = seg.parentElement;
@@ -7558,61 +7505,6 @@ function updateProfitPreview(){
     convEl.hidden = true;
   }
 }
-/* ══════════════════════════════════════════════════════════════
-   POKELO — logging ultra-rapide
-   ══════════════════════════════════════════════════════════════ */
-let quickSign = 1;
-function setQuickSign(sign){
-  quickSign = sign;
-  document.querySelector('.qr-sign-btn.pos').classList.toggle('active', sign === 1);
-  document.querySelector('.qr-sign-btn.neg').classList.toggle('active', sign === -1);
-}
-function openQuickLogModal(){
-  if (!state.bankrolls.length) { openBankrollModal(); return; }
-  populateBankrollSelects();
-  const sel = document.getElementById('quicklog-bankroll');
-  sel.innerHTML = state.bankrolls.map(b=>`<option value="${b.id}">${escapeHtml(b.name)}</option>`).join('');
-  sel.value = currentBankrollScope || state.bankrolls[0].id;
-  setSegmented('quicklog-type-seg', 'tournament');
-  setSegmented('quicklog-format-seg', 'live');
-  setQuickSign(1);
-  document.getElementById('quicklog-amount').value = '';
-  document.getElementById('quicklog-modal-overlay').hidden = false;
-  setTimeout(()=>document.getElementById('quicklog-amount').focus(), 50);
-}
-function closeQuickLogModal(){ document.getElementById('quicklog-modal-overlay').hidden = true; }
-function switchQuickToFull(){
-  const bankrollId = document.getElementById('quicklog-bankroll').value;
-  closeQuickLogModal();
-  currentBankrollScope = bankrollId;
-  openSessionModal();
-}
-function saveQuickLog(){
-  const bankrollId = document.getElementById('quicklog-bankroll').value;
-  const bk = getBankroll(bankrollId);
-  if (!bk) return;
-  const amount = Math.abs(parseFloat(document.getElementById('quicklog-amount').value) || 0);
-  const net = amount * quickSign;
-  const payload = {
-    id: newRecordId(), createdAt: Date.now(),
-    bankrollId,
-    category: getSegVal('quicklog-type-seg'),
-    format: getSegVal('quicklog-format-seg'),
-    date: todayStr(),
-    duration: null, time: null, tilt: false,
-    currency: bk.currency, fxRate: 1,
-    buyIn: net >= 0 ? 0 : -net,
-    cashout: net >= 0 ? net : 0,
-    bb: null, hands: null, site: '', variant: '', notes: '',
-  };
-  state.sessions.push(payload);
-  state.isDemo = false;
-  saveState(); closeQuickLogModal();
-  const active = ['dashboard','sessions','bankrolls'].find(s=>!document.getElementById('section-'+s).hidden);
-  if (active === 'sessions') renderSessions();
-  if (active === 'dashboard') renderDashboard();
-}
-
 function openSessionModal(id){
   if (!state.bankrolls.length) { openBankrollModal(); return; }
   document.getElementById('session-id').value = id || '';
