@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://pokelo.fr/sitemap.xml
+Sitemap: https://www.pokelo.fr/sitemap.xml
