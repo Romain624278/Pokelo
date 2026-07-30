@@ -851,10 +851,16 @@
     .hero-mock-body { grid-template-columns: repeat(2, 1fr); }
     .hero-mock-chart { grid-column: span 2; }
 
-    .app-sidebar { transform: translateX(-100%); transition: transform .25s; }
-    .app-sidebar.open { transform: translateX(0); }
+    /* Sur mobile, la sidebar app ne glisse plus depuis la gauche (ça mangeait
+       l'écran et gênait la navigation) : elle se comporte comme le menu de la
+       page d'accueil (.mobile-menu), un panneau qui tombe depuis le haut,
+       sous la topbar mobile de l'app. */
+    .app-sidebar { top: 60px; bottom: auto; left: 0; right: 0; width: auto; height: auto; max-height: calc(100vh - 60px); overflow-y: auto; border-right: none; border-bottom: 1px solid var(--border); box-shadow: 0 16px 32px rgba(0,0,0,0.35); transform: none; display: none; }
+    .app-sidebar.open { display: flex; }
+    .app-sidebar-top { display: none; }
+    .app-sidebar-nav { overflow-y: visible; }
     .app-main { margin-left: 0; }
-    .app-mobile-topbar { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 1.2rem; border-bottom: 1px solid var(--border); background: rgba(10,10,10,0.95); position: sticky; top: 0; z-index: 70; }
+    .app-mobile-topbar { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 1.2rem; height: 60px; box-sizing: border-box; border-bottom: 1px solid var(--border); background: rgba(10,10,10,0.95); position: sticky; top: 0; z-index: 70; }
     .stat-grid { grid-template-columns: repeat(2, 1fr); }
     .bankroll-grid { grid-template-columns: 1fr; }
   }
@@ -868,10 +874,23 @@
     .btn-primary, .btn-secondary { width: 100%; max-width: 320px; justify-content: center; }
     .stat-grid { grid-template-columns: 1fr 1fr; }
     .form-row { grid-template-columns: 1fr; }
-    .app-content { padding: 1.2rem; }
-    .app-topbar { padding: 1rem 1.2rem; }
+    .app-content { padding: 1.1rem 0.7rem; }
+    .app-topbar { padding: 1rem 0.7rem; }
     .filter-bar .select, .filter-bar .input { flex: 1; min-width: 130px; }
-    table.data-table { font-size: 0.78rem; }
+    /* Table de sessions -> cartes empilees : une table a 6-7 colonnes en
+       nowrap n'a aucune chance de respirer sur ~340px de large. Chaque ligne
+       devient une carte, chaque cellule une paire label/valeur (label tire de
+       data-label, pose par les fonctions de rendu cote JS). */
+    table.data-table { font-size: 0.85rem; }
+    .table-wrap:has(table.data-table) { overflow-x: visible; }
+    table.data-table thead { display: none; }
+    table.data-table tbody tr { display: block; margin-bottom: 0.8rem; border: 1px solid var(--border); border-radius: 10px; padding: 0.3rem 1rem; background: rgba(255,255,255,0.015); }
+    table.data-table tbody tr:last-child { margin-bottom: 0; }
+    table.data-table td { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.6rem 0; white-space: normal; text-align: right; }
+    table.data-table td:not(:last-child) { border-bottom: 1px solid rgba(255,255,255,0.05); }
+    table.data-table td[data-label]::before { content: attr(data-label); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--grey); font-weight: 600; text-align: left; flex-shrink: 0; }
+    table.data-table td:not([data-label]) { justify-content: flex-end; }
+    table.data-table .row-actions { justify-content: flex-end; width: 100%; }
   }
 </style>
 </head>
@@ -4569,12 +4588,12 @@ function sessionsTableAllBankrollsHtml(sessions){
     const sCur = s.currency || bk.currency;
     const converted = sCur !== bk.currency;
     return `<tr>
-      <td>${fmtDateFr(s.date)}</td>
-      <td><span class="bk-dot" style="background:${bankrollColor(bk)}"></span>${escapeHtml(bk.name)}</td>
-      <td><span class="badge badge-${s.category}">${CAT_LABEL[s.category]}</span></td>
-      <td><span class="badge badge-${s.format}">${FMT_LABEL[s.format]}</span></td>
-      <td>${fmtMoney(s.buyIn, sCur)}</td>
-      <td class="cell-profit ${p>=0?'pos':'neg'}">${fmtSigned(p, bk.currency)}${converted ? ` <span class="fx-tag">${escapeHtml(sCur)}→${escapeHtml(bk.currency)}</span>` : ''}</td>
+      <td data-label="${t('th_date')}">${fmtDateFr(s.date)}</td>
+      <td data-label="${t('th_bankroll')}"><span class="bk-dot" style="background:${bankrollColor(bk)}"></span>${escapeHtml(bk.name)}</td>
+      <td data-label="${t('th_type')}"><span class="badge badge-${s.category}">${CAT_LABEL[s.category]}</span></td>
+      <td data-label="${t('th_format')}"><span class="badge badge-${s.format}">${FMT_LABEL[s.format]}</span></td>
+      <td data-label="${t('th_buyin')}">${fmtMoney(s.buyIn, sCur)}</td>
+      <td data-label="${t('th_result')}" class="cell-profit ${p>=0?'pos':'neg'}">${fmtSigned(p, bk.currency)}${converted ? ` <span class="fx-tag">${escapeHtml(sCur)}→${escapeHtml(bk.currency)}</span>` : ''}</td>
     </tr>`;
   }).join('')}</tbody></table></div>`;
 }
@@ -4756,11 +4775,11 @@ function sessionsTableHtml(sessions, bk){
     const p = sessionProfit(s);
     const sCur = s.currency || bk.currency;
     const converted = sCur !== bk.currency;
-    return `<tr><td>${fmtDateFr(s.date)}</td>
-      <td><span class="badge badge-${s.category}">${CAT_LABEL[s.category]}</span></td>
-      <td><span class="badge badge-${s.format}">${FMT_LABEL[s.format]}</span></td>
-      <td>${fmtMoney(s.buyIn, sCur)}</td>
-      <td class="cell-profit ${p>=0?'pos':'neg'}">${fmtSigned(p, bk.currency)}${converted ? ` <span class="fx-tag">${escapeHtml(sCur)}→${escapeHtml(bk.currency)}</span>` : ''}</td></tr>`;
+    return `<tr><td data-label="${t('th_date')}">${fmtDateFr(s.date)}</td>
+      <td data-label="${t('th_type')}"><span class="badge badge-${s.category}">${CAT_LABEL[s.category]}</span></td>
+      <td data-label="${t('th_format')}"><span class="badge badge-${s.format}">${FMT_LABEL[s.format]}</span></td>
+      <td data-label="${t('th_buyin')}">${fmtMoney(s.buyIn, sCur)}</td>
+      <td data-label="${t('th_result')}" class="cell-profit ${p>=0?'pos':'neg'}">${fmtSigned(p, bk.currency)}${converted ? ` <span class="fx-tag">${escapeHtml(sCur)}→${escapeHtml(bk.currency)}</span>` : ''}</td></tr>`;
   }).join('')}</tbody></table></div>`;
 }
 
@@ -7219,13 +7238,13 @@ function renderSessionsTable(){
     const sCur = s.currency || bk.currency;
     const converted = sCur !== bk.currency;
     return `<tr>
-      <td>${fmtDateFr(s.date)}</td>
-      <td><span class="bk-dot" style="background:${bankrollColor(bk)}"></span>${escapeHtml(bk.name)}</td>
-      <td><span class="badge badge-${s.category}">${CAT_LABEL[s.category]}</span></td>
-      <td><span class="badge badge-${s.format}">${FMT_LABEL[s.format]}</span></td>
-      <td>${fmtMoney(s.buyIn, sCur)}</td>
-      <td>${fmtMoney(s.cashout, sCur)}</td>
-      <td class="cell-profit ${p>=0?'pos':'neg'}">${fmtSigned(p, bk.currency)}${converted ? ` <span class="fx-tag">${escapeHtml(sCur)}→${escapeHtml(bk.currency)}</span>` : ''}</td>
+      <td data-label="${t('th_date')}">${fmtDateFr(s.date)}</td>
+      <td data-label="${t('th_bankroll')}"><span class="bk-dot" style="background:${bankrollColor(bk)}"></span>${escapeHtml(bk.name)}</td>
+      <td data-label="${t('th_type')}"><span class="badge badge-${s.category}">${CAT_LABEL[s.category]}</span></td>
+      <td data-label="${t('th_format')}"><span class="badge badge-${s.format}">${FMT_LABEL[s.format]}</span></td>
+      <td data-label="${t('th_buyin')}">${fmtMoney(s.buyIn, sCur)}</td>
+      <td data-label="${t('th_cashout')}">${fmtMoney(s.cashout, sCur)}</td>
+      <td data-label="${t('th_result')}" class="cell-profit ${p>=0?'pos':'neg'}">${fmtSigned(p, bk.currency)}${converted ? ` <span class="fx-tag">${escapeHtml(sCur)}→${escapeHtml(bk.currency)}</span>` : ''}</td>
       <td><div class="row-actions">
         <button class="icon-btn" onclick="openSessionModal('${s.id}')" aria-label="Modifier"><svg class="icon" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>
         <button class="icon-btn danger" onclick="confirmDeleteSession('${s.id}')" aria-label="Supprimer"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
