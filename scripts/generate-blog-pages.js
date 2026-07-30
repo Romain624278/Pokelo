@@ -7,9 +7,11 @@
 const fs = require('fs');
 const path = require('path');
 const ARTICLES = require('./articles-data');
+const ILLUSTRATIONS = require('./articles-illustrations');
 
 const ROOT = path.join(__dirname, '..');
 const SITE = 'https://www.pokelo.fr';
+const ACCENT_VAR = { green: '--green', amber: '--amber', violet: '--violet', critical: '--critical', blue: '--blue' };
 
 function escapeAttr(s){ return String(s).replace(/"/g, '&quot;'); }
 function plainExcerpt(s){ return s.replace(/\s+/g, ' ').trim(); }
@@ -117,6 +119,8 @@ for (const a of ARTICLES) {
     publisher: { '@type': 'Organization', name: 'Pokelo', url: SITE + '/' },
     mainEntityOfPage: SITE + canonicalPath,
   };
+  const accentVar = ACCENT_VAR[a.accent] || '--green';
+  const illu = ILLUSTRATIONS[a.slug] || '';
   const html = `<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -129,6 +133,9 @@ ${navBlock('/blog')}
   <section id="article-view">
     <div class="article-wrap">
       <a href="/blog" class="article-back">&larr; Retour au blog</a>
+      <div class="article-banner" style="background: radial-gradient(circle at 75% 20%, color-mix(in srgb, var(${accentVar}) 18%, transparent) 0%, var(--black-card) 70%);">
+        <div class="article-banner-icon">${illu}</div>
+      </div>
       <span class="article-tag">${a.tag}</span>
       <h1 class="article-title">${a.title}</h1>
       <div class="article-meta">${fmtDateFr(a.date)} · ${a.readTime} de lecture</div>
@@ -161,15 +168,21 @@ const listingJsonLd = {
     url: `${SITE}/blog/${a.slug}`,
   })),
 };
-const cardsHtml = ARTICLES.map(a => `      <a class="blog-card" href="/blog/${a.slug}" data-type="${a.type}">
-        <div class="blog-card-top"></div>
+const cardsHtml = ARTICLES.map(a => {
+  const accentVar = ACCENT_VAR[a.accent] || '--green';
+  const illu = ILLUSTRATIONS[a.slug] || '';
+  return `      <a class="blog-card" href="/blog/${a.slug}" data-type="${a.type}">
+        <div class="blog-card-top" style="background: radial-gradient(circle at 75% 15%, color-mix(in srgb, var(${accentVar}) 16%, transparent) 0%, var(--black) 70%);">
+          <div class="blog-card-icon">${illu}</div>
+          <span class="tag" style="color: var(${accentVar}); background: color-mix(in srgb, var(${accentVar}) 14%, transparent);">${a.tag}</span>
+        </div>
         <div class="blog-card-body">
-          <span class="tag">${a.tag}</span>
           <h3>${a.title}</h3>
           <p>${a.excerpt}</p>
           <div class="blog-card-meta"><span>${fmtDateFr(a.date)}</span><span class="dot"></span><span>${a.readTime}</span></div>
         </div>
-      </a>`).join('\n');
+      </a>`;
+}).join('\n');
 
 const blogListingHtml = `<!DOCTYPE html>
 <html lang="fr">

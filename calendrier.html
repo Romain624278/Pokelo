@@ -130,7 +130,8 @@
   .calendar-list { display: flex; flex-direction: column; gap: .7rem; margin: 2rem auto 0; max-width: 1140px; }
   .calendar-event { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.2rem; background: var(--black-card); border: 1px solid var(--border); border-radius: var(--radius); transition: border-color .2s; }
   .calendar-event:hover { border-color: rgba(8,191,47,0.4); }
-  .ce-flag { width: 42px; height: 30px; flex-shrink: 0; border-radius: 4px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); font-size: .68rem; font-weight: 700; color: var(--grey); }
+  .ce-flag { width: 42px; height: 30px; flex-shrink: 0; border-radius: 4px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+  .ce-flag svg { width: 100%; height: 100%; display: block; }
   .ce-body { flex: 1; min-width: 0; }
   .ce-top { display: flex; align-items: center; gap: .7rem; flex-wrap: wrap; }
   .ce-name { font-size: .92rem; font-weight: 700; color: var(--text); }
@@ -244,7 +245,7 @@
 
     <div class="calendar-list" id="calendar-list">
       <div class="calendar-event" data-country="États-Unis" data-tour="WPT">
-        <div class="ce-flag">US</div>
+        <div class="ce-flag"><svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="20" fill="#fff"/><rect y="0" width="30" height="1.54" fill="#B22234"/><rect y="3.08" width="30" height="1.54" fill="#B22234"/><rect y="6.15" width="30" height="1.54" fill="#B22234"/><rect y="9.23" width="30" height="1.54" fill="#B22234"/><rect y="12.31" width="30" height="1.54" fill="#B22234"/><rect y="15.38" width="30" height="1.54" fill="#B22234"/><rect y="18.46" width="30" height="1.54" fill="#B22234"/><rect width="13" height="10.8" fill="#3C3B6E"/></svg></div>
         <div class="ce-body">
           <div class="ce-top"><span class="ce-name">WPT Seminole Hard Rock Lucky Hearts Poker Open</span><span class="ce-tour">WPT</span></div>
           <div class="ce-meta">Hollywood, Floride, États-Unis · 6 janv. 2026 – 20 janv. 2026</div>
@@ -252,7 +253,7 @@
         </div>
       </div>
       <div class="calendar-event" data-country="France" data-tour="Partouche">
-        <div class="ce-flag">FR</div>
+        <div class="ce-flag"><svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="10" height="20" fill="#002654"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ED2939"/></svg></div>
         <div class="ce-body">
           <div class="ce-top"><span class="ce-name">Partouche Poker Deepstack — La Tour-de-Salvagny</span><span class="ce-tour">Partouche</span></div>
           <div class="ce-meta">La Tour-de-Salvagny, France · 21 janv. 2026 – 25 janv. 2026</div>
@@ -260,7 +261,7 @@
         </div>
       </div>
       <div class="calendar-event" data-country="Cambodge" data-tour="WPT">
-        <div class="ce-flag">KH</div>
+        <div class="ce-flag"><svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="20" fill="#032ea1"/><rect y="5" width="30" height="10" fill="#e00025"/><rect x="11" y="7" width="8" height="6" fill="#fff"/></svg></div>
         <div class="ce-body">
           <div class="ce-top"><span class="ce-name">WPT Cambodia</span><span class="ce-tour">WPT</span></div>
           <div class="ce-meta">Phnom Penh (NagaWorld), Cambodge · 21 janv. 2026 – 3 févr. 2026</div>
@@ -268,7 +269,7 @@
         </div>
       </div>
       <div class="calendar-event" data-country="Italie" data-tour="PokerStars Open">
-        <div class="ce-flag">IT</div>
+        <div class="ce-flag"><svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="10" height="20" fill="#008C45"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#CD212A"/></svg></div>
         <div class="ce-body">
           <div class="ce-top"><span class="ce-name">PokerStars Open Campione</span><span class="ce-tour">PokerStars Open</span></div>
           <div class="ce-meta">Campione d'Italia, Italie · 23 janv. 2026 – 1 févr. 2026</div>
@@ -276,7 +277,7 @@
         </div>
       </div>
       <div class="calendar-event" data-country="États-Unis" data-tour="WPT">
-        <div class="ce-flag">US</div>
+        <div class="ce-flag"><svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="20" fill="#fff"/><rect y="0" width="30" height="1.54" fill="#B22234"/><rect y="3.08" width="30" height="1.54" fill="#B22234"/><rect y="6.15" width="30" height="1.54" fill="#B22234"/><rect y="9.23" width="30" height="1.54" fill="#B22234"/><rect y="12.31" width="30" height="1.54" fill="#B22234"/><rect y="15.38" width="30" height="1.54" fill="#B22234"/><rect y="18.46" width="30" height="1.54" fill="#B22234"/><rect width="13" height="10.8" fill="#3C3B6E"/></svg></div>
         <div class="ce-body">
           <div class="ce-top"><span class="ce-name">WPT Venetian Las Vegas Spring Championship</span><span class="ce-tour">WPT</span></div>
           <div class="ce-meta">Las Vegas, États-Unis · 9 févr. 2026 – 24 févr. 2026</div>
@@ -284,7 +285,7 @@
         </div>
       </div>
       <div class="calendar-event" data-country="France" data-tour="EPT">
-        <div class="ce-flag">FR</div>
+        <div class="ce-flag"><svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="10" height="20" fill="#002654"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ED2939"/></svg></div>
         <div class="ce-body">
           <div class="ce-top"><span class="ce-name">EPT Paris</span><span class="ce-tour">EPT</span></div>
           <div class="ce-meta">Paris, France · 18 févr. 2026 – 1 mars 2026</div>
@@ -292,7 +293,7 @@
         </div>
       </div>
       <div class="calendar-event" data-country="Corée du Sud" data-tour="Triton">
-        <div class="ce-flag">KR</div>
+        <div class="ce-flag"><svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="20" fill="#fff"/><circle cx="15" cy="10" r="6" fill="#CD2E3A"/><path d="M15 4a6 6 0 0 0 0 12 3 3 0 0 1 0-6 3 3 0 0 0 0-6Z" fill="#0047A0"/></svg></div>
         <div class="ce-body">
           <div class="ce-top"><span class="ce-name">Triton ONE Jeju</span><span class="ce-tour">Triton</span></div>
           <div class="ce-meta">Jeju, Corée du Sud · 5 mars 2026 – 15 mars 2026</div>
@@ -300,7 +301,7 @@
         </div>
       </div>
       <div class="calendar-event" data-country="Corée du Sud" data-tour="Triton">
-        <div class="ce-flag">KR</div>
+        <div class="ce-flag"><svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="20" fill="#fff"/><circle cx="15" cy="10" r="6" fill="#CD2E3A"/><path d="M15 4a6 6 0 0 0 0 12 3 3 0 0 1 0-6 3 3 0 0 0 0-6Z" fill="#0047A0"/></svg></div>
         <div class="ce-body">
           <div class="ce-top"><span class="ce-name">Triton Super High Roller Series Jeju</span><span class="ce-tour">Triton</span></div>
           <div class="ce-meta">Jeju, Corée du Sud · 14 mars 2026 – 1 avr. 2026</div>
@@ -308,7 +309,7 @@
         </div>
       </div>
       <div class="calendar-event" data-country="Irlande" data-tour="Irish Poker Open">
-        <div class="ce-flag">IE</div>
+        <div class="ce-flag"><svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="10" height="20" fill="#169B62"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#FF883E"/></svg></div>
         <div class="ce-body">
           <div class="ce-top"><span class="ce-name">Irish Poker Open</span><span class="ce-tour">Irish Poker Open</span></div>
           <div class="ce-meta">Dublin, Irlande · 26 mars 2026 – 6 avr. 2026</div>
@@ -316,7 +317,7 @@
         </div>
       </div>
       <div class="calendar-event" data-country="République tchèque" data-tour="WSOP Europe">
-        <div class="ce-flag">CZ</div>
+        <div class="ce-flag"><svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="10" fill="#fff"/><rect y="10" width="30" height="10" fill="#D7141A"/><path d="M0 0 15 10 0 20Z" fill="#11457E"/></svg></div>
         <div class="ce-body">
           <div class="ce-top"><span class="ce-name">WSOP Europe</span><span class="ce-tour">WSOP Europe</span></div>
           <div class="ce-meta">Prague (King's Casino), République tchèque · 31 mars 2026 – 12 avr. 2026</div>
@@ -324,7 +325,7 @@
         </div>
       </div>
       <div class="calendar-event" data-country="France" data-tour="WSOP Circuit">
-        <div class="ce-flag">FR</div>
+        <div class="ce-flag"><svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="10" height="20" fill="#002654"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ED2939"/></svg></div>
         <div class="ce-body">
           <div class="ce-top"><span class="ce-name">WSOP Circuit — Pasino Partouche</span><span class="ce-tour">WSOP Circuit</span></div>
           <div class="ce-meta">Aix-en-Provence, France · 10 avr. 2026 – 21 avr. 2026</div>
@@ -332,14 +333,14 @@
         </div>
       </div>
       <div class="calendar-event" data-country="France" data-tour="Partouche">
-        <div class="ce-flag">FR</div>
+        <div class="ce-flag"><svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="10" height="20" fill="#002654"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ED2939"/></svg></div>
         <div class="ce-body">
           <div class="ce-top"><span class="ce-name">Partouche Poker Deepstack — Divonne-les-Bains</span><span class="ce-tour">Partouche</span></div>
           <div class="ce-meta">Divonne-les-Bains, France · 22 avr. 2026 – 26 avr. 2026</div>
         </div>
       </div>
       <div class="calendar-event" data-country="Australie" data-tour="Aussie Millions">
-        <div class="ce-flag">AU</div>
+        <div class="ce-flag"><svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="20" fill="#00247D"/><path d="M0 0 15 10M15 0 0 10" stroke="#fff" stroke-width="1.6"/><path d="M7.5 0v10M0 5h15" stroke="#fff" stroke-width="1.8"/><path d="M7.5 0v10M0 5h15" stroke="#E4312B" stroke-width="0.9"/><circle cx="22" cy="6" r="0.8" fill="#fff"/><circle cx="25" cy="10" r="0.8" fill="#fff"/><circle cx="22" cy="14" r="0.8" fill="#fff"/><circle cx="19" cy="10" r="0.8" fill="#fff"/><circle cx="24" cy="15.5" r="0.6" fill="#fff"/></svg></div>
         <div class="ce-body">
           <div class="ce-top"><span class="ce-name">Aussie Millions</span><span class="ce-tour">Aussie Millions</span></div>
           <div class="ce-meta">Melbourne (Crown), Australie · 24 avr. 2026 – 10 mai 2026</div>
@@ -347,7 +348,7 @@
         </div>
       </div>
       <div class="calendar-event" data-country="Monaco" data-tour="EPT">
-        <div class="ce-flag">MC</div>
+        <div class="ce-flag"><svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="10" fill="#CE1126"/><rect y="10" width="30" height="10" fill="#fff"/></svg></div>
         <div class="ce-body">
           <div class="ce-top"><span class="ce-name">EPT Monte-Carlo</span><span class="ce-tour">EPT</span></div>
           <div class="ce-meta">Monte-Carlo, Monaco · 30 avr. 2026 – 10 mai 2026</div>
@@ -355,7 +356,7 @@
         </div>
       </div>
       <div class="calendar-event" data-country="Monténégro" data-tour="Triton">
-        <div class="ce-flag">ME</div>
+        <div class="ce-flag"><svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="20" fill="#D40000"/><rect x="0.8" y="0.8" width="28.4" height="18.4" fill="none" stroke="#D4AF37" stroke-width="1.4"/><circle cx="15" cy="10" r="4" fill="none" stroke="#D4AF37" stroke-width="1.2"/></svg></div>
         <div class="ce-body">
           <div class="ce-top"><span class="ce-name">Triton Super High Roller Series Montenegro</span><span class="ce-tour">Triton</span></div>
           <div class="ce-meta">Sveti Stefan, Monténégro · 13 mai 2026 – 28 mai 2026</div>
@@ -363,14 +364,14 @@
         </div>
       </div>
       <div class="calendar-event" data-country="France" data-tour="Partouche">
-        <div class="ce-flag">FR</div>
+        <div class="ce-flag"><svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="10" height="20" fill="#002654"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ED2939"/></svg></div>
         <div class="ce-body">
           <div class="ce-top"><span class="ce-name">Riviera Poker Festival</span><span class="ce-tour">Partouche</span></div>
           <div class="ce-meta">Aix-en-Provence, France · 8 mai 2026 – 5 août 2026</div>
         </div>
       </div>
       <div class="calendar-event" data-country="Belgique" data-tour="PokerStars Open">
-        <div class="ce-flag">BE</div>
+        <div class="ce-flag"><svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="10" height="20" fill="#000"/><rect x="10" width="10" height="20" fill="#FDDA24"/><rect x="20" width="10" height="20" fill="#EF3340"/></svg></div>
         <div class="ce-body">
           <div class="ce-top"><span class="ce-name">PokerStars Open Namur</span><span class="ce-tour">PokerStars Open</span></div>
           <div class="ce-meta">Namur, Belgique · 27 mai 2026 – 7 juin 2026</div>
@@ -378,56 +379,56 @@
         </div>
       </div>
       <div class="calendar-event" data-country="États-Unis" data-tour="WSOP">
-        <div class="ce-flag">US</div>
+        <div class="ce-flag"><svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="20" fill="#fff"/><rect y="0" width="30" height="1.54" fill="#B22234"/><rect y="3.08" width="30" height="1.54" fill="#B22234"/><rect y="6.15" width="30" height="1.54" fill="#B22234"/><rect y="9.23" width="30" height="1.54" fill="#B22234"/><rect y="12.31" width="30" height="1.54" fill="#B22234"/><rect y="15.38" width="30" height="1.54" fill="#B22234"/><rect y="18.46" width="30" height="1.54" fill="#B22234"/><rect width="13" height="10.8" fill="#3C3B6E"/></svg></div>
         <div class="ce-body">
           <div class="ce-top"><span class="ce-name">World Series of Poker (WSOP)</span><span class="ce-tour">WSOP</span></div>
           <div class="ce-meta">Las Vegas (Horseshoe &amp; Paris), États-Unis · 26 mai 2026 – 15 juil. 2026</div>
         </div>
       </div>
       <div class="calendar-event" data-country="Cambodge" data-tour="WPT">
-        <div class="ce-flag">KH</div>
+        <div class="ce-flag"><svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="20" fill="#032ea1"/><rect y="5" width="30" height="10" fill="#e00025"/><rect x="11" y="7" width="8" height="6" fill="#fff"/></svg></div>
         <div class="ce-body">
           <div class="ce-top"><span class="ce-name">WPT Cambodia — Passport to the World Championship</span><span class="ce-tour">WPT</span></div>
           <div class="ce-meta">Phnom Penh (NagaWorld), Cambodge · 12 août 2026 – 24 août 2026</div>
         </div>
       </div>
       <div class="calendar-event" data-country="Corée du Sud" data-tour="Triton">
-        <div class="ce-flag">KR</div>
+        <div class="ce-flag"><svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="20" fill="#fff"/><circle cx="15" cy="10" r="6" fill="#CD2E3A"/><path d="M15 4a6 6 0 0 0 0 12 3 3 0 0 1 0-6 3 3 0 0 0 0-6Z" fill="#0047A0"/></svg></div>
         <div class="ce-body">
           <div class="ce-top"><span class="ce-name">Triton Super High Roller Series Jeju</span><span class="ce-tour">Triton</span></div>
           <div class="ce-meta">Jeju, Corée du Sud · 4 sept. 2026 – 17 sept. 2026</div>
         </div>
       </div>
       <div class="calendar-event" data-country="Australie" data-tour="WPT">
-        <div class="ce-flag">AU</div>
+        <div class="ce-flag"><svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="20" fill="#00247D"/><path d="M0 0 15 10M15 0 0 10" stroke="#fff" stroke-width="1.6"/><path d="M7.5 0v10M0 5h15" stroke="#fff" stroke-width="1.8"/><path d="M7.5 0v10M0 5h15" stroke="#E4312B" stroke-width="0.9"/><circle cx="22" cy="6" r="0.8" fill="#fff"/><circle cx="25" cy="10" r="0.8" fill="#fff"/><circle cx="22" cy="14" r="0.8" fill="#fff"/><circle cx="19" cy="10" r="0.8" fill="#fff"/><circle cx="24" cy="15.5" r="0.6" fill="#fff"/></svg></div>
         <div class="ce-body">
           <div class="ce-top"><span class="ce-name">WPT Prime Australia</span><span class="ce-tour">WPT</span></div>
           <div class="ce-meta">Sydney (The Star), Australie · 10 sept. 2026 – 30 sept. 2026</div>
         </div>
       </div>
       <div class="calendar-event" data-country="États-Unis" data-tour="WPT">
-        <div class="ce-flag">US</div>
+        <div class="ce-flag"><svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="20" fill="#fff"/><rect y="0" width="30" height="1.54" fill="#B22234"/><rect y="3.08" width="30" height="1.54" fill="#B22234"/><rect y="6.15" width="30" height="1.54" fill="#B22234"/><rect y="9.23" width="30" height="1.54" fill="#B22234"/><rect y="12.31" width="30" height="1.54" fill="#B22234"/><rect y="15.38" width="30" height="1.54" fill="#B22234"/><rect y="18.46" width="30" height="1.54" fill="#B22234"/><rect width="13" height="10.8" fill="#3C3B6E"/></svg></div>
         <div class="ce-body">
           <div class="ce-top"><span class="ce-name">WPT Prime Lodge Championship</span><span class="ce-tour">WPT</span></div>
           <div class="ce-meta">Austin, Texas, États-Unis · 24 sept. 2026 – 12 oct. 2026</div>
         </div>
       </div>
       <div class="calendar-event" data-country="Corée du Sud" data-tour="WPT">
-        <div class="ce-flag">KR</div>
+        <div class="ce-flag"><svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="20" fill="#fff"/><circle cx="15" cy="10" r="6" fill="#CD2E3A"/><path d="M15 4a6 6 0 0 0 0 12 3 3 0 0 1 0-6 3 3 0 0 0 0-6Z" fill="#0047A0"/></svg></div>
         <div class="ce-body">
           <div class="ce-top"><span class="ce-name">WPT Seoul</span><span class="ce-tour">WPT</span></div>
           <div class="ce-meta">Séoul (INSPIRE), Corée du Sud · 30 oct. 2026 – 9 nov. 2026</div>
         </div>
       </div>
       <div class="calendar-event" data-country="France" data-tour="PokerStars Open">
-        <div class="ce-flag">FR</div>
+        <div class="ce-flag"><svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="10" height="20" fill="#002654"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ED2939"/></svg></div>
         <div class="ce-body">
           <div class="ce-top"><span class="ce-name">PokerStars Open Aix-en-Provence</span><span class="ce-tour">PokerStars Open</span></div>
           <div class="ce-meta">Aix-en-Provence, France · 2 nov. 2026 – 8 nov. 2026</div>
         </div>
       </div>
       <div class="calendar-event" data-country="République tchèque" data-tour="EPT">
-        <div class="ce-flag">CZ</div>
+        <div class="ce-flag"><svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="10" fill="#fff"/><rect y="10" width="30" height="10" fill="#D7141A"/><path d="M0 0 15 10 0 20Z" fill="#11457E"/></svg></div>
         <div class="ce-body">
           <div class="ce-top"><span class="ce-name">EPT Prague</span><span class="ce-tour">EPT</span></div>
           <div class="ce-meta">Prague, République tchèque · 2 déc. 2026 – 13 déc. 2026</div>

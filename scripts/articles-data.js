@@ -6,6 +6,7 @@ module.exports = [
   {
     slug: 'bankroll-management-regles-essentielles',
     tag: 'Bases',
+    accent: 'green',
     type: 'guide',
     title: "Bankroll management : les règles essentielles pour ne jamais tomber à zéro",
     excerpt: "Les principes fondamentaux pour dimensionner votre bankroll et éviter le tapis, quel que soit votre format de jeu.",
@@ -44,6 +45,7 @@ module.exports = [
   {
     slug: 'combien-de-buyins-mtt',
     tag: 'Tournois',
+    accent: 'amber',
     type: 'guide',
     title: "Combien de buy-ins faut-il pour jouer les MTT sereinement ?",
     excerpt: "La variance des tournois multi-tables est brutale. Voici comment calculer un nombre de buy-ins réaliste selon votre profil.",
@@ -76,6 +78,7 @@ module.exports = [
   {
     slug: 'cashgame-vs-tournoi-gestion-bankroll',
     tag: 'Stratégie',
+    accent: 'violet',
     type: 'guide',
     title: "Cash game vs Tournoi : quelle gestion de bankroll adopter ?",
     excerpt: "Les deux formats n'ont pas la même variance ni la même logique de mise. Comparatif pratique pour adapter votre BRM.",
@@ -98,6 +101,7 @@ module.exports = [
   {
     slug: 'expresso-spin-go-variance',
     tag: 'Expresso',
+    accent: 'critical',
     type: 'guide',
     title: "Expressos / Spin & Go : gérer la variance de la loterie",
     excerpt: "Le multiplicateur aléatoire rend les expressos passionnants — et statistiquement violents pour une bankroll mal calibrée.",
@@ -123,6 +127,7 @@ module.exports = [
   {
     slug: 'live-vs-online-adapter-bankroll',
     tag: 'Stratégie',
+    accent: 'blue',
     type: 'guide',
     title: "Live vs Online : adapter sa bankroll selon le format",
     excerpt: "Rythme de jeu, niveau moyen, structure des mises : le live et l'online n'exposent pas votre bankroll de la même façon.",
@@ -145,6 +150,7 @@ module.exports = [
   {
     slug: 'suivre-statistiques-poker-pourquoi-comment',
     tag: 'Bases',
+    accent: 'green',
     type: 'guide',
     title: "Suivre ses statistiques poker : pourquoi et comment",
     excerpt: "Le suivi de résultats n'est pas réservé aux professionnels. Voici ce qu'il faut enregistrer, et pourquoi ça change tout.",
@@ -177,6 +183,7 @@ module.exports = [
   {
     slug: 'calendrier-tournois-live-2026-preparer-bankroll',
     tag: 'Actualité',
+    accent: 'amber',
     type: 'news',
     title: "Calendrier des tournois live 2026 : comment préparer sa bankroll pour la saison",
     excerpt: "WSOP, EPT, circuits nationaux : la saison live s'étale sur toute l'année. Comment planifier son budget sans se mettre en danger.",
@@ -201,6 +208,7 @@ module.exports = [
   {
     slug: 'tendances-poker-en-ligne-2026',
     tag: 'Actualité',
+    accent: 'blue',
     type: 'news',
     title: "Poker en ligne : les tendances qui redessinent le jeu",
     excerpt: "Formats rapides, marketplaces de staking, outils d'analyse démocratisés : un tour d'horizon des évolutions qui changent la manière de jouer et de suivre sa bankroll.",
@@ -221,6 +229,7 @@ module.exports = [
   {
     slug: 'fiscalite-gains-poker-france',
     tag: 'Actualité',
+    accent: 'violet',
     type: 'news',
     title: "Fiscalité des gains de poker en France : ce qu'il faut savoir",
     excerpt: "Joueur occasionnel ou habituel, la frontière fiscale n'est pas qu'une formalité. Tour d'horizon des grands principes — et pourquoi ce n'est pas un conseil personnalisé.",

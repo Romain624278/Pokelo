@@ -66,8 +66,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Bebas+Neue&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="assets/site-marketing.css" />
 <style>
-  .module-pills { display: flex; flex-wrap: wrap; gap: .6rem; justify-content: center; max-width: 1000px; margin: 2.5rem auto 0; }
-  .module-pill { font-size: .8rem; color: var(--grey); background: var(--black-card); border: 1px solid var(--border); border-radius: 100px; padding: .5rem 1.1rem; }
   .module-pills-label { text-align: center; color: var(--grey); font-size: .82rem; margin-top: 3rem; }
 </style>
 </head>
@@ -110,59 +108,117 @@
       <p class="section-sub">Pokelo se concentre sur l'essentiel du bankroll management : enregistrer vite, comprendre vite.</p>
     </div>
 
-    <div class="feat-grid">
-      <div class="feat-card big feat-accent-green">
+    <div class="feat-hero feat-accent-green">
+      <div>
         <div class="feat-icon-lg"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="18" rx="1.5"/><rect x="14" y="3" width="7" height="8" rx="1.5"/><rect x="14" y="15" width="7" height="6" rx="1.5"/></svg></div>
-        <h3>Dashboard modulaire</h3>
+        <h2>Dashboard modulaire</h2>
         <p>Choisissez parmi 23 modules d'analyse — bankroll, ROI, heatmap, risque de ruine... — et composez le dashboard qui vous ressemble.</p>
       </div>
+      <div class="feat-hero-illus">
+        <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+          <rect x="4" y="4" width="92" height="52" rx="8" fill="none" stroke="var(--green)" stroke-width="1.6" opacity=".5"/>
+          <polyline points="14,44 30,36 46,40 62,24 78,30 90,14" fill="none" stroke="var(--green)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="104" y="4" width="92" height="52" rx="8" fill="none" stroke="var(--blue)" stroke-width="1.6" opacity=".5"/>
+          <rect x="114" y="30" width="10" height="20" rx="2" fill="var(--blue)"/>
+          <rect x="130" y="20" width="10" height="30" rx="2" fill="var(--blue)"/>
+          <rect x="146" y="34" width="10" height="16" rx="2" fill="var(--blue)" opacity=".6"/>
+          <rect x="162" y="14" width="10" height="36" rx="2" fill="var(--blue)"/>
+          <rect x="178" y="26" width="10" height="24" rx="2" fill="var(--blue)" opacity=".8"/>
+          <rect x="4" y="64" width="92" height="52" rx="8" fill="none" stroke="var(--violet)" stroke-width="1.6" opacity=".5"/>
+          <circle cx="34" cy="90" r="18" fill="none" stroke="var(--violet)" stroke-width="6" stroke-dasharray="60 100" transform="rotate(-90 34 90)"/>
+          <rect x="62" y="80" width="24" height="4" rx="2" fill="var(--violet)" opacity=".6"/>
+          <rect x="62" y="88" width="18" height="4" rx="2" fill="var(--violet)" opacity=".4"/>
+          <rect x="62" y="96" width="20" height="4" rx="2" fill="var(--violet)" opacity=".5"/>
+          <rect x="104" y="64" width="92" height="52" rx="8" fill="none" stroke="var(--amber)" stroke-width="1.6" opacity=".5"/>
+          <circle cx="150" cy="90" r="18" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="6"/>
+          <circle cx="150" cy="90" r="18" fill="none" stroke="var(--amber)" stroke-width="6" stroke-dasharray="70 113" stroke-linecap="round" transform="rotate(-90 150 90)"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="feat-row-3">
       <div class="feat-card feat-accent-blue">
         <div class="feat-icon-lg"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div>
         <h3>Bankrolls illimitées</h3>
         <p>Créez autant de bankrolls que nécessaire — online, live, un roll dédié aux MTT — et assignez chaque session à la bonne.</p>
+        <div class="feat-card-illus">
+          <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+            <rect x="20" y="50" width="120" height="46" rx="8" fill="var(--green)" opacity=".12" stroke="var(--green)" stroke-width="1.6"/>
+            <rect x="35" y="35" width="120" height="46" rx="8" fill="var(--blue)" opacity=".14" stroke="var(--blue)" stroke-width="1.6"/>
+            <rect x="50" y="20" width="120" height="46" rx="8" fill="var(--violet)" opacity=".16" stroke="var(--violet)" stroke-width="1.6"/>
+            <polyline points="60,52 75,45 90,49 105,36 120,40" fill="none" stroke="var(--violet)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="120" cy="40" r="3" fill="var(--violet)"/>
+          </svg>
+        </div>
       </div>
       <div class="feat-card feat-accent-violet">
         <div class="feat-icon-lg"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg></div>
         <h3>Multi-devises</h3>
         <p>EUR, USD, USDT, jetons de club... indiquez la devise de votre choix pour chaque bankroll, sans conversion imposée.</p>
+        <div class="feat-card-illus">
+          <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="70" cy="60" r="34" fill="var(--green)" opacity=".14" stroke="var(--green)" stroke-width="2"/>
+            <text x="70" y="70" font-size="28" font-weight="700" fill="var(--green)" text-anchor="middle" font-family="Inter, sans-serif">&#8364;</text>
+            <circle cx="128" cy="38" r="26" fill="var(--blue)" opacity=".14" stroke="var(--blue)" stroke-width="2"/>
+            <text x="128" y="47" font-size="22" font-weight="700" fill="var(--blue)" text-anchor="middle" font-family="Inter, sans-serif">$</text>
+            <circle cx="152" cy="86" r="20" fill="var(--violet)" opacity=".14" stroke="var(--violet)" stroke-width="2"/>
+            <text x="152" y="93" font-size="17" font-weight="700" fill="var(--violet)" text-anchor="middle" font-family="Inter, sans-serif">&#8366;</text>
+          </svg>
+        </div>
       </div>
       <div class="feat-card feat-accent-amber">
         <div class="feat-icon-lg"><svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="6" r="1.3"/><circle cx="16" cy="6" r="1.3"/><circle cx="9" cy="13" r="1.3"/><circle cx="16" cy="13" r="1.3"/><circle cx="9" cy="20" r="1.3"/><circle cx="16" cy="20" r="1.3"/></svg></div>
         <h3>Composé par vous</h3>
         <p>Ajoutez, retirez et réorganisez les modules par glisser-déposer — le dashboard s'adapte à votre façon de jouer, pas l'inverse.</p>
+        <div class="feat-card-illus">
+          <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+            <rect x="20" y="20" width="70" height="28" rx="6" fill="var(--amber)" opacity=".16" stroke="var(--amber)" stroke-width="1.6"/>
+            <rect x="20" y="56" width="70" height="28" rx="6" fill="var(--amber)" opacity=".28" stroke="var(--amber)" stroke-width="1.6"/>
+            <rect x="20" y="92" width="70" height="20" rx="6" fill="var(--amber)" opacity=".4" stroke="var(--amber)" stroke-width="1.6"/>
+            <g fill="var(--amber)">
+              <circle cx="112" cy="30" r="2.4"/><circle cx="122" cy="30" r="2.4"/>
+              <circle cx="112" cy="40" r="2.4"/><circle cx="122" cy="40" r="2.4"/>
+            </g>
+            <path d="M140 30 165 30M140 40 175 40M140 50 158 50" stroke="var(--amber)" stroke-width="2.2" stroke-linecap="round" opacity=".7"/>
+            <path d="M155 20 175 30 155 40Z" fill="var(--amber)" opacity=".8"/>
+          </svg>
+        </div>
       </div>
-      <div class="feat-card feat-accent-green">
-        <div class="feat-icon-lg"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div>
+    </div>
+
+    <div class="feat-card-small feat-accent-green">
+      <div class="feat-icon-lg"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div>
+      <div>
         <h3>Gratuit pour commencer</h3>
         <p>Aucune carte bancaire requise. Créez un compte et suivez votre bankroll dès aujourd'hui, sans engagement.</p>
       </div>
     </div>
 
     <p class="module-pills-label">Les 23 modules d'analyse, à composer vous-même</p>
-    <div class="module-pills">
-      <span class="module-pill">Évolution de la bankroll</span>
-      <span class="module-pill">Profit par mois</span>
-      <span class="module-pill">Sessions par type</span>
-      <span class="module-pill">Live vs Online</span>
-      <span class="module-pill">Meilleures sessions</span>
-      <span class="module-pill">Pires sessions</span>
-      <span class="module-pill">Dernières sessions</span>
-      <span class="module-pill">Résumé</span>
-      <span class="module-pill">ROI / Winrate par type</span>
-      <span class="module-pill">ITM %</span>
-      <span class="module-pill">Profit net par période</span>
-      <span class="module-pill">Répartition par stake</span>
-      <span class="module-pill">Répartition par salle</span>
-      <span class="module-pill">Heatmap jour / heure</span>
-      <span class="module-pill">Durée vs performance</span>
-      <span class="module-pill">Variance / écart-type</span>
-      <span class="module-pill">Risque de ruine</span>
-      <span class="module-pill">Alerte move-down</span>
-      <span class="module-pill">Buy-ins en réserve</span>
-      <span class="module-pill">Streaks</span>
-      <span class="module-pill">Sessions tilt</span>
-      <span class="module-pill">BB/100</span>
-      <span class="module-pill">Objectif</span>
+    <div class="module-grid">
+      <div class="module-card"><div class="module-card-icon"><svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><polygon points="2,28 12,22 20,26 30,13 40,17 54,5 54,34 2,34" fill="var(--good)" opacity="0.16"/><polyline points="2,28 12,22 20,26 30,13 40,17 54,5" fill="none" stroke="var(--good)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Évolution de la bankroll</span></div>
+      <div class="module-card"><div class="module-card-icon"><svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="14" width="8" height="20" rx="1.5" fill="var(--good)"/><rect x="17" y="21" width="8" height="13" rx="1.5" fill="var(--critical)"/><rect x="30" y="6" width="8" height="28" rx="1.5" fill="var(--good)"/><rect x="43" y="17" width="8" height="17" rx="1.5" fill="var(--good)"/></svg></div><span>Profit par mois</span></div>
+      <div class="module-card"><div class="module-card-icon"><svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="13" fill="none" stroke="var(--c-tournament)" stroke-width="7" stroke-dasharray="27 55"/><circle cx="18" cy="18" r="13" fill="none" stroke="var(--c-cash)" stroke-width="7" stroke-dasharray="27 55" stroke-dashoffset="-27"/><circle cx="18" cy="18" r="13" fill="none" stroke="var(--c-expresso)" stroke-width="7" stroke-dasharray="27 55" stroke-dashoffset="-54"/></svg></div><span>Sessions par type</span></div>
+      <div class="module-card"><div class="module-card-icon"><svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><rect x="16" y="8" width="10" height="26" rx="2" fill="var(--c-live)"/><rect x="32" y="16" width="10" height="18" rx="2" fill="var(--c-online)"/></svg></div><span>Live vs Online</span></div>
+      <div class="module-card"><div class="module-card-icon"><svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="22" width="7" height="12" rx="1.5" fill="var(--good)" opacity=".45"/><rect x="16" y="14" width="7" height="20" rx="1.5" fill="var(--good)" opacity=".7"/><rect x="28" y="6" width="7" height="28" rx="1.5" fill="var(--good)"/><path d="M40 15l4 4 8-10" stroke="var(--good)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Meilleures sessions</span></div>
+      <div class="module-card"><div class="module-card-icon"><svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="6" width="7" height="28" rx="1.5" fill="var(--critical)"/><rect x="16" y="14" width="7" height="20" rx="1.5" fill="var(--critical)" opacity=".7"/><rect x="28" y="22" width="7" height="12" rx="1.5" fill="var(--critical)" opacity=".45"/><path d="M40 11l4 12 8-6" stroke="var(--critical)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Pires sessions</span></div>
+      <div class="module-card"><div class="module-card-icon"><svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="6" width="48" height="5" rx="2.5" fill="var(--grey)" opacity=".55"/><rect x="2" y="16" width="34" height="5" rx="2.5" fill="var(--grey)" opacity=".55"/><rect x="2" y="26" width="40" height="5" rx="2.5" fill="var(--grey)" opacity=".55"/></svg></div><span>Dernières sessions</span></div>
+      <div class="module-card"><div class="module-card-icon"><svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="4" width="24" height="13" rx="2" fill="none" stroke="var(--good)" stroke-width="2"/><rect x="30" y="4" width="24" height="13" rx="2" fill="none" stroke="var(--grey)" stroke-width="2" opacity=".5"/><rect x="2" y="21" width="24" height="13" rx="2" fill="none" stroke="var(--good)" stroke-width="2" opacity=".5"/><rect x="30" y="21" width="24" height="13" rx="2" fill="none" stroke="var(--critical)" stroke-width="2" opacity=".5"/></svg></div><span>Résumé</span></div>
+      <div class="module-card"><div class="module-card-icon"><svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><path d="M4 30 L20 10 L36 20 L52 4" stroke="var(--good)" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="52" cy="4" r="3" fill="var(--good)"/></svg></div><span>ROI / Winrate par type</span></div>
+      <div class="module-card"><div class="module-card-icon"><svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="14" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="5"/><circle cx="18" cy="18" r="14" fill="none" stroke="var(--good)" stroke-width="5" stroke-dasharray="62 88" stroke-linecap="round" transform="rotate(-90 18 18)"/></svg></div><span>ITM %</span></div>
+      <div class="module-card"><div class="module-card-icon"><svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="20" width="6" height="14" rx="1.5" fill="var(--good)"/><rect x="11" y="10" width="6" height="24" rx="1.5" fill="var(--good)"/><rect x="20" y="24" width="6" height="10" rx="1.5" fill="var(--critical)"/><rect x="29" y="6" width="6" height="28" rx="1.5" fill="var(--good)"/><rect x="38" y="16" width="6" height="18" rx="1.5" fill="var(--good)"/><rect x="47" y="22" width="6" height="12" rx="1.5" fill="var(--critical)"/></svg></div><span>Profit net par période</span></div>
+      <div class="module-card"><div class="module-card-icon"><svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="26" width="9" height="8" rx="1.5" fill="var(--c-tournament)" opacity=".5"/><rect x="16" y="18" width="9" height="16" rx="1.5" fill="var(--c-tournament)" opacity=".7"/><rect x="29" y="10" width="9" height="24" rx="1.5" fill="var(--c-tournament)" opacity=".85"/><rect x="42" y="3" width="9" height="31" rx="1.5" fill="var(--c-tournament)"/></svg></div><span>Répartition par stake</span></div>
+      <div class="module-card"><div class="module-card-icon"><svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="4" width="38" height="6" rx="3" fill="var(--c-cash)"/><rect x="2" y="15" width="26" height="6" rx="3" fill="var(--c-cash)" opacity=".7"/><rect x="2" y="26" width="15" height="6" rx="3" fill="var(--c-cash)" opacity=".45"/></svg></div><span>Répartition par salle</span></div>
+      <div class="module-card"><div class="module-card-icon"><svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="7" height="7" rx="1.5" fill="var(--good)" opacity=".5"/><rect x="11" y="2" width="7" height="7" rx="1.5" fill="var(--good)" opacity=".75"/><rect x="20" y="2" width="7" height="7" rx="1.5" fill="var(--good)" opacity=".25"/><rect x="29" y="2" width="7" height="7" rx="1.5" fill="var(--good)"/><rect x="38" y="2" width="7" height="7" rx="1.5" fill="var(--good)" opacity=".5"/><rect x="47" y="2" width="7" height="7" rx="1.5" fill="var(--good)" opacity=".75"/><rect x="2" y="14" width="7" height="7" rx="1.5" fill="var(--critical)" opacity=".5"/><rect x="11" y="14" width="7" height="7" rx="1.5" fill="var(--critical)" opacity=".75"/><rect x="20" y="14" width="7" height="7" rx="1.5" fill="var(--critical)" opacity=".25"/><rect x="29" y="14" width="7" height="7" rx="1.5" fill="var(--critical)" opacity=".5"/><rect x="38" y="14" width="7" height="7" rx="1.5" fill="var(--critical)" opacity=".75"/><rect x="47" y="14" width="7" height="7" rx="1.5" fill="var(--critical)" opacity=".25"/><rect x="2" y="26" width="7" height="7" rx="1.5" fill="var(--good)" opacity=".5"/><rect x="11" y="26" width="7" height="7" rx="1.5" fill="var(--good)" opacity=".75"/><rect x="20" y="26" width="7" height="7" rx="1.5" fill="var(--good)" opacity=".25"/><rect x="29" y="26" width="7" height="7" rx="1.5" fill="var(--good)" opacity=".5"/><rect x="38" y="26" width="7" height="7" rx="1.5" fill="var(--good)" opacity=".75"/><rect x="47" y="26" width="7" height="7" rx="1.5" fill="var(--good)" opacity=".25"/></svg></div><span>Heatmap jour / heure</span></div>
+      <div class="module-card"><div class="module-card-icon"><svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="26" r="3" fill="var(--critical)" opacity=".7"/><circle cx="20" cy="18" r="3" fill="var(--good)" opacity=".6"/><circle cx="32" cy="10" r="3" fill="var(--good)" opacity=".8"/><circle cx="44" cy="22" r="3" fill="var(--critical)" opacity=".6"/><path d="M4 28 L50 12" stroke="var(--grey)" stroke-width="1.5" stroke-dasharray="3 3" opacity=".5"/></svg></div><span>Durée vs performance</span></div>
+      <div class="module-card"><div class="module-card-icon"><svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><path d="M2 18 Q14 2 28 18 T54 18" stroke="var(--good)" stroke-width="2.2" fill="none"/><line x1="2" y1="18" x2="54" y2="18" stroke="var(--grey)" stroke-width="1" stroke-dasharray="2 2" opacity=".6"/></svg></div><span>Variance / écart-type</span></div>
+      <div class="module-card"><div class="module-card-icon"><svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="14" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="5"/><circle cx="18" cy="18" r="14" fill="none" stroke="var(--critical)" stroke-width="5" stroke-dasharray="22 88" stroke-linecap="round" transform="rotate(-90 18 18)"/></svg></div><span>Risque de ruine</span></div>
+      <div class="module-card"><div class="module-card-icon"><svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><path d="M18 4 3 30h30Z" fill="none" stroke="var(--critical)" stroke-width="2.2" stroke-linejoin="round"/><path d="M18 14v8" stroke="var(--critical)" stroke-width="2.2" stroke-linecap="round"/><circle cx="18" cy="25.5" r="1.4" fill="var(--critical)"/></svg></div><span>Alerte move-down</span></div>
+      <div class="module-card"><div class="module-card-icon"><svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><ellipse cx="10" cy="30" rx="9" ry="3.5" fill="none" stroke="var(--good)" stroke-width="2" opacity=".4"/><ellipse cx="10" cy="25" rx="9" ry="3.5" fill="none" stroke="var(--good)" stroke-width="2" opacity=".52"/><ellipse cx="10" cy="20" rx="9" ry="3.5" fill="none" stroke="var(--good)" stroke-width="2" opacity=".64"/><ellipse cx="10" cy="15" rx="9" ry="3.5" fill="none" stroke="var(--good)" stroke-width="2" opacity=".76"/><ellipse cx="10" cy="10" rx="9" ry="3.5" fill="none" stroke="var(--good)" stroke-width="2" opacity=".88"/></svg></div><span>Buy-ins en réserve</span></div>
+      <div class="module-card"><div class="module-card-icon"><svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="4" width="7" height="30" rx="1.5" fill="var(--good)"/><rect x="11" y="4" width="7" height="30" rx="1.5" fill="var(--good)"/><rect x="20" y="4" width="7" height="30" rx="1.5" fill="var(--good)"/><rect x="33" y="12" width="7" height="22" rx="1.5" fill="var(--critical)"/><rect x="42" y="12" width="7" height="22" rx="1.5" fill="var(--critical)"/></svg></div><span>Streaks</span></div>
+      <div class="module-card"><div class="module-card-icon"><svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="14" fill="none" stroke="var(--critical)" stroke-width="2.2"/><path d="M12 15h1M23 15h1" stroke="var(--critical)" stroke-width="2.2" stroke-linecap="round"/><path d="M12 24q6-5 12 0" stroke="var(--critical)" stroke-width="2.2" fill="none" stroke-linecap="round"/></svg></div><span>Sessions tilt</span></div>
+      <div class="module-card"><div class="module-card-icon"><svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="4" width="20" height="20" rx="10" fill="none" stroke="var(--c-cash)" stroke-width="2.4"/><path d="M30 26 L52 4" stroke="var(--good)" stroke-width="2.4" stroke-linecap="round"/><path d="M46 4h6v6" stroke="var(--good)" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>BB/100</span></div>
+      <div class="module-card"><div class="module-card-icon"><svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="14" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="4"/><circle cx="18" cy="18" r="14" fill="none" stroke="var(--good)" stroke-width="4" stroke-dasharray="66 88" stroke-linecap="round" transform="rotate(-90 18 18)"/><circle cx="18" cy="18" r="4" fill="var(--good)"/></svg></div><span>Objectif</span></div>
     </div>
   </section>
 
