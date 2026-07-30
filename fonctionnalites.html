@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fonctionnalités — Dashboard modulaire, multi-bankroll, multi-devises | Pokelo</title>
+<meta name="description" content="Bankrolls illimitées, multi-devises, dashboard modulaire à composer vous-même parmi 23 modules d'analyse (ROI, heatmap, risque de ruine...). Gratuit pour commencer, sans carte bancaire." />
+<meta name="keywords" content="logiciel suivi bankroll poker, dashboard poker, gestion bankroll poker en ligne, outil bankroll management" />
+<meta name="robots" content="index, follow" />
+<meta name="author" content="Pokelo" />
+<link rel="canonical" href="https://www.pokelo.fr/fonctionnalites" />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Pokelo" />
+<meta property="og:locale" content="fr_FR" />
+<meta property="og:url" content="https://www.pokelo.fr/fonctionnalites" />
+<meta property="og:title" content="Fonctionnalités Pokelo — Dashboard modulaire, multi-bankroll, multi-devises" />
+<meta property="og:description" content="Bankrolls illimitées, multi-devises, dashboard modulaire à composer vous-même parmi 23 modules d'analyse. Gratuit pour commencer." />
+<meta property="og:image" content="https://www.pokelo.fr/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Fonctionnalités Pokelo — Dashboard modulaire, multi-bankroll, multi-devises" />
+<meta name="twitter:description" content="Bankrolls illimitées, multi-devises, dashboard modulaire à composer vous-même parmi 23 modules d'analyse. Gratuit pour commencer." />
+<meta name="twitter:image" content="https://www.pokelo.fr/og-image.png" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Pokelo",
+  "url": "https://www.pokelo.fr/",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Web, iOS, Android",
+  "description": "Suivi de bankroll poker avec dashboard modulaire (23 modules d'analyse), multi-bankroll, multi-devises.",
+  "featureList": [
+    "Bankrolls illimitées",
+    "Multi-devises sans conversion imposée",
+    "Dashboard modulaire (23 modules d'analyse)",
+    "Composition du dashboard par glisser-déposer",
+    "Plan gratuit sans carte bancaire"
+  ],
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Pokelo", "item": "https://www.pokelo.fr/" },
+    { "@type": "ListItem", "position": 2, "name": "Fonctionnalités", "item": "https://www.pokelo.fr/fonctionnalites" }
+  ]
+}
+</script>
+
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png" />
+<link rel="shortcut icon" type="image/png" href="icons/icon-192.png" />
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#08BF2F" />
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Bebas+Neue&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/site-marketing.css" />
+<style>
+  .module-pills { display: flex; flex-wrap: wrap; gap: .6rem; justify-content: center; max-width: 1000px; margin: 2.5rem auto 0; }
+  .module-pill { font-size: .8rem; color: var(--grey); background: var(--black-card); border: 1px solid var(--border); border-radius: 100px; padding: .5rem 1.1rem; }
+  .module-pills-label { text-align: center; color: var(--grey); font-size: .82rem; margin-top: 3rem; }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a class="nav-logo" href="/">
+    <svg class="logo-mark" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" width="32" height="32">
+      <rect class="lb1" x="4" y="32" width="7" height="10" rx="2"/><rect class="lb2" x="15" y="25" width="7" height="17" rx="2"/><rect class="lb3" x="26" y="18" width="7" height="24" rx="2"/>
+      <path class="lpip" d="M29.5 4C23 10 20 14 20 17.5C20 20 22.2 22 25 22C26.8 22 28.4 21.2 29.5 19.8C30.6 21.2 32.2 22 34 22C36.8 22 39 20 39 17.5C39 14 36 10 29.5 4Z"/>
+    </svg>
+    <span>Pokelo</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/fonctionnalites" class="active">Fonctionnalités</a></li>
+    <li><a href="/#pricing">Tarifs</a></li>
+    <li><a href="/blog">Blog</a></li>
+    <li><a href="/calendrier">Calendrier</a></li>
+    <li><a href="/#/account" class="nav-cta">Se connecter</a></li>
+  </ul>
+  <button class="nav-burger" id="burger" aria-label="Menu" onclick="document.getElementById('burger').classList.toggle('open');document.getElementById('mobileMenu').classList.toggle('open');">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="/fonctionnalites">Fonctionnalités</a>
+  <a href="/#pricing">Tarifs</a>
+  <a href="/blog">Blog</a>
+  <a href="/calendrier">Calendrier</a>
+  <a href="/#/account" class="nav-cta">Se connecter</a>
+</div>
+
+<main>
+  <section id="features-hero" style="padding-top:150px;">
+    <div class="hero-block">
+      <div class="section-tag">Fonctionnalités</div>
+      <h1 class="section-title">Tout ce qu'il faut,<br>rien de superflu</h1>
+      <div class="divider"></div>
+      <p class="section-sub">Pokelo se concentre sur l'essentiel du bankroll management : enregistrer vite, comprendre vite.</p>
+    </div>
+
+    <div class="feat-grid">
+      <div class="feat-card big feat-accent-green">
+        <div class="feat-icon-lg"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="18" rx="1.5"/><rect x="14" y="3" width="7" height="8" rx="1.5"/><rect x="14" y="15" width="7" height="6" rx="1.5"/></svg></div>
+        <h3>Dashboard modulaire</h3>
+        <p>Choisissez parmi 23 modules d'analyse — bankroll, ROI, heatmap, risque de ruine... — et composez le dashboard qui vous ressemble.</p>
+      </div>
+      <div class="feat-card feat-accent-blue">
+        <div class="feat-icon-lg"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div>
+        <h3>Bankrolls illimitées</h3>
+        <p>Créez autant de bankrolls que nécessaire — online, live, un roll dédié aux MTT — et assignez chaque session à la bonne.</p>
+      </div>
+      <div class="feat-card feat-accent-violet">
+        <div class="feat-icon-lg"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg></div>
+        <h3>Multi-devises</h3>
+        <p>EUR, USD, USDT, jetons de club... indiquez la devise de votre choix pour chaque bankroll, sans conversion imposée.</p>
+      </div>
+      <div class="feat-card feat-accent-amber">
+        <div class="feat-icon-lg"><svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="6" r="1.3"/><circle cx="16" cy="6" r="1.3"/><circle cx="9" cy="13" r="1.3"/><circle cx="16" cy="13" r="1.3"/><circle cx="9" cy="20" r="1.3"/><circle cx="16" cy="20" r="1.3"/></svg></div>
+        <h3>Composé par vous</h3>
+        <p>Ajoutez, retirez et réorganisez les modules par glisser-déposer — le dashboard s'adapte à votre façon de jouer, pas l'inverse.</p>
+      </div>
+      <div class="feat-card feat-accent-green">
+        <div class="feat-icon-lg"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div>
+        <h3>Gratuit pour commencer</h3>
+        <p>Aucune carte bancaire requise. Créez un compte et suivez votre bankroll dès aujourd'hui, sans engagement.</p>
+      </div>
+    </div>
+
+    <p class="module-pills-label">Les 23 modules d'analyse, à composer vous-même</p>
+    <div class="module-pills">
+      <span class="module-pill">Évolution de la bankroll</span>
+      <span class="module-pill">Profit par mois</span>
+      <span class="module-pill">Sessions par type</span>
+      <span class="module-pill">Live vs Online</span>
+      <span class="module-pill">Meilleures sessions</span>
+      <span class="module-pill">Pires sessions</span>
+      <span class="module-pill">Dernières sessions</span>
+      <span class="module-pill">Résumé</span>
+      <span class="module-pill">ROI / Winrate par type</span>
+      <span class="module-pill">ITM %</span>
+      <span class="module-pill">Profit net par période</span>
+      <span class="module-pill">Répartition par stake</span>
+      <span class="module-pill">Répartition par salle</span>
+      <span class="module-pill">Heatmap jour / heure</span>
+      <span class="module-pill">Durée vs performance</span>
+      <span class="module-pill">Variance / écart-type</span>
+      <span class="module-pill">Risque de ruine</span>
+      <span class="module-pill">Alerte move-down</span>
+      <span class="module-pill">Buy-ins en réserve</span>
+      <span class="module-pill">Streaks</span>
+      <span class="module-pill">Sessions tilt</span>
+      <span class="module-pill">BB/100</span>
+      <span class="module-pill">Objectif</span>
+    </div>
+  </section>
+
+  <section id="cta">
+    <div class="hero-block">
+      <h2 class="section-title" style="font-size:clamp(1.8rem,4vw,2.6rem)">Composez le dashboard qui vous ressemble</h2>
+      <p class="section-sub">Aucune carte bancaire requise. Créez un compte et suivez votre bankroll dès aujourd'hui.</p>
+      <div style="margin-top:2rem">
+        <a href="/#/account/signup" class="btn-primary">Créer un compte gratuit</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <svg class="logo-mark" viewBox="0 0 48 48" width="28" height="28" xmlns="http://www.w3.org/2000/svg">
+        <rect class="lb1" x="4" y="32" width="7" height="10" rx="2"/><rect class="lb2" x="15" y="25" width="7" height="17" rx="2"/><rect class="lb3" x="26" y="18" width="7" height="24" rx="2"/>
+        <path class="lpip" d="M29.5 4C23 10 20 14 20 17.5C20 20 22.2 22 25 22C26.8 22 28.4 21.2 29.5 19.8C30.6 21.2 32.2 22 34 22C36.8 22 39 20 39 17.5C39 14 36 10 29.5 4Z"/>
+      </svg>
+      <span>Pokelo</span>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Pokelo. Tous droits réservés.</span>
+    <span>Le poker responsable commence par une bonne gestion de bankroll.</span>
+  </div>
+</footer>
+</body>
+</html>
