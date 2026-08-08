@@ -112,7 +112,8 @@ section { padding: 100px 6vw; }
 
 /* ── MODULES (grille avec icônes) ── */
 .module-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .9rem; margin: 2.2rem auto 0; max-width: 1140px; }
-.module-card { background: var(--black-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem 1.2rem; display: flex; align-items: center; gap: .9rem; text-align: left; transition: border-color .2s, transform .2s; }
+.module-card { background: var(--black-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem 1.2rem; display: flex; align-items: center; gap: .9rem; text-align: left; transition: border-color .2s, transform .2s; text-decoration: none; cursor: default; }
+a.module-card { cursor: pointer; }
 .module-card:hover { border-color: var(--green); transform: translateY(-2px); }
 .module-card-icon { width: 44px; height: 34px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
 .module-card-icon svg { width: 100%; height: 100%; }

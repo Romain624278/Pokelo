@@ -1295,7 +1295,9 @@
         <h5 data-i18n="footer_resources">Ressources</h5>
         <a href="/blog" data-i18n="nav_blog">Blog</a>
         <a href="/calendrier" data-i18n="nav_calendar">Calendrier poker 2026</a>
+        <a href="/calculateur-risque-de-ruine">Calculateur de risque de ruine</a>
         <a href="#how" data-link data-i18n="hero_cta_secondary">Comment ça marche</a>
+        <a href="/a-propos">À propos</a>
         <a onclick="openSupportModal();return false;" data-i18n="footer_support">Contact / Support</a>
       </div>
       <div class="footer-col">
@@ -1659,6 +1661,10 @@
         <div class="app-topbar">
           <h1 data-i18n="nav_sessions">Sessions</h1>
           <div class="app-topbar-actions">
+            <button class="btn-ghost btn-sm" onclick="openCsvImportModal()">
+              <svg class="icon" style="width:16px;height:16px" viewBox="0 0 24 24"><path d="M12 3v12M12 15l-4-4M12 15l4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+              <span data-i18n="btn_csv_import">Importer un CSV</span>
+            </button>
             <button class="btn-primary btn-sm" onclick="openSessionModal()">
               <svg class="icon" style="width:16px;height:16px" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
               <span data-i18n="btn_new_session">Nouvelle session</span>
@@ -2262,6 +2268,98 @@
   </div>
 </div>
 
+<!-- ══════════════ MODAL : IMPORT CSV (mapping générique) ══════════════ -->
+<div class="modal-overlay" id="csv-import-modal-overlay" hidden onclick="if(event.target===this) closeCsvImportModal()">
+  <div class="modal" style="max-width:720px">
+    <div class="modal-head">
+      <h3 data-i18n="csv_import_title">Importer un CSV</h3>
+      <button class="icon-btn" onclick="closeCsvImportModal()" aria-label="Fermer"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <p class="form-hint" data-i18n="csv_import_hint">Fonctionne avec l'export CSV de n'importe quelle app (Pokmanager, Poker Bankroll Manager, etc.) : vous associez vous-même les colonnes de votre fichier aux champs Pokelo.</p>
+      <div class="form-row">
+        <div class="form-group">
+          <label data-i18n="csv_import_bankroll">Bankroll de destination</label>
+          <select class="select" id="csv-bankroll"></select>
+        </div>
+        <div class="form-group">
+          <label data-i18n="csv_import_file">Fichier CSV</label>
+          <input class="input" type="file" id="csv-file-input" accept=".csv,text/csv" onchange="handleCsvFileSelect(event)" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label data-i18n="csv_import_date_format">Format de date dans le fichier</label>
+          <select class="select" id="csv-date-format">
+            <option value="ymd">AAAA-MM-JJ (2026-01-23)</option>
+            <option value="dmy">JJ/MM/AAAA (23/01/2026)</option>
+            <option value="mdy">MM/JJ/AAAA (01/23/2026)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label data-i18n="csv_import_default_type">Type par défaut</label>
+          <div class="segmented" id="csv-type-seg">
+            <button type="button" data-val="tournament" class="active">Tournoi</button>
+            <button type="button" data-val="cash">Cash Game</button>
+            <button type="button" data-val="expresso">Expresso<span class="pro-crown-inline"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 18h14l1.4-8.4-4.4 2.6-3-5.2-3 5.2-4.4-2.6L5 18Z"/></svg></span></button>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label data-i18n="csv_import_default_format">Format par défaut</label>
+          <div class="segmented" id="csv-format-seg">
+            <button type="button" data-val="live" class="active">Live</button>
+            <button type="button" data-val="online">Online</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="csv-mapping-area" hidden>
+        <div style="border-top:1px solid var(--border);margin:1.4rem 0"></div>
+        <p class="form-hint" data-i18n="csv_import_mapping_hint">Associez les colonnes de votre fichier aux champs Pokelo. Date, Buy-in et Cashout sont obligatoires.</p>
+        <div class="form-row">
+          <div class="form-group">
+            <label data-i18n="csv_import_col_date">Colonne Date *</label>
+            <select class="select" id="csv-map-date"></select>
+          </div>
+          <div class="form-group">
+            <label data-i18n="csv_import_col_buyin">Colonne Buy-in *</label>
+            <select class="select" id="csv-map-buyin"></select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label data-i18n="csv_import_col_cashout">Colonne Cashout *</label>
+            <select class="select" id="csv-map-cashout"></select>
+          </div>
+          <div class="form-group">
+            <label data-i18n="csv_import_col_site">Colonne Lieu / Site (optionnel)</label>
+            <select class="select" id="csv-map-site"></select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label data-i18n="csv_import_col_type">Colonne Type (optionnel)</label>
+            <select class="select" id="csv-map-type"></select>
+          </div>
+          <div class="form-group">
+            <label data-i18n="csv_import_col_notes">Colonne Notes (optionnel)</label>
+            <select class="select" id="csv-map-notes"></select>
+          </div>
+        </div>
+        <button class="btn-secondary btn-sm" onclick="renderCsvPreview()" data-i18n="csv_import_preview_btn">Prévisualiser</button>
+        <div id="csv-preview-area" style="margin-top:1rem"></div>
+      </div>
+      <div class="account-feedback" id="csv-import-feedback" hidden></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-ghost" onclick="closeCsvImportModal()">Annuler</button>
+      <button class="btn-primary btn-sm" id="csv-import-submit" onclick="submitCsvImport()" disabled data-i18n="csv_import_submit">Importer</button>
+    </div>
+  </div>
+</div>
+
 <!-- ══════════════ MODAL : PRESET PROMPT ══════════════ -->
 <div class="modal-overlay" id="preset-prompt-overlay" hidden onclick="if(event.target===this) closePresetPrompt()">
   <div class="modal" style="max-width:520px">
@@ -2779,6 +2877,21 @@ const I18N = {
     settings_account_public_stats_hint:'Aucun montant en euros n\'est jamais affiché — uniquement des pourcentages et des volumes.',
     nav_dashboard:'Dashboard', nav_sessions:'Sessions', nav_bankrolls:'Bankrolls', nav_my_account:'Mon compte',
     btn_new_session:'Nouvelle session', btn_new_bankroll:'Nouvelle bankroll', btn_customize:'Personnaliser', btn_save:'Enregistrer',
+    btn_csv_import:'Importer un CSV',
+    csv_import_title:'Importer un CSV', csv_import_hint:"Fonctionne avec l'export CSV de n'importe quelle app (Pokmanager, Poker Bankroll Manager, etc.) : vous associez vous-même les colonnes de votre fichier aux champs Pokelo.",
+    csv_import_bankroll:'Bankroll de destination', csv_import_file:'Fichier CSV', csv_import_date_format:'Format de date dans le fichier',
+    csv_import_default_type:'Type par défaut', csv_import_default_format:'Format par défaut',
+    csv_import_mapping_hint:'Associez les colonnes de votre fichier aux champs Pokelo. Date, Buy-in et Cashout sont obligatoires.',
+    csv_import_col_date:'Colonne Date *', csv_import_col_buyin:'Colonne Buy-in *', csv_import_col_cashout:'Colonne Cashout *',
+    csv_import_col_site:'Colonne Lieu / Site (optionnel)', csv_import_col_type:'Colonne Type (optionnel)', csv_import_col_notes:'Colonne Notes (optionnel)',
+    csv_import_none:"— Ne pas importer —", csv_import_preview_btn:'Prévisualiser', csv_import_submit:'Importer',
+    csv_import_error_file:'Impossible de lire ce fichier. Vérifiez qu\'il s\'agit bien d\'un CSV.',
+    csv_import_error_empty:'Ce fichier ne contient aucune ligne de données.',
+    csv_import_error_mapping:'Sélectionnez une colonne pour Date, Buy-in et Cashout avant de prévisualiser.',
+    csv_import_preview_summary:'{valid} ligne(s) valide(s) sur {total} détectée(s).',
+    csv_import_row_error:'ligne(s) ignorée(s) (date ou montant invalide)',
+    csv_import_success:'{count} sessions importées.',
+    csv_import_error_none_valid:'Aucune ligne valide à importer — vérifiez le mapping des colonnes et le format de date.',
     fx_loading:'Calcul du taux de change…', fx_unavailable:'Taux de change indisponible pour cette devise.',
     fx_manual_prompt:'Saisissez le taux manuellement :', fx_manual_placeholder:'ex. 1.08',
     fx_rate_label:'Taux appliqué :', fx_in_bankroll:'dans la bankroll',
@@ -3072,6 +3185,21 @@ const I18N = {
     settings_account_public_stats_hint:'No amount in euros is ever shown — only percentages and volumes.',
     nav_dashboard:'Dashboard', nav_sessions:'Sessions', nav_bankrolls:'Bankrolls', nav_my_account:'My account',
     btn_new_session:'New session', btn_new_bankroll:'New bankroll', btn_customize:'Customize', btn_save:'Save',
+    btn_csv_import:'Import a CSV',
+    csv_import_title:'Import a CSV', csv_import_hint:"Works with the CSV export from any app (Pokmanager, Poker Bankroll Manager, etc.) — you map your file's columns to Pokelo's fields yourself.",
+    csv_import_bankroll:'Target bankroll', csv_import_file:'CSV file', csv_import_date_format:'Date format in the file',
+    csv_import_default_type:'Default type', csv_import_default_format:'Default format',
+    csv_import_mapping_hint:"Map your file's columns to Pokelo's fields. Date, Buy-in and Cashout are required.",
+    csv_import_col_date:'Date column *', csv_import_col_buyin:'Buy-in column *', csv_import_col_cashout:'Cashout column *',
+    csv_import_col_site:'Location / site column (optional)', csv_import_col_type:'Type column (optional)', csv_import_col_notes:'Notes column (optional)',
+    csv_import_none:"— Don't import —", csv_import_preview_btn:'Preview', csv_import_submit:'Import',
+    csv_import_error_file:'Could not read this file. Make sure it is a CSV.',
+    csv_import_error_empty:'This file has no data rows.',
+    csv_import_error_mapping:'Select a column for Date, Buy-in and Cashout before previewing.',
+    csv_import_preview_summary:'{valid} valid row(s) out of {total} detected.',
+    csv_import_row_error:'row(s) skipped (invalid date or amount)',
+    csv_import_success:'{count} sessions imported.',
+    csv_import_error_none_valid:'No valid rows to import — check the column mapping and the date format.',
     fx_loading:'Fetching exchange rate…', fx_unavailable:'Exchange rate unavailable for this currency.',
     fx_manual_prompt:'Enter the rate manually:', fx_manual_placeholder:'e.g. 1.08',
     fx_rate_label:'Rate applied:', fx_in_bankroll:'in the bankroll',
@@ -7436,7 +7564,7 @@ function setSegmented(containerId, val){
   c.querySelectorAll('button').forEach(b => b.classList.toggle('active', b.dataset.val === val));
 }
 document.addEventListener('click', function(e){
-  const seg = e.target.closest('#session-type-seg button, #session-format-seg button, #bankroll-focus-seg button');
+  const seg = e.target.closest('#session-type-seg button, #session-format-seg button, #bankroll-focus-seg button, #csv-type-seg button, #csv-format-seg button');
   if (!seg) return;
   if (seg.dataset.val === 'expresso' && !isPremium()) { showProFeatureModal('expresso'); return; }
   const parent = seg.parentElement;
@@ -7614,6 +7742,218 @@ async function saveSession(){
   const active = ['dashboard','sessions','bankrolls'].find(s=>!document.getElementById('section-'+s).hidden);
   if (active === 'sessions') renderSessions();
   if (active === 'dashboard') renderDashboard();
+}
+
+/* ══════════════════════════════════════════════════════════════
+   POKELO — import CSV générique
+   Lit un fichier CSV déjà rempli — export d'une autre app de suivi
+   de bankroll — et laisse l'utilisateur associer lui-même les
+   colonnes de son fichier aux champs Pokelo, plutôt que de supposer
+   un format de colonnes fixe : aucune spec de format n'étant
+   publiquement documentée pour les apps concurrentes, un mapping
+   fixe aurait pu mal importer les données silencieusement.
+   ══════════════════════════════════════════════════════════════ */
+let csvImportData = { headers: [], rows: [] };
+function openCsvImportModal(){
+  if (!state.bankrolls.length) { openBankrollModal(); return; }
+  populateCsvBankrollSelect();
+  document.getElementById('csv-file-input').value = '';
+  document.getElementById('csv-date-format').value = 'ymd';
+  setSegmented('csv-type-seg', 'tournament');
+  setSegmented('csv-format-seg', 'live');
+  document.getElementById('csv-mapping-area').hidden = true;
+  document.getElementById('csv-preview-area').innerHTML = '';
+  document.getElementById('csv-import-submit').disabled = true;
+  const feedback = document.getElementById('csv-import-feedback');
+  feedback.hidden = true; feedback.className = 'account-feedback';
+  csvImportData = { headers: [], rows: [] };
+  document.getElementById('csv-import-modal-overlay').hidden = false;
+}
+function closeCsvImportModal(){ document.getElementById('csv-import-modal-overlay').hidden = true; }
+function populateCsvBankrollSelect(){
+  const sel = document.getElementById('csv-bankroll');
+  sel.innerHTML = state.bankrolls.map(b => `<option value="${b.id}">${escapeHtml(b.name)}</option>`).join('');
+  if (currentBankrollScope && currentBankrollScope !== ALL_BANKROLLS_SCOPE && state.bankrolls.some(b=>b.id===currentBankrollScope)) {
+    sel.value = currentBankrollScope;
+  }
+}
+function parseCsvText(text){
+  const rows = [];
+  let row = [], field = '', inQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQuotes) {
+      if (c === '"') { if (text[i+1] === '"') { field += '"'; i++; } else inQuotes = false; }
+      else field += c;
+    } else {
+      if (c === '"') inQuotes = true;
+      else if (c === ',' || c === ';') { row.push(field); field = ''; }
+      else if (c === '\n') { row.push(field); rows.push(row); row = []; field = ''; }
+      else if (c === '\r') { /* ignoré, géré via \n */ }
+      else field += c;
+    }
+  }
+  if (field.length || row.length) { row.push(field); rows.push(row); }
+  const nonEmpty = rows.filter(r => r.some(c => c.trim() !== ''));
+  if (!nonEmpty.length) return { headers: [], rows: [] };
+  const headers = nonEmpty[0].map(h => h.trim());
+  return { headers, rows: nonEmpty.slice(1) };
+}
+function handleCsvFileSelect(event){
+  const file = event.target.files && event.target.files[0];
+  const feedback = document.getElementById('csv-import-feedback');
+  feedback.hidden = true;
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const parsed = parseCsvText(String(reader.result || ''));
+      if (!parsed.headers.length) {
+        feedback.hidden = false; feedback.className = 'account-feedback error'; feedback.textContent = t('csv_import_error_empty');
+        document.getElementById('csv-mapping-area').hidden = true;
+        return;
+      }
+      csvImportData = parsed;
+      populateCsvMappingSelects();
+      document.getElementById('csv-mapping-area').hidden = false;
+      document.getElementById('csv-preview-area').innerHTML = '';
+      document.getElementById('csv-import-submit').disabled = true;
+    } catch (e) {
+      feedback.hidden = false; feedback.className = 'account-feedback error'; feedback.textContent = t('csv_import_error_file');
+    }
+  };
+  reader.onerror = () => { feedback.hidden = false; feedback.className = 'account-feedback error'; feedback.textContent = t('csv_import_error_file'); };
+  reader.readAsText(file);
+}
+function populateCsvMappingSelects(){
+  const required = ['csv-map-date', 'csv-map-buyin', 'csv-map-cashout'];
+  const optional = ['csv-map-site', 'csv-map-type', 'csv-map-notes'];
+  const optionsHtml = csvImportData.headers.map((h, i) => `<option value="${i}">${escapeHtml(h)}</option>`).join('');
+  required.forEach(id => { document.getElementById(id).innerHTML = optionsHtml; });
+  optional.forEach(id => { document.getElementById(id).innerHTML = `<option value="-1">${t('csv_import_none')}</option>` + optionsHtml; });
+  // Pré-sélection heuristique si un en-tête ressemble à un nom de champ connu (confort, reste modifiable).
+  const guess = (patterns) => csvImportData.headers.findIndex(h => patterns.some(p => h.toLowerCase().includes(p)));
+  const dateIdx = guess(['date']); if (dateIdx >= 0) document.getElementById('csv-map-date').value = dateIdx;
+  const buyinIdx = guess(['buyin', 'buy-in', 'buy in', 'mise']); if (buyinIdx >= 0) document.getElementById('csv-map-buyin').value = buyinIdx;
+  const cashoutIdx = guess(['cashout', 'cash-out', 'cash out', 'gain', 'result']); if (cashoutIdx >= 0) document.getElementById('csv-map-cashout').value = cashoutIdx;
+  const siteIdx = guess(['site', 'location', 'lieu', 'casino', 'room']); if (siteIdx >= 0) document.getElementById('csv-map-site').value = siteIdx;
+  const typeIdx = guess(['type', 'game', 'variant']); if (typeIdx >= 0) document.getElementById('csv-map-type').value = typeIdx;
+  const notesIdx = guess(['note', 'comment']); if (notesIdx >= 0) document.getElementById('csv-map-notes').value = notesIdx;
+}
+function parseCsvDateValue(raw, fmt){
+  const v = String(raw || '').trim();
+  if (!v) return null;
+  let m, y, mo, d;
+  if (fmt === 'ymd') m = v.match(/^(\d{4})[-\/.](\d{1,2})[-\/.](\d{1,2})/);
+  else m = v.match(/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{4})/);
+  if (!m) return null;
+  if (fmt === 'ymd') { y = m[1]; mo = m[2]; d = m[3]; }
+  else if (fmt === 'dmy') { d = m[1]; mo = m[2]; y = m[3]; }
+  else { mo = m[1]; d = m[2]; y = m[3]; }
+  mo = String(mo).padStart(2, '0'); d = String(d).padStart(2, '0');
+  const iso = `${y}-${mo}-${d}`;
+  const check = new Date(iso + 'T00:00:00');
+  if (isNaN(check.getTime())) return null;
+  return iso;
+}
+function parseCsvNumberValue(raw){
+  if (raw == null) return NaN;
+  let v = String(raw).trim().replace(/[^\d,.\-]/g, '');
+  if (!v) return NaN;
+  if (v.includes(',') && v.includes('.')) v = v.replace(/,/g, '');
+  else if (v.includes(',') && !v.includes('.')) v = v.replace(',', '.');
+  return parseFloat(v);
+}
+function getCsvMappedSessions(){
+  const dateCol = parseInt(document.getElementById('csv-map-date').value, 10);
+  const buyinCol = parseInt(document.getElementById('csv-map-buyin').value, 10);
+  const cashoutCol = parseInt(document.getElementById('csv-map-cashout').value, 10);
+  const siteCol = parseInt(document.getElementById('csv-map-site').value, 10);
+  const typeCol = parseInt(document.getElementById('csv-map-type').value, 10);
+  const notesCol = parseInt(document.getElementById('csv-map-notes').value, 10);
+  const dateFmt = document.getElementById('csv-date-format').value;
+  const defaultCategory = getSegVal('csv-type-seg');
+  const defaultFormat = getSegVal('csv-format-seg');
+  const typeMap = { tournoi: 'tournament', tournament: 'tournament', mtt: 'tournament', cash: 'cash', cashgame: 'cash', 'cash game': 'cash', expresso: 'expresso', spin: 'expresso', 'spin&go': 'expresso', 'spin & go': 'expresso' };
+  const valid = [], invalid = [];
+  csvImportData.rows.forEach(row => {
+    const date = parseCsvDateValue(row[dateCol], dateFmt);
+    const buyIn = parseCsvNumberValue(row[buyinCol]);
+    const cashout = parseCsvNumberValue(row[cashoutCol]);
+    if (!date || !(buyIn >= 0) || !(cashout >= 0)) { invalid.push(row); return; }
+    let category = defaultCategory;
+    if (typeCol >= 0 && row[typeCol]) {
+      const mapped = typeMap[String(row[typeCol]).trim().toLowerCase()];
+      if (mapped) category = mapped;
+    }
+    valid.push({
+      date, buyIn, cashout, category, format: defaultFormat,
+      site: siteCol >= 0 ? String(row[siteCol] || '').trim() : '',
+      notes: notesCol >= 0 ? String(row[notesCol] || '').trim() : '',
+    });
+  });
+  return { valid, invalid };
+}
+function renderCsvPreview(){
+  const feedback = document.getElementById('csv-import-feedback');
+  feedback.hidden = true;
+  const dateCol = document.getElementById('csv-map-date').value;
+  const buyinCol = document.getElementById('csv-map-buyin').value;
+  const cashoutCol = document.getElementById('csv-map-cashout').value;
+  if (dateCol === '' || buyinCol === '' || cashoutCol === '') {
+    feedback.hidden = false; feedback.className = 'account-feedback error'; feedback.textContent = t('csv_import_error_mapping');
+    return;
+  }
+  const { valid, invalid } = getCsvMappedSessions();
+  const total = valid.length + invalid.length;
+  const previewArea = document.getElementById('csv-preview-area');
+  const submitBtn = document.getElementById('csv-import-submit');
+  if (!valid.length) {
+    previewArea.innerHTML = `<div class="account-feedback error">${t('csv_import_error_none_valid')}</div>`;
+    submitBtn.disabled = true;
+    return;
+  }
+  const rowsHtml = valid.slice(0, 5).map(s => `<tr><td>${escapeHtml(s.date)}</td><td>${fmtNum(s.buyIn)}</td><td>${fmtNum(s.cashout)}</td><td>${escapeHtml(s.category)}</td><td>${escapeHtml(s.site || '—')}</td></tr>`).join('');
+  const summary = t('csv_import_preview_summary').replace('{valid}', valid.length).replace('{total}', total)
+    + (invalid.length ? ` — ${invalid.length} ${t('csv_import_row_error')}` : '');
+  previewArea.innerHTML = `
+    <p class="form-hint">${escapeHtml(summary)}</p>
+    <div class="table-wrap" style="max-height:220px;overflow-y:auto">
+      <table class="data-table">
+        <thead><tr><th>Date</th><th>Buy-in</th><th>Cashout</th><th>Type</th><th>Lieu</th></tr></thead>
+        <tbody>${rowsHtml}</tbody>
+      </table>
+    </div>`;
+  submitBtn.disabled = false;
+}
+function submitCsvImport(){
+  const feedback = document.getElementById('csv-import-feedback');
+  const bankrollId = document.getElementById('csv-bankroll').value;
+  const bk = getBankroll(bankrollId);
+  if (!bk) return;
+  const { valid } = getCsvMappedSessions();
+  if (!valid.length) {
+    feedback.hidden = false; feedback.className = 'account-feedback error'; feedback.textContent = t('csv_import_error_none_valid');
+    return;
+  }
+  if (valid.some(s => s.category === 'expresso') && !isPremium()) { showProFeatureModal('expresso'); return; }
+  const now = Date.now();
+  valid.forEach((s, i) => {
+    state.sessions.push({
+      id: newRecordId(), bankrollId, category: s.category, format: s.format, date: s.date,
+      time: null, duration: null, tilt: false,
+      currency: bk.currency, fxRate: 1,
+      buyIn: s.buyIn, cashout: s.cashout, bb: null, hands: null,
+      site: s.site, variant: '', notes: s.notes,
+      createdAt: now + i,
+    });
+  });
+  state.isDemo = false;
+  saveState(); closeCsvImportModal(); populateBankrollSelects();
+  const active = ['dashboard','sessions','bankrolls'].find(s=>!document.getElementById('section-'+s).hidden);
+  if (active === 'sessions') renderSessions();
+  if (active === 'dashboard') renderDashboard();
+  showToast(t('csv_import_success').replace('{count}', valid.length), 'success');
 }
 
 /* ══════════════════════════════════════════════════════════════

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Calculateur de risque de ruine poker gratuit | Pokelo</title>
+<meta name="description" content="Calculez gratuitement votre risque de ruine au poker à partir de votre bankroll, votre buy-in moyen et vos résultats par session. Outil en ligne, aucun compte requis." />
+<meta name="keywords" content="risque de ruine poker, calculateur bankroll poker, risk of ruin poker, gestion bankroll poker" />
+<meta name="robots" content="index, follow" />
+<meta name="author" content="Pokelo" />
+<link rel="canonical" href="https://www.pokelo.fr/calculateur-risque-de-ruine" />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Pokelo" />
+<meta property="og:locale" content="fr_FR" />
+<meta property="og:url" content="https://www.pokelo.fr/calculateur-risque-de-ruine" />
+<meta property="og:title" content="Calculateur de risque de ruine poker gratuit | Pokelo" />
+<meta property="og:description" content="Calculez gratuitement votre risque de ruine au poker à partir de votre bankroll, votre buy-in moyen et vos résultats par session." />
+<meta property="og:image" content="https://www.pokelo.fr/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Calculateur de risque de ruine poker gratuit | Pokelo" />
+<meta name="twitter:description" content="Calculez gratuitement votre risque de ruine au poker à partir de votre bankroll, votre buy-in moyen et vos résultats par session." />
+<meta name="twitter:image" content="https://www.pokelo.fr/og-image.png" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Calculateur de risque de ruine — Pokelo",
+  "url": "https://www.pokelo.fr/calculateur-risque-de-ruine",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+  "description": "Outil gratuit pour estimer le risque de ruine d'une bankroll de poker à partir du solde, du buy-in moyen et de vos derniers résultats de session — profit moyen et écart-type calculés automatiquement."
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Pokelo", "item": "https://www.pokelo.fr/" },
+    { "@type": "ListItem", "position": 2, "name": "Calculateur de risque de ruine", "item": "https://www.pokelo.fr/calculateur-risque-de-ruine" }
+  ]
+}
+</script>
+
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png" />
+<link rel="shortcut icon" type="image/png" href="icons/icon-192.png" />
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#08BF2F" />
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Bebas+Neue&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/site-marketing.css" />
+<style>
+  .ror-tool { max-width: 720px; margin: 2.2rem auto 0; background: var(--black-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; text-align: left; }
+  .ror-form { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+  .ror-field { display: flex; flex-direction: column; }
+  .ror-field.full { grid-column: 1 / -1; }
+  .ror-field label { display: flex; align-items: center; gap: .4rem; font-size: .78rem; color: var(--grey); text-transform: uppercase; letter-spacing: .05em; margin-bottom: .4rem; }
+  .ror-field input, .ror-field textarea { width: 100%; background: var(--black); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: .7rem .9rem; font-size: .95rem; font-family: inherit; }
+  .ror-field textarea { resize: vertical; min-height: 72px; line-height: 1.5; }
+  .ror-field input:focus, .ror-field textarea:focus { outline: none; border-color: var(--green); }
+  .ror-field .hint { font-size: .72rem; color: var(--grey); margin-top: .35rem; line-height: 1.55; }
+  .ror-example { display: inline-flex; align-items: center; justify-content: center; width: 15px; height: 15px; border-radius: 50%; background: rgba(255,255,255,0.08); color: var(--grey); font-size: .64rem; font-weight: 700; cursor: default; text-transform: none; letter-spacing: 0; }
+  .ror-computed { margin-top: 1rem; padding: .9rem 1.1rem; background: rgba(8,191,47,0.05); border: 1px solid var(--border); border-radius: 8px; font-size: .84rem; color: var(--grey); display: flex; flex-wrap: wrap; gap: .4rem 1.4rem; }
+  .ror-computed strong { color: var(--text); }
+  .ror-count-warning { font-size: .78rem; color: var(--amber); margin-top: .6rem; }
+  .ror-result { margin-top: 1.8rem; padding-top: 1.8rem; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 1.6rem; }
+  .ror-gauge { width: 96px; height: 96px; flex-shrink: 0; }
+  .ror-gauge svg { width: 100%; height: 100%; }
+  .ror-result-text { flex: 1; }
+  .ror-val { font-family: 'Bebas Neue', sans-serif; font-size: 2.6rem; letter-spacing: .02em; line-height: 1; }
+  .ror-val.pos { color: var(--green); }
+  .ror-val.mid { color: var(--amber); }
+  .ror-val.neg { color: var(--critical); }
+  .ror-label { font-size: .85rem; color: var(--grey); margin-top: .3rem; }
+  .ror-note { font-size: .78rem; color: var(--grey); margin-top: 1.4rem; line-height: 1.6; }
+  @media (max-width: 640px) {
+    .ror-form { grid-template-columns: 1fr; }
+    .ror-result { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a class="nav-logo" href="/">
+    <svg class="logo-mark" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" width="32" height="32">
+      <rect class="lb1" x="4" y="32" width="7" height="10" rx="2"/><rect class="lb2" x="15" y="25" width="7" height="17" rx="2"/><rect class="lb3" x="26" y="18" width="7" height="24" rx="2"/>
+      <path class="lpip" d="M29.5 4C23 10 20 14 20 17.5C20 20 22.2 22 25 22C26.8 22 28.4 21.2 29.5 19.8C30.6 21.2 32.2 22 34 22C36.8 22 39 20 39 17.5C39 14 36 10 29.5 4Z"/>
+    </svg>
+    <span>Pokelo</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/fonctionnalites">Fonctionnalités</a></li>
+    <li><a href="/#pricing">Tarifs</a></li>
+    <li><a href="/blog">Blog</a></li>
+    <li><a href="/calendrier">Calendrier</a></li>
+    <li><a href="/#/account" class="nav-cta">Se connecter</a></li>
+  </ul>
+  <button class="nav-burger" id="burger" aria-label="Menu" onclick="document.getElementById('burger').classList.toggle('open');document.getElementById('mobileMenu').classList.toggle('open');">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="/fonctionnalites">Fonctionnalités</a>
+  <a href="/#pricing">Tarifs</a>
+  <a href="/blog">Blog</a>
+  <a href="/calendrier">Calendrier</a>
+  <a href="/#/account" class="nav-cta">Se connecter</a>
+</div>
+
+<main>
+  <section id="ror-hero" style="padding-top:150px;">
+    <div class="hero-block">
+      <div class="section-tag" style="color:var(--critical);">Outil gratuit</div>
+      <h1 class="section-title">Calculateur de<br>risque de ruine</h1>
+      <div class="divider"></div>
+      <p class="section-sub">Estimez la probabilité que votre bankroll actuelle tombe à zéro, à partir de vos propres chiffres. Aucun compte requis.</p>
+    </div>
+
+    <div class="ror-tool">
+      <div class="ror-form">
+        <div class="ror-field">
+          <label for="ror-balance">Bankroll actuelle</label>
+          <input type="number" id="ror-balance" min="0" step="1" placeholder="500" />
+          <div class="hint">Le solde total de la bankroll à protéger, dans la devise de votre choix (le résultat est un pourcentage, pas un montant).</div>
+        </div>
+        <div class="ror-field">
+          <label for="ror-buyin">Buy-in moyen</label>
+          <input type="number" id="ror-buyin" min="0.01" step="0.01" placeholder="20" />
+          <div class="hint">Le buy-in (ou la mise) typique que vous jouez le plus souvent, dans la même devise que la bankroll ci-dessus.</div>
+        </div>
+        <div class="ror-field full">
+          <label for="ror-sessions">Vos derniers résultats de session
+            <span class="ror-example" title="Un résultat = ce que vous repartez avec, moins ce que vous avez misé. Ex. buy-in 20€, vous repartez avec 35€ → résultat +15.">?</span>
+          </label>
+          <textarea id="ror-sessions" placeholder="ex. 15, -20, 40, -20, 10, -20, 60, -15, 25, -20"></textarea>
+          <div class="hint">Un résultat par session (cashout moins buy-in, peut être négatif), séparés par des virgules ou un retour à la ligne — utilisez un point pour les décimales (15.5, pas 15,5). Au moins 5 sessions, idéalement 15 à 30 pour une estimation fiable — c'est exactement l'historique que Pokelo utilise automatiquement une fois vos sessions loguées.</div>
+          <div class="ror-computed" id="ror-computed" hidden></div>
+          <div class="ror-count-warning" id="ror-count-warning" hidden></div>
+        </div>
+      </div>
+
+      <div class="ror-result" id="ror-result" hidden>
+        <div class="ror-gauge">
+          <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="18" cy="18" r="15" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="5"/>
+            <circle id="ror-gauge-arc" cx="18" cy="18" r="15" fill="none" stroke="var(--critical)" stroke-width="5" stroke-dasharray="0 94" stroke-linecap="round" transform="rotate(-90 18 18)" style="transition: stroke-dasharray .4s ease, stroke .4s ease;"/>
+          </svg>
+        </div>
+        <div class="ror-result-text">
+          <div class="ror-val" id="ror-val">—</div>
+          <div class="ror-label" id="ror-label">Renseignez les 4 champs ci-dessus pour voir votre estimation.</div>
+        </div>
+      </div>
+
+      <p class="ror-note">Le profit moyen et l'écart-type sont calculés automatiquement à partir des résultats que vous saisissez — vous n'avez rien à calculer vous-même. Estimation simplifiée basée sur une approximation statistique classique (formule de la ruine du joueur) — à titre indicatif, pas une garantie. Elle suppose des résultats de session indépendants et de distribution stable dans le temps, ce qui n'est qu'une approximation du poker réel. C'est exactement le même calcul qu'utilise le module « Risque de ruine » du dashboard Pokelo, appliqué automatiquement à votre historique de sessions.</p>
+    </div>
+  </section>
+
+  <section id="ror-explain">
+    <div class="article-wrap" style="max-width:720px;">
+      <h2 style="font-family:'Bebas Neue',sans-serif;font-size:1.7rem;letter-spacing:.02em;color:var(--text-wall);margin-bottom:1rem;">Qu'est-ce que le risque de ruine ?</h2>
+      <p style="color:var(--grey);line-height:1.8;margin-bottom:1.2rem;">Le risque de ruine est la probabilité statistique que votre bankroll atteigne zéro avant de croître indéfiniment, compte tenu de votre winrate moyen, de la volatilité de vos résultats et du nombre de buy-ins que représente votre bankroll actuelle. Un joueur gagnant sur le long terme peut malgré tout avoir un risque de ruine élevé s'il joue trop gros par rapport à son roll : ce n'est pas une question de niveau de jeu, c'est une question de dimensionnement.</p>
+      <h2 style="font-family:'Bebas Neue',sans-serif;font-size:1.7rem;letter-spacing:.02em;color:var(--text-wall);margin:2rem 0 1rem;">Comment lire le résultat</h2>
+      <ul style="color:var(--grey);line-height:1.8;margin:0 0 1.2rem 1.3rem;">
+        <li><strong style="color:var(--text);">En dessous de 5%</strong> : votre bankroll est correctement dimensionnée pour vos résultats actuels.</li>
+        <li><strong style="color:var(--text);">Entre 5% et 25%</strong> : zone de vigilance — envisagez de descendre de limite ou de renforcer votre bankroll.</li>
+        <li><strong style="color:var(--text);">Au-dessus de 25%</strong> : risque élevé de tomber à zéro si rien ne change dans votre façon de jouer.</li>
+      </ul>
+      <p style="color:var(--grey);line-height:1.8;">Ce calculateur demande une saisie manuelle de vos derniers résultats de session. Pour un suivi automatique — recalculé à chaque nouvelle session que vous loguez, sans jamais ressaisir un seul chiffre — c'est exactement ce que fait le module Risque de ruine du dashboard Pokelo.</p>
+    </div>
+  </section>
+
+  <section id="cta">
+    <div class="hero-block">
+      <h2 class="section-title" style="font-size:clamp(1.8rem,4vw,2.6rem)">Suivez ce calcul automatiquement</h2>
+      <p class="section-sub">Loguez vos sessions et Pokelo recalcule votre risque de ruine à chaque fois, sans ressaisir aucun chiffre. Gratuit pour commencer.</p>
+      <div style="margin-top:2rem">
+        <a href="/#/account/signup" class="btn-primary">Créer un compte gratuit</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <svg class="logo-mark" viewBox="0 0 48 48" width="28" height="28" xmlns="http://www.w3.org/2000/svg">
+        <rect class="lb1" x="4" y="32" width="7" height="10" rx="2"/><rect class="lb2" x="15" y="25" width="7" height="17" rx="2"/><rect class="lb3" x="26" y="18" width="7" height="24" rx="2"/>
+        <path class="lpip" d="M29.5 4C23 10 20 14 20 17.5C20 20 22.2 22 25 22C26.8 22 28.4 21.2 29.5 19.8C30.6 21.2 32.2 22 34 22C36.8 22 39 20 39 17.5C39 14 36 10 29.5 4Z"/>
+      </svg>
+      <span>Pokelo</span>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Pokelo. Tous droits réservés.</span>
+    <span>Le poker responsable commence par une bonne gestion de bankroll.</span>
+  </div>
+</footer>
+
+<script>
+  const MIN_SESSIONS = 5;
+
+  function meanStdDev(values) {
+    if (!values.length) return { mean: 0, stddev: 0 };
+    const mean = values.reduce((a, b) => a + b, 0) / values.length;
+    const variance = values.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / values.length;
+    return { mean, stddev: Math.sqrt(variance) };
+  }
+
+  function computeRiskOfRuin(balance, avgBuyIn, mean, stddev) {
+    const units = Math.max(1, balance / avgBuyIn);
+    let ror;
+    if (mean <= 0 || stddev === 0) ror = 100;
+    else {
+      const A = Math.max(-0.99, Math.min(0.99, mean / stddev));
+      ror = Math.pow((1 - A) / (1 + A), units) * 100;
+    }
+    return Math.max(0, Math.min(100, ror));
+  }
+
+  function parseSessionResults(raw) {
+    // La virgule sert de séparateur entre résultats, donc elle ne peut pas
+    // aussi servir de séparateur décimal ici (ambiguïté) — d'où la consigne
+    // d'utiliser un point pour les décimales, affichée dans l'indice du champ.
+    return String(raw || '')
+      .split(/[,\n;]+/)
+      .map(s => s.trim())
+      .filter(s => s !== '')
+      .map(s => parseFloat(s))
+      .filter(n => !isNaN(n));
+  }
+
+  const balanceEl = document.getElementById('ror-balance');
+  const buyinEl = document.getElementById('ror-buyin');
+  const sessionsEl = document.getElementById('ror-sessions');
+  const resultEl = document.getElementById('ror-result');
+  const valEl = document.getElementById('ror-val');
+  const labelEl = document.getElementById('ror-label');
+  const arcEl = document.getElementById('ror-gauge-arc');
+  const computedEl = document.getElementById('ror-computed');
+  const countWarningEl = document.getElementById('ror-count-warning');
+
+  function updateRor() {
+    const balance = parseFloat(balanceEl.value);
+    const buyin = parseFloat(buyinEl.value);
+    const values = parseSessionResults(sessionsEl.value);
+
+    if (!values.length) {
+      computedEl.hidden = true;
+      countWarningEl.hidden = true;
+      resultEl.hidden = true;
+      return;
+    }
+
+    const { mean, stddev } = meanStdDev(values);
+    computedEl.hidden = false;
+    computedEl.innerHTML = `<span><strong>${values.length}</strong> session(s) saisie(s)</span><span>Profit moyen calculé : <strong>${mean >= 0 ? '+' : ''}${mean.toFixed(2)}</strong></span><span>Écart-type calculé : <strong>${stddev.toFixed(2)}</strong></span>`;
+
+    if (values.length < MIN_SESSIONS) {
+      countWarningEl.hidden = false;
+      countWarningEl.textContent = `Ajoutez au moins ${MIN_SESSIONS - values.length} résultat(s) de plus pour une estimation fiable (${MIN_SESSIONS} minimum).`;
+      resultEl.hidden = true;
+      return;
+    }
+    countWarningEl.hidden = true;
+
+    if (!(balance > 0) || !(buyin > 0)) {
+      resultEl.hidden = true;
+      return;
+    }
+
+    const ror = computeRiskOfRuin(balance, buyin, mean, stddev);
+    const tone = ror < 5 ? 'pos' : ror < 25 ? 'mid' : 'neg';
+    const color = tone === 'pos' ? 'var(--green)' : tone === 'mid' ? 'var(--amber)' : 'var(--critical)';
+    resultEl.hidden = false;
+    valEl.textContent = ror.toFixed(1) + '%';
+    valEl.className = 'ror-val ' + tone;
+    labelEl.textContent = tone === 'pos'
+      ? 'Bankroll correctement dimensionnée pour ces résultats.'
+      : tone === 'mid'
+      ? 'Zone de vigilance : envisagez de descendre de limite.'
+      : 'Risque élevé — votre bankroll est sous-dimensionnée pour ces résultats.';
+    arcEl.style.stroke = color;
+    arcEl.setAttribute('stroke-dasharray', (ror * 0.94).toFixed(1) + ' 94');
+  }
+
+  [balanceEl, buyinEl, sessionsEl].forEach(f => f.addEventListener('input', updateRor));
+</script>
+</body>
+</html>
