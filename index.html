@@ -416,6 +416,22 @@
   #final-cta .section-sub { color: #B9CFC0; }
   .cta-inner { max-width: 680px; margin: 0 auto; }
 
+  /* ── RISK OF RUIN PROMO ── */
+  #risk-promo { padding-top: 40px; padding-bottom: 40px; }
+  .risk-promo-card { max-width: 1140px; margin: 0 auto; display: flex; align-items: center; gap: 2.5rem; padding: 2.6rem 3rem; border-radius: var(--radius); background: linear-gradient(135deg, #260707 0%, #3d0e0e 100%); border: 1px solid rgba(230,103,103,0.3); text-align: left; }
+  .risk-promo-gauge { flex-shrink: 0; width: 96px; height: 96px; }
+  .risk-promo-gauge svg { width: 100%; height: 100%; }
+  .risk-promo-text { flex: 1; }
+  .risk-promo-tag { display: inline-block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #ff8f8f; margin-bottom: .5rem; }
+  .risk-promo-text h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(1.6rem, 3vw, 2.2rem); letter-spacing: 0.02em; color: #F1FFF5; margin-bottom: .6rem; line-height: 1.1; }
+  .risk-promo-text p { color: #E8C4C4; font-size: .92rem; line-height: 1.6; max-width: 560px; margin-bottom: 1.3rem; }
+  .risk-promo-cta { display: inline-flex; align-items: center; gap: 8px; background: var(--critical); color: #1a0404; border: 1px solid var(--critical); border-radius: 6px; padding: 0.75rem 1.6rem; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; text-decoration: none; transition: transform .15s, background .2s; }
+  .risk-promo-cta:hover { background: #f08787; transform: translateY(-2px); }
+  @media (max-width: 780px) {
+    .risk-promo-card { flex-direction: column; text-align: center; padding: 2rem 1.6rem; }
+    .risk-promo-text p { max-width: none; }
+  }
+
   /* ── FOOTER ── */
   footer.site-footer { padding: 2.5rem 6vw; border-top: 1px solid var(--border); background: var(--black); margin-top: auto; order: 999; }
   .footer-top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; max-width: 1140px; margin: 0 auto 2rem; }
@@ -912,6 +928,7 @@
     <li><a href="#pricing" data-link data-i18n="nav_pricing">Tarifs</a></li>
     <li><a href="/blog" data-i18n="nav_blog">Blog</a></li>
     <li><a href="/calendrier" data-i18n="nav_calendar">Calendrier</a></li>
+    <li><a href="/calculateur-risque-de-ruine">Calculateur</a></li>
     <li class="nav-utils">
       <button class="nav-icon-btn nav-theme-toggle" onclick="toggleNavTheme()" aria-label="Changer de thème" title="Thème"></button>
       <button class="nav-icon-btn nav-lang-toggle" onclick="toggleNavLang()" aria-label="Changer de langue" title="Langue">EN</button>
@@ -932,6 +949,7 @@
   <a href="#pricing" data-link onclick="closeMenu()" data-i18n="nav_pricing">Tarifs</a>
   <a href="/blog" onclick="closeMenu()" data-i18n="nav_blog">Blog</a>
   <a href="/calendrier" onclick="closeMenu()" data-i18n="nav_calendar">Calendrier</a>
+  <a href="/calculateur-risque-de-ruine" onclick="closeMenu()">Calculateur</a>
   <a href="#/account" data-link class="nav-cta" onclick="closeMenu()" id="landing-nav-cta-mobile">Se connecter</a>
 </div>
 
@@ -1065,6 +1083,24 @@
       <p class="module-marquee-label" data-i18n="module_marquee_label">23 modules d'analyse, à composer vous-même</p>
       <div class="stat-marquee" aria-hidden="true">
         <div class="stat-marquee-track" id="module-marquee-track"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RISK OF RUIN PROMO -->
+  <section id="risk-promo">
+    <div class="risk-promo-card fade-up">
+      <div class="risk-promo-gauge">
+        <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="18" cy="18" r="15" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="5"/>
+          <circle cx="18" cy="18" r="15" fill="none" stroke="#ff8f8f" stroke-width="5" stroke-dasharray="35 94" stroke-linecap="round" transform="rotate(-90 18 18)"/>
+        </svg>
+      </div>
+      <div class="risk-promo-text">
+        <span class="risk-promo-tag" data-i18n="risk_promo_tag">Outil gratuit</span>
+        <h2 data-i18n="risk_promo_title">Votre bankroll est-elle en danger ?</h2>
+        <p data-i18n="risk_promo_desc">Calculez votre risque de ruine en 30 secondes, sans créer de compte — c'est exactement le calcul que Pokelo fait automatiquement pour vous, à chaque session, une fois connecté.</p>
+        <a href="/calculateur-risque-de-ruine" class="risk-promo-cta" data-i18n="risk_promo_cta">Calculer mon risque de ruine</a>
       </div>
     </div>
   </section>
@@ -2268,6 +2304,7 @@
   </div>
 </div>
 
+
 <!-- ══════════════ MODAL : IMPORT CSV (mapping générique) ══════════════ -->
 <div class="modal-overlay" id="csv-import-modal-overlay" hidden onclick="if(event.target===this) closeCsvImportModal()">
   <div class="modal" style="max-width:720px">
@@ -2803,6 +2840,9 @@ const I18N = {
     feat_composed_title:'Composé par vous', feat_composed_desc:"Ajoutez, retirez et réorganisez les modules par glisser-déposer — le dashboard s'adapte à votre façon de jouer, pas l'inverse.",
     feat_free_title:'Gratuit pour commencer', feat_free_desc:'Aucune carte bancaire requise. Créez un compte et suivez votre bankroll dès aujourd\'hui, sans engagement.',
     module_marquee_label:"23 modules d'analyse, à composer vous-même",
+    risk_promo_tag:'Outil gratuit', risk_promo_title:'Votre bankroll est-elle en danger ?',
+    risk_promo_desc:"Calculez votre risque de ruine en 30 secondes, sans créer de compte — c'est exactement le calcul que Pokelo fait automatiquement pour vous, à chaque session, une fois connecté.",
+    risk_promo_cta:'Calculer mon risque de ruine',
     how_tag:'Fonctionnement', how_title:'Quatre étapes,<br>une meilleure vision',
     step1_title:'Créez vos bankrolls', step1_desc:'Nommez-les, choisissez leur devise, et fixez un solde de départ.',
     step2_title:'Enregistrez vos sessions', step2_desc:'Tournoi, cash game ou expresso, live ou online — en quelques secondes.',
@@ -3111,6 +3151,9 @@ const I18N = {
     feat_composed_title:'Composed by you', feat_composed_desc:"Add, remove and reorder modules by drag-and-drop — the dashboard adapts to how you play, not the other way around.",
     feat_free_title:'Free to start', feat_free_desc:'No credit card required. Create an account and start tracking your bankroll today, no commitment.',
     module_marquee_label:'23 analytics modules, composed by you',
+    risk_promo_tag:'Free tool', risk_promo_title:'Is your bankroll at risk?',
+    risk_promo_desc:"Calculate your risk of ruin in 30 seconds, no account needed — it's the exact same calculation Pokelo runs automatically for you, on every session, once you're logged in.",
+    risk_promo_cta:'Calculate my risk of ruin',
     how_tag:'How it works', how_title:'Four steps,<br>a clearer view',
     step1_title:'Create your bankrolls', step1_desc:'Name them, pick a currency, and set a starting balance.',
     step2_title:'Log your sessions', step2_desc:'Tournament, cash game or Spin & Go, live or online — in seconds.',

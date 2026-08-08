@@ -67,6 +67,7 @@ function navBlock(activePath){
     <li><a href="/#pricing">Tarifs</a></li>
     <li><a href="/blog"${activePath==='/blog'?' class="active"':''}>Blog</a></li>
     <li><a href="/calendrier"${activePath==='/calendrier'?' class="active"':''}>Calendrier</a></li>
+    <li><a href="/calculateur-risque-de-ruine"${activePath==='/calculateur-risque-de-ruine'?' class="active"':''}>Calculateur</a></li>
     <li><a href="/#/account" class="nav-cta">Se connecter</a></li>
   </ul>
   <button class="nav-burger" id="burger" aria-label="Menu" onclick="document.getElementById('burger').classList.toggle('open');document.getElementById('mobileMenu').classList.toggle('open');">
@@ -79,6 +80,7 @@ function navBlock(activePath){
   <a href="/#pricing">Tarifs</a>
   <a href="/blog">Blog</a>
   <a href="/calendrier">Calendrier</a>
+  <a href="/calculateur-risque-de-ruine">Calculateur</a>
   <a href="/#/account" class="nav-cta">Se connecter</a>
 </div>`;
 }
