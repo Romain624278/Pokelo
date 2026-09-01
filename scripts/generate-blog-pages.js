@@ -64,7 +64,7 @@ function navBlock(activePath){
   </a>
   <ul class="nav-links">
     <li><a href="/fonctionnalites"${activePath==='/fonctionnalites'?' class="active"':''}>Fonctionnalités</a></li>
-    <li><a href="/#pricing">Tarifs</a></li>
+    <li><a href="/tarifs">Tarifs</a></li>
     <li><a href="/blog"${activePath==='/blog'?' class="active"':''}>Blog</a></li>
     <li><a href="/calendrier"${activePath==='/calendrier'?' class="active"':''}>Calendrier</a></li>
     <li><a href="/calculateur-risque-de-ruine"${activePath==='/calculateur-risque-de-ruine'?' class="active"':''}>Calculateur</a></li>
@@ -77,7 +77,7 @@ function navBlock(activePath){
 
 <div class="mobile-menu" id="mobileMenu">
   <a href="/fonctionnalites">Fonctionnalités</a>
-  <a href="/#pricing">Tarifs</a>
+  <a href="/tarifs">Tarifs</a>
   <a href="/blog">Blog</a>
   <a href="/calendrier">Calendrier</a>
   <a href="/calculateur-risque-de-ruine">Calculateur</a>

@@ -994,7 +994,7 @@
   </a>
   <ul class="nav-links">
     <li><a href="/fonctionnalites" data-i18n="nav_features">Fonctionnalités</a></li>
-    <li><a href="#pricing" data-link data-i18n="nav_pricing">Tarifs</a></li>
+    <li><a href="/tarifs" data-i18n="nav_pricing">Tarifs</a></li>
     <li><a href="/blog" data-i18n="nav_blog">Blog</a></li>
     <li><a href="/calendrier" data-i18n="nav_calendar">Calendrier</a></li>
     <li><a href="/calculateur-risque-de-ruine">Calculateur</a></li>
@@ -1015,7 +1015,7 @@
     <button class="nav-icon-btn nav-lang-toggle" onclick="toggleNavLang()" aria-label="Changer de langue" title="Langue">EN</button>
   </div>
   <a href="/fonctionnalites" onclick="closeMenu()" data-i18n="nav_features">Fonctionnalités</a>
-  <a href="#pricing" data-link onclick="closeMenu()" data-i18n="nav_pricing">Tarifs</a>
+  <a href="/tarifs" onclick="closeMenu()" data-i18n="nav_pricing">Tarifs</a>
   <a href="/blog" onclick="closeMenu()" data-i18n="nav_blog">Blog</a>
   <a href="/calendrier" onclick="closeMenu()" data-i18n="nav_calendar">Calendrier</a>
   <a href="/calculateur-risque-de-ruine" onclick="closeMenu()">Calculateur</a>
@@ -1045,7 +1045,7 @@
       </p>
       <div class="hero-actions">
         <a href="#/account/signup" data-link class="btn-primary" data-i18n="hero_cta_primary">Créer un compte gratuit</a>
-        <a href="#how" data-link class="btn-secondary" data-i18n="hero_cta_secondary">Comment ça marche</a>
+        <a href="#comment-ca-marche" data-link class="btn-secondary" data-i18n="hero_cta_secondary">Comment ça marche</a>
       </div>
     </div>
 
@@ -1175,7 +1175,7 @@
   </section>
 
   <!-- HOW IT WORKS -->
-  <section id="how">
+  <section id="comment-ca-marche">
     <div class="fade-up">
       <div class="section-tag" style="color: var(--blue);" data-i18n="how_tag">Fonctionnement</div>
       <h2 class="section-title" data-i18n="how_title">Quatre étapes,<br>une meilleure vision</h2>
@@ -1437,7 +1437,7 @@
       <div class="footer-col">
         <h5 data-i18n="footer_product">Produit</h5>
         <a href="/fonctionnalites" data-i18n="nav_features">Fonctionnalités</a>
-        <a href="#pricing" data-link data-i18n="nav_pricing">Tarifs</a>
+        <a href="/tarifs" data-i18n="nav_pricing">Tarifs</a>
         <a href="#/account" data-link id="landing-nav-cta-footer">Se connecter</a>
       </div>
       <div class="footer-col">
@@ -1445,7 +1445,7 @@
         <a href="/blog" data-i18n="nav_blog">Blog</a>
         <a href="/calendrier" data-i18n="nav_calendar">Calendrier poker 2026</a>
         <a href="/calculateur-risque-de-ruine">Calculateur de risque de ruine</a>
-        <a href="#how" data-link data-i18n="hero_cta_secondary">Comment ça marche</a>
+        <a href="#comment-ca-marche" data-link data-i18n="hero_cta_secondary">Comment ça marche</a>
         <a href="/a-propos">À propos</a>
         <a onclick="openSupportModal();return false;" data-i18n="footer_support">Contact / Support</a>
       </div>
@@ -1927,7 +1927,7 @@
                     </div>
                     <p class="form-hint" id="settings-account-period-end" hidden></p>
                     <div class="account-feedback" id="account-plan-feedback" hidden></div>
-                    <a href="#pricing" data-link class="settings-plan-link" data-i18n="settings_account_view_plans">Voir les plans disponibles</a>
+                    <a href="/tarifs" class="settings-plan-link" data-i18n="settings_account_view_plans">Voir les plans disponibles</a>
                     <p class="form-hint" id="settings-account-role-label" style="margin-top:.5rem;"></p>
                   </div>
                 </div>
@@ -2437,6 +2437,7 @@
 
 
 
+
 <!-- ══════════════ MODAL : IMPORT CSV (mapping générique) ══════════════ -->
 <div class="modal-overlay" id="csv-import-modal-overlay" hidden onclick="if(event.target===this) closeCsvImportModal()">
   <div class="modal" style="max-width:720px">
@@ -2651,7 +2652,7 @@
     </div>
     <div class="modal-foot">
       <button class="btn-ghost" onclick="closeProFeatureModal()" data-i18n="pro_modal_close">Fermer</button>
-      <a href="#pricing" data-link class="btn-primary btn-sm" onclick="closeProFeatureModal()" data-i18n="pro_modal_cta">Découvrir Pokelo Pro</a>
+      <a href="/tarifs" class="btn-primary btn-sm" onclick="closeProFeatureModal()" data-i18n="pro_modal_cta">Découvrir Pokelo Pro</a>
     </div>
   </div>
 </div>
@@ -6074,6 +6075,19 @@ function scheduleCloudSync(){
   clearTimeout(syncDebounceTimer);
   syncDebounceTimer = setTimeout(syncPushToCloud, 1200);
 }
+// Filet de sécurité si l'utilisateur quitte/rafraîchit la page pendant que le
+// push débounced est encore en attente : on tente une synchronisation
+// immédiate. Le navigateur ne garantit pas qu'un appel réseau lancé ici
+// aboutisse — la vraie protection contre la perte de données est la logique
+// de fusion dans completeSignInRun (pousser le local s'il est en avance sur
+// le cloud au prochain chargement), ceci ne fait que réduire la fenêtre de
+// risque en pratique.
+window.addEventListener('pagehide', () => {
+  if (syncDebounceTimer) {
+    clearTimeout(syncDebounceTimer);
+    syncPushToCloud();
+  }
+});
 function showAppLoadingSkeleton(){
   const el = document.getElementById('app-loading-overlay');
   if (el) el.hidden = false;
@@ -6350,10 +6364,19 @@ async function completeSignInRun(session){
       currentUserRole = cloud.profile.role || 'user';
       mfaSetupPrompted = !!cloud.profile.mfa_setup_prompted;
     }
-    const hasCloudData = cloud.bankrolls.length > 0;
-    const hasLocalRealData = state.bankrolls.length > 0 && !state.isDemo;
-    console.warn('completeSignIn: branch decision', { hasCloudData, hasLocalRealData, cloudBankrolls: cloud.bankrolls.length, localBankrolls: state.bankrolls.length, isDemo: state.isDemo, plan: currentPlan });
-    if (!hasCloudData && hasLocalRealData) {
+    const hasCloudData = cloud.bankrolls.length > 0 || cloud.sessions.length > 0;
+    const hasLocalRealData = (state.bankrolls.length > 0 || state.sessions.length > 0) && !state.isDemo;
+    // Le local peut avoir plus de bankrolls/sessions que le cloud si une
+    // synchronisation précédente n'a pas eu le temps de se terminer avant un
+    // refresh (le push est débounced de plusieurs centaines de ms après
+    // chaque sauvegarde — ex. onboarding : créer une session puis rafraîchir
+    // immédiatement pour vérifier). Dans ce cas, écraser le local avec le
+    // snapshot cloud (incomplet) faisait disparaître silencieusement la
+    // donnée qui n'avait pas fini d'être poussée. On pousse le local à la
+    // place dès qu'il est visiblement en avance sur le cloud.
+    const localAheadOfCloud = hasLocalRealData && (state.bankrolls.length > cloud.bankrolls.length || state.sessions.length > cloud.sessions.length);
+    console.warn('completeSignIn: branch decision', { hasCloudData, hasLocalRealData, localAheadOfCloud, cloudBankrolls: cloud.bankrolls.length, cloudSessions: cloud.sessions.length, localBankrolls: state.bankrolls.length, localSessions: state.sessions.length, isDemo: state.isDemo, plan: currentPlan });
+    if ((!hasCloudData && hasLocalRealData) || localAheadOfCloud) {
       await syncPushToCloud();
     } else {
       state.bankrolls = cloud.bankrolls.map(mapRemoteBankroll);
