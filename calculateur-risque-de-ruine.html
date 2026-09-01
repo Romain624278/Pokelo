@@ -60,16 +60,30 @@
 <link rel="stylesheet" href="assets/site-marketing.css" />
 <style>
   .ror-tool { max-width: 720px; margin: 2.2rem auto 0; background: var(--black-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; text-align: left; }
-  .ror-form { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+  .ror-step { margin-bottom: 1.8rem; }
+  .ror-step-num { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: rgba(8,191,47,0.14); color: var(--green); font-size: .72rem; font-weight: 700; margin-right: .5rem; }
+  .ror-step-title { font-size: .95rem; font-weight: 700; color: var(--text); display: inline-flex; align-items: center; }
+  .ror-example-btn { float: right; font-size: .74rem; color: var(--green); background: none; border: 1px solid var(--border); border-radius: 100px; padding: .35rem .8rem; cursor: pointer; transition: border-color .15s; }
+  .ror-example-btn:hover { border-color: var(--green); }
+  .ror-form { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-top: .9rem; }
   .ror-field { display: flex; flex-direction: column; }
   .ror-field.full { grid-column: 1 / -1; }
-  .ror-field label { display: flex; align-items: center; gap: .4rem; font-size: .78rem; color: var(--grey); text-transform: uppercase; letter-spacing: .05em; margin-bottom: .4rem; }
-  .ror-field input, .ror-field textarea { width: 100%; background: var(--black); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: .7rem .9rem; font-size: .95rem; font-family: inherit; }
-  .ror-field textarea { resize: vertical; min-height: 72px; line-height: 1.5; }
-  .ror-field input:focus, .ror-field textarea:focus { outline: none; border-color: var(--green); }
-  .ror-field .hint { font-size: .72rem; color: var(--grey); margin-top: .35rem; line-height: 1.55; }
-  .ror-example { display: inline-flex; align-items: center; justify-content: center; width: 15px; height: 15px; border-radius: 50%; background: rgba(255,255,255,0.08); color: var(--grey); font-size: .64rem; font-weight: 700; cursor: default; text-transform: none; letter-spacing: 0; }
-  .ror-computed { margin-top: 1rem; padding: .9rem 1.1rem; background: rgba(8,191,47,0.05); border: 1px solid var(--border); border-radius: 8px; font-size: .84rem; color: var(--grey); display: flex; flex-wrap: wrap; gap: .4rem 1.4rem; }
+  .ror-field label { display: flex; align-items: center; gap: .4rem; font-size: .78rem; color: var(--grey); margin-bottom: .4rem; }
+  .ror-field input { width: 100%; background: var(--black); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: .7rem .9rem; font-size: .95rem; font-family: inherit; }
+  .ror-field input:focus { outline: none; border-color: var(--green); }
+  .ror-units-chip { margin-top: .6rem; font-size: .78rem; color: var(--green); background: rgba(8,191,47,0.08); border-radius: 100px; padding: .35rem .8rem; display: inline-block; width: fit-content; }
+  .ror-chip-input-wrap { display: flex; align-items: center; gap: .6rem; }
+  .ror-chip-input-wrap input { flex: 1; }
+  .ror-chip-add { flex-shrink: 0; width: 42px; height: 42px; border-radius: 8px; background: rgba(8,191,47,0.12); color: var(--green); border: 1px solid var(--border); cursor: pointer; font-size: 1.3rem; line-height: 1; display: flex; align-items: center; justify-content: center; transition: background .15s; }
+  .ror-chip-add:hover { background: rgba(8,191,47,0.2); }
+  .ror-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .9rem; min-height: 0; }
+  .ror-chip { display: inline-flex; align-items: center; gap: .4rem; font-size: .85rem; font-weight: 600; padding: .35rem .5rem .35rem .8rem; border-radius: 100px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); }
+  .ror-chip.pos { color: var(--green); border-color: rgba(8,191,47,0.3); }
+  .ror-chip.neg { color: var(--critical); border-color: rgba(230,103,103,0.3); }
+  .ror-chip button { background: none; border: none; color: inherit; opacity: .55; cursor: pointer; font-size: .95rem; line-height: 1; padding: 0 .1rem; }
+  .ror-chip button:hover { opacity: 1; }
+  .ror-field .hint { font-size: .74rem; color: var(--grey); margin-top: .5rem; line-height: 1.5; }
+  .ror-computed { margin-top: .9rem; padding: .7rem 1rem; background: rgba(8,191,47,0.05); border: 1px solid var(--border); border-radius: 8px; font-size: .82rem; color: var(--grey); display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; }
   .ror-computed strong { color: var(--text); }
   .ror-count-warning { font-size: .78rem; color: var(--amber); margin-top: .6rem; }
   .ror-result { margin-top: 1.8rem; padding-top: 1.8rem; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 1.6rem; }
@@ -85,6 +99,7 @@
   @media (max-width: 640px) {
     .ror-form { grid-template-columns: 1fr; }
     .ror-result { flex-direction: column; text-align: center; }
+    .ror-example-btn { float: none; display: inline-block; margin-top: .6rem; }
   }
 </style>
 </head>
@@ -130,26 +145,32 @@
     </div>
 
     <div class="ror-tool">
-      <div class="ror-form">
-        <div class="ror-field">
-          <label for="ror-balance">Bankroll actuelle</label>
-          <input type="number" id="ror-balance" min="0" step="1" placeholder="500" />
-          <div class="hint">Le solde total de la bankroll à protéger, dans la devise de votre choix (le résultat est un pourcentage, pas un montant).</div>
+      <button type="button" class="ror-example-btn" onclick="loadRorExample()">Voir un exemple</button>
+      <div class="ror-step">
+        <span class="ror-step-title"><span class="ror-step-num">1</span>Votre bankroll</span>
+        <div class="ror-form">
+          <div class="ror-field">
+            <label for="ror-balance">Bankroll actuelle</label>
+            <input type="number" id="ror-balance" min="0" step="1" placeholder="500" />
+          </div>
+          <div class="ror-field">
+            <label for="ror-buyin">Buy-in habituel</label>
+            <input type="number" id="ror-buyin" min="0.01" step="0.01" placeholder="20" />
+          </div>
         </div>
-        <div class="ror-field">
-          <label for="ror-buyin">Buy-in moyen</label>
-          <input type="number" id="ror-buyin" min="0.01" step="0.01" placeholder="20" />
-          <div class="hint">Le buy-in (ou la mise) typique que vous jouez le plus souvent, dans la même devise que la bankroll ci-dessus.</div>
+        <span class="ror-units-chip" id="ror-units-chip" hidden></span>
+      </div>
+
+      <div class="ror-step">
+        <span class="ror-step-title"><span class="ror-step-num">2</span>Vos derniers résultats de session</span>
+        <p class="hint" style="margin:.5rem 0 .8rem;">Ajoutez-les un par un : ce que vous repartez avec, moins ce que vous avez misé (ex. buy-in 20, vous repartez avec 35 → tapez 15). Un chiffre négatif pour une perte. Au moins 5 résultats, idéalement 15 à 30.</p>
+        <div class="ror-chip-input-wrap">
+          <input type="number" id="ror-chip-input" step="0.01" placeholder="ex. 15 ou -20" />
+          <button type="button" class="ror-chip-add" onclick="addRorChip()" aria-label="Ajouter ce résultat">+</button>
         </div>
-        <div class="ror-field full">
-          <label for="ror-sessions">Vos derniers résultats de session
-            <span class="ror-example" title="Un résultat = ce que vous repartez avec, moins ce que vous avez misé. Ex. buy-in 20€, vous repartez avec 35€ → résultat +15.">?</span>
-          </label>
-          <textarea id="ror-sessions" placeholder="ex. 15, -20, 40, -20, 10, -20, 60, -15, 25, -20"></textarea>
-          <div class="hint">Un résultat par session (cashout moins buy-in, peut être négatif), séparés par des virgules ou un retour à la ligne — utilisez un point pour les décimales (15.5, pas 15,5). Au moins 5 sessions, idéalement 15 à 30 pour une estimation fiable — c'est exactement l'historique que Pokelo utilise automatiquement une fois vos sessions loguées.</div>
-          <div class="ror-computed" id="ror-computed" hidden></div>
-          <div class="ror-count-warning" id="ror-count-warning" hidden></div>
-        </div>
+        <div class="ror-chips" id="ror-chips"></div>
+        <div class="ror-computed" id="ror-computed" hidden></div>
+        <div class="ror-count-warning" id="ror-count-warning" hidden></div>
       </div>
 
       <div class="ror-result" id="ror-result" hidden>
@@ -161,11 +182,11 @@
         </div>
         <div class="ror-result-text">
           <div class="ror-val" id="ror-val">—</div>
-          <div class="ror-label" id="ror-label">Renseignez les 4 champs ci-dessus pour voir votre estimation.</div>
+          <div class="ror-label" id="ror-label">Renseignez la bankroll et au moins 5 résultats pour voir votre estimation.</div>
         </div>
       </div>
 
-      <p class="ror-note">Le profit moyen et l'écart-type sont calculés automatiquement à partir des résultats que vous saisissez — vous n'avez rien à calculer vous-même. Estimation simplifiée basée sur une approximation statistique classique (formule de la ruine du joueur) — à titre indicatif, pas une garantie. Elle suppose des résultats de session indépendants et de distribution stable dans le temps, ce qui n'est qu'une approximation du poker réel. C'est exactement le même calcul qu'utilise le module « Risque de ruine » du dashboard Pokelo, appliqué automatiquement à votre historique de sessions.</p>
+      <p class="ror-note">Le profit moyen et l'écart-type sont calculés automatiquement à partir des résultats ajoutés — vous n'avez rien à calculer vous-même. Estimation simplifiée basée sur une approximation statistique classique (formule de la ruine du joueur) — à titre indicatif, pas une garantie. C'est exactement le même calcul qu'utilise le module « Risque de ruine » du dashboard Pokelo, appliqué automatiquement à votre historique de sessions.</p>
     </div>
   </section>
 
@@ -231,21 +252,13 @@
     return Math.max(0, Math.min(100, ror));
   }
 
-  function parseSessionResults(raw) {
-    // La virgule sert de séparateur entre résultats, donc elle ne peut pas
-    // aussi servir de séparateur décimal ici (ambiguïté) — d'où la consigne
-    // d'utiliser un point pour les décimales, affichée dans l'indice du champ.
-    return String(raw || '')
-      .split(/[,\n;]+/)
-      .map(s => s.trim())
-      .filter(s => s !== '')
-      .map(s => parseFloat(s))
-      .filter(n => !isNaN(n));
-  }
+  let rorResults = [];
 
   const balanceEl = document.getElementById('ror-balance');
   const buyinEl = document.getElementById('ror-buyin');
-  const sessionsEl = document.getElementById('ror-sessions');
+  const chipInputEl = document.getElementById('ror-chip-input');
+  const chipsEl = document.getElementById('ror-chips');
+  const unitsChipEl = document.getElementById('ror-units-chip');
   const resultEl = document.getElementById('ror-result');
   const valEl = document.getElementById('ror-val');
   const labelEl = document.getElementById('ror-label');
@@ -253,11 +266,47 @@
   const computedEl = document.getElementById('ror-computed');
   const countWarningEl = document.getElementById('ror-count-warning');
 
+  function addRorChip() {
+    const v = parseFloat(chipInputEl.value);
+    if (isNaN(v)) { chipInputEl.focus(); return; }
+    rorResults.push(v);
+    chipInputEl.value = '';
+    chipInputEl.focus();
+    renderRorChips();
+    updateRor();
+  }
+  function removeRorChip(index) {
+    rorResults.splice(index, 1);
+    renderRorChips();
+    updateRor();
+  }
+  function renderRorChips() {
+    chipsEl.innerHTML = rorResults.map((v, i) => `<span class="ror-chip ${v >= 0 ? 'pos' : 'neg'}">${v >= 0 ? '+' : ''}${v}<button type="button" onclick="removeRorChip(${i})" aria-label="Retirer">&times;</button></span>`).join('');
+  }
+  chipInputEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); addRorChip(); }
+  });
+
+  function loadRorExample() {
+    balanceEl.value = 500;
+    buyinEl.value = 20;
+    rorResults = [15, -20, 40, -20, 10, -20, 60, -15, 25, -20, 35, -20];
+    renderRorChips();
+    updateRor();
+  }
+
   function updateRor() {
     const balance = parseFloat(balanceEl.value);
     const buyin = parseFloat(buyinEl.value);
-    const values = parseSessionResults(sessionsEl.value);
 
+    if (balance > 0 && buyin > 0) {
+      unitsChipEl.hidden = false;
+      unitsChipEl.textContent = `= ${Math.round(balance / buyin)} buy-ins dans votre bankroll`;
+    } else {
+      unitsChipEl.hidden = true;
+    }
+
+    const values = rorResults;
     if (!values.length) {
       computedEl.hidden = true;
       countWarningEl.hidden = true;
@@ -267,7 +316,7 @@
 
     const { mean, stddev } = meanStdDev(values);
     computedEl.hidden = false;
-    computedEl.innerHTML = `<span><strong>${values.length}</strong> session(s) saisie(s)</span><span>Profit moyen calculé : <strong>${mean >= 0 ? '+' : ''}${mean.toFixed(2)}</strong></span><span>Écart-type calculé : <strong>${stddev.toFixed(2)}</strong></span>`;
+    computedEl.innerHTML = `<span><strong>${values.length}</strong> résultat(s)</span><span>Profit moyen : <strong>${mean >= 0 ? '+' : ''}${mean.toFixed(2)}</strong></span><span>Écart-type : <strong>${stddev.toFixed(2)}</strong></span>`;
 
     if (values.length < MIN_SESSIONS) {
       countWarningEl.hidden = false;
@@ -297,7 +346,7 @@
     arcEl.setAttribute('stroke-dasharray', (ror * 0.94).toFixed(1) + ' 94');
   }
 
-  [balanceEl, buyinEl, sessionsEl].forEach(f => f.addEventListener('input', updateRor));
+  [balanceEl, buyinEl].forEach(f => f.addEventListener('input', updateRor));
 </script>
 </body>
 </html>
