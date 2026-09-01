@@ -69,19 +69,33 @@
   .ror-field { display: flex; flex-direction: column; }
   .ror-field.full { grid-column: 1 / -1; }
   .ror-field label { display: flex; align-items: center; gap: .4rem; font-size: .78rem; color: var(--grey); margin-bottom: .4rem; }
-  .ror-field input { width: 100%; background: var(--black); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: .7rem .9rem; font-size: .95rem; font-family: inherit; }
-  .ror-field input:focus { outline: none; border-color: var(--green); }
+  .ror-field input {
+    width: 100%; background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0) 100%), var(--black);
+    color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: .7rem .9rem; font-size: .95rem;
+    font-family: inherit; box-shadow: inset 0 1px 2px rgba(0,0,0,0.15); transition: border-color .18s, box-shadow .18s;
+  }
+  .ror-field input:hover { border-color: rgba(8,191,47,0.35); }
+  .ror-field input:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 3px rgba(8,191,47,0.14), inset 0 1px 2px rgba(0,0,0,0.15); }
   .ror-units-chip { margin-top: .6rem; font-size: .78rem; color: var(--green); background: rgba(8,191,47,0.08); border-radius: 100px; padding: .35rem .8rem; display: inline-block; width: fit-content; }
-  .ror-chip-input-wrap { display: flex; align-items: center; gap: .6rem; }
-  .ror-chip-input-wrap input { flex: 1; }
-  .ror-chip-add { flex-shrink: 0; width: 42px; height: 42px; border-radius: 8px; background: rgba(8,191,47,0.12); color: var(--green); border: 1px solid var(--border); cursor: pointer; font-size: 1.3rem; line-height: 1; display: flex; align-items: center; justify-content: center; transition: background .15s; }
-  .ror-chip-add:hover { background: rgba(8,191,47,0.2); }
+
+  .ror-chip-input-wrap { display: flex; align-items: stretch; gap: .5rem; background: var(--black); border: 1px solid var(--border); border-radius: 12px; padding: .4rem; box-shadow: inset 0 1px 2px rgba(0,0,0,0.15); transition: border-color .18s, box-shadow .18s; }
+  .ror-chip-input-wrap:focus-within { border-color: var(--green); box-shadow: 0 0 0 3px rgba(8,191,47,0.14), inset 0 1px 2px rgba(0,0,0,0.15); }
+  .ror-sign-toggle { display: flex; border-radius: 8px; overflow: hidden; flex-shrink: 0; background: rgba(255,255,255,0.03); }
+  .ror-sign-toggle button { padding: 0 1rem; font-size: .82rem; font-weight: 700; background: none; border: none; color: var(--grey); cursor: pointer; transition: background .15s, color .15s; white-space: nowrap; }
+  .ror-sign-toggle button.active[data-sign="1"] { background: rgba(8,191,47,0.18); color: var(--green); }
+  .ror-sign-toggle button.active[data-sign="-1"] { background: rgba(230,103,103,0.18); color: var(--critical); }
+  .ror-chip-input-wrap input { flex: 1; min-width: 0; border: none; background: none; box-shadow: none; outline: none; font-size: 1.15rem; font-family: 'Bebas Neue', sans-serif; letter-spacing: .02em; color: var(--text); padding: 0 .3rem; }
+  .ror-chip-add { flex-shrink: 0; background: var(--green); color: #0a0a0a; border: none; border-radius: 8px; padding: 0 1.2rem; font-size: .82rem; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; cursor: pointer; transition: background .15s, transform .15s; }
+  .ror-chip-add:hover { background: var(--green-hov); transform: translateY(-1px); }
+
   .ror-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .9rem; min-height: 0; }
-  .ror-chip { display: inline-flex; align-items: center; gap: .4rem; font-size: .85rem; font-weight: 600; padding: .35rem .5rem .35rem .8rem; border-radius: 100px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); }
-  .ror-chip.pos { color: var(--green); border-color: rgba(8,191,47,0.3); }
-  .ror-chip.neg { color: var(--critical); border-color: rgba(230,103,103,0.3); }
+  .ror-chip { display: inline-flex; align-items: center; gap: .4rem; font-size: .85rem; font-weight: 600; padding: .35rem .5rem .35rem .8rem; border-radius: 100px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); transition: transform .12s; }
+  .ror-chip.pos { color: var(--green); border-color: rgba(8,191,47,0.3); background: rgba(8,191,47,0.06); }
+  .ror-chip.neg { color: var(--critical); border-color: rgba(230,103,103,0.3); background: rgba(230,103,103,0.06); }
   .ror-chip button { background: none; border: none; color: inherit; opacity: .55; cursor: pointer; font-size: .95rem; line-height: 1; padding: 0 .1rem; }
   .ror-chip button:hover { opacity: 1; }
+  @keyframes ror-chip-pop { from { transform: scale(.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .ror-chip.new { animation: ror-chip-pop .22s ease-out; }
   .ror-field .hint { font-size: .74rem; color: var(--grey); margin-top: .5rem; line-height: 1.5; }
   .ror-computed { margin-top: .9rem; padding: .7rem 1rem; background: rgba(8,191,47,0.05); border: 1px solid var(--border); border-radius: 8px; font-size: .82rem; color: var(--grey); display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; }
   .ror-computed strong { color: var(--text); }
@@ -163,10 +177,14 @@
 
       <div class="ror-step">
         <span class="ror-step-title"><span class="ror-step-num">2</span>Vos derniers résultats de session</span>
-        <p class="hint" style="margin:.5rem 0 .8rem;">Ajoutez-les un par un : ce que vous repartez avec, moins ce que vous avez misé (ex. buy-in 20, vous repartez avec 35 → tapez 15). Un chiffre négatif pour une perte. Au moins 5 résultats, idéalement 15 à 30.</p>
+        <p class="hint" style="margin:.5rem 0 .8rem;">Ajoutez-les un par un : ce que vous repartez avec, moins ce que vous avez misé (ex. buy-in 20, vous repartez avec 35 → 15 de gain). Au moins 5 résultats, idéalement 15 à 30.</p>
         <div class="ror-chip-input-wrap">
-          <input type="number" id="ror-chip-input" step="0.01" placeholder="ex. 15 ou -20" />
-          <button type="button" class="ror-chip-add" onclick="addRorChip()" aria-label="Ajouter ce résultat">+</button>
+          <div class="ror-sign-toggle">
+            <button type="button" class="active" data-sign="1" onclick="setRorSign(1)">+ Gain</button>
+            <button type="button" data-sign="-1" onclick="setRorSign(-1)">− Perte</button>
+          </div>
+          <input type="number" id="ror-chip-input" min="0" step="0.01" placeholder="Montant" />
+          <button type="button" class="ror-chip-add" onclick="addRorChip()">Ajouter</button>
         </div>
         <div class="ror-chips" id="ror-chips"></div>
         <div class="ror-computed" id="ror-computed" hidden></div>
@@ -266,10 +284,18 @@
   const computedEl = document.getElementById('ror-computed');
   const countWarningEl = document.getElementById('ror-count-warning');
 
+  let rorSign = 1;
+  let rorLastAddedIndex = -1;
+  function setRorSign(sign) {
+    rorSign = sign;
+    document.querySelectorAll('.ror-sign-toggle button').forEach(b => b.classList.toggle('active', parseInt(b.dataset.sign, 10) === sign));
+    chipInputEl.focus();
+  }
   function addRorChip() {
-    const v = parseFloat(chipInputEl.value);
-    if (isNaN(v)) { chipInputEl.focus(); return; }
-    rorResults.push(v);
+    const amount = parseFloat(chipInputEl.value);
+    if (isNaN(amount) || amount < 0) { chipInputEl.focus(); return; }
+    rorResults.push(amount * rorSign);
+    rorLastAddedIndex = rorResults.length - 1;
     chipInputEl.value = '';
     chipInputEl.focus();
     renderRorChips();
@@ -277,20 +303,22 @@
   }
   function removeRorChip(index) {
     rorResults.splice(index, 1);
+    rorLastAddedIndex = -1;
     renderRorChips();
     updateRor();
   }
   function renderRorChips() {
-    chipsEl.innerHTML = rorResults.map((v, i) => `<span class="ror-chip ${v >= 0 ? 'pos' : 'neg'}">${v >= 0 ? '+' : ''}${v}<button type="button" onclick="removeRorChip(${i})" aria-label="Retirer">&times;</button></span>`).join('');
+    chipsEl.innerHTML = rorResults.map((v, i) => `<span class="ror-chip ${v >= 0 ? 'pos' : 'neg'}${i === rorLastAddedIndex ? ' new' : ''}">${v >= 0 ? '+' : ''}${v}<button type="button" onclick="removeRorChip(${i})" aria-label="Retirer">&times;</button></span>`).join('');
   }
   chipInputEl.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); addRorChip(); }
+    if (e.key === 'Enter') { e.preventDefault(); addRorChip(); }
   });
 
   function loadRorExample() {
     balanceEl.value = 500;
     buyinEl.value = 20;
     rorResults = [15, -20, 40, -20, 10, -20, 60, -15, 25, -20, 35, -20];
+    rorLastAddedIndex = -1;
     renderRorChips();
     updateRor();
   }
