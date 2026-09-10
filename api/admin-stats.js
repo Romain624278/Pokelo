@@ -57,6 +57,7 @@ module.exports = async (req, res) => {
     });
 
     const users = profiles.slice(0, 200).map(p => ({
+      id: p.id,
       email: p.email,
       plan: p.plan || 'free',
       role: p.role || 'user',

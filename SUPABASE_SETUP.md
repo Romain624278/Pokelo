@@ -498,6 +498,17 @@ begin
   if auth.role() = 'service_role' then
     return new;
   end if;
+  -- Un upsert() (INSERT ... ON CONFLICT DO UPDATE, utilisé par syncPushToCloudRun
+  -- à CHAQUE synchronisation, même sans changement) déclenche quand même ce
+  -- trigger BEFORE INSERT pour une ligne qui existe déjà et qui sera en
+  -- réalité mise à jour, pas insérée (comportement standard de Postgres pour
+  -- ON CONFLICT). Sans ce garde, la simple re-synchronisation de l'unique
+  -- bankroll déjà autorisée en gratuit était bloquée à tort par cette limite
+  -- — un vrai incident : l'utilisateur ne pouvait alors même plus se
+  -- déconnecter proprement (la sync avant déconnexion échouait pareil).
+  if exists (select 1 from public.bankrolls where id = new.id) then
+    return new;
+  end if;
   select plan into user_plan from public.profiles where id = new.user_id;
   if user_plan is null or user_plan = 'free' then
     select count(*) into bankroll_count from public.bankrolls where user_id = new.user_id;
@@ -517,6 +528,13 @@ create trigger enforce_bankroll_limit_trigger
 
 Le `1` en dur dans `bankroll_count >= 1` doit rester synchronisé avec
 `FREE_BANKROLL_LIMIT` côté client si cette valeur change un jour.
+
+> **Si ce trigger est déjà installé sur votre projet Supabase**, le bug ci-dessus
+> (sync — et donc déconnexion — bloquée à tort pour un compte gratuit conforme)
+> est déjà en production côté base de données : il faut réexécuter le bloc SQL
+> ci-dessus (Supabase → SQL Editor) pour appliquer le correctif. Aucune
+> migration ni modification de schéma n'est nécessaire, `create or replace
+> function` suffit à remplacer l'ancienne version.
 
 Les autres limites "Pro" (export CSV, personnalisation du dashboard,
 catégorie Expresso, seuils de stakes) ne portent que sur la présentation des
