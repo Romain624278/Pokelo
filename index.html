@@ -52,12 +52,12 @@
 <!-- Favicon référencé via de vrais fichiers PNG crawlables : Google Search exige une
      ressource accessible à une URL stable pour afficher un favicon dans les résultats
      de recherche — une data URI inline (l'ancienne version) n'en est pas une. -->
-<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
-<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png" />
-<link rel="shortcut icon" type="image/png" href="icons/icon-192.png" />
-<link rel="manifest" href="manifest.json" />
+<link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512.png" />
+<link rel="shortcut icon" type="image/png" href="/icons/icon-192.png" />
+<link rel="manifest" href="/manifest.json" />
 <meta name="theme-color" content="#08BF2F" />
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="Pokelo" />
@@ -983,7 +983,7 @@
 
 <!-- ══════════════ MARKETING NAV ══════════════ -->
 <nav class="site-nav">
-  <a class="nav-logo" href="#/" data-link>
+  <a class="nav-logo" href="/" data-link>
     <svg class="logo-mark" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
       <rect class="lb1" x="4" y="32" width="7" height="10" rx="2"/>
       <rect class="lb2" x="15" y="25" width="7" height="17" rx="2"/>
@@ -1002,7 +1002,7 @@
       <button class="nav-icon-btn nav-theme-toggle" onclick="toggleNavTheme()" aria-label="Changer de thème" title="Thème"></button>
       <button class="nav-icon-btn nav-lang-toggle" onclick="toggleNavLang()" aria-label="Changer de langue" title="Langue">EN</button>
     </li>
-    <li><a href="#/account" data-link class="nav-cta" id="landing-nav-cta">Se connecter</a></li>
+    <li><a href="/account" data-link class="nav-cta" id="landing-nav-cta">Se connecter</a></li>
   </ul>
   <button class="nav-burger" id="burger" aria-label="Menu" onclick="toggleMenu()">
     <span></span><span></span><span></span>
@@ -1019,7 +1019,7 @@
   <a href="/blog" onclick="closeMenu()" data-i18n="nav_blog">Blog</a>
   <a href="/calendrier" onclick="closeMenu()" data-i18n="nav_calendar">Calendrier</a>
   <a href="/calculateur-risque-de-ruine" onclick="closeMenu()">Calculateur</a>
-  <a href="#/account" data-link class="nav-cta" onclick="closeMenu()" id="landing-nav-cta-mobile">Se connecter</a>
+  <a href="/account" data-link class="nav-cta" onclick="closeMenu()" id="landing-nav-cta-mobile">Se connecter</a>
 </div>
 
 <!-- ══════════════ VIEW : LANDING ══════════════ -->
@@ -1044,7 +1044,7 @@
         tout ça en graphiques clairs pour progresser sereinement.
       </p>
       <div class="hero-actions">
-        <a href="#/account/signup" data-link class="btn-primary" data-i18n="hero_cta_primary">Créer un compte gratuit</a>
+        <a href="/account/signup" data-link class="btn-primary" data-i18n="hero_cta_primary">Créer un compte gratuit</a>
         <a href="#comment-ca-marche" data-link class="btn-secondary" data-i18n="hero_cta_secondary">Comment ça marche</a>
       </div>
     </div>
@@ -1286,7 +1286,7 @@
     </div>
     <div class="blog-grid fade-up" id="blog-preview-grid"><!-- filled by JS from ARTICLES --></div>
     <div class="fade-up" style="margin-top:2.5rem;text-align:center">
-      <a href="#/blog" data-link class="btn-secondary" data-i18n="blog_see_all">Voir tous les articles</a>
+      <a href="/blog" class="btn-secondary" data-i18n="blog_see_all">Voir tous les articles</a>
     </div>
   </section>
 
@@ -1348,7 +1348,7 @@
       <h2 class="section-title" data-i18n="cta_title">Commencez à suivre<br>votre bankroll aujourd'hui</h2>
       <p class="section-sub center" data-i18n="cta_sub">Gratuit pour commencer, sans carte bancaire.</p>
       <div class="hero-actions" style="margin-top:2rem">
-        <a href="#/account/signup" data-link class="btn-primary" data-i18n="cta_button">Créer un compte gratuit</a>
+        <a href="/account/signup" data-link class="btn-primary" data-i18n="cta_button">Créer un compte gratuit</a>
       </div>
     </div>
   </section>
@@ -1408,11 +1408,11 @@
 <main id="view-article" hidden>
   <section id="article-view">
     <div class="article-wrap">
-      <a href="#/blog" data-link class="article-back">&larr; <span data-i18n="article_back">Retour au blog</span></a>
+      <a href="/blog" class="article-back">&larr; <span data-i18n="article_back">Retour au blog</span></a>
       <div id="article-content"><!-- filled by JS --></div>
       <div class="article-cta fade-up visible">
         <p data-i18n="article_cta_text">Mettez ces principes en pratique dès votre prochaine session.</p>
-        <a href="#/account/signup" data-link class="btn-primary" data-i18n="article_cta_button">Créer un compte gratuit</a>
+        <a href="/account/signup" data-link class="btn-primary" data-i18n="article_cta_button">Créer un compte gratuit</a>
       </div>
     </div>
   </section>
@@ -1438,7 +1438,7 @@
         <h5 data-i18n="footer_product">Produit</h5>
         <a href="/fonctionnalites" data-i18n="nav_features">Fonctionnalités</a>
         <a href="/tarifs" data-i18n="nav_pricing">Tarifs</a>
-        <a href="#/account" data-link id="landing-nav-cta-footer">Se connecter</a>
+        <a href="/account" data-link id="landing-nav-cta-footer">Se connecter</a>
       </div>
       <div class="footer-col">
         <h5 data-i18n="footer_resources">Ressources</h5>
@@ -1468,7 +1468,7 @@
   <section id="account-section" style="padding-top:120px; padding-bottom:2.5rem; min-height:100vh; display:flex; align-items:center; justify-content:center;">
     <div class="auth-split fade-up visible">
       <div class="auth-visual">
-        <a class="nav-logo" href="#/" data-link>
+        <a class="nav-logo" href="/" data-link>
           <svg class="logo-mark" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
             <rect class="lb1" x="4" y="32" width="7" height="10" rx="2"/>
             <rect class="lb2" x="15" y="25" width="7" height="17" rx="2"/>
@@ -1487,7 +1487,7 @@
         </ul>
       </div>
     <div class="account-card fade-up visible">
-      <a class="nav-logo" href="#/" data-link style="justify-content:center; margin-bottom:1.6rem;">
+      <a class="nav-logo" href="/" data-link style="justify-content:center; margin-bottom:1.6rem;">
         <svg class="logo-mark" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
           <rect class="lb1" x="4" y="32" width="7" height="10" rx="2"/>
           <rect class="lb2" x="15" y="25" width="7" height="17" rx="2"/>
@@ -1556,7 +1556,7 @@
         <div class="account-feedback" id="forgot-feedback" hidden></div>
       </div>
 
-      <a href="#/" data-link class="article-back" style="justify-content:center; margin-top:1.5rem;"><span data-i18n="app_back_site">Retour au site</span></a>
+      <a href="/" data-link class="article-back" style="justify-content:center; margin-top:1.5rem;"><span data-i18n="app_back_site">Retour au site</span></a>
     </div>
     </div>
   </section>
@@ -1566,7 +1566,7 @@
 <main id="view-legal" hidden>
   <section id="legal-view" style="padding-top:150px">
     <div class="article-wrap fade-up visible">
-      <a href="#/" data-link class="article-back">&larr; Retour au site</a>
+      <a href="/" data-link class="article-back">&larr; Retour au site</a>
       <div class="article-tag">Informations légales</div>
       <h1 class="article-title">Mentions légales</h1>
       <div class="article-meta">Dernière mise à jour : 24 juillet 2026</div>
@@ -1605,7 +1605,7 @@
       </div>
       <div class="article-cta">
         <p>Une question sur vos données personnelles ?</p>
-        <a href="#/privacy" data-link class="btn-primary">Voir la politique de confidentialité</a>
+        <a href="/confidentialite" class="btn-primary">Voir la politique de confidentialité</a>
       </div>
     </div>
   </section>
@@ -1615,7 +1615,7 @@
 <main id="view-privacy" hidden>
   <section id="privacy-view" style="padding-top:150px">
     <div class="article-wrap fade-up visible">
-      <a href="#/" data-link class="article-back">&larr; Retour au site</a>
+      <a href="/" data-link class="article-back">&larr; Retour au site</a>
       <div class="article-tag">Vie privée</div>
       <h1 class="article-title">Politique de confidentialité</h1>
       <div class="article-meta">Dernière mise à jour : 24 juillet 2026</div>
@@ -1655,7 +1655,7 @@
       </div>
       <div class="article-cta">
         <p>Prêt à créer votre compte Pokelo ?</p>
-        <a href="#/account/signup" data-link class="btn-primary">Créer un compte gratuit</a>
+        <a href="/account/signup" data-link class="btn-primary">Créer un compte gratuit</a>
       </div>
     </div>
   </section>
@@ -1665,7 +1665,7 @@
 <main id="view-terms" hidden>
   <section id="terms-view" style="padding-top:150px">
     <div class="article-wrap fade-up visible">
-      <a href="#/" data-link class="article-back">&larr; Retour au site</a>
+      <a href="/" data-link class="article-back">&larr; Retour au site</a>
       <div class="article-tag">Conditions</div>
       <h1 class="article-title">Conditions générales d'utilisation et de vente</h1>
       <div class="article-meta">Dernière mise à jour : 24 juillet 2026</div>
@@ -1677,7 +1677,7 @@
         <p>L'accès aux fonctionnalités de Pokelo nécessite la création d'un compte (adresse e-mail et mot de passe). L'utilisateur s'engage à fournir des informations exactes et à assurer la confidentialité de ses identifiants. Pokelo se réserve le droit de suspendre ou supprimer un compte en cas d'usage frauduleux ou contraire aux présentes conditions.</p>
 
         <h2>3. Description des offres</h2>
-        <p>Pokelo propose un plan Gratuit sans limite de durée et un plan payant par abonnement (Pro) dont le détail des fonctionnalités et tarifs est présenté sur la page <a href="#/" data-link>Tarifs</a>. Les tarifs sont indiqués en euros, toutes taxes applicables comprises le cas échéant.</p>
+        <p>Pokelo propose un plan Gratuit sans limite de durée et un plan payant par abonnement (Pro) dont le détail des fonctionnalités et tarifs est présenté sur la page <a href="/" data-link>Tarifs</a>. Les tarifs sont indiqués en euros, toutes taxes applicables comprises le cas échéant.</p>
 
         <h2>4. Prix et paiement</h2>
         <p>Les abonnements payants sont facturés de façon récurrente (mensuelle) via notre prestataire de paiement Stripe, qui traite les données de paiement de façon sécurisée — Pokelo n'a à aucun moment accès à vos coordonnées bancaires complètes. Le paiement est exigible dès la souscription puis à chaque échéance jusqu'à résiliation.</p>
@@ -1689,7 +1689,7 @@
         <p>Les abonnements sont sans engagement de durée et peuvent être résiliés à tout moment depuis les paramètres du compte (portail de gestion d'abonnement). La résiliation prend effet à la fin de la période de facturation en cours ; aucun remboursement au prorata n'est effectué pour la période déjà entamée, sauf disposition légale contraire.</p>
 
         <h2>7. Responsabilité</h2>
-        <p>Pokelo est un outil de suivi et d'analyse fourni à titre informatif (voir les <a href="#/legal" data-link>Mentions légales</a> pour la limitation de responsabilité complète, notamment concernant les indicateurs statistiques et le caractère non contractuel des estimations).</p>
+        <p>Pokelo est un outil de suivi et d'analyse fourni à titre informatif (voir les <a href="/mentions-legales">Mentions légales</a> pour la limitation de responsabilité complète, notamment concernant les indicateurs statistiques et le caractère non contractuel des estimations).</p>
 
         <h2>8. Modification des CGU/CGV</h2>
         <p>RD DIGITAL se réserve le droit de modifier les présentes conditions à tout moment. Les utilisateurs seront informés de toute modification substantielle ; la poursuite de l'utilisation du Service après modification vaut acceptation des nouvelles conditions.</p>
@@ -1718,7 +1718,7 @@
   <div class="app-shell">
     <aside class="app-sidebar" id="app-sidebar">
       <div class="app-sidebar-top">
-        <a class="nav-logo" href="#/" data-link>
+        <a class="nav-logo" href="/" data-link>
           <svg class="logo-mark" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
             <rect class="lb1" x="4" y="32" width="7" height="10" rx="2"/>
             <rect class="lb2" x="15" y="25" width="7" height="17" rx="2"/>
@@ -1729,23 +1729,23 @@
         </a>
       </div>
       <nav class="app-sidebar-nav" id="app-sidebar-nav">
-        <a class="app-nav-link" data-appnav="dashboard" href="#/app" data-link>
+        <a class="app-nav-link" data-appnav="dashboard" href="/app" data-link>
           <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
           <span data-i18n="nav_dashboard">Dashboard</span>
         </a>
-        <a class="app-nav-link" data-appnav="sessions" href="#/app/sessions" data-link>
+        <a class="app-nav-link" data-appnav="sessions" href="/app/sessions" data-link>
           <svg class="icon" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
           <span data-i18n="nav_sessions">Sessions</span>
         </a>
-        <a class="app-nav-link" data-appnav="bankrolls" href="#/app/bankrolls" data-link>
+        <a class="app-nav-link" data-appnav="bankrolls" href="/app/bankrolls" data-link>
           <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><circle cx="16" cy="14.5" r="1.4"/></svg>
           <span data-i18n="nav_bankrolls">Bankrolls</span>
         </a>
-        <a class="app-nav-link" data-appnav="settings" href="#/app/settings" data-link>
+        <a class="app-nav-link" data-appnav="settings" href="/app/settings" data-link>
           <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
           <span data-i18n="settings_display_title">Affichage</span>
         </a>
-        <a class="app-nav-link" data-appnav="admin" href="#/app/admin" data-link id="app-nav-admin" hidden>
+        <a class="app-nav-link" data-appnav="admin" href="/app/admin" data-link id="app-nav-admin" hidden>
           <svg class="icon" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V5l-8-3Z"/><path d="M9 12l2 2 4-4"/></svg>
           <span data-i18n="nav_admin">Admin</span>
         </a>
@@ -1755,7 +1755,7 @@
           <svg class="icon" style="width:16px;height:16px" viewBox="0 0 24 24"><path d="M12 3v13M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>
           <span data-i18n="install_app">Installer l'app</span>
         </a>
-        <a class="app-nav-link" data-appnav="account" href="#/app/account" data-link id="account-settings-link" hidden style="margin-bottom:.3rem;">
+        <a class="app-nav-link" data-appnav="account" href="/app/account" data-link id="account-settings-link" hidden style="margin-bottom:.3rem;">
           <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg>
           <span data-i18n="nav_my_account">Mon compte</span>
         </a>
@@ -1766,11 +1766,11 @@
           </div>
           <a class="account-status-logout" onclick="signOutUser()"><span data-i18n="account_logout">Déconnexion</span></a>
         </div>
-        <a href="#/account" data-link style="margin-bottom:.6rem;" id="account-login-link">
+        <a href="/account" data-link style="margin-bottom:.6rem;" id="account-login-link">
           <svg class="icon" style="width:16px;height:16px" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           <span data-i18n="account_tab_login">Connexion</span>
         </a>
-        <a href="#/" data-link>
+        <a href="/" data-link>
           <svg class="icon" style="width:16px;height:16px" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
           <span data-i18n="app_back_site">Retour au site</span>
         </a>
@@ -1793,7 +1793,7 @@
       </div>
       <div class="app-mobile-topbar">
         <button class="nav-burger" id="app-burger" aria-label="Menu" onclick="toggleAppSidebar()"><span></span><span></span><span></span></button>
-        <a class="nav-logo" href="#/" data-link>
+        <a class="nav-logo" href="/" data-link>
           <svg class="logo-mark" viewBox="0 0 48 48" width="26" height="26" xmlns="http://www.w3.org/2000/svg">
             <rect class="lb1" x="4" y="32" width="7" height="10" rx="2"/><rect class="lb2" x="15" y="25" width="7" height="17" rx="2"/><rect class="lb3" x="26" y="18" width="7" height="24" rx="2"/>
             <path class="lpip" d="M29.5 4C23 10 20 14 20 17.5C20 20 22.2 22 25 22C26.8 22 28.4 21.2 29.5 19.8C30.6 21.2 32.2 22 34 22C36.8 22 39 20 39 17.5C39 14 36 10 29.5 4Z"/>
@@ -1868,7 +1868,7 @@
             <div class="settings-card" style="grid-column: 1 / -1;">
               <div id="settings-account-loggedout">
                 <p class="settings-desc" data-i18n="settings_account_loggedout_desc">Connectez-vous pour synchroniser vos données dans le cloud et gérer la sécurité de votre compte.</p>
-                <a class="btn-primary btn-sm" href="#/account" data-link data-i18n="account_tab_login">Connexion</a>
+                <a class="btn-primary btn-sm" href="/account" data-link data-i18n="account_tab_login">Connexion</a>
               </div>
               <div id="settings-account-loggedin" hidden>
                 <div class="settings-account-row">
@@ -2616,10 +2616,10 @@
   </div>
 </div>
 
-<!-- defer : Chart.js n'est utilisé que dans le dashboard (#/app), jamais sur la
+<!-- defer : Chart.js n'est utilisé que dans le dashboard (/app), jamais sur la
      landing/blog/légal — un utilisateur non connecté n'atteint jamais un appel
      à new Chart(...) pendant le parsing initial (le routeur redirige vers
-     #/account de façon synchrone), et côté connecté le premier dessin de
+     /account de façon synchrone), et côté connecté le premier dessin de
      graphique n'arrive qu'après l'aller-retour réseau de complétion du login,
      largement après que ce script différé ait fini de s'exécuter. -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" defer></script>
@@ -2752,7 +2752,7 @@
   </div>
 </div>
 
-<script src="js/pure-utils.js"></script>
+<script src="/js/pure-utils.js"></script>
 <script>
 /* ══════════════════════════════════════════════════════════════
    POKELO — utils
@@ -3220,6 +3220,9 @@ const I18N = {
     plan_feat_all_pro:'Tout Pro, multi-joueurs', plan_feat_group_view:'Vue de groupe', plan_feat_roles:'Gestion des rôles',
     toast_sync_error:'La synchronisation a échoué. Vos changements seront réessayés automatiquement.',
     toast_sync_error_logout:"Impossible de sauvegarder vos dernières modifications — déconnexion annulée pour ne pas perdre de données. Réessayez dans quelques instants.",
+    signout_sync_failed_title:'Synchronisation impossible',
+    signout_sync_failed_text:"Vos dernières modifications n'ont pas pu être sauvegardées dans le cloud (problème réseau ou serveur). Vous pouvez réessayer, ou vous déconnecter quand même — dans ce cas, les modifications non sauvegardées seront perdues.",
+    signout_force_confirm:'Se déconnecter quand même',
     toast_checkout_error:"Impossible d'ouvrir la page de paiement pour le moment. Réessayez dans quelques instants ou contactez le support.",
     toast_cloud_pull_error:'Impossible de récupérer vos données depuis le cloud. Vérifiez votre connexion.',
     toast_profile_public_updated:'Visibilité du profil mise à jour.',
@@ -3539,6 +3542,9 @@ const I18N = {
     plan_feat_all_pro:'Everything in Pro, multi-player', plan_feat_group_view:'Group view', plan_feat_roles:'Role management',
     toast_sync_error:'Sync failed. Your changes will be retried automatically.',
     toast_sync_error_logout:'Could not save your latest changes — sign-out cancelled to avoid data loss. Try again shortly.',
+    signout_sync_failed_title:'Sync failed',
+    signout_sync_failed_text:"Your latest changes couldn't be saved to the cloud (network or server issue). You can try again, or sign out anyway — in that case, unsaved changes will be lost.",
+    signout_force_confirm:'Sign out anyway',
     toast_checkout_error:'Could not open the payment page right now. Try again shortly or contact support.',
     toast_cloud_pull_error:'Could not fetch your data from the cloud. Check your connection.',
     toast_profile_public_updated:'Profile visibility updated.',
@@ -3620,10 +3626,10 @@ function updateLandingNavCta(){
     const el = document.getElementById(id);
     if (!el) return;
     if (currentUser) {
-      el.setAttribute('href', '#/app');
+      el.setAttribute('href', '/app');
       el.textContent = t('nav_my_dashboard');
     } else {
-      el.setAttribute('href', '#/account');
+      el.setAttribute('href', '/account');
       el.textContent = t('nav_open_app');
     }
   });
@@ -4050,60 +4056,70 @@ function showView(id){
   document.querySelector('nav.site-nav').hidden = (id === 'view-app');
 }
 
-function router(){
+// Anciens favoris/liens partagés en #/... (avant migration vers de vraies
+// URLs) : convertis une fois au chargement vers l'équivalent en chemin réel,
+// avant le tout premier appel à router(). Les pages marketing dupliquées en
+// interne (#/blog, #/legal, #/privacy, #/terms, #/calendrier) redirigent vers
+// leur page statique réelle plutôt que vers une vue SPA équivalente.
+function migrateLegacyHashRoute(){
   const hash = location.hash || '';
-  if (hash.startsWith('#/blog/')) {
-    const slug = decodeURIComponent(hash.slice('#/blog/'.length));
-    showView('view-article');
-    renderArticle(slug);
-  } else if (hash.startsWith('#/blog')) {
-    showView('view-blog');
-    renderBlogGrid('blog-list-grid', null, currentBlogFilter);
-  } else if (hash.startsWith('#/calendrier')) {
-    showView('view-calendar');
-    renderPokerCalendar();
-  } else if (hash.startsWith('#/app')) {
+  if (!hash.startsWith('#/')) return;
+  const base = hash.split('?')[0];
+  // Ces cibles sont de vraies pages statiques distinctes d'index.html : un
+  // simple replaceState changerait l'URL sans jamais charger leur contenu
+  // réel (l'utilisateur resterait sur la vue SPA courante) — il faut donc une
+  // vraie navigation ici, pas juste une correction d'URL.
+  const staticNavMap = { '#/blog': '/blog', '#/calendrier': '/calendrier', '#/legal': '/mentions-legales', '#/privacy': '/confidentialite', '#/terms': '/cgu-cgv' };
+  if (staticNavMap[base]) { location.replace(staticNavMap[base]); return; }
+  if (base.startsWith('#/blog/')) { location.replace('/blog/' + base.slice('#/blog/'.length)); return; }
+  // Ces cibles restent dans le SPA (index.html déjà chargé est le bon
+  // document) : une correction d'URL en place suffit, router() s'en charge.
+  let target = base === '#/' ? '/' : null;
+  if (!target && (base.startsWith('#/app') || base.startsWith('#/account') || base.startsWith('#/u/'))) target = base.slice(1);
+  if (target) history.replaceState(null, '', target + location.search);
+}
+
+function router(){
+  const path = (location.pathname || '/').replace(/\/+$/, '') || '/';
+  if (path === '/app' || path.startsWith('/app/')) {
     if (!authCheckComplete) {
       showView('view-app');
       showAppLoadingSkeleton();
     } else if (!currentUser) {
-      location.hash = '#/account';
+      navigateTo('/account');
       return;
     } else {
       showView('view-app');
-      appRouter(hash);
+      appRouter(path);
     }
-  } else if (hash.startsWith('#/account')) {
+  } else if (path === '/account' || path.startsWith('/account/')) {
     if (authCheckComplete && currentUser) {
-      location.hash = '#/app';
+      navigateTo('/app');
       return;
     }
     showView('view-account');
-    const tab = hash.replace(/^#\/account\/?/, '') || 'login';
+    const tab = path.replace(/^\/account\/?/, '') || 'login';
     setAccountTab(['login','signup','forgot'].includes(tab) ? tab : 'login');
-  } else if (hash.startsWith('#/u/')) {
+  } else if (path.startsWith('/u/')) {
     showView('view-public-profile');
-    renderPublicProfile(decodeURIComponent(hash.slice('#/u/'.length)));
-  } else if (hash.startsWith('#/legal')) {
-    showView('view-legal');
-  } else if (hash.startsWith('#/privacy')) {
-    showView('view-privacy');
-  } else if (hash.startsWith('#/terms')) {
-    showView('view-terms');
+    renderPublicProfile(decodeURIComponent(path.slice('/u/'.length)));
   } else {
     showView('view-landing');
   }
   window.scrollTo(0,0);
   refreshFadeUps();
 }
-window.addEventListener('hashchange', router);
+// pushState ne déclenche pas popstate : toute navigation interne programmatique
+// passe par navigateTo(), qui appelle router() elle-même juste après.
+function navigateTo(path){
+  if (location.pathname + location.search === path) { router(); return; }
+  history.pushState(null, '', path);
+  router();
+}
+window.addEventListener('popstate', router);
 
-function appRouter(hash){
-  // .split('?')[0] : un hash comme "#/app/account?checkout=success" ne doit
-  // jamais casser la correspondance exacte dans `map` ci-dessous (sans ce
-  // split, la clé "account?checkout=success" est introuvable et la section
-  // retombait silencieusement sur "dashboard" au lieu d'afficher le compte).
-  const sub = hash.replace(/^#\/app\/?/, '').split('?')[0] || 'dashboard';
+function appRouter(path){
+  const sub = path.replace(/^\/app\/?/, '') || 'dashboard';
   const map = { '': 'dashboard', 'dashboard':'dashboard', 'sessions':'sessions', 'bankrolls':'bankrolls', 'settings':'settings', 'account':'account', 'admin':'admin' };
   let section = map[sub] || 'dashboard';
   // Le lien "Admin" n'est qu'un confort d'UI : l'accès réel est revérifié
@@ -4129,13 +4145,13 @@ document.addEventListener('click', function(e){
   if (!a) return;
   const href = a.getAttribute('href');
   if (!href) return;
-  e.preventDefault();
-  if (href.startsWith('#/')) {
-    if (location.hash === href) router();
-    else location.hash = href;
+  if (href.startsWith('/')) {
+    e.preventDefault();
+    navigateTo(href);
   } else if (href.startsWith('#')) {
-    const goHome = !(location.hash === '' || location.hash === '#/' );
-    if (goHome) location.hash = '#/';
+    e.preventDefault();
+    const goHome = location.pathname !== '/';
+    if (goHome) navigateTo('/');
     setTimeout(() => {
       const el = document.getElementById(href.slice(1));
       if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -4265,7 +4281,7 @@ function blogCardHtml(a){
   const illu = ARTICLE_ILLUSTRATIONS[a.slug] || '';
   const accentVar = ARTICLE_ACCENT_VAR[a.accent] || '--green';
   return `
-    <a class="blog-card" href="#/blog/${a.slug}" data-link>
+    <a class="blog-card" href="/blog/${a.slug}">
       <div class="blog-card-top" style="background: radial-gradient(circle at 75% 15%, color-mix(in srgb, var(${accentVar}) 16%, transparent) 0%, var(--black) 70%);">
         <div class="blog-card-icon">${illu}</div>
         <span class="tag" style="color: var(${accentVar}); background: color-mix(in srgb, var(${accentVar}) 14%, transparent);">${escapeHtml(a.tag)}</span>
@@ -4981,7 +4997,7 @@ function renderDashboardModules(bk, sessions){
 
 function moduleCardHtml(id, bk, sessions, index){
   const meta = moduleMeta(id);
-  const extra = id === 'recent' ? `<a href="#/app/sessions" data-link class="btn-ghost btn-sm">${t('btn_see_all')}</a>` : '';
+  const extra = id === 'recent' ? `<a href="/app/sessions" data-link class="btn-ghost btn-sm">${t('btn_see_all')}</a>` : '';
   const delay = Math.min(index || 0, 8) * 40;
   return `<div class="module-card stat-tile-enter" style="animation-delay:${delay}ms" data-size="${meta.size}" data-mod="${id}">
     <div class="module-head">
@@ -5813,6 +5829,12 @@ let cloudSyncInFlight = false;
 let cloudSyncQueued = false;
 let cloudSyncPromise = null;
 let syncDebounceTimer = null;
+let cloudSyncRetryCount = 0;
+let cloudSyncRetryTimer = null;
+// La plupart des échecs de sync sont un raté réseau ponctuel (wifi de salle de
+// tournoi, bascule 4G) qui se résout tout seul en quelques secondes : on
+// retente donc silencieusement avant d'afficher un message d'erreur.
+const CLOUD_SYNC_RETRY_DELAYS = [3000, 8000, 20000];
 
 // Préparation Stripe (voir STRIPE_SETUP.md) : aucun module n'est verrouillé par
 // Différenciateurs plan gratuit / Pokelo Pro (décision produit) :
@@ -5925,7 +5947,7 @@ async function submitAccountForm(kind){
     if (error) { setBtnLoading(btn, false); feedback.hidden = false; feedback.className = 'account-feedback error'; feedback.textContent = translateAuthError(error); }
     else {
       feedback.hidden = false; feedback.className = 'account-feedback'; feedback.textContent = t('account_login_success');
-      setTimeout(() => { location.hash = '#/app'; }, 700);
+      setTimeout(() => { navigateTo('/app'); }, 700);
     }
   } else if (kind === 'signup') {
     const name = document.getElementById('signup-name').value.trim();
@@ -5948,7 +5970,7 @@ async function submitAccountForm(kind){
     if (!email) { feedback.className = 'account-feedback error'; feedback.textContent = t('account_error_fields'); return; }
     feedback.hidden = true;
     setBtnLoading(btn, true);
-    const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: location.origin + location.pathname + '#/account' });
+    const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: location.origin + '/account' });
     setBtnLoading(btn, false);
     feedback.hidden = false;
     if (error) { feedback.className = 'account-feedback error'; feedback.textContent = translateAuthError(error); }
@@ -6060,10 +6082,20 @@ async function syncPushToCloudRun(){
       phone: profile.phone || null, phone_country: profile.phoneCountry || null,
     });
     if (profileErr) throw profileErr;
+    cloudSyncRetryCount = 0;
     return true;
   } catch (e) {
     console.warn('Synchronisation Supabase échouée :', e);
-    showToast(t('toast_sync_error'), 'error');
+    if (cloudSyncRetryCount < CLOUD_SYNC_RETRY_DELAYS.length) {
+      const delay = CLOUD_SYNC_RETRY_DELAYS[cloudSyncRetryCount];
+      cloudSyncRetryCount++;
+      clearTimeout(cloudSyncRetryTimer);
+      cloudSyncRetryTimer = setTimeout(syncPushToCloud, delay);
+    } else {
+      cloudSyncRetryCount = 0;
+      const detail = e && (e.message || e.hint) ? ` (${e.message || e.hint})` : '';
+      showToast(t('toast_sync_error') + detail, 'error');
+    }
     return false;
   } finally {
     cloudSyncInFlight = false;
@@ -6073,6 +6105,10 @@ async function syncPushToCloudRun(){
 function scheduleCloudSync(){
   if (!currentUser || !window.supabase) return;
   clearTimeout(syncDebounceTimer);
+  // Un nouvel edit remplace tout retry en attente : le prochain push enverra
+  // de toute façon l'état le plus récent, donc l'ancien backoff est redondant.
+  clearTimeout(cloudSyncRetryTimer);
+  cloudSyncRetryCount = 0;
   syncDebounceTimer = setTimeout(syncPushToCloud, 1200);
 }
 // Filet de sécurité si l'utilisateur quitte/rafraîchit la page pendant que le
@@ -6184,7 +6220,7 @@ async function chooseMfaSetupNow(){
   const session = pendingSignInSession;
   pendingSignInSession = null;
   await completeSignIn(session);
-  location.hash = '#/app/account';
+  navigateTo('/app/account');
 }
 async function skipMfaSetup(){
   document.getElementById('mfa-setup-prompt-overlay').hidden = true;
@@ -6427,7 +6463,7 @@ async function completeSignInRun(session){
   maybeShowProWelcome(currentUser.id, currentPlan);
   startPlanPolling();
 }
-async function signOutUser(){
+async function signOutUser(force){
   if (currentUser && window.supabase) {
     clearTimeout(syncDebounceTimer);
     // N'efface jamais l'état local (plus bas) si la synchronisation d'avant
@@ -6436,12 +6472,26 @@ async function signOutUser(){
     // le cloud n'avait jamais reçu les dernières modifications). On préfère
     // laisser l'utilisateur connecté avec ses données visibles, quitte à ce
     // qu'il retente, plutôt que de risquer de tout perdre silencieusement.
-    const synced = await syncPushToCloud();
-    if (synced === false) {
-      showToast(t('toast_sync_error_logout'), 'error');
-      return;
+    if (!force) {
+      let synced = await syncPushToCloud();
+      if (!synced) {
+        // Beaucoup d'échecs sont un simple raté réseau ponctuel (bascule
+        // wifi/4G, latence) : une deuxième tentative silencieuse résout la
+        // majorité des cas avant d'aller jusqu'à bloquer la déconnexion.
+        await new Promise(r => setTimeout(r, 1500));
+        synced = await syncPushToCloud();
+      }
+      if (!synced) {
+        openConfirm(
+          t('signout_sync_failed_title'),
+          t('signout_sync_failed_text'),
+          () => { closeConfirmModal(); signOutUser(true); },
+          t('signout_force_confirm')
+        );
+        return;
+      }
     }
-    await supabase.auth.signOut();
+    try { await supabase.auth.signOut(); } catch (e) { console.warn('auth.signOut:', e); }
   }
   stopPlanPolling();
   currentUser = null;
@@ -6581,7 +6631,7 @@ function renderAccountSettings(){
 
 function renderReferralSettings(){
   const linkEl = document.getElementById('referral-link');
-  if (linkEl && currentReferralCode) linkEl.value = `${location.origin}${location.pathname}?ref=${currentReferralCode}`;
+  if (linkEl && currentReferralCode) linkEl.value = `${location.origin}/?ref=${currentReferralCode}`;
   loadReferralStats();
 }
 async function loadReferralStats(){
@@ -6830,7 +6880,7 @@ async function toggleSupportMessageStatus(id, status){
 // Mais avatar_url est lu tel quel depuis la base (profiles.avatar_url), que la
 // policy RLS ne protège que par propriétaire — pas par contenu. Un appel direct
 // à l'API Supabase (hors client) pourrait donc y écrire n'importe quelle chaîne.
-// Comme ce profil est affiché publiquement via #/u/<id> (profil partagé), on
+// Comme ce profil est affiché publiquement via /u/<id> (profil partagé), on
 // revalide ce format avant de l'injecter dans un attribut src pour empêcher une
 // XSS stockée (ex. avatar_url = '" onerror="...') qui toucherait tout visiteur
 // du lien de partage, pas seulement le propriétaire du compte.
@@ -6858,7 +6908,7 @@ function renderProfileSettings(){
   const statsToggle = document.getElementById('profile-public-stats-toggle');
   if (statsToggle) statsToggle.checked = !!p.publicShowStats;
   const linkInput = document.getElementById('profile-share-link');
-  if (linkInput) linkInput.value = `${location.origin}${location.pathname}#/u/${currentUser.id}`;
+  if (linkInput) linkInput.value = `${location.origin}/u/${currentUser.id}`;
   populateAccountPhoneCountrySelect();
   const phoneInput = document.getElementById('account-phone-number');
   if (phoneInput && document.activeElement !== phoneInput) phoneInput.value = p.phone || '';
@@ -7010,12 +7060,12 @@ async function renderPublicProfile(userId){
       <h1 class="article-title" style="text-align:center;font-size:1.4rem;">${escapeHtml(data.displayName || t('public_profile_anonymous'))}</h1>
       ${joined ? `<p style="text-align:center;color:var(--grey);font-size:.85rem;margin-top:.3rem;">${t('public_profile_member_since')} ${joined}</p>` : ''}
       ${publicProfileStatsHtml(data.stats)}
-      <a href="#/" data-link class="btn-secondary" style="justify-content:center;margin-top:1.6rem;">${t('app_back_site')}</a>
+      <a href="/" data-link class="btn-secondary" style="justify-content:center;margin-top:1.6rem;">${t('app_back_site')}</a>
     `;
   } catch (e) {
     card.innerHTML = `
       <p style="color:var(--grey)">${t('public_profile_not_found')}</p>
-      <a href="#/" data-link class="btn-secondary" style="justify-content:center;margin-top:1.2rem;">${t('app_back_site')}</a>
+      <a href="/" data-link class="btn-secondary" style="justify-content:center;margin-top:1.2rem;">${t('app_back_site')}</a>
     `;
   }
 }
@@ -7057,7 +7107,7 @@ function pricingColBadge(p, highlight){
 }
 function pricingCtaCell(plan, highlight){
   if (plan.id === 'free') {
-    return `<a href="#/account/signup" data-link class="btn-secondary btn-sm" data-i18n="price_cta_free">${t('price_cta_free')}</a>`;
+    return `<a href="/account/signup" data-link class="btn-secondary btn-sm" data-i18n="price_cta_free">${t('price_cta_free')}</a>`;
   }
   if (plan.id === highlight) {
     return `<button class="btn-ghost btn-sm" disabled>${t('settings_account_plan_current')}</button>`;
@@ -7230,18 +7280,18 @@ function stopPlanPolling(){
   if (planPollTimer) { clearInterval(planPollTimer); planPollTimer = null; }
 }
 
-// Après un retour de Stripe Checkout (#/app/account?checkout=success|cancelled) :
+// Après un retour de Stripe Checkout (/app/account?checkout=success|cancelled) :
 // nettoie l'URL tout de suite (évite de redéclencher ce traitement à chaque
 // rechargement), puis attend/reconfirme le plan directement depuis Supabase
 // plutôt que de faire confiance à l'état local — le webhook Stripe peut
 // mettre quelques secondes à arriver après la redirection du navigateur.
 async function handleCheckoutReturn(){
-  const hash = location.hash;
-  if (!hash.includes('checkout=')) return;
-  const isSuccess = hash.includes('checkout=success');
-  const isCancelled = hash.includes('checkout=cancelled');
-  const cleanHash = hash.replace(/[?&]checkout=(success|cancelled)/, '');
-  history.replaceState(null, '', cleanHash || '#/app/account');
+  const search = location.search;
+  if (!search.includes('checkout=')) return;
+  const isSuccess = search.includes('checkout=success');
+  const isCancelled = search.includes('checkout=cancelled');
+  const cleanSearch = search.replace(/[?&]checkout=(success|cancelled)/, '');
+  history.replaceState(null, '', location.pathname + cleanSearch);
   if (isCancelled) { showToast(t('checkout_cancelled'), 'error'); return; }
   if (!isSuccess || !currentUser || !window.supabase) return;
   showToast(t('checkout_finalizing'), 'success');
@@ -7265,7 +7315,7 @@ async function startCheckout(priceId, btn){
   try {
     const { data: { session } } = await supabase.auth.getSession();
     const token = session && session.access_token;
-    if (!token) { location.hash = '#/account'; return; }
+    if (!token) { navigateTo('/account'); return; }
     const res = await fetch('/api/create-checkout-session', {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
@@ -7468,8 +7518,7 @@ async function deleteMyAccount(){
     updateAccountUI();
     applySettingsToDOM();
     populateBankrollSelects();
-    location.hash = '#/';
-    router();
+    navigateTo('/');
     showToast(t('toast_account_deleted'), 'success');
   } catch (e) {
     feedback.className = 'account-feedback error';
@@ -8262,10 +8311,11 @@ function submitCsvImport(){
    POKELO — generic confirm modal
    ══════════════════════════════════════════════════════════════ */
 let confirmCallback = null;
-function openConfirm(title, text, onConfirm){
+function openConfirm(title, text, onConfirm, actionLabel){
   document.getElementById('confirm-modal-title').textContent = title;
   document.getElementById('confirm-modal-text').textContent = text;
   confirmCallback = onConfirm;
+  document.getElementById('confirm-modal-action').textContent = actionLabel || 'Confirmer';
   document.getElementById('confirm-modal-action').onclick = () => { if (confirmCallback) confirmCallback(); };
   document.getElementById('confirm-modal-overlay').hidden = false;
 }
@@ -8309,6 +8359,7 @@ document.addEventListener('DOMContentLoaded', function(){
   renderStatMarquee();
   playHeroCounters();
   populateBankrollSelects();
+  migrateLegacyHashRoute();
   router();
   initPwa();
   initSupabaseAuth();
@@ -8332,7 +8383,7 @@ function captureReferralCode(){
 let deferredInstallPrompt = null;
 function initPwa(){
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(()=>{});
+    navigator.serviceWorker.register('/sw.js').catch(()=>{});
   }
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();

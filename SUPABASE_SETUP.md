@@ -13,7 +13,7 @@ suivre le jour où vous créez le projet Supabase.
   `SupabaseAdapter` qui respecte le même contrat et de faire
   `const DB = SupabaseAdapter;` — le reste de l'app (dashboard, modules,
   graphiques, i18n, etc.) n'a pas besoin de changer.
-- **Écrans d'authentification** (`#/account`) : Connexion / Créer un compte /
+- **Écrans d'authentification** (`/account`) : Connexion / Créer un compte /
   Mot de passe oublié sont déjà construits (formulaires, validation, tabs,
   routing). Les boutons affichent aujourd'hui un message "à venir" — il suffit
   de remplacer le contenu de `submitAccountForm()` par de vrais appels
@@ -178,7 +178,7 @@ const { error } = await supabase.auth.signUp({ email, password });
 
 // Mot de passe oublié
 const { error } = await supabase.auth.resetPasswordForEmail(email, {
-  redirectTo: 'https://pokelo.vercel.app/#/account/reset',
+  redirectTo: 'https://pokelo.fr/account',
 });
 ```
 
@@ -223,7 +223,7 @@ alter table public.profiles
   add column if not exists public_show_stats boolean not null default false;
 ```
 
-Le profil public (`#/u/:id`) ne passe **jamais** par le client Supabase
+Le profil public (`/u/:id`) ne passe **jamais** par le client Supabase
 directement : les policies RLS actuelles (`auth.uid() = id`) empêchent tout
 visiteur anonyme de lire la table `profiles`, même avec `is_public = true`.
 La route publique passe par `api/public-profile.js`, qui utilise la clé
@@ -332,7 +332,7 @@ revérifie systématiquement `role` côté serveur avant de renvoyer quoi que ce
 soit ; le fait que le menu admin s'affiche côté client n'est qu'un confort
 d'UI, jamais le contrôle d'accès réel.
 
-Le panneau admin (`#/app/admin`) permet aussi :
+Le panneau admin (`/app/admin`) permet aussi :
 - **Attribuer/retirer Pokelo Pro** à un compte par email (`api/admin-grant-plan.js`)
   — modifie uniquement `profiles.plan`, ne touche jamais aux champs `stripe_*` :
   si ce joueur souscrit un jour un vrai abonnement, le webhook Stripe reprend

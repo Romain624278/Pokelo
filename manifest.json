@@ -2,7 +2,7 @@
   "name": "Pokelo — Suivi de bankroll poker",
   "short_name": "Pokelo",
   "description": "Suivi de bankroll poker minimaliste : tournois, cash game, expressos, multi-devises, graphiques.",
-  "start_url": "./index.html#/app",
+  "start_url": "/app",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",

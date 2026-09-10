@@ -1,5 +1,5 @@
 // Illustrations SVG par article de blog, copiées telles quelles depuis la
-// const ARTICLE_ILLUSTRATIONS d'index.html (rendu #/blog dans l'app) pour
+// const ARTICLE_ILLUSTRATIONS d'index.html pour
 // que les pages statiques /blog/*.html affichent le même visuel coloré.
 // Si un article change dans index.html, reporter ici puis relancer
 // `node scripts/generate-blog-pages.js`.

@@ -124,7 +124,14 @@ footer.site-footer { padding: 2.5rem 6vw; border-top: 1px solid var(--border); b
 .footer-top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; max-width: 1140px; margin: 0 auto 2rem; }
 .footer-brand { display: flex; align-items: center; gap: 10px; }
 .footer-brand span { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.1em; color: var(--grey); }
-.footer-bottom { max-width: 1140px; margin: 0 auto; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.06); font-size: 0.78rem; color: var(--grey); }
+.footer-social { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; margin-left: 6px; border-radius: 8px; border: 1px solid var(--border); color: var(--grey); transition: color .2s, border-color .2s; }
+.footer-social:hover { color: var(--green); border-color: rgba(8,191,47,0.4); }
+.footer-social .icon { width: 17px; height: 17px; }
+.footer-cols { display: flex; gap: 4rem; flex-wrap: wrap; }
+.footer-col h5 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--grey); margin-bottom: 0.9rem; }
+.footer-col a { display: block; font-size: 0.85rem; color: var(--text); text-decoration: none; margin-bottom: 0.6rem; opacity: 0.85; cursor: pointer; }
+.footer-col a:hover { color: var(--green); opacity: 1; }
+.footer-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; max-width: 1140px; margin: 0 auto; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.06); font-size: 0.78rem; color: var(--grey); }
 
 @media (max-width: 900px) {
   .nav-links { display: none; }
