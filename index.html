@@ -178,8 +178,8 @@
   .mobile-menu-utils { display: flex; gap: 0.6rem; padding-bottom: 1.2rem; margin-bottom: 0.6rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
 
   .nav-burger {
-    display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 6px;
-    border: none; background: none; z-index: 200;
+    display: none; flex-direction: column; justify-content: center; align-items: center; gap: 5px; cursor: pointer;
+    width: 44px; height: 44px; padding: 0; border: none; background: none; z-index: 200;
   }
   .nav-burger span { display: block; width: 24px; height: 2px; background: var(--text); border-radius: 2px; transition: all 0.3s; }
   .nav-burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
@@ -327,6 +327,10 @@
   /* ── TESTIMONIALS (exemples fictifs — à remplacer par de vrais retours dès
      que possible, voir data-i18n testimonial_1..4_*) ── */
   .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; margin: 2.2rem auto 0; max-width: 1140px; }
+  .testimonial-stars { display: flex; gap: 2px; margin-bottom: .7rem; }
+  .testimonial-stars .icon { width: 15px; height: 15px; color: var(--border); }
+  .testimonial-stars .icon.filled { color: #F5B700; }
+  .reviews-empty { text-align: center; color: var(--grey); font-size: .88rem; grid-column: 1 / -1; padding: 1.5rem 0; }
   .testimonial-card { background: var(--black); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.6rem; text-align: left; display: flex; flex-direction: column; transition: border-color .2s, transform .2s; }
   .testimonial-card:hover { border-color: rgba(8,191,47,0.35); transform: translateY(-3px); }
   .testimonial-quote-icon { width: 26px; height: 20px; color: var(--green); opacity: .5; margin-bottom: .9rem; }
@@ -654,6 +658,10 @@
   @media (max-width: 640px) { .customize-body { grid-template-columns: 1fr; } }
 
   .demo-banner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; background: rgba(8,191,47,0.06); border: 1px solid var(--border); border-radius: 10px; padding: 0.8rem 1.2rem; margin-bottom: 1.3rem; font-size: 0.83rem; color: var(--grey); }
+  .review-banner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; background: rgba(245,183,0,0.06); border: 1px solid rgba(245,183,0,0.25); border-radius: 10px; padding: 0.8rem 1.2rem; margin-bottom: 1.3rem; font-size: 0.83rem; color: var(--text); }
+  .review-banner-text { display: flex; align-items: center; gap: .6rem; }
+  .review-banner-text .icon { width: 18px; height: 18px; color: #F5B700; flex-shrink: 0; }
+  .review-banner-actions { display: flex; align-items: center; gap: .5rem; }
   .risk-banner { display: flex; align-items: flex-start; gap: .8rem; background: rgba(230,103,103,0.08); border: 1px solid rgba(230,103,103,0.35); border-radius: 10px; padding: 0.9rem 1.2rem; margin-bottom: 1.3rem; font-size: 0.85rem; color: var(--text); }
   .risk-banner svg { width: 20px; height: 20px; color: var(--critical); flex-shrink: 0; margin-top: 1px; }
   .risk-banner strong { color: var(--critical); }
@@ -720,6 +728,12 @@
   .admin-detail-section { margin-top: 1.3rem; }
   .admin-detail-section h4 { font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; color: var(--grey); margin-bottom: .6rem; }
   .admin-detail-empty { font-size: .82rem; color: var(--grey); padding: .5rem 0; }
+  .review-star-picker { display: flex; gap: .4rem; margin-top: 1rem; }
+  .review-star { background: none; border: none; padding: 4px; cursor: pointer; color: var(--border); transition: color .15s, transform .1s; }
+  .review-star:hover { transform: scale(1.12); }
+  .review-star .icon { width: 30px; height: 30px; }
+  .review-star.filled { color: #F5B700; }
+  .review-star.filled .icon { fill: currentColor; }
 
   .badge { display: inline-flex; align-items: center; gap: 5px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; padding: 0.28rem 0.65rem; border-radius: 100px; text-transform: uppercase; }
   .badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
@@ -968,6 +982,11 @@
     .app-mobile-topbar { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 1.2rem; height: 60px; box-sizing: border-box; border-bottom: 1px solid var(--border); background: rgba(10,10,10,0.95); position: sticky; top: 0; z-index: 70; }
     .stat-grid { grid-template-columns: repeat(2, 1fr); }
     .bankroll-grid { grid-template-columns: 1fr; }
+    /* Cibles tactiles : sous la souris 32-34px passe (précision du pointeur),
+       au doigt c'est trop petit (WCAG 2.5.5 / recommandation Apple & Material
+       : 44px mini) — élargi seulement ici, jamais sur desktop. */
+    .nav-icon-btn { width: 44px; height: 44px; }
+    .icon-btn { width: 40px; height: 40px; }
   }
   @media (max-width: 640px) {
     .feat-grid, .blog-grid { grid-template-columns: 1fr; grid-auto-rows: auto; }
@@ -996,6 +1015,12 @@
     table.data-table td[data-label]::before { content: attr(data-label); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--grey); font-weight: 600; text-align: left; flex-shrink: 0; }
     table.data-table td:not([data-label]) { justify-content: flex-end; }
     table.data-table .row-actions { justify-content: flex-end; width: 100%; }
+  }
+  @media (max-width: 480px) {
+    /* En dessous de 2 colonnes de ~165px, le texte des filtres (ex. "Tous les
+       résultats") se fait tronquer par le <select> natif : une seule colonne
+       laisse la place de tout afficher. */
+    .filter-bar .select, .filter-bar .input { flex-basis: 100%; }
   }
 </style>
 </head>
@@ -1240,47 +1265,15 @@
     </div>
   </section>
 
-  <!-- TESTIMONIALS — exemples fictifs à remplacer par de vrais retours utilisateurs -->
+  <!-- AVIS — avis publics soumis par les utilisateurs, modérés depuis le panneau admin -->
   <section id="testimonials">
     <div class="fade-up">
       <div class="section-tag" data-i18n="testimonials_tag">Ils utilisent Pokelo</div>
       <h2 class="section-title" data-i18n="testimonials_title">Ce qu'en disent<br>les joueurs</h2>
       <div class="divider"></div>
     </div>
-    <div class="testimonials-grid fade-up">
-      <div class="testimonial-card">
-        <svg class="testimonial-quote-icon" viewBox="0 0 24 18" fill="currentColor"><path d="M0 18V10.8C0 4.8 3.6 1.2 9.6 0L10.8 2.4C7.2 3.6 5.4 6 5.4 9.6H9.6V18H0ZM13.2 18V10.8C13.2 4.8 16.8 1.2 22.8 0L24 2.4C20.4 3.6 18.6 6 18.6 9.6H22.8V18H13.2Z"/></svg>
-        <p class="testimonial-text" data-i18n="testimonial_1_text">« J'avais un Google Sheets qui a fini par me lâcher après deux ans. Sur Pokelo je logue une session en 20 secondes depuis mon téléphone, direct après la table. »</p>
-        <div class="testimonial-author">
-          <div class="testimonial-avatar">A</div>
-          <div>
-            <div class="testimonial-name" data-i18n="testimonial_1_name">Alex_MTT</div>
-            <div class="testimonial-meta" data-i18n="testimonial_1_meta">Joueur de tournois, online</div>
-          </div>
-        </div>
-      </div>
-      <div class="testimonial-card">
-        <svg class="testimonial-quote-icon" viewBox="0 0 24 18" fill="currentColor"><path d="M0 18V10.8C0 4.8 3.6 1.2 9.6 0L10.8 2.4C7.2 3.6 5.4 6 5.4 9.6H9.6V18H0ZM13.2 18V10.8C13.2 4.8 16.8 1.2 22.8 0L24 2.4C20.4 3.6 18.6 6 18.6 9.6H22.8V18H13.2Z"/></svg>
-        <p class="testimonial-text" data-i18n="testimonial_2_text">« Le multi-devises m'a convaincue direct — je joue en euros et en dollars selon les salles, et je n'ai plus besoin de tout convertir à la main dans un tableur. »</p>
-        <div class="testimonial-author">
-          <div class="testimonial-avatar">S</div>
-          <div>
-            <div class="testimonial-name" data-i18n="testimonial_2_name">Sarah_CashOnly</div>
-            <div class="testimonial-meta" data-i18n="testimonial_2_meta">Cash game, live et online</div>
-          </div>
-        </div>
-      </div>
-      <div class="testimonial-card">
-        <svg class="testimonial-quote-icon" viewBox="0 0 24 18" fill="currentColor"><path d="M0 18V10.8C0 4.8 3.6 1.2 9.6 0L10.8 2.4C7.2 3.6 5.4 6 5.4 9.6H9.6V18H0ZM13.2 18V10.8C13.2 4.8 16.8 1.2 22.8 0L24 2.4C20.4 3.6 18.6 6 18.6 9.6H22.8V18H13.2Z"/></svg>
-        <p class="testimonial-text" data-i18n="testimonial_3_text">« Le module risque de ruine m'a fait descendre de stake avant que ça devienne un vrai problème. Rien que pour ça, ça vaut le coup d'avoir ses vraies stats sous les yeux. »</p>
-        <div class="testimonial-author">
-          <div class="testimonial-avatar">J</div>
-          <div>
-            <div class="testimonial-name" data-i18n="testimonial_3_name">Julien_Grinder</div>
-            <div class="testimonial-meta" data-i18n="testimonial_3_meta">Expresso &amp; Spin&amp;Go</div>
-          </div>
-        </div>
-      </div>
+    <div class="testimonials-grid fade-up" id="reviews-grid">
+      <p class="reviews-empty" id="reviews-empty" data-i18n="reviews_empty" hidden>Soyez le premier à partager votre avis sur Pokelo.</p>
     </div>
   </section>
 
@@ -1840,7 +1833,19 @@
             </button>
           </div>
         </div>
-        <div class="app-content" id="dashboard-content"><!-- filled by JS --></div>
+        <div class="app-content">
+          <div class="review-banner" id="dashboard-review-banner" hidden>
+            <div class="review-banner-text">
+              <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 15.09 8.26 22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg>
+              <span data-i18n="dashboard_review_banner_text">Pokelo vous plaît ? Laissez un avis — ça aide d'autres joueurs à nous découvrir.</span>
+            </div>
+            <div class="review-banner-actions">
+              <button class="btn-primary btn-sm" onclick="openReviewPromptManual()" data-i18n="dashboard_review_banner_cta">Laisser un avis</button>
+              <button class="icon-btn" onclick="dismissReviewBanner()" aria-label="Fermer"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+            </div>
+          </div>
+          <div id="dashboard-content"><!-- filled by JS --></div>
+        </div>
       </section>
 
       <!-- SESSIONS -->
@@ -1934,6 +1939,14 @@
                     <button class="btn-ghost btn-sm" onclick="saveAccountPhone()" data-i18n="settings_account_save">Enregistrer</button>
                   </div>
                   <div class="account-feedback" id="account-phone-feedback" hidden></div>
+                </div>
+                <div class="settings-account-row">
+                  <label data-i18n="settings_account_emails">E-mails</label>
+                  <label class="switch-row">
+                    <input type="checkbox" id="reengagement-emails-toggle" onchange="toggleReengagementEmails(this.checked)" />
+                    <span data-i18n="settings_account_reengagement_toggle">Recevoir un rappel par e-mail en cas d'inactivité prolongée</span>
+                  </label>
+                  <p class="form-hint" data-i18n="settings_account_reengagement_hint">Un e-mail occasionnel si vous n'avez pas enregistré de session depuis un moment — jamais plus d'un tous les 14 jours, désinscription en un clic.</p>
                 </div>
                 <div class="settings-account-row">
                   <label data-i18n="settings_account_plan">Plan actuel</label>
@@ -2247,6 +2260,33 @@
           <p class="form-hint" id="admin-promos-empty" hidden data-i18n="admin_promo_list_empty">Aucun code promo créé pour le moment.</p>
         </div>
         <div class="settings-card">
+          <h3 data-i18n="admin_reviews_title">Avis</h3>
+          <p class="settings-desc" data-i18n="admin_reviews_desc">Avis soumis par les utilisateurs. Seuls les avis approuvés apparaissent sur la page d'accueil.</p>
+          <div class="table-wrap">
+            <table class="data-table" id="admin-reviews-table">
+              <thead><tr>
+                <th data-i18n="admin_reviews_col_date">Date</th>
+                <th data-i18n="admin_reviews_col_rating">Note</th>
+                <th data-i18n="admin_reviews_col_author">Auteur</th>
+                <th data-i18n="admin_reviews_col_text">Avis</th>
+                <th data-i18n="admin_reviews_col_status">Statut</th>
+                <th></th>
+              </tr></thead>
+              <tbody id="admin-reviews-tbody"></tbody>
+            </table>
+          </div>
+          <p class="form-hint" id="admin-reviews-empty" hidden data-i18n="admin_reviews_empty">Aucun avis pour le moment.</p>
+        </div>
+        <div class="settings-card">
+          <h3 data-i18n="admin_simulate_title">Tests &amp; simulation</h3>
+          <p class="settings-desc" data-i18n="admin_simulate_desc">Déclenchez ces flux sur votre propre compte pour les vérifier, sans attendre les conditions réelles (15 jours d'usage, inactivité...).</p>
+          <div class="form-row">
+            <button class="btn-secondary btn-sm" onclick="openReviewPromptManual()" data-i18n="admin_simulate_review_popup">Simuler le pop-up d'avis</button>
+            <button class="btn-secondary btn-sm" id="admin-simulate-email-btn" onclick="adminSendTestReengagementEmail()" data-i18n="admin_simulate_reengagement_email">M'envoyer l'e-mail de relance</button>
+          </div>
+          <div class="account-feedback" id="admin-simulate-feedback" hidden></div>
+        </div>
+        <div class="settings-card">
           <h3 data-i18n="admin_support_title">Messages de support</h3>
           <p class="settings-desc" data-i18n="admin_support_desc">Messages envoyés depuis le formulaire de contact du site (avec ou sans compte).</p>
           <div class="table-wrap">
@@ -2455,10 +2495,6 @@
     </div>
   </div>
 </div>
-
-
-
-
 
 <!-- ══════════════ MODAL : IMPORT CSV (mapping générique) ══════════════ -->
 <div class="modal-overlay" id="csv-import-modal-overlay" hidden onclick="if(event.target===this) closeCsvImportModal()">
@@ -2708,6 +2744,40 @@
     <div class="modal-foot">
       <button class="btn-ghost" onclick="closeDowngradeGraceModal()" data-i18n="pro_modal_close">Fermer</button>
       <a href="/tarifs" class="btn-primary btn-sm" onclick="closeDowngradeGraceModal()" data-i18n="downgrade_grace_cta">Se réabonner</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MODAL : DEMANDE D'AVIS (15 jours d'utilisation) ══════════════ -->
+<div class="modal-overlay" id="review-prompt-modal-overlay" hidden onclick="if(event.target===this) closeReviewPromptModal()">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 data-i18n="review_prompt_title">Votre avis sur Pokelo ?</h3>
+      <button class="icon-btn" onclick="closeReviewPromptModal()" aria-label="Fermer"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div id="review-prompt-step-ask">
+        <p class="form-hint" data-i18n="review_prompt_text">Ça fait 15 jours que vous suivez votre bankroll avec Pokelo. Notez votre expérience et dites-nous-en un mot — les avis validés apparaissent sur la page d'accueil.</p>
+        <div class="review-star-picker" id="review-star-picker">
+          <button type="button" class="review-star" data-val="1" onclick="setReviewRating(1)" aria-label="1 étoile"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2 15.09 8.26 22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg></button>
+          <button type="button" class="review-star" data-val="2" onclick="setReviewRating(2)" aria-label="2 étoiles"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2 15.09 8.26 22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg></button>
+          <button type="button" class="review-star" data-val="3" onclick="setReviewRating(3)" aria-label="3 étoiles"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2 15.09 8.26 22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg></button>
+          <button type="button" class="review-star" data-val="4" onclick="setReviewRating(4)" aria-label="4 étoiles"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2 15.09 8.26 22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg></button>
+          <button type="button" class="review-star" data-val="5" onclick="setReviewRating(5)" aria-label="5 étoiles"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2 15.09 8.26 22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg></button>
+        </div>
+        <textarea class="textarea" id="review-prompt-text" rows="4" style="width:100%;box-sizing:border-box;margin-top:1rem" data-i18n-placeholder="review_prompt_text_placeholder" placeholder="Qu'est-ce qui vous plaît (ou pas) sur Pokelo ?"></textarea>
+        <div class="account-feedback" id="review-prompt-status" hidden></div>
+      </div>
+      <div id="review-prompt-step-done" hidden>
+        <p class="form-hint" data-i18n="review_prompt_done_text">Merci ! Votre avis a été enregistré et sera visible sur la page d'accueil une fois validé.</p>
+      </div>
+    </div>
+    <div class="modal-foot" id="review-prompt-foot-ask">
+      <button class="btn-ghost" onclick="closeReviewPromptModal()" data-i18n="review_prompt_later">Plus tard</button>
+      <button class="btn-primary btn-sm" id="review-prompt-submit-btn" onclick="submitReviewPrompt()" data-i18n="review_prompt_feedback_submit">Envoyer</button>
+    </div>
+    <div class="modal-foot" id="review-prompt-foot-done" hidden>
+      <button class="btn-primary btn-sm" onclick="closeReviewPromptModal()" data-i18n="pro_modal_close">Fermer</button>
     </div>
   </div>
 </div>
@@ -3039,12 +3109,7 @@ const I18N = {
     step3_title:'Suivez vos courbes', step3_desc:'Bankroll, ROI, winrate : tout se met à jour automatiquement.',
     step4_title:'Prenez de meilleures décisions', step4_desc:'Ajustez vos limites de jeu selon des données réelles, pas des impressions.',
     testimonials_tag:'Ils utilisent Pokelo', testimonials_title:'Ce qu\'en disent<br>les joueurs',
-    testimonial_1_text:"« J'avais un Google Sheets qui a fini par me lâcher après deux ans. Sur Pokelo je logue une session en 20 secondes depuis mon téléphone, direct après la table. »",
-    testimonial_1_name:'Alex_MTT', testimonial_1_meta:'Joueur de tournois, online',
-    testimonial_2_text:"« Le multi-devises m'a convaincue direct — je joue en euros et en dollars selon les salles, et je n'ai plus besoin de tout convertir à la main dans un tableur. »",
-    testimonial_2_name:'Sarah_CashOnly', testimonial_2_meta:'Cash game, live et online',
-    testimonial_3_text:"« Le module risque de ruine m'a fait descendre de stake avant que ça devienne un vrai problème. Rien que pour ça, ça vaut le coup d'avoir ses vraies stats sous les yeux. »",
-    testimonial_3_name:'Julien_Grinder', testimonial_3_meta:'Expresso &amp; Spin&amp;Go',
+    reviews_empty:'Soyez le premier à partager votre avis sur Pokelo.',
     pricing_tag:'Tarifs', pricing_title:'Simple, comme<br>le reste de Pokelo',
     pricing_sub:"Un plan gratuit qui couvre l'essentiel, et des formules à venir pour les joueurs les plus exigeants.",
     pricing_note_italic:'Tarifs indicatifs, susceptibles d\'évoluer.',
@@ -3112,6 +3177,8 @@ const I18N = {
     public_profile_fmt_live:'Live', public_profile_fmt_online:'Online',
     settings_account_public_stats_toggle:'Afficher mes statistiques de jeu (winrate, volume, répartition)',
     settings_account_public_stats_hint:'Aucun montant en euros n\'est jamais affiché — uniquement des pourcentages et des volumes.',
+    settings_account_emails:'E-mails', settings_account_reengagement_toggle:"Recevoir un rappel par e-mail en cas d'inactivité prolongée",
+    settings_account_reengagement_hint:"Un e-mail occasionnel si vous n'avez pas enregistré de session depuis un moment — jamais plus d'un tous les 14 jours, désinscription en un clic.",
     nav_dashboard:'Dashboard', nav_sessions:'Sessions', nav_bankrolls:'Bankrolls', nav_my_account:'Mon compte',
     btn_new_session:'Nouvelle session', btn_new_bankroll:'Nouvelle bankroll', btn_customize:'Personnaliser', btn_save:'Enregistrer',
     btn_csv_import:'Importer un CSV',
@@ -3245,6 +3312,13 @@ const I18N = {
     admin_errors_title:'Dernières erreurs serveur', admin_errors_desc:"Webhook Stripe, création de session de paiement, crédit de parrainage — surveillez ici les échecs silencieux.",
     admin_errors_col_date:'Date', admin_errors_col_source:'Source', admin_errors_col_message:'Message',
     admin_errors_empty:'Aucune erreur récente. Tout va bien.', admin_load_error:"Impossible de charger les statistiques admin.",
+    admin_reviews_title:'Avis', admin_reviews_desc:"Avis soumis par les utilisateurs. Seuls les avis approuvés apparaissent sur la page d'accueil.",
+    admin_reviews_col_date:'Date', admin_reviews_col_rating:'Note', admin_reviews_col_author:'Auteur', admin_reviews_col_text:'Avis', admin_reviews_col_status:'Statut',
+    admin_reviews_empty:'Aucun avis pour le moment.', admin_reviews_approve:'Valider', admin_reviews_reject:'Rejeter',
+    admin_reviews_status_pending:'En attente', admin_reviews_status_approved:'Approuvé', admin_reviews_status_rejected:'Rejeté',
+    admin_simulate_title:'Tests & simulation', admin_simulate_desc:"Déclenchez ces flux sur votre propre compte pour les vérifier, sans attendre les conditions réelles (15 jours d'usage, inactivité...).",
+    admin_simulate_review_popup:"Simuler le pop-up d'avis", admin_simulate_reengagement_email:"M'envoyer l'e-mail de relance",
+    admin_simulate_email_success:'E-mail de test envoyé à {email}.',
     admin_support_title:'Messages de support', admin_support_desc:'Messages envoyés depuis le formulaire de contact du site (avec ou sans compte).',
     admin_support_col_date:'Date', admin_support_col_category:'Type', admin_support_col_email:'Email', admin_support_col_message:'Message', admin_support_col_status:'Statut',
     admin_support_empty:'Aucun message de support pour le moment.', admin_support_status_new:'Nouveau', admin_support_status_read:'Traité',
@@ -3299,6 +3373,13 @@ const I18N = {
     downgrade_grace_cta:'Se réabonner',
     bankroll_frozen_badge:'Gelée', bankroll_frozen_tooltip:"Bankroll gelée : plus d'une bankroll nécessite Pokelo Pro. Données conservées, réabonnez-vous pour la réutiliser.",
     pro_modal_frozen_bankroll:"Cette bankroll est gelée car votre plan gratuit ne permet qu'une seule bankroll active. Repassez à Pokelo Pro pour la réutiliser — aucune donnée n'a été perdue.",
+    review_prompt_title:'Votre avis sur Pokelo ?', review_prompt_later:'Plus tard',
+    review_prompt_text:"Ça fait 15 jours que vous suivez votre bankroll avec Pokelo. Notez votre expérience et dites-nous-en un mot — les avis validés apparaissent sur la page d'accueil.",
+    review_prompt_text_placeholder:'Qu\'est-ce qui vous plaît (ou pas) sur Pokelo ?',
+    review_prompt_done_text:"Merci ! Votre avis a été enregistré et sera visible sur la page d'accueil une fois validé.",
+    review_prompt_feedback_submit:'Envoyer', review_prompt_error_no_rating:'Choisissez une note avant d\'envoyer.',
+    review_prompt_feedback_error:'Échec de l\'envoi, réessayez.',
+    dashboard_review_banner_text:'Pokelo vous plaît ? Laissez un avis — ça aide d\'autres joueurs à nous découvrir.', dashboard_review_banner_cta:'Laisser un avis',
     pro_welcome_title:'Bienvenue dans Pokelo Pro !', pro_welcome_sub:'Votre abonnement est actif. Voici ce qui est débloqué :',
     pro_welcome_cta:'Découvrir mon dashboard',
     pro_welcome_benefit_1:'Bankrolls illimitées', pro_welcome_benefit_2:'Dashboard modulaire personnalisable',
@@ -3377,12 +3458,7 @@ const I18N = {
     step3_title:'Track your curves', step3_desc:'Bankroll, ROI, win rate: everything updates automatically.',
     step4_title:'Make better decisions', step4_desc:'Adjust your playing limits based on real data, not impressions.',
     testimonials_tag:'Trusted by players', testimonials_title:'What players<br>are saying',
-    testimonial_1_text:'"I had a Google Sheet that finally gave up after two years. On Pokelo I log a session in 20 seconds from my phone, right after the table."',
-    testimonial_1_name:'Alex_MTT', testimonial_1_meta:'Tournament player, online',
-    testimonial_2_text:'"Multi-currency sold me instantly — I play in euros and dollars depending on the room, and I no longer have to convert everything by hand in a spreadsheet."',
-    testimonial_2_name:'Sarah_CashOnly', testimonial_2_meta:'Cash game, live and online',
-    testimonial_3_text:'"The risk of ruin module got me to move down a stake before it became a real problem. Just for that, having real stats in front of you is worth it."',
-    testimonial_3_name:'Julien_Grinder', testimonial_3_meta:'Expresso &amp; Spin&amp;Go',
+    reviews_empty:'Be the first to share your review of Pokelo.',
     pricing_tag:'Pricing', pricing_title:'Simple, just like<br>the rest of Pokelo',
     pricing_sub:'A free plan that covers the essentials, with more formulas coming soon for the most demanding players.',
     pricing_note_italic:'Indicative pricing, subject to change.',
@@ -3450,6 +3526,8 @@ const I18N = {
     public_profile_fmt_live:'Live', public_profile_fmt_online:'Online',
     settings_account_public_stats_toggle:'Show my game stats (winrate, volume, breakdown)',
     settings_account_public_stats_hint:'No amount in euros is ever shown — only percentages and volumes.',
+    settings_account_emails:'Emails', settings_account_reengagement_toggle:"Get an email reminder after a while of inactivity",
+    settings_account_reengagement_hint:"An occasional email if you haven't logged a session in a while — never more than once every 14 days, one-click unsubscribe.",
     nav_dashboard:'Dashboard', nav_sessions:'Sessions', nav_bankrolls:'Bankrolls', nav_my_account:'My account',
     btn_new_session:'New session', btn_new_bankroll:'New bankroll', btn_customize:'Customize', btn_save:'Save',
     btn_csv_import:'Import a CSV',
@@ -3583,6 +3661,13 @@ const I18N = {
     admin_errors_title:'Recent server errors', admin_errors_desc:'Stripe webhook, checkout session creation, referral crediting — monitor silent failures here.',
     admin_errors_col_date:'Date', admin_errors_col_source:'Source', admin_errors_col_message:'Message',
     admin_errors_empty:'No recent errors. All good.', admin_load_error:'Could not load admin stats.',
+    admin_reviews_title:'Reviews', admin_reviews_desc:'Reviews submitted by users. Only approved reviews appear on the homepage.',
+    admin_reviews_col_date:'Date', admin_reviews_col_rating:'Rating', admin_reviews_col_author:'Author', admin_reviews_col_text:'Review', admin_reviews_col_status:'Status',
+    admin_reviews_empty:'No reviews yet.', admin_reviews_approve:'Approve', admin_reviews_reject:'Reject',
+    admin_reviews_status_pending:'Pending', admin_reviews_status_approved:'Approved', admin_reviews_status_rejected:'Rejected',
+    admin_simulate_title:'Tests & simulation', admin_simulate_desc:"Trigger these flows on your own account to check them, without waiting for the real conditions (15 days of usage, inactivity...).",
+    admin_simulate_review_popup:'Simulate the review pop-up', admin_simulate_reengagement_email:'Send me the reminder email',
+    admin_simulate_email_success:'Test email sent to {email}.',
     admin_support_title:'Support messages', admin_support_desc:'Messages sent from the site\'s contact form (with or without an account).',
     admin_support_col_date:'Date', admin_support_col_category:'Type', admin_support_col_email:'Email', admin_support_col_message:'Message', admin_support_col_status:'Status',
     admin_support_empty:'No support messages yet.', admin_support_status_new:'New', admin_support_status_read:'Resolved',
@@ -3637,6 +3722,13 @@ const I18N = {
     downgrade_grace_cta:'Resubscribe',
     bankroll_frozen_badge:'Frozen', bankroll_frozen_tooltip:'Frozen bankroll: more than one bankroll requires Pokelo Pro. Data is kept — resubscribe to use it again.',
     pro_modal_frozen_bankroll:"This bankroll is frozen because your free plan only allows one active bankroll. Upgrade to Pokelo Pro to use it again — no data was lost.",
+    review_prompt_title:'How\'s Pokelo working for you?', review_prompt_later:'Later',
+    review_prompt_text:'You\'ve been tracking your bankroll with Pokelo for 15 days. Rate your experience and tell us a word about it — approved reviews appear on the homepage.',
+    review_prompt_text_placeholder:'What do (or don\'t) you like about Pokelo?',
+    review_prompt_done_text:'Thank you! Your review has been recorded and will show on the homepage once approved.',
+    review_prompt_feedback_submit:'Send', review_prompt_error_no_rating:'Pick a rating before sending.',
+    review_prompt_feedback_error:'Failed to send, try again.',
+    dashboard_review_banner_text:'Enjoying Pokelo? Leave a review — it helps other players discover us.', dashboard_review_banner_cta:'Leave a review',
     pro_welcome_title:'Welcome to Pokelo Pro!', pro_welcome_sub:'Your subscription is active. Here\'s what\'s unlocked:',
     pro_welcome_cta:'Discover my dashboard',
     pro_welcome_benefit_1:'Unlimited bankrolls', pro_welcome_benefit_2:'Customizable modular dashboard',
@@ -4034,7 +4126,7 @@ const STORAGE_KEY = 'pokelo_state_v1';
 let state = null;
 
 function defaultProfile(){
-  return { displayName: '', avatarUrl: '', isPublic: false, publicShowStats: false, phone: '', phoneCountry: '' };
+  return { displayName: '', avatarUrl: '', isPublic: false, publicShowStats: false, phone: '', phoneCountry: '', reengagementEmailsEnabled: true };
 }
 function defaultState(){
   return { bankrolls: [], sessions: [], isDemo: false, demoDismissed: false, dashboardLayout: DEFAULT_LAYOUT.slice(), settings: defaultSettings(), profile: defaultProfile(), deletedBankrollIds: [], deletedSessionIds: [] };
@@ -4218,6 +4310,8 @@ function appRouter(path){
   document.querySelectorAll('.app-nav-link').forEach(a => a.classList.toggle('active', a.dataset.appnav === section));
   populateBankrollSelects();
   maybeShowDowngradeGraceModal();
+  maybeShowReviewPrompt();
+  updateReviewBannerVisibility();
   if (section === 'dashboard') renderDashboard();
   if (section === 'sessions') renderSessions();
   if (section === 'bankrolls') renderBankrolls();
@@ -4404,6 +4498,51 @@ function renderArticle(slug){
     <div class="article-body">${a.content}</div>
   `;
   document.title = a.title + ' — Pokelo';
+}
+
+/* ══════════════════════════════════════════════════════════════
+   POKELO — avis publics (page d'accueil)
+   Lecture directe via le client Supabase (RLS autorise la lecture
+   anonyme des avis status='approved', voir SUPABASE_SETUP.md §15) —
+   aucune fonction serverless nécessaire, la donnée est déjà publique
+   une fois approuvée.
+   ══════════════════════════════════════════════════════════════ */
+function starsHtml(rating){
+  let html = '';
+  for (let i = 1; i <= 5; i++) {
+    html += `<svg class="icon${i <= rating ? ' filled' : ''}" viewBox="0 0 24 24" fill="${i <= rating ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.6"><path d="M12 2 15.09 8.26 22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg>`;
+  }
+  return html;
+}
+async function renderPublicReviews(){
+  const grid = document.getElementById('reviews-grid');
+  const emptyEl = document.getElementById('reviews-empty');
+  if (!grid || !window.supabase) return;
+  try {
+    const { data, error } = await supabase.from('reviews')
+      .select('rating,text,display_name,created_at')
+      .eq('status', 'approved')
+      .order('created_at', { ascending: false })
+      .limit(9);
+    if (error) throw error;
+    if (!data || !data.length) {
+      grid.querySelectorAll('.testimonial-card').forEach(el => el.remove());
+      if (emptyEl) emptyEl.hidden = false;
+      return;
+    }
+    if (emptyEl) emptyEl.hidden = true;
+    grid.innerHTML = data.map(r => `
+      <div class="testimonial-card">
+        <div class="testimonial-stars">${starsHtml(r.rating)}</div>
+        <p class="testimonial-text">${escapeHtml(r.text)}</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">${escapeHtml((r.display_name || '?').trim().charAt(0).toUpperCase())}</div>
+          <div class="testimonial-name">${escapeHtml(r.display_name || 'Joueur Pokelo')}</div>
+        </div>
+      </div>`).join('');
+  } catch (e) {
+    console.warn('renderPublicReviews:', e);
+  }
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -4922,6 +5061,7 @@ function applyPresetFromPrompt(name){
 }
 
 function renderDashboard(){
+  updateReviewBannerVisibility();
   const el = document.getElementById('dashboard-content');
   if (!state.bankrolls.length) {
     el.innerHTML = onboardingWelcomeHtml();
@@ -5997,6 +6137,97 @@ function closeDowngradeGraceModal(){
   document.getElementById('downgrade-grace-modal-overlay').hidden = true;
 }
 
+// ── Demande d'avis après 15 jours d'usage réel ──
+// Avis interne (table `reviews`, RLS) plutôt qu'un service tiers : soumis
+// avec une note 1-5 et un texte, toujours en attente de modération avant
+// d'apparaître sur la page d'accueil (voir renderPublicReviews, admin
+// api/admin-reviews.js).
+const REVIEW_PROMPT_DELAY_DAYS = 15;
+let reviewPromptRating = 0;
+function resetReviewPromptModal(){
+  reviewPromptRating = 0;
+  renderReviewStars(0);
+  const textEl = document.getElementById('review-prompt-text');
+  if (textEl) textEl.value = '';
+  const status = document.getElementById('review-prompt-status');
+  if (status) status.hidden = true;
+  document.getElementById('review-prompt-step-ask').hidden = false;
+  document.getElementById('review-prompt-step-done').hidden = true;
+  document.getElementById('review-prompt-foot-ask').hidden = false;
+  document.getElementById('review-prompt-foot-done').hidden = true;
+}
+function maybeShowReviewPrompt(){
+  if (!currentUser || !currentUser.created_at) return;
+  if (!state.sessions.length) return; // pas encore vraiment utilisé l'app
+  if (!document.getElementById('downgrade-grace-modal-overlay').hidden) return; // pas deux popups à la fois
+  const accountAgeDays = (Date.now() - new Date(currentUser.created_at).getTime()) / (24 * 60 * 60 * 1000);
+  if (accountAgeDays < REVIEW_PROMPT_DELAY_DAYS) return;
+  const seenKey = 'pokelo_review_prompt_seen';
+  try { if (localStorage.getItem(seenKey)) return; } catch (e) {}
+  resetReviewPromptModal();
+  document.getElementById('review-prompt-modal-overlay').hidden = false;
+  try { localStorage.setItem(seenKey, '1'); } catch (e) {}
+}
+function closeReviewPromptModal(){
+  document.getElementById('review-prompt-modal-overlay').hidden = true;
+}
+// Point d'entrée permanent dans le dashboard (par opposition au pop-up
+// automatique des 15 jours) : ouvre le même flux, sans passer par les
+// conditions d'âge de compte puisque c'est l'utilisateur qui a cliqué
+// lui-même.
+function openReviewPromptManual(){
+  resetReviewPromptModal();
+  document.getElementById('review-prompt-modal-overlay').hidden = false;
+}
+function updateReviewBannerVisibility(){
+  const banner = document.getElementById('dashboard-review-banner');
+  if (!banner) return;
+  let dismissed = false;
+  try { dismissed = !!localStorage.getItem('pokelo_review_banner_dismissed'); } catch (e) {}
+  banner.hidden = dismissed || !state.sessions.length;
+}
+function dismissReviewBanner(){
+  try { localStorage.setItem('pokelo_review_banner_dismissed', '1'); } catch (e) {}
+  updateReviewBannerVisibility();
+}
+function renderReviewStars(rating){
+  document.querySelectorAll('#review-star-picker .review-star').forEach(btn => {
+    btn.classList.toggle('filled', Number(btn.dataset.val) <= rating);
+  });
+}
+function setReviewRating(rating){
+  reviewPromptRating = rating;
+  renderReviewStars(rating);
+}
+async function submitReviewPrompt(){
+  const status = document.getElementById('review-prompt-status');
+  const btn = document.getElementById('review-prompt-submit-btn');
+  const textEl = document.getElementById('review-prompt-text');
+  const text = textEl.value.trim();
+  if (!reviewPromptRating) {
+    status.hidden = false; status.className = 'account-feedback error'; status.textContent = t('review_prompt_error_no_rating');
+    return;
+  }
+  if (!text) { textEl.focus(); return; }
+  if (!currentUser || !window.supabase) return;
+  setBtnLoading(btn, true);
+  try {
+    const displayName = (state.profile && state.profile.displayName) || (currentUser.email || '').split('@')[0];
+    const { error } = await supabase.from('reviews').insert({
+      user_id: currentUser.id, rating: reviewPromptRating, text, display_name: displayName,
+    });
+    if (error) throw error;
+    document.getElementById('review-prompt-step-ask').hidden = true;
+    document.getElementById('review-prompt-foot-ask').hidden = true;
+    document.getElementById('review-prompt-step-done').hidden = false;
+    document.getElementById('review-prompt-foot-done').hidden = false;
+  } catch (e) {
+    status.hidden = false; status.className = 'account-feedback error'; status.textContent = t('review_prompt_feedback_error') + (e && e.message ? ` (${e.message})` : '');
+  } finally {
+    setBtnLoading(btn, false);
+  }
+}
+
 const PRO_CROWN_ICON = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 18h14l1.4-8.4-4.4 2.6-3-5.2-3 5.2-4.4-2.6L5 18Z"/></svg>';
 // Petite couronne cliquable à afficher à côté de toute fonctionnalité Pro
 // pour un utilisateur gratuit — jamais rendue pour un compte déjà Pro.
@@ -6050,7 +6281,7 @@ async function submitSupportMessage(){
     }
     const headers = { 'Content-Type': 'application/json' };
     if (token) headers.Authorization = `Bearer ${token}`;
-    const res = await fetch('/api/support-submit', { method: 'POST', headers, body: JSON.stringify({ category, message, email: email || null }) });
+    const res = await fetch('/api/support', { method: 'POST', headers, body: JSON.stringify({ category, message, email: email || null }) });
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(data.error || 'failed');
     feedback.hidden = false; feedback.className = 'account-feedback'; feedback.textContent = t('support_modal_success');
@@ -6231,6 +6462,7 @@ async function syncPushToCloudRun(){
       display_name: profile.displayName || null, avatar_url: profile.avatarUrl || null, is_public: !!profile.isPublic,
       public_show_stats: !!profile.publicShowStats,
       phone: profile.phone || null, phone_country: profile.phoneCountry || null,
+      reengagement_emails_enabled: profile.reengagementEmailsEnabled !== false,
     });
     if (profileErr) throw profileErr;
     cloudSyncRetryCount = 0;
@@ -6584,6 +6816,7 @@ async function completeSignInRun(session){
           publicShowStats: !!cloud.profile.public_show_stats,
           phone: cloud.profile.phone || '',
           phoneCountry: cloud.profile.phone_country || '',
+          reengagementEmailsEnabled: cloud.profile.reengagement_emails_enabled !== false,
         };
         // Rattrapage : le nom saisi à l'inscription est passé en métadonnée
         // auth (user_metadata.name) mais le trigger handle_new_user() ne l'a
@@ -6792,7 +7025,7 @@ async function loadReferralStats(){
     const { data: { session } } = await supabase.auth.getSession();
     const token = session && session.access_token;
     if (!token) return;
-    const res = await fetch('/api/referral-stats', { headers: { Authorization: `Bearer ${token}` } });
+    const res = await fetch('/api/public-profile', { headers: { Authorization: `Bearer ${token}` } });
     if (!res.ok) return;
     const data = await res.json();
     hint.textContent = t('settings_referral_stats').replace('{count}', data.totalReferred).replace('{rewards}', data.rewardsGiven);
@@ -6930,6 +7163,7 @@ async function renderAdminPanel(){
   if (feedback) { feedback.hidden = false; feedback.className = 'account-feedback'; feedback.textContent = t('account_loading'); }
   renderAdminPromosTable();
   renderAdminSupportTable();
+  renderAdminReviewsTable();
   try {
     const { data: { session } } = await supabase.auth.getSession();
     const token = session && session.access_token;
@@ -7083,7 +7317,7 @@ async function renderAdminSupportTable(){
   const emptyEl = document.getElementById('admin-support-empty');
   if (!tbody) return;
   try {
-    const data = await adminAuthedFetch('/api/admin-support', null, 'GET');
+    const data = await adminAuthedFetch('/api/support', null, 'GET');
     const messages = data.messages || [];
     if (!messages.length) {
       tbody.innerHTML = '';
@@ -7110,10 +7344,68 @@ async function renderAdminSupportTable(){
 }
 async function toggleSupportMessageStatus(id, status){
   try {
-    await adminAuthedFetch('/api/admin-support', { id, status });
+    await adminAuthedFetch('/api/support', { action: 'update-status', id, status });
     renderAdminSupportTable();
   } catch (e) {
     showToast(t('admin_load_error'), 'error');
+  }
+}
+async function renderAdminReviewsTable(){
+  const tbody = document.getElementById('admin-reviews-tbody');
+  const emptyEl = document.getElementById('admin-reviews-empty');
+  if (!tbody) return;
+  try {
+    const data = await adminAuthedFetch('/api/admin-reviews', null, 'GET');
+    const reviews = data.reviews || [];
+    if (!reviews.length) {
+      tbody.innerHTML = '';
+      if (emptyEl) emptyEl.hidden = false;
+      return;
+    }
+    if (emptyEl) emptyEl.hidden = true;
+    const locale = state.settings.lang === 'en' ? 'en-US' : 'fr-FR';
+    const statusLabel = { pending: t('admin_reviews_status_pending'), approved: t('admin_reviews_status_approved'), rejected: t('admin_reviews_status_rejected') };
+    const statusColor = { pending: 'var(--grey)', approved: 'var(--good)', rejected: 'var(--critical)' };
+    tbody.innerHTML = reviews.map(r => `
+      <tr>
+        <td>${new Date(r.created_at).toLocaleDateString(locale, { day:'2-digit', month:'short', year:'numeric' })}</td>
+        <td>${starsHtml(r.rating)}</td>
+        <td>${escapeHtml(r.display_name || '—')}</td>
+        <td style="max-width:320px;white-space:pre-wrap">${escapeHtml(r.text)}</td>
+        <td><span style="color:${statusColor[r.status]}">${statusLabel[r.status] || r.status}</span></td>
+        <td><div class="row-actions">
+          ${r.status !== 'approved' ? `<button class="btn-ghost btn-sm" onclick="setAdminReviewStatus('${r.id}','approved')" data-i18n="admin_reviews_approve">Valider</button>` : ''}
+          ${r.status !== 'rejected' ? `<button class="btn-ghost btn-sm" onclick="setAdminReviewStatus('${r.id}','rejected')" data-i18n="admin_reviews_reject">Rejeter</button>` : ''}
+        </div></td>
+      </tr>`).join('');
+  } catch (e) {
+    console.warn('renderAdminReviewsTable:', e);
+    tbody.innerHTML = '';
+    if (emptyEl) { emptyEl.hidden = false; emptyEl.textContent = t('admin_load_error'); }
+  }
+}
+async function setAdminReviewStatus(id, status){
+  try {
+    await adminAuthedFetch('/api/admin-reviews', { id, status });
+    renderAdminReviewsTable();
+    if (status === 'approved') renderPublicReviews();
+  } catch (e) {
+    showToast(t('admin_load_error'), 'error');
+  }
+}
+async function adminSendTestReengagementEmail(){
+  const btn = document.getElementById('admin-simulate-email-btn');
+  const feedback = document.getElementById('admin-simulate-feedback');
+  setBtnLoading(btn, true);
+  try {
+    const data = await adminAuthedFetch('/api/reengagement', { action: 'send-test' });
+    feedback.hidden = false; feedback.className = 'account-feedback';
+    feedback.textContent = t('admin_simulate_email_success').replace('{email}', data.email);
+  } catch (e) {
+    feedback.hidden = false; feedback.className = 'account-feedback error';
+    feedback.textContent = t('admin_load_error') + (e && e.message ? ` (${e.message})` : '');
+  } finally {
+    setBtnLoading(btn, false);
   }
 }
 
@@ -7149,6 +7441,8 @@ function renderProfileSettings(){
   if (linkRow) linkRow.hidden = !p.isPublic;
   const statsToggle = document.getElementById('profile-public-stats-toggle');
   if (statsToggle) statsToggle.checked = !!p.publicShowStats;
+  const reengagementToggle = document.getElementById('reengagement-emails-toggle');
+  if (reengagementToggle) reengagementToggle.checked = p.reengagementEmailsEnabled !== false;
   const linkInput = document.getElementById('profile-share-link');
   if (linkInput) linkInput.value = `${location.origin}/u/${currentUser.id}`;
   populateAccountPhoneCountrySelect();
@@ -7256,6 +7550,15 @@ function togglePublicStats(checked){
   state.profile.publicShowStats = checked;
   DB.save(state);
   renderProfileSettings();
+  if (currentUser) {
+    clearTimeout(syncDebounceTimer);
+    syncPushToCloud().then(ok => showToast(t(ok ? 'toast_profile_public_updated' : 'toast_sync_error'), ok ? 'success' : 'error'));
+  }
+}
+function toggleReengagementEmails(checked){
+  if (!state.profile) state.profile = defaultProfile();
+  state.profile.reengagementEmailsEnabled = checked;
+  DB.save(state);
   if (currentUser) {
     clearTimeout(syncDebounceTimer);
     syncPushToCloud().then(ok => showToast(t(ok ? 'toast_profile_public_updated' : 'toast_sync_error'), ok ? 'success' : 'error'));
@@ -8609,6 +8912,7 @@ document.addEventListener('DOMContentLoaded', function(){
   applySettingsToDOM();
   document.getElementById('footer-year').textContent = new Date().getFullYear();
   renderBlogGrid('blog-preview-grid', 3);
+  renderPublicReviews();
   drawHeroCharts();
   renderModuleMarquee();
   renderPricingTable('pricing-table-landing', { highlightPlanId: null, showCta: true });

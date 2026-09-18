@@ -1,20 +1,19 @@
-// Vercel Serverless Function — expose un profil public en lecture seule.
-// N'utilise JAMAIS la clé publishable côté client pour ça : les policies RLS sur
-// `profiles` restreignent la lecture à `auth.uid() = id`, donc un visiteur anonyme
-// ne peut lire aucun profil (même public) sans passer par ici. Cette fonction
-// utilise la clé service_role côté serveur mais ne renvoie jamais l'email ni
-// aucune donnée financière — uniquement display_name / avatar_url / created_at,
-// et seulement si is_public = true.
-module.exports = async (req, res) => {
-  if (req.method !== 'GET') { res.status(405).json({ error: 'Method not allowed' }); return; }
+// Vercel Serverless Function — deux lectures publiques/utilisateur distinctes,
+// regroupées dans un seul fichier pour rester sous la limite de 12 fonctions
+// serverless du plan Hobby Vercel :
+//   - ?id=<userId> (sans authentification) : profil public en lecture seule.
+//     N'utilise JAMAIS la clé publishable côté client pour ça : les policies RLS
+//     sur `profiles` restreignent la lecture à `auth.uid() = id`, donc un
+//     visiteur anonyme ne peut lire aucun profil (même public) sans passer par
+//     ici. Ne renvoie jamais l'email ni aucune donnée financière — uniquement
+//     display_name / avatar_url / created_at, et seulement si is_public = true.
+//   - sans ?id, avec `Authorization: Bearer <token>` : statistiques de
+//     parrainage de l'utilisateur connecté. Mêmes policies RLS limitantes,
+//     donc clé service_role ici aussi ; ne renvoie que des nombres, jamais les
+//     lignes elles-mêmes (email, etc.).
+const { getSupabaseUser } = require('./_stripe-helpers');
 
-  const userId = req.query.id;
-  if (!userId) { res.status(400).json({ error: 'Missing id' }); return; }
-
-  const SUPABASE_URL = process.env.SUPABASE_URL;
-  const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!SUPABASE_URL || !SERVICE_ROLE_KEY) { res.status(500).json({ error: 'Server misconfigured' }); return; }
-
+async function handlePublicProfile(req, res, userId, SUPABASE_URL, SERVICE_ROLE_KEY){
   try {
     const url = `${SUPABASE_URL}/rest/v1/profiles?id=eq.${encodeURIComponent(userId)}&is_public=is.true&select=display_name,avatar_url,created_at,public_show_stats`;
     const profileRes = await fetch(url, {
@@ -53,7 +52,7 @@ module.exports = async (req, res) => {
   } catch (e) {
     res.status(500).json({ error: 'Unexpected error', detail: String(e && e.message || e) });
   }
-};
+}
 
 // N'agrège et ne renvoie jamais aucun montant (buy_in/cashout) — uniquement des
 // pourcentages et des volumes — même si l'utilisateur a explicitement opté pour
@@ -80,3 +79,38 @@ async function computePublicStats(SUPABASE_URL, SERVICE_ROLE_KEY, userId){
   Object.keys(byFormat).forEach(k => { byFormat[k] = pct(byFormat[k]); });
   return { totalSessions: total, winratePct: pct(wins), byCategory, byFormat };
 }
+
+async function handleReferralStats(req, res, SUPABASE_URL, SERVICE_ROLE_KEY){
+  const authHeader = req.headers.authorization || '';
+  const accessToken = authHeader.replace(/^Bearer\s+/i, '');
+  if (!accessToken) { res.status(401).json({ error: 'Missing access token' }); return; }
+  try {
+    const user = await getSupabaseUser(SUPABASE_URL, SERVICE_ROLE_KEY, accessToken);
+    if (!user) { res.status(401).json({ error: 'Invalid or expired session' }); return; }
+
+    const referredRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/profiles?select=referral_reward_claimed&referred_by_user_id=eq.${user.id}`,
+      { headers: { apikey: SERVICE_ROLE_KEY, Authorization: `Bearer ${SERVICE_ROLE_KEY}` } }
+    );
+    if (!referredRes.ok) throw new Error('Supabase query failed');
+    const referred = await referredRes.json();
+    const totalReferred = referred.length;
+    const rewardsGiven = referred.filter(r => r.referral_reward_claimed).length;
+
+    res.status(200).json({ totalReferred, rewardsGiven });
+  } catch (e) {
+    res.status(502).json({ error: 'Query failed', detail: String(e && e.message || e) });
+  }
+}
+
+module.exports = async (req, res) => {
+  if (req.method !== 'GET') { res.status(405).json({ error: 'Method not allowed' }); return; }
+
+  const SUPABASE_URL = process.env.SUPABASE_URL;
+  const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!SUPABASE_URL || !SERVICE_ROLE_KEY) { res.status(500).json({ error: 'Server misconfigured' }); return; }
+
+  const userId = req.query.id;
+  if (userId) { await handlePublicProfile(req, res, userId, SUPABASE_URL, SERVICE_ROLE_KEY); return; }
+  await handleReferralStats(req, res, SUPABASE_URL, SERVICE_ROLE_KEY);
+};

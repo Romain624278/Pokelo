@@ -7,6 +7,9 @@
     { "source": "/account/:path*", "destination": "/" },
     { "source": "/u/:path*", "destination": "/" }
   ],
+  "crons": [
+    { "path": "/api/reengagement", "schedule": "0 9 * * *" }
+  ],
   "headers": [
     {
       "source": "/(.*)",

@@ -568,12 +568,54 @@ alter table public.support_messages enable row level security;
 -- Supabase, y compris son propre message.
 ```
 
-Deux fonctions Vercel :
-- `api/support-submit.js` — publique (pas d'auth requise), insère le
-  message. Si un jeton d'accès est fourni (utilisateur connecté), `user_id`
-  et `email` sont renseignés automatiquement ; sinon le visiteur saisit son
-  email dans le formulaire.
-- `api/admin-support.js` — réservée au rôle admin (GET = liste, POST
-  `{id, status}` = bascule le statut `new`/`read`). Regroupé en un seul
-  fichier (au lieu de 2 endpoints séparés) pour rester sous la limite de 12
-  fonctions serverless du plan Hobby Vercel.
+Une seule fonction Vercel, `api/support.js`, pour rester sous la limite de 12
+fonctions serverless du plan Hobby Vercel :
+- POST sans `action` — publique (pas d'auth requise), insère le message. Si
+  un jeton d'accès est fourni (utilisateur connecté), `user_id` et `email`
+  sont renseignés automatiquement ; sinon le visiteur saisit son email dans
+  le formulaire.
+- GET, ou POST `{action:'update-status', id, status}` — réservée au rôle
+  admin (GET = liste, POST = bascule le statut `new`/`read`).
+
+## 15. Avis publics (5 étoiles, modération admin, page d'accueil)
+
+À exécuter dans Supabase (SQL Editor) — remplace l'intégration Trustpilot :
+les avis sont soumis depuis l'app, modérés par un admin, et affichés sur la
+page d'accueil une fois approuvés. Contrairement au canal de support
+(ci-dessus), la soumission et la lecture des avis approuvés passent
+directement par le client Supabase (RLS), sans fonction serverless — la
+donnée n'a rien de sensible une fois approuvée, elle est destinée à être
+publique.
+
+```sql
+create table if not exists public.reviews (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  rating smallint not null check (rating between 1 and 5),
+  text text not null check (char_length(text) between 1 and 2000),
+  display_name text,
+  status text not null default 'pending' check (status in ('pending','approved','rejected')),
+  created_at timestamptz not null default now()
+);
+
+alter table public.reviews enable row level security;
+
+-- Un utilisateur ne peut créer un avis que pour lui-même, toujours en
+-- attente (jamais approuvé directement depuis le client).
+create policy "users can insert own review" on public.reviews
+  for insert with check (auth.uid() = user_id and status = 'pending');
+
+-- Un utilisateur peut relire son propre avis (savoir où il en est), quel
+-- que soit son statut.
+create policy "users can read own review" on public.reviews
+  for select using (auth.uid() = user_id);
+
+-- N'importe qui, y compris anonyme, peut lire les avis déjà approuvés
+-- (page d'accueil publique) — jamais les avis en attente ou rejetés.
+create policy "public can read approved reviews" on public.reviews
+  for select using (status = 'approved');
+```
+
+Modération : `api/admin-reviews.js` (réservé au rôle admin, revérifié côté
+serveur, clé service_role) — GET liste tous les avis quel que soit leur
+statut, POST `{id, status}` bascule `pending`/`approved`/`rejected`.
