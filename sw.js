@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pokelo-v5';
+const CACHE_NAME = 'pokelo-v7';
 const SHELL_ASSETS = [
   './',
   './index.html',
@@ -31,7 +31,7 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const url = event.request.url;
   if (event.request.method !== 'GET') return;
-  if (url.includes('api.frankfurter.app')) return; // toujours réseau, jamais de cache
+  if (url.includes('api.frankfurter.dev')) return; // toujours réseau, jamais de cache
   // Jamais de cache pour nos propres endpoints /api/* : ce sont des réponses
   // authentifiées (via en-tête Authorization, jamais reflété dans l'URL/le
   // cache Cache Storage). Un cache-first ici renverrait la réponse d'un

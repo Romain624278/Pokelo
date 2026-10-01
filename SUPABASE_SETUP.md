@@ -619,3 +619,18 @@ create policy "public can read approved reviews" on public.reviews
 Modération : `api/admin-reviews.js` (réservé au rôle admin, revérifié côté
 serveur, clé service_role) — GET liste tous les avis quel que soit leur
 statut, POST `{id, status}` bascule `pending`/`approved`/`rejected`.
+
+## 16. Dépenses liées à une session (pourboires, repas, transport, hébergement...)
+
+À exécuter dans Supabase (SQL Editor) — une seule colonne, aucune nouvelle
+table :
+
+```sql
+alter table public.sessions add column if not exists expenses jsonb not null default '[]'::jsonb;
+```
+
+Tant que cette migration n'est pas appliquée, la synchronisation continue de
+fonctionner normalement (le code détecte l'erreur Postgres "colonne
+inconnue" — 42703 — et retente automatiquement sans ce champ) : les
+dépenses restent visibles en local mais ne remontent pas encore dans le
+cloud tant que la colonne n'existe pas.

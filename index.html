@@ -342,6 +342,15 @@
   @media (max-width: 900px) { .testimonials-grid { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 640px) { .testimonials-grid { grid-template-columns: 1fr; } }
 
+  .press-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; margin: 2.2rem auto 0; max-width: 820px; }
+  .press-card { background: var(--black); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.6rem; text-align: left; display: flex; flex-direction: column; text-decoration: none; transition: border-color .2s, transform .2s; }
+  .press-card:hover { border-color: rgba(59,130,246,0.4); transform: translateY(-3px); }
+  .press-source { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: .02em; color: var(--blue); margin-bottom: .8rem; }
+  .press-quote { font-size: .89rem; color: var(--text); line-height: 1.65; flex: 1; margin-bottom: 1.2rem; font-style: italic; }
+  .press-footer { display: flex; align-items: center; justify-content: space-between; gap: .8rem; flex-wrap: wrap; border-top: 1px solid var(--border); padding-top: .9rem; }
+  .press-meta { font-size: .74rem; color: var(--grey); }
+  .press-link { font-size: .78rem; font-weight: 700; color: var(--blue); white-space: nowrap; }
+
   /* ── PRICING ── */
   #pricing { background: radial-gradient(ellipse 60% 50% at 10% 100%, rgba(8,191,47,0.05) 0%, transparent 60%), radial-gradient(ellipse 55% 45% at 90% 0%, rgba(8,191,47,0.04) 0%, transparent 60%), var(--black-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
   .pricing-toggle { display: inline-flex; align-items: center; gap: .7rem; margin-top: 1.6rem; font-size: .85rem; color: var(--grey); }
@@ -787,6 +796,10 @@
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
   .form-hint { font-size: 0.72rem; color: var(--grey); margin-top: 0.35rem; }
   .form-section-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--grey); margin: 1.5rem 0 0.7rem; font-weight: 700; border-top: 1px solid var(--border); padding-top: 1.3rem; }
+  .expense-row { display: flex; gap: .5rem; align-items: center; margin-bottom: .5rem; }
+  .expense-row .select { flex: 1.3; min-width: 0; }
+  .expense-row .input { flex: 1; min-width: 0; }
+  @media (max-width: 480px) { .expense-row { flex-wrap: wrap; } .expense-row .select { flex-basis: 100%; } }
   .form-section-label:first-child { margin-top: 0; border-top: none; padding-top: 0; }
   .field-info { display: inline-flex; width: 14px; height: 14px; color: var(--grey); cursor: help; vertical-align: -2px; margin-left: 4px; }
   .field-info:hover { color: var(--green); }
@@ -1015,6 +1028,12 @@
     table.data-table td[data-label]::before { content: attr(data-label); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--grey); font-weight: 600; text-align: left; flex-shrink: 0; }
     table.data-table td:not([data-label]) { justify-content: flex-end; }
     table.data-table .row-actions { justify-content: flex-end; width: 100%; }
+    /* Liste des joueurs (admin) : une carte par compte sur mobile restait
+       trop grande à 9 lignes empilées. On masque les colonnes secondaires
+       (rôle, date de création, statut Stripe, nb. bankrolls/sessions bruts —
+       déjà couverts par la valeur de bankroll et la tendance 30j) pour ne
+       garder que l'essentiel d'un coup d'œil. */
+    table.admin-users-data-table .hide-mobile { display: none; }
   }
   @media (max-width: 480px) {
     /* En dessous de 2 colonnes de ~165px, le texte des filtres (ex. "Tous les
@@ -1274,6 +1293,25 @@
     </div>
     <div class="testimonials-grid fade-up" id="reviews-grid">
       <p class="reviews-empty" id="reviews-empty" data-i18n="reviews_empty" hidden>Soyez le premier à partager votre avis sur Pokelo.</p>
+    </div>
+  </section>
+
+  <!-- PRESSE — mentions presse réelles et vérifiées uniquement -->
+  <section id="press">
+    <div class="fade-up">
+      <div class="section-tag" style="color: var(--blue);" data-i18n="press_tag">Presse</div>
+      <h2 class="section-title" data-i18n="press_title">Ils parlent de<br>Pokelo</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="press-grid fade-up">
+      <a class="press-card" href="https://lamateurdepoker.fr/2026/09/13/pokelo-le-suivi-de-bankroll-enfin-simple-meme-sans-etre-un-pro/" target="_blank" rel="noopener">
+        <div class="press-source">L'Amateur de Poker</div>
+        <p class="press-quote">« L'application cherche finalement à trouver le bon équilibre : suffisamment simple pour être utilisée après chaque session, mais assez complète pour apporter une véritable lecture des résultats. »</p>
+        <div class="press-footer">
+          <span class="press-meta">Julien Tissot · 13 septembre 2026</span>
+          <span class="press-link" data-i18n="press_read_article">Lire l'article →</span>
+        </div>
+      </a>
     </div>
   </section>
 
@@ -2175,16 +2213,18 @@
             <input class="input" id="admin-users-search" placeholder="Rechercher un e-mail…" oninput="renderAdminUsersTable()" />
           </div>
           <div class="table-wrap">
-            <table class="data-table" id="admin-users-table">
+            <table class="data-table admin-users-data-table" id="admin-users-table">
               <thead><tr>
                 <th data-i18n="admin_users_col_email">E-mail</th>
                 <th data-i18n="admin_users_col_plan">Plan</th>
-                <th data-i18n="admin_users_col_role">Rôle</th>
-                <th data-i18n="admin_users_col_created">Créé le</th>
-                <th data-i18n="admin_users_col_bankrolls">Bankrolls</th>
-                <th data-i18n="admin_users_col_sessions">Sessions</th>
+                <th data-i18n="admin_users_col_bankroll_value">Bankroll totale</th>
+                <th data-i18n="admin_users_col_profit30d">30 derniers jours</th>
+                <th class="hide-mobile" data-i18n="admin_users_col_bankrolls">Bankrolls</th>
+                <th class="hide-mobile" data-i18n="admin_users_col_sessions">Sessions</th>
                 <th data-i18n="admin_users_col_last_session">Dernière session</th>
-                <th data-i18n="admin_users_col_stripe">Stripe</th>
+                <th class="hide-mobile" data-i18n="admin_users_col_role">Rôle</th>
+                <th class="hide-mobile" data-i18n="admin_users_col_created">Créé le</th>
+                <th class="hide-mobile" data-i18n="admin_users_col_stripe">Stripe</th>
                 <th></th>
               </tr></thead>
               <tbody id="admin-users-tbody"></tbody>
@@ -2471,6 +2511,12 @@
         <div class="form-hint" id="session-profit-converted" hidden></div>
       </div>
 
+      <p class="form-section-label" data-i18n="session_expenses_label">Dépenses liées à la session (optionnel)</p>
+      <p class="form-hint" data-i18n="session_expenses_hint">Pourboires, repas, transport, hébergement... pour voir le coût réel d'un déplacement, en plus du résultat de jeu.</p>
+      <div id="session-expenses-rows"></div>
+      <button type="button" class="btn-ghost btn-sm" onclick="addExpenseRow()" data-i18n="session_expenses_add">+ Ajouter une dépense</button>
+      <div class="form-hint" id="session-expenses-total" style="margin-top:.5rem" hidden></div>
+
       <p class="form-section-label">Détails (optionnel)</p>
       <div class="form-row">
         <div class="form-group">
@@ -2495,7 +2541,6 @@
     </div>
   </div>
 </div>
-
 <!-- ══════════════ MODAL : IMPORT CSV (mapping générique) ══════════════ -->
 <div class="modal-overlay" id="csv-import-modal-overlay" hidden onclick="if(event.target===this) closeCsvImportModal()">
   <div class="modal" style="max-width:720px">
@@ -2960,11 +3005,11 @@ async function getFxRate(date, from, to){
   const key = date + '|' + from + '|' + to;
   if (key in fxCache) return fxCache[key];
   // 1) taux exact à la date demandée
-  let rate = await fetchFxRate(`https://api.frankfurter.app/${date}?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`, to);
+  let rate = await fetchFxRate(`https://api.frankfurter.dev/v1/${date}?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`, to);
   // 2) repli sur le taux le plus récent publié (ex: taux du jour pas encore publié par la BCE,
   //    ou date tombant un week-end/jour férié sans cours de référence)
   if (rate == null) {
-    rate = await fetchFxRate(`https://api.frankfurter.app/latest?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`, to);
+    rate = await fetchFxRate(`https://api.frankfurter.dev/v1/latest?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`, to);
   }
   fxCache[key] = rate;
   return rate;
@@ -3120,6 +3165,7 @@ const I18N = {
     blog_tag:'Blog', blog_title:'Apprendre à gérer<br>sa bankroll',
     blog_sub:'Des guides courts et concrets sur le bankroll management, écrits pour être appliqués dès la prochaine session.',
     blog_see_all:'Voir tous les articles',
+    press_tag:'Presse', press_title:'Ils parlent de<br>Pokelo', press_read_article:"Lire l'article →",
     marquee_1:'Multi-devises avec conversion automatique', marquee_2:'Dashboard modulaire personnalisable',
     marquee_3:'Live &amp; Online unifiés', marquee_4:'Statistiques avancées (ROI, BB/100, variance)',
     marquee_5:'Export de vos données à tout moment', marquee_6:'Installable comme une vraie app (PWA)',
@@ -3198,6 +3244,12 @@ const I18N = {
     csv_import_error_none_valid:'Aucune ligne valide à importer — vérifiez le mapping des colonnes et le format de date.',
     fx_loading:'Calcul du taux de change…', fx_unavailable:'Taux de change indisponible pour cette devise.',
     fx_manual_prompt:'Saisissez le taux manuellement :', fx_manual_placeholder:'ex. 1.08',
+    session_expenses_label:'Dépenses liées à la session (optionnel)',
+    session_expenses_hint:"Pourboires, repas, transport, hébergement... pour voir le coût réel d'un déplacement, en plus du résultat de jeu.",
+    session_expenses_add:'+ Ajouter une dépense', session_expenses_total:'Total des dépenses : {amount}',
+    expense_cat_tips:'Pourboires', expense_cat_food:'Nourriture', expense_cat_transport:'Transport (taxi, Uber...)',
+    expense_cat_flight:'Avion', expense_cat_lodging:'Hôtel / Airbnb', expense_cat_other:'Autre',
+    expense_remove:'Retirer cette dépense',
     fx_rate_label:'Taux appliqué :', fx_in_bankroll:'dans la bankroll',
     stat_balance:'Solde actuel', stat_profit:'Profit total', stat_roi:'ROI', stat_sessions:'Sessions', stat_winrate:'Winrate',
     stat_since_creation:'depuis la création', stat_roi_sub:'sur la mise totale engagée', stat_recorded:'enregistrées', stat_winning:'sessions gagnantes',
@@ -3326,6 +3378,7 @@ const I18N = {
     admin_users_title:'Comptes & mouvements', admin_users_desc:"Vue d'ensemble de tous les comptes : plan, activité, statut Stripe.",
     admin_users_col_email:'E-mail', admin_users_col_plan:'Plan', admin_users_col_role:'Rôle', admin_users_col_created:'Créé le',
     admin_users_col_bankrolls:'Bankrolls', admin_users_col_sessions:'Sessions', admin_users_col_last_session:'Dernière session', admin_users_col_stripe:'Stripe',
+    admin_users_col_bankroll_value:'Bankroll totale', admin_users_col_profit30d:'30 derniers jours',
     admin_users_empty:'Aucun compte ne correspond à cette recherche.', admin_users_details:'Détails',
     admin_detail_title:'Fiche utilisateur', admin_detail_load_error:'Impossible de charger la fiche utilisateur.',
     admin_detail_member_since:'Membre depuis', admin_detail_no_stripe:'Aucun client Stripe associé.',
@@ -3469,6 +3522,7 @@ const I18N = {
     blog_tag:'Blog', blog_title:'Learn to manage<br>your bankroll',
     blog_sub:'Short, practical guides on bankroll management, written to be applied from your very next session.',
     blog_see_all:'See all articles',
+    press_tag:'Press', press_title:'Press & media<br>coverage', press_read_article:'Read the article →',
     marquee_1:'Multi-currency with automatic conversion', marquee_2:'Modular, customizable dashboard',
     marquee_3:'Live &amp; online unified', marquee_4:'Advanced statistics (ROI, BB/100, variance)',
     marquee_5:'Export your data anytime', marquee_6:'Installable as a real app (PWA)',
@@ -3547,6 +3601,12 @@ const I18N = {
     csv_import_error_none_valid:'No valid rows to import — check the column mapping and the date format.',
     fx_loading:'Fetching exchange rate…', fx_unavailable:'Exchange rate unavailable for this currency.',
     fx_manual_prompt:'Enter the rate manually:', fx_manual_placeholder:'e.g. 1.08',
+    session_expenses_label:'Session expenses (optional)',
+    session_expenses_hint:'Tips, food, transport, lodging... to see the real cost of a trip, on top of the game result.',
+    session_expenses_add:'+ Add an expense', session_expenses_total:'Total expenses: {amount}',
+    expense_cat_tips:'Tips', expense_cat_food:'Food', expense_cat_transport:'Transport (taxi, Uber...)',
+    expense_cat_flight:'Flight', expense_cat_lodging:'Hotel / Airbnb', expense_cat_other:'Other',
+    expense_remove:'Remove this expense',
     fx_rate_label:'Rate applied:', fx_in_bankroll:'in the bankroll',
     stat_balance:'Current balance', stat_profit:'Total profit', stat_roi:'ROI', stat_sessions:'Sessions', stat_winrate:'Win rate',
     stat_since_creation:'since creation', stat_roi_sub:'on total amount staked', stat_recorded:'recorded', stat_winning:'winning sessions',
@@ -3675,6 +3735,7 @@ const I18N = {
     admin_users_title:'Accounts & activity', admin_users_desc:'Overview of every account: plan, activity, Stripe status.',
     admin_users_col_email:'Email', admin_users_col_plan:'Plan', admin_users_col_role:'Role', admin_users_col_created:'Created',
     admin_users_col_bankrolls:'Bankrolls', admin_users_col_sessions:'Sessions', admin_users_col_last_session:'Last session', admin_users_col_stripe:'Stripe',
+    admin_users_col_bankroll_value:'Total bankroll', admin_users_col_profit30d:'Last 30 days',
     admin_users_empty:'No account matches this search.', admin_users_details:'Details',
     admin_detail_title:'User details', admin_detail_load_error:'Could not load user details.',
     admin_detail_member_since:'Member since', admin_detail_no_stripe:'No Stripe customer linked.',
@@ -4204,6 +4265,9 @@ function getSessionsFor(bankrollId){
   return state.sessions.filter(s => s.bankrollId === bankrollId).sort((a,b)=> a.date.localeCompare(b.date));
 }
 // sessionProfit : voir js/pure-utils.js
+function sessionExpensesTotal(s){
+  return (s.expenses || []).reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+}
 function bankrollBalance(bankrollId){
   const bk = getBankroll(bankrollId); if(!bk) return 0;
   const invested = state.sessions.filter(s=>s.bankrollId===bankrollId).reduce((sum,s)=>sum+sessionProfit(s),0);
@@ -6367,7 +6431,7 @@ function mapRemoteBankroll(b){
   return { id: b.id, name: b.name, currency: b.currency, start: Number(b.start), color: b.color, createdAt: b.created_at ? new Date(b.created_at).getTime() : Date.now() };
 }
 function mapRemoteSession(s){
-  return { id: s.id, bankrollId: s.bankroll_id, category: s.category, format: s.format, date: s.date, time: s.time, duration: s.duration, tilt: !!s.tilt, currency: s.currency, fxRate: s.fx_rate == null ? 1 : Number(s.fx_rate), buyIn: Number(s.buy_in), cashout: Number(s.cashout), bb: s.bb == null ? null : Number(s.bb), hands: s.hands, site: s.site || '', variant: s.variant || '', notes: s.notes || '', createdAt: s.created_at ? new Date(s.created_at).getTime() : Date.now() };
+  return { id: s.id, bankrollId: s.bankroll_id, category: s.category, format: s.format, date: s.date, time: s.time, duration: s.duration, tilt: !!s.tilt, currency: s.currency, fxRate: s.fx_rate == null ? 1 : Number(s.fx_rate), buyIn: Number(s.buy_in), cashout: Number(s.cashout), bb: s.bb == null ? null : Number(s.bb), hands: s.hands, site: s.site || '', variant: s.variant || '', notes: s.notes || '', expenses: Array.isArray(s.expenses) ? s.expenses : [], createdAt: s.created_at ? new Date(s.created_at).getTime() : Date.now() };
 }
 async function pullFromCloud(userId){
   const [profileRes, bankrollsRes, sessionsRes] = await Promise.all([
@@ -6424,6 +6488,7 @@ async function syncPushToCloudRun(){
       currency: s.currency || 'EUR', fx_rate: s.fxRate == null ? 1 : s.fxRate,
       buy_in: s.buyIn, cashout: s.cashout, bb: s.bb || null, hands: s.hands || null,
       site: s.site || '', variant: s.variant || '', notes: s.notes || '',
+      expenses: s.expenses || [],
       created_at: new Date(s.createdAt || Date.now()).toISOString(),
     }));
     // Les erreurs d'upsert n'étaient jusqu'ici jamais vérifiées : un rejet
@@ -6436,7 +6501,18 @@ async function syncPushToCloudRun(){
       if (error) throw error;
     }
     if (sessPayload.length) {
-      const { error } = await supabase.from('sessions').upsert(sessPayload);
+      let { error } = await supabase.from('sessions').upsert(sessPayload);
+      // 42703 = colonne inconnue (Postgres) : la migration ajoutant `expenses`
+      // (voir SUPABASE_SETUP.md) n'a pas encore été appliquée côté serveur.
+      // Sans ce repli, TOUTE synchronisation des sessions resterait bloquée
+      // (pas seulement les dépenses) tant que la migration n'est pas faite —
+      // on retente donc sans ce champ plutôt que de casser la sync existante
+      // pour une fonctionnalité additive.
+      if (error && error.code === '42703') {
+        console.warn('sync: colonne "expenses" absente côté serveur, retry sans ce champ — voir SUPABASE_SETUP.md', error);
+        const fallbackPayload = sessPayload.map(({ expenses, ...rest }) => rest);
+        ({ error } = await supabase.from('sessions').upsert(fallbackPayload));
+      }
       if (error) throw error;
     }
     // Suppressions explicites (tombstones) plutôt qu'un diff "ce qui n'est plus
@@ -6769,7 +6845,21 @@ async function completeSignInRun(session){
   currentUser = session.user;
   showAppLoadingSkeleton();
   try {
-    const cloud = await pullFromCloud(currentUser.id);
+    // La plupart des échecs ici sont un raté réseau ponctuel (wifi de salle de
+    // tournoi, bascule 4G au moment précis du chargement de l'app) : sans
+    // retry, chaque connexion/rafraîchissement dans ces conditions se soldait
+    // par le message "impossible de récupérer vos données" alors qu'une
+    // deuxième tentative quelques secondes plus tard aurait suffi — même
+    // logique que le retry déjà en place pour la synchronisation sortante
+    // (signOutUser, scheduleCloudSync).
+    let cloud;
+    try {
+      cloud = await pullFromCloud(currentUser.id);
+    } catch (e) {
+      console.warn('pullFromCloud: premier essai échoué, nouvelle tentative dans 1.5s', e);
+      await new Promise(r => setTimeout(r, 1500));
+      cloud = await pullFromCloud(currentUser.id);
+    }
     // Le plan/rôle/code de parrainage doivent toujours refléter le cloud dès
     // la connexion, indépendamment de la fusion bankrolls/sessions ci-dessous
     // — sinon un compte sans bankroll cloud (ex. un compte admin fraîchement
@@ -7060,17 +7150,29 @@ function renderAdminUsersTable(){
     const planClass = u.plan === 'free' ? 'plan-badge-free' : 'plan-badge-pro';
     return `
     <tr class="admin-user-row" onclick="openAdminUserDetail('${u.id}')">
-      <td><span class="admin-user-email"><span class="admin-user-avatar">${escapeHtml(initial)}</span>${escapeHtml(u.email || '—')}</span></td>
-      <td><span class="plan-badge ${planClass}">${escapeHtml(t('settings_account_plan_' + u.plan) || u.plan)}</span></td>
-      <td>${escapeHtml(u.role)}</td>
-      <td>${u.createdAt ? escapeHtml(new Date(u.createdAt).toLocaleDateString(locale)) : '—'}</td>
-      <td>${u.bankrollCount}</td>
-      <td>${u.sessionCount}</td>
-      <td>${u.lastSessionAt ? escapeHtml(new Date(u.lastSessionAt).toLocaleDateString(locale)) : '—'}</td>
-      <td>${u.hasStripeCustomer ? '✓' : '—'}</td>
+      <td data-label="${t('admin_users_col_email')}"><span class="admin-user-email"><span class="admin-user-avatar">${escapeHtml(initial)}</span>${escapeHtml(u.email || '—')}</span></td>
+      <td data-label="${t('admin_users_col_plan')}"><span class="plan-badge ${planClass}">${escapeHtml(t('settings_account_plan_' + u.plan) || u.plan)}</span></td>
+      <td data-label="${t('admin_users_col_bankroll_value')}">${fmtCurrencyList(u.bankrollValue)}</td>
+      <td data-label="${t('admin_users_col_profit30d')}">${fmtCurrencyList(u.profit30d, true)}</td>
+      <td class="hide-mobile" data-label="${t('admin_users_col_bankrolls')}">${u.bankrollCount}</td>
+      <td class="hide-mobile" data-label="${t('admin_users_col_sessions')}">${u.sessionCount}</td>
+      <td data-label="${t('admin_users_col_last_session')}">${u.lastSessionAt ? escapeHtml(new Date(u.lastSessionAt).toLocaleDateString(locale)) : '—'}</td>
+      <td class="hide-mobile" data-label="${t('admin_users_col_role')}">${escapeHtml(u.role)}</td>
+      <td class="hide-mobile" data-label="${t('admin_users_col_created')}">${u.createdAt ? escapeHtml(new Date(u.createdAt).toLocaleDateString(locale)) : '—'}</td>
+      <td class="hide-mobile" data-label="${t('admin_users_col_stripe')}">${u.hasStripeCustomer ? '✓' : '—'}</td>
       <td><button class="btn-ghost btn-sm" onclick="event.stopPropagation();openAdminUserDetail('${u.id}')" data-i18n="admin_users_details">Détails</button></td>
     </tr>`;
   }).join('');
+}
+// Affiche une liste de montants par devise (ex. bankroll totale d'un joueur
+// qui a des bankrolls en EUR et USD) : jamais de somme entre devises
+// différentes, chaque devise reste sur sa propre ligne/segment.
+function fmtCurrencyList(list, signed){
+  if (!Array.isArray(list) || !list.length) return '—';
+  return list.map(({ currency, value }) => {
+    const text = escapeHtml(signed ? fmtSigned(value, currency) : fmtMoney(value, currency));
+    return signed ? `<span class="${value>=0?'cell-profit pos':'cell-profit neg'}">${text}</span>` : text;
+  }).join(' · ');
 }
 async function openAdminUserDetail(userId){
   document.getElementById('admin-user-detail-modal-overlay').hidden = false;
@@ -8268,7 +8370,7 @@ function renderSessionsTable(){
       <td data-label="${t('th_format')}"><span class="badge badge-${s.format}">${FMT_LABEL[s.format]}</span></td>
       <td data-label="${t('th_buyin')}">${fmtMoney(s.buyIn, sCur)}</td>
       <td data-label="${t('th_cashout')}">${fmtMoney(s.cashout, sCur)}</td>
-      <td data-label="${t('th_result')}" class="cell-profit ${p>=0?'pos':'neg'}">${fmtSigned(p, bk.currency)}${converted ? ` <span class="fx-tag">${escapeHtml(sCur)}→${escapeHtml(bk.currency)}</span>` : ''}</td>
+      <td data-label="${t('th_result')}" class="cell-profit ${p>=0?'pos':'neg'}">${fmtSigned(p, bk.currency)}${converted ? ` <span class="fx-tag">${escapeHtml(sCur)}→${escapeHtml(bk.currency)}</span>` : ''}${sessionExpensesTotal(s) > 0 ? ` <span class="fx-tag" title="${escapeHtml(t('session_expenses_total').replace('{amount}', fmtMoney(sessionExpensesTotal(s), sCur)))}">− ${fmtMoney(sessionExpensesTotal(s), sCur)}</span>` : ''}</td>
       <td><div class="row-actions">
         <button class="icon-btn" onclick="openSessionModal('${s.id}')" aria-label="Modifier"><svg class="icon" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>
         <button class="icon-btn danger" onclick="confirmDeleteSession('${s.id}')" aria-label="Supprimer"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
@@ -8499,6 +8601,7 @@ function updateFxPreview(){
   const sessionCur = getCurrencySelectValue('session-currency-select');
   document.getElementById('session-buyin-cur').textContent = sessionCur;
   document.getElementById('session-cashout-cur').textContent = sessionCur;
+  updateExpensesTotal();
   const bk = getBankroll(document.getElementById('session-bankroll').value);
   const fxWrap = document.getElementById('session-fx-info');
   if (!bk || sessionCur === bk.currency) {
@@ -8555,11 +8658,58 @@ function updateProfitPreview(){
     convEl.hidden = true;
   }
 }
+// ── Dépenses liées à une session (pourboires, repas, transport, hébergement...) ──
+// Volontairement séparées du résultat de jeu (buyIn/cashout) : sessionProfit()
+// et tous les calculs qui en dépendent (ROI, variance, risque de ruine...)
+// restent inchangés dans toute l'app — les dépenses sont une donnée
+// informative en plus, pas une refonte de la métrique de profit partout.
+const EXPENSE_CATEGORIES = ['tips', 'food', 'transport', 'flight', 'lodging', 'other'];
+function expenseRowTemplate(category, amount){
+  const cat = EXPENSE_CATEGORIES.includes(category) ? category : 'other';
+  return `<select class="select expense-category" onchange="updateExpensesTotal()">
+      ${EXPENSE_CATEGORIES.map(c => `<option value="${c}"${c===cat?' selected':''}>${escapeHtml(t('expense_cat_'+c))}</option>`).join('')}
+    </select>
+    <input class="input expense-amount" type="number" step="0.01" min="0" placeholder="0" value="${amount!=null?amount:''}" oninput="updateExpensesTotal()" />
+    <button type="button" class="icon-btn danger" onclick="this.closest('.expense-row').remove(); updateExpensesTotal();" aria-label="${escapeHtml(t('expense_remove'))}"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg></button>`;
+}
+function addExpenseRow(category, amount){
+  const wrap = document.getElementById('session-expenses-rows');
+  const row = document.createElement('div');
+  row.className = 'expense-row';
+  row.innerHTML = expenseRowTemplate(category || 'other', amount);
+  wrap.appendChild(row);
+  updateExpensesTotal();
+}
+function renderExpenseRows(expenses){
+  const wrap = document.getElementById('session-expenses-rows');
+  wrap.innerHTML = '';
+  (expenses || []).forEach(e => addExpenseRow(e.category, e.amount));
+  updateExpensesTotal();
+}
+function collectExpenseRows(){
+  return Array.from(document.querySelectorAll('#session-expenses-rows .expense-row')).map(row => ({
+    category: row.querySelector('.expense-category').value,
+    amount: parseFloat(row.querySelector('.expense-amount').value) || 0,
+  })).filter(e => e.amount > 0);
+}
+function updateExpensesTotal(){
+  const total = collectExpenseRows().reduce((s, e) => s + e.amount, 0);
+  const el = document.getElementById('session-expenses-total');
+  if (!el) return;
+  if (total > 0) {
+    const cur = getCurrencySelectValue('session-currency-select');
+    el.hidden = false;
+    el.textContent = t('session_expenses_total').replace('{amount}', fmtMoney(total, cur));
+  } else {
+    el.hidden = true;
+  }
+}
 function openSessionModal(id){
   if (!state.bankrolls.length) { openBankrollModal(); return; }
   document.getElementById('session-id').value = id || '';
   document.getElementById('session-modal-title').textContent = id ? 'Modifier la session' : 'Nouvelle session';
   const s = id ? state.sessions.find(x=>x.id===id) : null;
+  renderExpenseRows(s ? s.expenses : []);
   populateBankrollSelects();
   const bankrollId = s ? s.bankrollId : ((currentBankrollScope && currentBankrollScope !== ALL_BANKROLLS_SCOPE) ? currentBankrollScope : state.bankrolls[0].id);
   document.getElementById('session-bankroll').value = bankrollId;
@@ -8640,7 +8790,8 @@ async function saveSession(){
     hands: (getSegVal('session-type-seg') === 'cash' && document.getElementById('session-hands').value) ? parseInt(document.getElementById('session-hands').value) : null,
     site: document.getElementById('session-site').value.trim(),
     variant: document.getElementById('session-variant').value.trim(),
-    notes: document.getElementById('session-notes').value.trim()
+    notes: document.getElementById('session-notes').value.trim(),
+    expenses: collectExpenseRows(),
   };
   if (id) {
     const s = state.sessions.find(x=>x.id===id); Object.assign(s, payload);
