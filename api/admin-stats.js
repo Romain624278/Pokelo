@@ -3,6 +3,7 @@
 // profiles.role === 'admin' via la clé service_role avant de renvoyer quoi
 // que ce soit. Le menu admin visible côté client n'est qu'un confort d'UI.
 const { getSupabaseUser, fetchProfileFields } = require('./_stripe-helpers');
+const { computeKpis } = require('./_admin-kpis');
 
 module.exports = async (req, res) => {
   if (req.method !== 'GET') { res.status(405).json({ error: 'Method not allowed' }); return; }
@@ -34,6 +35,41 @@ module.exports = async (req, res) => {
     const errors = errorsRes.ok ? await errorsRes.json() : [];
     const bankrolls = bankrollsRes.ok ? await bankrollsRes.json() : [];
     const sessions = sessionsRes.ok ? await sessionsRes.json() : [];
+
+    // Éléments secondaires : chacun est isolé, un échec (table absente,
+    // API auth indisponible) ne doit jamais casser tout le panneau.
+    const safeJson = async (url) => {
+      try { const r = await fetch(url, { headers }); return r.ok ? await r.json() : null; } catch (e) { return null; }
+    };
+    const since24h = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+    const [pendingReviewsRows, newSupportRows, errors24hRows] = await Promise.all([
+      safeJson(`${SUPABASE_URL}/rest/v1/reviews?select=id&status=eq.pending&limit=1000`),
+      safeJson(`${SUPABASE_URL}/rest/v1/support_messages?select=id&status=eq.new&limit=1000`),
+      safeJson(`${SUPABASE_URL}/rest/v1/error_logs?select=id&created_at=gte.${since24h}&limit=1000`),
+    ]);
+    // Dernière connexion : n'existe que dans l'authentification Supabase
+    // (auth.users.last_sign_in_at), pas dans `profiles`.
+    let authUsers = null;
+    try {
+      authUsers = [];
+      for (let page = 1; page <= 10; page++) {
+        const r = await fetch(`${SUPABASE_URL}/auth/v1/admin/users?page=${page}&per_page=1000`, { headers });
+        if (!r.ok) { if (page === 1) authUsers = null; break; }
+        const body = await r.json();
+        const batch = Array.isArray(body) ? body : (body.users || []);
+        authUsers = authUsers.concat(batch);
+        if (batch.length < 1000) break;
+      }
+    } catch (e) { authUsers = null; }
+    const lastSignInById = {};
+    (authUsers || []).forEach(u => { lastSignInById[u.id] = u.last_sign_in_at || null; });
+
+    const kpis = computeKpis({
+      profiles, bankrolls, sessions, authUsers,
+      pendingReviews: pendingReviewsRows ? pendingReviewsRows.length : 0,
+      newSupport: newSupportRows ? newSupportRows.length : 0,
+      errors24h: errors24hRows ? errors24hRows.length : 0,
+    });
 
     const bankrollCountByUser = {};
     const bankrollById = {};
@@ -92,6 +128,7 @@ module.exports = async (req, res) => {
       bankrollCount: bankrollCountByUser[p.id] || 0,
       sessionCount: sessionCountByUser[p.id] || 0,
       lastSessionAt: lastSessionByUser[p.id] || null,
+      lastSignInAt: lastSignInById[p.id] || null,
       bankrollValue: toCurrencyList(bankrollValueByUser[p.id]),
       profit30d: toCurrencyList(profit30dByUser[p.id]),
     }));
@@ -102,6 +139,7 @@ module.exports = async (req, res) => {
       signups7d,
       signups30d,
       referralRewardsGiven,
+      kpis,
       recentErrors: errors,
       users,
     });

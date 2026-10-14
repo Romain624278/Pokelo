@@ -681,6 +681,32 @@
   @media (max-width: 640px) { .customize-body { grid-template-columns: 1fr; } }
 
   .demo-banner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; background: rgba(8,191,47,0.06); border: 1px solid var(--border); border-radius: 10px; padding: 0.8rem 1.2rem; margin-bottom: 1.3rem; font-size: 0.83rem; color: var(--grey); }
+  /* ── ADMIN : onglets, KPIs, à traiter ── */
+  .admin-tabs { display: flex; gap: .4rem; overflow-x: auto; padding: .2rem 0 .9rem; margin: 0 0 1.2rem; border-bottom: 1px solid var(--border); -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .admin-tabs::-webkit-scrollbar { display: none; }
+  .admin-tabs a { flex: 0 0 auto; display: inline-flex; align-items: center; gap: .45rem; padding: .5rem .95rem; border-radius: 100px; border: 1px solid var(--border); background: var(--black-card); color: var(--grey); font-size: .82rem; font-weight: 600; text-decoration: none; white-space: nowrap; transition: color .15s, border-color .15s, background .15s; }
+  .admin-tabs a:hover { color: var(--text); border-color: rgba(8,191,47,.35); }
+  .admin-tabs a.active { color: #0a0a0a; background: var(--green); border-color: var(--green); }
+  .admin-tab-badge { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 100px; background: var(--critical); color: #fff; font-size: .68rem; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; }
+  .admin-tab-badge[hidden] { display: none; }
+  .admin-group-title { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--grey); margin: 1.6rem 0 .8rem; }
+  .admin-group-title:first-child { margin-top: 0; }
+  .admin-kpi-grid { margin-bottom: 0; }
+  .admin-todo { display: flex; flex-wrap: wrap; gap: .6rem; }
+  .admin-todo-chip { display: inline-flex; align-items: center; gap: .6rem; padding: .6rem 1rem; border-radius: 12px; background: rgba(245,183,0,.07); border: 1px solid rgba(245,183,0,.35); color: var(--text); text-decoration: none; font-size: .82rem; transition: transform .15s; }
+  .admin-todo-chip:hover { transform: translateY(-2px); }
+  .admin-todo-chip strong { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: .02em; color: #F5B700; }
+  .admin-todo-chip.danger { background: rgba(229,72,77,.07); border-color: rgba(229,72,77,.4); }
+  .admin-todo-chip.danger strong { color: var(--critical); }
+  .admin-todo-empty { font-size: .85rem; color: var(--grey); padding: .6rem 0; }
+  .admin-spark-card { margin-top: .9rem; }
+  .admin-spark-head { display: flex; justify-content: space-between; font-size: .78rem; color: var(--grey); margin-bottom: .7rem; }
+  .admin-spark-head #admin-signups-series-total { color: var(--text); font-weight: 700; }
+  .admin-spark { display: flex; align-items: flex-end; gap: 3px; height: 64px; }
+  .admin-spark-bar { flex: 1; min-width: 3px; background: var(--green); opacity: .8; border-radius: 2px 2px 0 0; }
+  .admin-updated { font-size: .74rem; color: var(--grey); align-self: center; }
+  @media (max-width: 480px) { .admin-updated { display: none; } }
+
   /* ── QUOTA MENSUEL (plan gratuit) : bandeau, jauge, compte à rebours ── */
   .quota-strip { display: flex; align-items: center; gap: .9rem; flex-wrap: wrap; width: 100%; background: var(--black-card); border: 1px solid var(--border); border-radius: 10px; padding: .65rem 1rem; margin-bottom: 1.1rem; font-size: .8rem; color: var(--text); cursor: pointer; text-align: left; font-family: inherit; transition: border-color .2s; }
   .quota-strip:hover { border-color: rgba(8,191,47,.4); }
@@ -2261,25 +2287,39 @@
       <section class="app-section" id="section-admin" hidden>
         <div class="app-topbar">
           <h1 data-i18n="nav_admin">Admin</h1>
-        </div>
-        <div class="summary-grid" id="admin-stats-grid" style="margin-bottom:1.6rem;">
-          <div class="mini-stat-tile">
-            <div class="mst-label" data-i18n="admin_total_users">Utilisateurs</div>
-            <div class="mst-val" id="admin-stat-users">—</div>
-          </div>
-          <div class="mini-stat-tile accent">
-            <div class="mst-label" data-i18n="admin_plan_pro">Pro</div>
-            <div class="mst-val" id="admin-stat-pro">—</div>
-          </div>
-          <div class="mini-stat-tile">
-            <div class="mst-label" data-i18n="admin_signups_30d">Inscriptions (30j)</div>
-            <div class="mst-val" id="admin-stat-signups30">—</div>
-          </div>
-          <div class="mini-stat-tile">
-            <div class="mst-label" data-i18n="admin_referral_rewards">Mois offerts (parrainage)</div>
-            <div class="mst-val" id="admin-stat-referrals">—</div>
+          <div class="app-topbar-actions">
+            <span class="admin-updated" id="admin-updated"></span>
+            <button class="btn-ghost btn-sm" onclick="renderAdminPanel(true)" data-i18n="admin_refresh">Actualiser</button>
           </div>
         </div>
+        <nav class="admin-tabs" id="admin-tabs" aria-label="Administration">
+          <a href="/app/admin" data-link data-admin-tab="overview" data-i18n="admin_tab_overview">Vue d'ensemble</a>
+          <a href="/app/admin/utilisateurs" data-link data-admin-tab="users" data-i18n="admin_tab_users">Utilisateurs</a>
+          <a href="/app/admin/plans" data-link data-admin-tab="plans" data-i18n="admin_tab_plans">Plans</a>
+          <a href="/app/admin/avis" data-link data-admin-tab="reviews"><span data-i18n="admin_tab_reviews">Avis &amp; support</span><span class="admin-tab-badge" id="admin-tab-badge-reviews" hidden></span></a>
+          <a href="/app/admin/promos" data-link data-admin-tab="promos" data-i18n="admin_tab_promos">Codes promo</a>
+          <a href="/app/admin/systeme" data-link data-admin-tab="system"><span data-i18n="admin_tab_system">Système &amp; tests</span><span class="admin-tab-badge" id="admin-tab-badge-system" hidden></span></a>
+        </nav>
+
+        <div class="admin-panel" data-admin-panel="overview">
+          <h2 class="admin-group-title" data-i18n="admin_group_todo">À traiter</h2>
+          <div class="admin-todo" id="admin-todo"></div>
+
+          <h2 class="admin-group-title" data-i18n="admin_group_growth">Croissance</h2>
+          <div class="summary-grid admin-kpi-grid" id="admin-kpi-growth"></div>
+          <div class="settings-card admin-spark-card">
+            <div class="admin-spark-head"><span data-i18n="admin_signups_series">Inscriptions des 30 derniers jours</span><span id="admin-signups-series-total"></span></div>
+            <div class="admin-spark" id="admin-signups-series"></div>
+          </div>
+
+          <h2 class="admin-group-title" data-i18n="admin_group_revenue">Revenu</h2>
+          <div class="summary-grid admin-kpi-grid" id="admin-kpi-revenue"></div>
+
+          <h2 class="admin-group-title" data-i18n="admin_group_activation">Activation &amp; engagement</h2>
+          <div class="summary-grid admin-kpi-grid" id="admin-kpi-activation"></div>
+        </div>
+
+        <div class="admin-panel" data-admin-panel="users" hidden>
         <div class="settings-card">
           <h3 data-i18n="admin_users_title">Comptes &amp; mouvements</h3>
           <p class="settings-desc" data-i18n="admin_users_desc">Vue d'ensemble de tous les comptes : plan, activité, statut Stripe.</p>
@@ -2306,6 +2346,8 @@
           </div>
           <p class="form-hint" id="admin-users-empty" hidden data-i18n="admin_users_empty">Aucun compte ne correspond à cette recherche.</p>
         </div>
+        </div>
+        <div class="admin-panel" data-admin-panel="plans" hidden>
         <div class="settings-card">
           <h3 data-i18n="admin_grant_title">Attribuer Pokelo Pro</h3>
           <p class="settings-desc" data-i18n="admin_grant_desc">Donne ou retire un plan directement, sans passer par un vrai abonnement Stripe — utile pour offrir un accès à un joueur.</p>
@@ -2319,6 +2361,8 @@
           </div>
           <div class="account-feedback" id="admin-grant-feedback" hidden></div>
         </div>
+        </div>
+        <div class="admin-panel" data-admin-panel="promos" hidden>
         <div class="settings-card">
           <h3 data-i18n="admin_promo_title">Créer un code promo</h3>
           <p class="settings-desc" data-i18n="admin_promo_desc">Crée un coupon Stripe utilisable directement sur la page de paiement (champ « Code promo »).</p>
@@ -2373,6 +2417,8 @@
           </div>
           <p class="form-hint" id="admin-promos-empty" hidden data-i18n="admin_promo_list_empty">Aucun code promo créé pour le moment.</p>
         </div>
+        </div>
+        <div class="admin-panel" data-admin-panel="reviews" hidden>
         <div class="settings-card">
           <h3 data-i18n="admin_reviews_title">Avis</h3>
           <p class="settings-desc" data-i18n="admin_reviews_desc">Avis soumis par les utilisateurs. Seuls les avis approuvés apparaissent sur la page d'accueil.</p>
@@ -2392,15 +2438,6 @@
           <p class="form-hint" id="admin-reviews-empty" hidden data-i18n="admin_reviews_empty">Aucun avis pour le moment.</p>
         </div>
         <div class="settings-card">
-          <h3 data-i18n="admin_simulate_title">Tests &amp; simulation</h3>
-          <p class="settings-desc" data-i18n="admin_simulate_desc">Déclenchez ces flux sur votre propre compte pour les vérifier, sans attendre les conditions réelles (15 jours d'usage, inactivité...).</p>
-          <div class="form-row">
-            <button class="btn-secondary btn-sm" onclick="openReviewPromptManual()" data-i18n="admin_simulate_review_popup">Simuler le pop-up d'avis</button>
-            <button class="btn-secondary btn-sm" id="admin-simulate-email-btn" onclick="adminSendTestReengagementEmail()" data-i18n="admin_simulate_reengagement_email">M'envoyer l'e-mail de relance</button>
-          </div>
-          <div class="account-feedback" id="admin-simulate-feedback" hidden></div>
-        </div>
-        <div class="settings-card">
           <h3 data-i18n="admin_support_title">Messages de support</h3>
           <p class="settings-desc" data-i18n="admin_support_desc">Messages envoyés depuis le formulaire de contact du site (avec ou sans compte).</p>
           <div class="table-wrap">
@@ -2418,6 +2455,17 @@
           </div>
           <p class="form-hint" id="admin-support-empty" hidden data-i18n="admin_support_empty">Aucun message de support pour le moment.</p>
         </div>
+        </div>
+        <div class="admin-panel" data-admin-panel="system" hidden>
+        <div class="settings-card">
+          <h3 data-i18n="admin_simulate_title">Tests &amp; simulation</h3>
+          <p class="settings-desc" data-i18n="admin_simulate_desc">Déclenchez ces flux sur votre propre compte pour les vérifier, sans attendre les conditions réelles (15 jours d'usage, inactivité...).</p>
+          <div class="form-row">
+            <button class="btn-secondary btn-sm" onclick="openReviewPromptManual()" data-i18n="admin_simulate_review_popup">Simuler le pop-up d'avis</button>
+            <button class="btn-secondary btn-sm" id="admin-simulate-email-btn" onclick="adminSendTestReengagementEmail()" data-i18n="admin_simulate_reengagement_email">M'envoyer l'e-mail de relance</button>
+          </div>
+          <div class="account-feedback" id="admin-simulate-feedback" hidden></div>
+        </div>
         <div class="settings-card">
           <h3 data-i18n="admin_errors_title">Dernières erreurs serveur</h3>
           <p class="settings-desc" data-i18n="admin_errors_desc">Webhook Stripe, création de session de paiement, crédit de parrainage — surveillez ici les échecs silencieux.</p>
@@ -2428,6 +2476,7 @@
             </table>
           </div>
           <p class="form-hint" id="admin-errors-empty" hidden data-i18n="admin_errors_empty">Aucune erreur récente. Tout va bien.</p>
+        </div>
         </div>
         <div class="account-feedback" id="admin-feedback" hidden></div>
       </section>
@@ -3523,6 +3572,18 @@ const I18N = {
     admin_users_col_email:'E-mail', admin_users_col_plan:'Plan', admin_users_col_role:'Rôle', admin_users_col_created:'Créé le',
     admin_users_col_bankrolls:'Bankrolls', admin_users_col_sessions:'Sessions', admin_users_col_last_session:'Dernière session', admin_users_col_stripe:'Stripe',
     admin_users_col_bankroll_value:'Bankroll totale', admin_users_col_profit30d:'30 derniers jours',
+    admin_refresh:'Actualiser', admin_updated_at:'Mis à jour à {time}',
+    admin_tab_overview:"Vue d'ensemble", admin_tab_users:'Utilisateurs', admin_tab_plans:'Plans', admin_tab_reviews:'Avis & support', admin_tab_promos:'Codes promo', admin_tab_system:'Système & tests',
+    admin_group_todo:'À traiter', admin_group_growth:'Croissance', admin_group_revenue:'Revenu', admin_group_activation:'Activation & engagement',
+    admin_signups_series:'Inscriptions des 30 derniers jours',
+    admin_todo_reviews:'avis en attente', admin_todo_support:'messages de support non lus', admin_todo_errors:'erreurs serveur (24 h)', admin_todo_quota:'comptes bloqués à 10/10 ce mois-ci', admin_todo_none:'Rien à traiter pour le moment.',
+    admin_kpi_signups7d:'dont {n} sur 7 jours',
+    admin_kpi_pro_total:'Comptes Pro', admin_kpi_mrr:'MRR estimé', admin_kpi_mrr_sub:'estimation : {n} abonné(s) payant(s) × 9,90 €', admin_kpi_pro_sub:'dont {n} attribué(s) manuellement (hors MRR)',
+    admin_kpi_conversion:'Conversion gratuit → Pro', admin_kpi_conversion_sub:'{n} comptes gratuits',
+    admin_kpi_with_bankroll:'Ont créé une bankroll', admin_kpi_with_session:'Ont saisi 1 session ou plus', admin_kpi_with_five:'Ont saisi 5 sessions ou plus', admin_kpi_accounts:'{n} compte(s)',
+    admin_kpi_signed_in_7d:'Connectés sur 7 jours', admin_kpi_signed_in_30d:'{n} sur 30 jours', admin_kpi_unavailable:'données de connexion indisponibles',
+    admin_kpi_sessions_30d:'Sessions saisies (30 j)', admin_kpi_entered_7d:'{n} compte(s) actif(s) sur 7 jours',
+    admin_kpi_quota_blocked:'Bloqués par le quota', admin_kpi_quota_blocked_sub:'prospects Pro les plus chauds',
     admin_users_empty:'Aucun compte ne correspond à cette recherche.', admin_users_details:'Détails',
     admin_detail_title:'Fiche utilisateur', admin_detail_load_error:'Impossible de charger la fiche utilisateur.',
     admin_detail_member_since:'Membre depuis', admin_detail_no_stripe:'Aucun client Stripe associé.',
@@ -3906,6 +3967,18 @@ const I18N = {
     admin_users_col_email:'Email', admin_users_col_plan:'Plan', admin_users_col_role:'Role', admin_users_col_created:'Created',
     admin_users_col_bankrolls:'Bankrolls', admin_users_col_sessions:'Sessions', admin_users_col_last_session:'Last session', admin_users_col_stripe:'Stripe',
     admin_users_col_bankroll_value:'Total bankroll', admin_users_col_profit30d:'Last 30 days',
+    admin_refresh:'Refresh', admin_updated_at:'Updated at {time}',
+    admin_tab_overview:'Overview', admin_tab_users:'Users', admin_tab_plans:'Plans', admin_tab_reviews:'Reviews & support', admin_tab_promos:'Promo codes', admin_tab_system:'System & tests',
+    admin_group_todo:'To handle', admin_group_growth:'Growth', admin_group_revenue:'Revenue', admin_group_activation:'Activation & engagement',
+    admin_signups_series:'Signups over the last 30 days',
+    admin_todo_reviews:'pending reviews', admin_todo_support:'unread support messages', admin_todo_errors:'server errors (24 h)', admin_todo_quota:'accounts blocked at 10/10 this month', admin_todo_none:'Nothing to handle right now.',
+    admin_kpi_signups7d:'{n} over 7 days',
+    admin_kpi_pro_total:'Pro accounts', admin_kpi_mrr:'Estimated MRR', admin_kpi_mrr_sub:'estimate: {n} paying subscriber(s) × €9.90', admin_kpi_pro_sub:'{n} granted manually (excluded from MRR)',
+    admin_kpi_conversion:'Free → Pro conversion', admin_kpi_conversion_sub:'{n} free accounts',
+    admin_kpi_with_bankroll:'Created a bankroll', admin_kpi_with_session:'Logged 1+ session', admin_kpi_with_five:'Logged 5+ sessions', admin_kpi_accounts:'{n} account(s)',
+    admin_kpi_signed_in_7d:'Signed in over 7 days', admin_kpi_signed_in_30d:'{n} over 30 days', admin_kpi_unavailable:'sign-in data unavailable',
+    admin_kpi_sessions_30d:'Sessions logged (30 d)', admin_kpi_entered_7d:'{n} active account(s) over 7 days',
+    admin_kpi_quota_blocked:'Blocked by the quota', admin_kpi_quota_blocked_sub:'hottest Pro prospects',
     admin_users_empty:'No account matches this search.', admin_users_details:'Details',
     admin_detail_title:'User details', admin_detail_load_error:'Could not load user details.',
     admin_detail_member_since:'Member since', admin_detail_no_stripe:'No Stripe customer linked.',
@@ -4533,7 +4606,9 @@ function navigateTo(path){
 window.addEventListener('popstate', router);
 
 function appRouter(path){
-  const sub = path.replace(/^\/app\/?/, '') || 'dashboard';
+  const subFull = path.replace(/^\/app\/?/, '') || 'dashboard';
+  const sub = subFull.split('/')[0];
+  currentAdminTab = ADMIN_TAB_BY_SLUG[subFull.split('/')[1] || ''] || 'overview';
   const map = { '': 'dashboard', 'dashboard':'dashboard', 'sessions':'sessions', 'bankrolls':'bankrolls', 'settings':'settings', 'account':'account', 'admin':'admin' };
   let section = map[sub] || 'dashboard';
   // Le lien "Admin" n'est qu'un confort d'UI : l'accès réel est revérifié
@@ -7517,12 +7592,96 @@ async function sendAdminUserPasswordReset(userId){
     setBtnLoading(btn, false);
   }
 }
-async function renderAdminPanel(){
+const ADMIN_TAB_BY_SLUG = { '': 'overview', utilisateurs: 'users', plans: 'plans', avis: 'reviews', promos: 'promos', systeme: 'system' };
+let currentAdminTab = 'overview';
+let adminStatsCache = null;
+let adminStatsAt = 0;
+const ADMIN_STATS_TTL_MS = 30000;
+
+function showAdminTab(){
+  document.querySelectorAll('[data-admin-panel]').forEach(p => { p.hidden = (p.dataset.adminPanel !== currentAdminTab); });
+  document.querySelectorAll('[data-admin-tab]').forEach(a => a.classList.toggle('active', a.dataset.adminTab === currentAdminTab));
+}
+function adminKpiTile(label, value, sub, accent){
+  return `<div class="mini-stat-tile${accent ? ' accent' : ''}"><div class="mst-label">${escapeHtml(label)}</div><div class="mst-val">${escapeHtml(String(value))}</div>${sub ? `<div class="mst-sub">${escapeHtml(sub)}</div>` : ''}</div>`;
+}
+function renderAdminStats(data){
+  const k = data.kpis;
+  const locale = state.settings.lang === 'en' ? 'en-US' : 'fr-FR';
+  const nf = n => Number(n).toLocaleString(locale);
+  const pctText = n => nf(n) + ' %';
+  adminUsersCache = data.users || [];
+  renderAdminUsersTable();
+  if (k) {
+    const tpl = (key, vars) => Object.keys(vars).reduce((s, name) => s.replace('{' + name + '}', vars[name]), t(key));
+    // « À traiter » : pastilles cliquables vers l'onglet concerné
+    const todo = [
+      { n: k.todo.pendingReviews, label: 'admin_todo_reviews', href: '/app/admin/avis' },
+      { n: k.todo.newSupport, label: 'admin_todo_support', href: '/app/admin/avis' },
+      { n: k.todo.errors24h, label: 'admin_todo_errors', href: '/app/admin/systeme', danger: true },
+      { n: k.quotaBlocked, label: 'admin_todo_quota', href: '/app/admin/utilisateurs' },
+    ];
+    const todoEl = document.getElementById('admin-todo');
+    const open = todo.filter(x => x.n > 0);
+    todoEl.innerHTML = open.length
+      ? open.map(x => `<a class="admin-todo-chip${x.danger ? ' danger' : ''}" href="${x.href}" data-link><strong>${nf(x.n)}</strong><span>${escapeHtml(t(x.label))}</span></a>`).join('')
+      : `<div class="admin-todo-empty">${escapeHtml(t('admin_todo_none'))}</div>`;
+    document.getElementById('admin-kpi-growth').innerHTML =
+      adminKpiTile(t('admin_total_users'), nf(k.totalUsers), tpl('admin_kpi_signups7d', { n: nf(k.signups7d) })) +
+      adminKpiTile(t('admin_signups_30d'), nf(k.signups30d), '') +
+      adminKpiTile(t('admin_referral_rewards'), nf(k.referralRewardsGiven), '');
+    const max = Math.max(1, ...k.signupSeries.map(d => d.count));
+    document.getElementById('admin-signups-series').innerHTML = k.signupSeries.map(d =>
+      `<span class="admin-spark-bar" title="${escapeHtml(d.date)} : ${d.count}" style="height:${Math.max(3, Math.round(d.count / max * 100))}%"></span>`).join('');
+    document.getElementById('admin-signups-series-total').textContent = nf(k.signups30d);
+    document.getElementById('admin-kpi-revenue').innerHTML =
+      adminKpiTile(t('admin_kpi_mrr'), fmtMoney(k.mrrEstimate, 'EUR'), tpl('admin_kpi_mrr_sub', { n: nf(k.payingPro) }), true) +
+      adminKpiTile(t('admin_kpi_pro_total'), nf(k.proCount), tpl('admin_kpi_pro_sub', { n: nf(k.grantedPro) })) +
+      adminKpiTile(t('admin_kpi_conversion'), pctText(k.conversionPct), tpl('admin_kpi_conversion_sub', { n: nf(k.planCounts.free || 0) }));
+    const a = k.activation;
+    document.getElementById('admin-kpi-activation').innerHTML =
+      adminKpiTile(t('admin_kpi_with_bankroll'), pctText(a.withBankrollPct), tpl('admin_kpi_accounts', { n: nf(a.withBankroll) })) +
+      adminKpiTile(t('admin_kpi_with_session'), pctText(a.withSessionPct), tpl('admin_kpi_accounts', { n: nf(a.withSession) })) +
+      adminKpiTile(t('admin_kpi_with_five'), pctText(a.withFiveSessionsPct), tpl('admin_kpi_accounts', { n: nf(a.withFiveSessions) })) +
+      adminKpiTile(t('admin_kpi_signed_in_7d'), k.active.authAvailable ? nf(k.active.signedIn7d) : '—', k.active.authAvailable ? tpl('admin_kpi_signed_in_30d', { n: nf(k.active.signedIn30d) }) : t('admin_kpi_unavailable')) +
+      adminKpiTile(t('admin_kpi_sessions_30d'), nf(k.sessions30d), tpl('admin_kpi_entered_7d', { n: nf(k.active.entered7d) })) +
+      adminKpiTile(t('admin_kpi_quota_blocked'), nf(k.quotaBlocked), t('admin_kpi_quota_blocked_sub'));
+    const reviewsBadge = document.getElementById('admin-tab-badge-reviews');
+    const systemBadge = document.getElementById('admin-tab-badge-system');
+    const rb = k.todo.pendingReviews + k.todo.newSupport;
+    reviewsBadge.hidden = rb === 0; reviewsBadge.textContent = rb;
+    systemBadge.hidden = k.todo.errors24h === 0; systemBadge.textContent = k.todo.errors24h;
+  }
+  const tbody = document.getElementById('admin-errors-tbody');
+  const emptyEl = document.getElementById('admin-errors-empty');
+  const errs = data.recentErrors || [];
+  if (!errs.length) {
+    tbody.innerHTML = '';
+    if (emptyEl) emptyEl.hidden = false;
+  } else {
+    if (emptyEl) emptyEl.hidden = true;
+    const locale2 = state.settings.lang === 'en' ? 'en-US' : 'fr-FR';
+    tbody.innerHTML = errs.map(err => `
+      <tr>
+        <td>${escapeHtml(new Date(err.created_at).toLocaleString(locale2))}</td>
+        <td>${escapeHtml(err.source)}</td>
+        <td>${escapeHtml(err.message)}</td>
+      </tr>`).join('');
+  }
+  const stamp = document.getElementById('admin-updated');
+  if (stamp) stamp.textContent = t('admin_updated_at').replace('{time}', new Date(adminStatsAt).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' }));
+}
+async function renderAdminPanel(force){
+  showAdminTab();
   const feedback = document.getElementById('admin-feedback');
+  if (currentAdminTab === 'promos') renderAdminPromosTable();
+  if (currentAdminTab === 'reviews') { renderAdminSupportTable(); renderAdminReviewsTable(); }
+  if (adminStatsCache && force !== true && Date.now() - adminStatsAt < ADMIN_STATS_TTL_MS) {
+    if (feedback) feedback.hidden = true;
+    renderAdminStats(adminStatsCache);
+    return;
+  }
   if (feedback) { feedback.hidden = false; feedback.className = 'account-feedback'; feedback.textContent = t('account_loading'); }
-  renderAdminPromosTable();
-  renderAdminSupportTable();
-  renderAdminReviewsTable();
   try {
     const { data: { session } } = await supabase.auth.getSession();
     const token = session && session.access_token;
@@ -7531,29 +7690,9 @@ async function renderAdminPanel(){
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(`${res.status} ${data.error || 'admin-stats-failed'}${data.detail ? ' — ' + data.detail : ''}`);
     if (feedback) feedback.hidden = true;
-
-    document.getElementById('admin-stat-users').textContent = data.totalUsers;
-    document.getElementById('admin-stat-pro').textContent = (data.planCounts.pro || 0) + (data.planCounts.team || 0);
-    document.getElementById('admin-stat-signups30').textContent = data.signups30d;
-    document.getElementById('admin-stat-referrals').textContent = data.referralRewardsGiven;
-
-    adminUsersCache = data.users || [];
-    renderAdminUsersTable();
-
-    const tbody = document.getElementById('admin-errors-tbody');
-    const emptyEl = document.getElementById('admin-errors-empty');
-    if (!data.recentErrors.length) {
-      tbody.innerHTML = '';
-      if (emptyEl) emptyEl.hidden = false;
-    } else {
-      if (emptyEl) emptyEl.hidden = true;
-      tbody.innerHTML = data.recentErrors.map(err => `
-        <tr>
-          <td>${escapeHtml(new Date(err.created_at).toLocaleString(state.settings.lang === 'en' ? 'en-US' : 'fr-FR'))}</td>
-          <td>${escapeHtml(err.source)}</td>
-          <td>${escapeHtml(err.message)}</td>
-        </tr>`).join('');
-    }
+    adminStatsCache = data;
+    adminStatsAt = Date.now();
+    renderAdminStats(data);
   } catch (e) {
     console.warn('Admin stats failed:', e);
     if (feedback) { feedback.className = 'account-feedback error'; feedback.textContent = t('admin_load_error') + (e && e.message ? ` (${e.message})` : ''); }
@@ -7599,7 +7738,7 @@ async function submitAdminGrantPlan(){
     feedback.className = 'account-feedback';
     feedback.textContent = t('admin_grant_success').replace('{email}', data.email).replace('{plan}', t('settings_account_plan_' + data.plan));
     document.getElementById('admin-grant-email').value = '';
-    renderAdminPanel();
+    renderAdminPanel(true);
     // Un admin qui s'attribue un plan à lui-même ne le voit sinon prendre
     // effet qu'à la prochaine connexion : currentPlan n'est chargé qu'au
     // login (completeSignIn), jamais rafraîchi en direct autrement. Sans ce
