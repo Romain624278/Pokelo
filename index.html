@@ -707,6 +707,36 @@
   .admin-updated { font-size: .74rem; color: var(--grey); align-self: center; }
   @media (max-width: 480px) { .admin-updated { display: none; } }
 
+  .admin-toolbar { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: .8rem; }
+  .admin-toolbar .input { flex: 1 1 160px; min-width: 0; }
+  .admin-toolbar #admin-users-search { flex: 2 1 220px; }
+  .admin-pager { display: flex; align-items: center; justify-content: center; gap: .9rem; margin-top: 1rem; font-size: .82rem; color: var(--grey); }
+  .admin-user-name { display: block; font-size: .72rem; color: var(--grey); font-weight: 500; }
+  .admin-review-chip { color: #F5B700; font-weight: 700; font-size: .8rem; }
+  .admin-sub-chip { display: inline-block; font-size: .68rem; font-weight: 700; padding: .08rem .45rem; border-radius: 100px; background: rgba(255,255,255,.06); border: 1px solid var(--border); color: var(--grey); white-space: nowrap; }
+  .admin-sub-chip.full { color: var(--critical); border-color: rgba(229,72,77,.5); background: rgba(229,72,77,.08); }
+  .admin-detail-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .9rem; }
+  .admin-detail-tabs { display: flex; gap: .3rem; overflow-x: auto; margin: 1.2rem 0 .9rem; border-bottom: 1px solid var(--border); scrollbar-width: none; }
+  .admin-detail-tabs button { flex: 0 0 auto; background: none; border: 0; border-bottom: 2px solid transparent; padding: .55rem .9rem; font: inherit; font-size: .82rem; font-weight: 600; color: var(--grey); cursor: pointer; }
+  .admin-detail-tabs button.active { color: var(--green); border-bottom-color: var(--green); }
+  .admin-kv-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: .6rem; }
+  .admin-kv { display: flex; flex-direction: column; gap: .15rem; padding: .7rem .9rem; border: 1px solid var(--border); border-radius: 10px; background: var(--black-card); }
+  .admin-kv span { font-size: .68rem; text-transform: uppercase; letter-spacing: .06em; color: var(--grey); }
+  .admin-kv strong { font-size: .88rem; word-break: break-word; }
+  .admin-months { display: grid; grid-template-columns: repeat(6, 1fr); gap: .5rem; }
+  .admin-month { text-align: center; font-size: .72rem; }
+  .admin-month-bar { height: 70px; display: flex; align-items: flex-end; justify-content: center; border-bottom: 1px solid var(--border); }
+  .admin-month-bar span { width: 55%; background: var(--green); border-radius: 3px 3px 0 0; opacity: .85; }
+  .admin-month-n { font-weight: 700; margin-top: .3rem; }
+  .admin-month-l { color: var(--grey); }
+  .admin-month-p { margin-top: .25rem; font-size: .68rem; line-height: 1.35; }
+  .admin-activity-item { border: 1px solid var(--border); border-radius: 10px; padding: .7rem .9rem; margin-bottom: .6rem; background: var(--black-card); }
+  .admin-activity-head { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; margin-bottom: .35rem; }
+  .admin-activity-date { margin-left: auto; font-size: .72rem; color: var(--grey); }
+  .admin-activity-item p { font-size: .83rem; line-height: 1.5; margin: 0; white-space: pre-wrap; word-break: break-word; }
+  .admin-stars { color: #F5B700; letter-spacing: 1px; font-size: .9rem; }
+  @media (max-width: 480px) { .admin-months { grid-template-columns: repeat(3, 1fr); } .admin-month:nth-child(n+4) { margin-top: .6rem; } }
+
   /* ── QUOTA MENSUEL (plan gratuit) : bandeau, jauge, compte à rebours ── */
   .quota-strip { display: flex; align-items: center; gap: .9rem; flex-wrap: wrap; width: 100%; background: var(--black-card); border: 1px solid var(--border); border-radius: 10px; padding: .65rem 1rem; margin-bottom: 1.1rem; font-size: .8rem; color: var(--text); cursor: pointer; text-align: left; font-family: inherit; transition: border-color .2s; }
   .quota-strip:hover { border-color: rgba(8,191,47,.4); }
@@ -2323,27 +2353,49 @@
         <div class="settings-card">
           <h3 data-i18n="admin_users_title">Comptes &amp; mouvements</h3>
           <p class="settings-desc" data-i18n="admin_users_desc">Vue d'ensemble de tous les comptes : plan, activité, statut Stripe.</p>
-          <div class="form-row" style="margin-bottom:.8rem">
-            <input class="input" id="admin-users-search" placeholder="Rechercher un e-mail…" oninput="renderAdminUsersTable()" />
+          <div class="admin-toolbar">
+            <input class="input" id="admin-users-search" placeholder="Rechercher un e-mail ou un nom…" oninput="adminUsersPage=1;renderAdminUsersTable()" />
+            <select class="input" id="admin-users-filter-plan" onchange="adminUsersPage=1;renderAdminUsersTable()">
+              <option value="all" data-i18n="admin_filter_plan_all">Tous les plans</option>
+              <option value="free" data-i18n="settings_account_plan_free">Gratuit</option>
+              <option value="pro" data-i18n="settings_account_plan_pro">Pro</option>
+            </select>
+            <select class="input" id="admin-users-filter-activity" onchange="adminUsersPage=1;renderAdminUsersTable()">
+              <option value="all" data-i18n="admin_filter_all">Tous les comptes</option>
+              <option value="active7" data-i18n="admin_filter_active7">Connectés sur 7 jours</option>
+              <option value="inactive30" data-i18n="admin_filter_inactive30">Inactifs depuis 30 jours</option>
+              <option value="never" data-i18n="admin_filter_never">Jamais connectés</option>
+              <option value="nosession" data-i18n="admin_filter_nosession">Sans aucune session</option>
+              <option value="blocked" data-i18n="admin_filter_blocked">Bloqués par le quota</option>
+              <option value="reviewed" data-i18n="admin_filter_reviewed">Ont laissé un avis</option>
+            </select>
+            <select class="input" id="admin-users-sort" onchange="adminUsersPage=1;renderAdminUsersTable()">
+              <option value="signin" data-i18n="admin_sort_signin">Dernière connexion</option>
+              <option value="created" data-i18n="admin_sort_created">Inscription récente</option>
+              <option value="sessions" data-i18n="admin_sort_sessions">Nombre de sessions</option>
+              <option value="month" data-i18n="admin_sort_month">Sessions ce mois-ci</option>
+              <option value="lastsession" data-i18n="admin_sort_lastsession">Dernière session</option>
+            </select>
+            <button class="btn-ghost btn-sm" onclick="exportAdminUsersCsv()" data-i18n="admin_export_csv">Exporter (CSV)</button>
           </div>
+          <p class="form-hint" id="admin-users-count"></p>
           <div class="table-wrap">
             <table class="data-table admin-users-data-table" id="admin-users-table">
               <thead><tr>
                 <th data-i18n="admin_users_col_email">E-mail</th>
                 <th data-i18n="admin_users_col_plan">Plan</th>
+                <th data-i18n="admin_users_col_last_signin">Dernière connexion</th>
                 <th data-i18n="admin_users_col_bankroll_value">Bankroll totale</th>
+                <th data-i18n="admin_users_col_sessions">Sessions</th>
                 <th data-i18n="admin_users_col_profit30d">30 derniers jours</th>
-                <th class="hide-mobile" data-i18n="admin_users_col_bankrolls">Bankrolls</th>
-                <th class="hide-mobile" data-i18n="admin_users_col_sessions">Sessions</th>
-                <th data-i18n="admin_users_col_last_session">Dernière session</th>
-                <th class="hide-mobile" data-i18n="admin_users_col_role">Rôle</th>
                 <th class="hide-mobile" data-i18n="admin_users_col_created">Créé le</th>
-                <th class="hide-mobile" data-i18n="admin_users_col_stripe">Stripe</th>
+                <th class="hide-mobile" data-i18n="admin_users_col_review">Avis</th>
                 <th></th>
               </tr></thead>
               <tbody id="admin-users-tbody"></tbody>
             </table>
           </div>
+          <div class="admin-pager" id="admin-users-pager"></div>
           <p class="form-hint" id="admin-users-empty" hidden data-i18n="admin_users_empty">Aucun compte ne correspond à cette recherche.</p>
         </div>
         </div>
@@ -3573,6 +3625,19 @@ const I18N = {
     admin_users_col_bankrolls:'Bankrolls', admin_users_col_sessions:'Sessions', admin_users_col_last_session:'Dernière session', admin_users_col_stripe:'Stripe',
     admin_users_col_bankroll_value:'Bankroll totale', admin_users_col_profit30d:'30 derniers jours',
     admin_refresh:'Actualiser', admin_updated_at:'Mis à jour à {time}',
+    admin_users_col_last_signin:'Dernière connexion', admin_users_col_review:'Avis',
+    admin_filter_plan_all:'Tous les plans', admin_filter_all:'Tous les comptes', admin_filter_active7:'Connectés sur 7 jours', admin_filter_inactive30:'Inactifs depuis 30 jours',
+    admin_filter_never:'Jamais connectés', admin_filter_nosession:'Sans aucune session', admin_filter_blocked:'Bloqués par le quota', admin_filter_reviewed:'Ont laissé un avis',
+    admin_sort_signin:'Tri : dernière connexion', admin_sort_created:'Tri : inscription récente', admin_sort_sessions:'Tri : nombre de sessions', admin_sort_month:'Tri : sessions ce mois-ci', admin_sort_lastsession:'Tri : dernière session',
+    admin_export_csv:'Exporter (CSV)', admin_users_count:'{n} compte(s) sur {total}',
+    admin_today:"Aujourd'hui", admin_yesterday:'Hier', admin_days_ago:'il y a {n} j',
+    admin_detail_tab_profile:'Profil', admin_detail_tab_activity:'Activité', admin_detail_monthly:'Activité des 6 derniers mois', admin_detail_reviews:'Avis laissés', admin_detail_support:'Messages de support',
+    admin_detail_period_end:"Fin de période d'abonnement", admin_detail_quota:'Quota du mois', admin_detail_quota_unlimited:'Illimité (Pro)', admin_detail_quota_reset_on:'réinitialisé le {date}',
+    admin_detail_referrer:'Parrainé par', admin_detail_referred:'Filleuls', admin_detail_referral_code:'Code de parrainage', admin_detail_col_balance:'Solde actuel',
+    admin_detail_no_reviews:"Aucun avis laissé par ce compte.", admin_detail_no_support:'Aucun message de support de ce compte.',
+    admin_detail_grant_pro:'Attribuer Pro', admin_detail_revoke_pro:'Retirer Pro', admin_detail_revoke_confirm:"Repasser {email} au plan gratuit ? Ses données restent intactes ; seules les fonctionnalités Pro se verrouillent.",
+    admin_detail_reset_quota:'Réinitialiser le quota du mois', admin_detail_quota_reset_ok:'Quota du mois réinitialisé : ce compte peut de nouveau saisir 10 sessions. Aucune session n\'a été supprimée.',
+    admin_detail_quota_migration:'Migration requise : exécutez le SQL du §17 de SUPABASE_SETUP.md (colonne quota_reset_at), puis réessayez.',
     admin_tab_overview:"Vue d'ensemble", admin_tab_users:'Utilisateurs', admin_tab_plans:'Plans', admin_tab_reviews:'Avis & support', admin_tab_promos:'Codes promo', admin_tab_system:'Système & tests',
     admin_group_todo:'À traiter', admin_group_growth:'Croissance', admin_group_revenue:'Revenu', admin_group_activation:'Activation & engagement',
     admin_signups_series:'Inscriptions des 30 derniers jours',
@@ -3968,6 +4033,19 @@ const I18N = {
     admin_users_col_bankrolls:'Bankrolls', admin_users_col_sessions:'Sessions', admin_users_col_last_session:'Last session', admin_users_col_stripe:'Stripe',
     admin_users_col_bankroll_value:'Total bankroll', admin_users_col_profit30d:'Last 30 days',
     admin_refresh:'Refresh', admin_updated_at:'Updated at {time}',
+    admin_users_col_last_signin:'Last sign-in', admin_users_col_review:'Review',
+    admin_filter_plan_all:'All plans', admin_filter_all:'All accounts', admin_filter_active7:'Signed in over 7 days', admin_filter_inactive30:'Inactive for 30 days',
+    admin_filter_never:'Never signed in', admin_filter_nosession:'No session at all', admin_filter_blocked:'Blocked by the quota', admin_filter_reviewed:'Left a review',
+    admin_sort_signin:'Sort: last sign-in', admin_sort_created:'Sort: newest signup', admin_sort_sessions:'Sort: number of sessions', admin_sort_month:'Sort: sessions this month', admin_sort_lastsession:'Sort: last session',
+    admin_export_csv:'Export (CSV)', admin_users_count:'{n} account(s) of {total}',
+    admin_today:'Today', admin_yesterday:'Yesterday', admin_days_ago:'{n} d ago',
+    admin_detail_tab_profile:'Profile', admin_detail_tab_activity:'Activity', admin_detail_monthly:'Activity over the last 6 months', admin_detail_reviews:'Reviews left', admin_detail_support:'Support messages',
+    admin_detail_period_end:'Subscription period end', admin_detail_quota:'Monthly quota', admin_detail_quota_unlimited:'Unlimited (Pro)', admin_detail_quota_reset_on:'reset on {date}',
+    admin_detail_referrer:'Referred by', admin_detail_referred:'Referrals', admin_detail_referral_code:'Referral code', admin_detail_col_balance:'Current balance',
+    admin_detail_no_reviews:'No review left by this account.', admin_detail_no_support:'No support message from this account.',
+    admin_detail_grant_pro:'Grant Pro', admin_detail_revoke_pro:'Remove Pro', admin_detail_revoke_confirm:'Move {email} back to the free plan? Their data stays intact; only Pro features lock again.',
+    admin_detail_reset_quota:"Reset this month's quota", admin_detail_quota_reset_ok:'Monthly quota reset: this account can log 10 sessions again. No session was deleted.',
+    admin_detail_quota_migration:'Migration required: run the SQL from §17 of SUPABASE_SETUP.md (quota_reset_at column), then retry.',
     admin_tab_overview:'Overview', admin_tab_users:'Users', admin_tab_plans:'Plans', admin_tab_reviews:'Reviews & support', admin_tab_promos:'Promo codes', admin_tab_system:'System & tests',
     admin_group_todo:'To handle', admin_group_growth:'Growth', admin_group_revenue:'Revenue', admin_group_activation:'Activation & engagement',
     admin_signups_series:'Signups over the last 30 days',
@@ -6371,6 +6449,7 @@ let currentUser = null;
 let currentPlan = 'free';
 let currentPlanPeriodEnd = null;
 let currentReferralCode = null;
+let currentQuotaResetAt = null; // geste commercial admin : les sessions saisies avant cette date ne comptent plus dans le quota du mois
 let currentUserRole = 'user';
 let cloudSyncInFlight = false;
 let cloudSyncQueued = false;
@@ -6406,7 +6485,7 @@ function sessionQuota(){
   if (isPremium() || typeof Quota === 'undefined') {
     return { unlimited: true, used: 0, limit: Infinity, remaining: Infinity, blocked: false, resetAtMs: null };
   }
-  return Object.assign({ unlimited: false }, Quota.computeSessionQuota(state.sessions, FREE_SESSIONS_PER_MONTH, Date.now()));
+  return Object.assign({ unlimited: false }, Quota.computeSessionQuota(state.sessions, FREE_SESSIONS_PER_MONTH, Date.now(), currentQuotaResetAt));
 }
 function guardSessionQuota(requested){
   const q = sessionQuota();
@@ -7202,6 +7281,7 @@ async function completeSignInRun(session){
       currentPlan = cloud.profile.plan || 'free';
       currentPlanPeriodEnd = cloud.profile.stripe_current_period_end || null;
       currentReferralCode = cloud.profile.referral_code || null;
+      currentQuotaResetAt = cloud.profile.quota_reset_at ? new Date(cloud.profile.quota_reset_at).getTime() : null;
       currentUserRole = cloud.profile.role || 'user';
       mfaSetupPrompted = !!cloud.profile.mfa_setup_prompted;
     }
@@ -7304,6 +7384,7 @@ async function signOutUser(force){
   currentPlan = 'free';
   currentPlanPeriodEnd = null;
   currentReferralCode = null;
+  currentQuotaResetAt = null;
   currentUserRole = 'user';
   mfaSetupPrompted = false;
   localStorage.removeItem(STORAGE_KEY);
@@ -7464,37 +7545,103 @@ function copyReferralLink(){
    POKELO — panneau admin (rôle admin uniquement, revérifié côté serveur)
    ══════════════════════════════════════════════════════════════ */
 let adminUsersCache = [];
+let adminUsersPage = 1;
+const ADMIN_USERS_PAGE_SIZE = 25;
+function adminFilteredUsers(){
+  const q = (document.getElementById('admin-users-search').value || '').trim().toLowerCase();
+  const plan = document.getElementById('admin-users-filter-plan').value;
+  const act = document.getElementById('admin-users-filter-activity').value;
+  const sort = document.getElementById('admin-users-sort').value;
+  const DAY = 86400000, now = Date.now();
+  const ts = v => (v ? new Date(v).getTime() : 0);
+  const rows = adminUsersCache.filter(u => {
+    if (q && !((u.email || '').toLowerCase().includes(q) || (u.displayName || '').toLowerCase().includes(q))) return false;
+    if (plan === 'free' && u.plan !== 'free') return false;
+    if (plan === 'pro' && u.plan === 'free') return false;
+    const si = ts(u.lastSignInAt);
+    if (act === 'active7' && !(si && now - si <= 7 * DAY)) return false;
+    if (act === 'inactive30' && !(si && now - si > 30 * DAY)) return false;
+    if (act === 'never' && si) return false;
+    if (act === 'nosession' && u.sessionCount > 0) return false;
+    if (act === 'blocked' && !(u.plan === 'free' && u.monthSessions >= FREE_SESSIONS_PER_MONTH)) return false;
+    if (act === 'reviewed' && !u.reviewCount) return false;
+    return true;
+  });
+  const keys = {
+    signin: u => ts(u.lastSignInAt), created: u => ts(u.createdAt), sessions: u => u.sessionCount,
+    month: u => u.monthSessions, lastsession: u => ts(u.lastSessionAt),
+  };
+  const key = keys[sort] || keys.signin;
+  rows.sort((a, b) => key(b) - key(a));
+  return rows;
+}
+function adminRelativeDay(iso, locale){
+  if (!iso) return '—';
+  const d = new Date(iso);
+  const days = Math.floor((Date.now() - d.getTime()) / 86400000);
+  const abs = d.toLocaleDateString(locale);
+  if (days <= 0) return t('admin_today');
+  if (days === 1) return t('admin_yesterday');
+  if (days < 30) return t('admin_days_ago').replace('{n}', days) + ' · ' + abs;
+  return abs;
+}
 function renderAdminUsersTable(){
   const tbody = document.getElementById('admin-users-tbody');
   const emptyEl = document.getElementById('admin-users-empty');
   if (!tbody) return;
-  const q = (document.getElementById('admin-users-search').value || '').trim().toLowerCase();
   const locale = state.settings.lang === 'en' ? 'en-US' : 'fr-FR';
-  const rows = adminUsersCache.filter(u => !q || (u.email || '').toLowerCase().includes(q));
+  const rows = adminFilteredUsers();
+  const pages = Math.max(1, Math.ceil(rows.length / ADMIN_USERS_PAGE_SIZE));
+  if (adminUsersPage > pages) adminUsersPage = pages;
+  const slice = rows.slice((adminUsersPage - 1) * ADMIN_USERS_PAGE_SIZE, adminUsersPage * ADMIN_USERS_PAGE_SIZE);
+  const countEl = document.getElementById('admin-users-count');
+  if (countEl) countEl.textContent = t('admin_users_count').replace('{n}', rows.length).replace('{total}', adminUsersCache.length);
+  const pager = document.getElementById('admin-users-pager');
+  if (pager) {
+    pager.innerHTML = pages > 1
+      ? `<button class="btn-ghost btn-sm" ${adminUsersPage <= 1 ? 'disabled' : ''} onclick="adminUsersPage--;renderAdminUsersTable()">←</button><span>${adminUsersPage} / ${pages}</span><button class="btn-ghost btn-sm" ${adminUsersPage >= pages ? 'disabled' : ''} onclick="adminUsersPage++;renderAdminUsersTable()">→</button>`
+      : '';
+  }
   if (!rows.length) {
     tbody.innerHTML = '';
     if (emptyEl) emptyEl.hidden = false;
     return;
   }
   if (emptyEl) emptyEl.hidden = true;
-  tbody.innerHTML = rows.map(u => {
+  tbody.innerHTML = slice.map(u => {
     const initial = (u.email || '?').trim().charAt(0).toUpperCase();
     const planClass = u.plan === 'free' ? 'plan-badge-free' : 'plan-badge-pro';
+    const review = u.reviewCount ? `<span class="admin-review-chip" title="${escapeHtml(u.reviewStatus || '')}">★ ${u.reviewRating}</span>` : '—';
+    const quotaChip = (u.plan === 'free' && u.sessionCount)
+      ? ` <span class="admin-sub-chip${u.monthSessions >= FREE_SESSIONS_PER_MONTH ? ' full' : ''}">${u.monthSessions}/${FREE_SESSIONS_PER_MONTH}</span>` : '';
     return `
     <tr class="admin-user-row" onclick="openAdminUserDetail('${u.id}')">
-      <td data-label="${t('admin_users_col_email')}"><span class="admin-user-email"><span class="admin-user-avatar">${escapeHtml(initial)}</span>${escapeHtml(u.email || '—')}</span></td>
+      <td data-label="${t('admin_users_col_email')}"><span class="admin-user-email"><span class="admin-user-avatar">${escapeHtml(initial)}</span><span>${escapeHtml(u.email || '—')}${u.displayName ? `<small class="admin-user-name">${escapeHtml(u.displayName)}</small>` : ''}</span></span></td>
       <td data-label="${t('admin_users_col_plan')}"><span class="plan-badge ${planClass}">${escapeHtml(t('settings_account_plan_' + u.plan) || u.plan)}</span></td>
+      <td data-label="${t('admin_users_col_last_signin')}">${escapeHtml(adminRelativeDay(u.lastSignInAt, locale))}</td>
       <td data-label="${t('admin_users_col_bankroll_value')}">${fmtCurrencyList(u.bankrollValue)}</td>
+      <td data-label="${t('admin_users_col_sessions')}">${u.sessionCount}${quotaChip}</td>
       <td data-label="${t('admin_users_col_profit30d')}">${fmtCurrencyList(u.profit30d, true)}</td>
-      <td class="hide-mobile" data-label="${t('admin_users_col_bankrolls')}">${u.bankrollCount}</td>
-      <td class="hide-mobile" data-label="${t('admin_users_col_sessions')}">${u.sessionCount}</td>
-      <td data-label="${t('admin_users_col_last_session')}">${u.lastSessionAt ? escapeHtml(new Date(u.lastSessionAt).toLocaleDateString(locale)) : '—'}</td>
-      <td class="hide-mobile" data-label="${t('admin_users_col_role')}">${escapeHtml(u.role)}</td>
       <td class="hide-mobile" data-label="${t('admin_users_col_created')}">${u.createdAt ? escapeHtml(new Date(u.createdAt).toLocaleDateString(locale)) : '—'}</td>
-      <td class="hide-mobile" data-label="${t('admin_users_col_stripe')}">${u.hasStripeCustomer ? '✓' : '—'}</td>
-      <td><button class="btn-ghost btn-sm" onclick="event.stopPropagation();openAdminUserDetail('${u.id}')" data-i18n="admin_users_details">Détails</button></td>
+      <td class="hide-mobile" data-label="${t('admin_users_col_review')}">${review}</td>
+      <td><button class="btn-ghost btn-sm" onclick="event.stopPropagation();openAdminUserDetail('${u.id}')">${escapeHtml(t('admin_users_details'))}</button></td>
     </tr>`;
   }).join('');
+}
+function exportAdminUsersCsv(){
+  const rows = adminFilteredUsers();
+  const header = ['email', 'nom', 'plan', 'inscription', 'derniere_connexion', 'bankroll_totale', 'sessions', 'sessions_ce_mois', 'derniere_session', 'profit_30j', 'avis_note'];
+  const money = list => (list || []).map(x => x.value + ' ' + x.currency).join(' + ');
+  const lines = [header.join(';')].concat(rows.map(u => [
+    u.email, u.displayName, u.plan, u.createdAt || '', u.lastSignInAt || '', money(u.bankrollValue),
+    u.sessionCount, u.monthSessions, u.lastSessionAt || '', money(u.profit30d), u.reviewRating == null ? '' : u.reviewRating,
+  ].map(csvEscape).join(';')));
+  const blob = new Blob(['﻿' + lines.join('\n')], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'pokelo-utilisateurs-' + todayStr() + '.csv';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 }
 // Affiche une liste de montants par devise (ex. bankroll totale d'un joueur
 // qui a des bankrolls en EUR et USD) : jamais de somme entre devises
@@ -7526,55 +7673,184 @@ async function openAdminUserDetail(userId){
 function closeAdminUserDetailModal(){
   document.getElementById('admin-user-detail-modal-overlay').hidden = true;
 }
+let adminDetailData = null;
+function adminDetailTab(name){
+  document.querySelectorAll('#admin-user-detail-body [data-detail-tab]').forEach(b => b.classList.toggle('active', b.dataset.detailTab === name));
+  document.querySelectorAll('#admin-user-detail-body [data-detail-panel]').forEach(p => { p.hidden = p.dataset.detailPanel !== name; });
+}
+function adminStars(n){
+  const r = Math.max(0, Math.min(5, Number(n) || 0));
+  return '★'.repeat(r) + '☆'.repeat(5 - r);
+}
 function renderAdminUserDetailBody(data){
+  adminDetailData = data;
   const p = data.profile;
+  const st = data.stats || { bankrolls: [], monthly: [], quotaUsed: 0, sessionCount: data.sessions.length };
   const locale = state.settings.lang === 'en' ? 'en-US' : 'fr-FR';
+  const dateOnly = v => (v ? escapeHtml(new Date(v).toLocaleDateString(locale)) : '—');
   const initial = (p.email || '?').trim().charAt(0).toUpperCase();
-  const planClass = p.plan === 'free' ? 'plan-badge-free' : 'plan-badge-pro';
+  const isFree = p.plan === 'free';
+  const planClass = isFree ? 'plan-badge-free' : 'plan-badge-pro';
   const planLabel = t('settings_account_plan_' + p.plan) || p.plan;
+  const kv = (label, value) => `<div class="admin-kv"><span>${escapeHtml(label)}</span><strong>${value}</strong></div>`;
 
-  const bankrollsHtml = data.bankrolls.length ? `
+  // ── Profil ──
+  const quotaText = isFree
+    ? `${st.quotaUsed} / ${FREE_SESSIONS_PER_MONTH}${p.quotaResetAt ? ' · ' + escapeHtml(t('admin_detail_quota_reset_on').replace('{date}', new Date(p.quotaResetAt).toLocaleDateString(locale))) : ''}`
+    : escapeHtml(t('admin_detail_quota_unlimited'));
+  const profileHtml = `<div class="admin-kv-grid">
+      ${kv(t('admin_detail_member_since'), dateOnly(p.createdAt))}
+      ${kv(t('admin_users_col_last_signin'), p.lastSignInAt ? escapeHtml(adminRelativeDay(p.lastSignInAt, locale)) : '—')}
+      ${kv(t('admin_users_col_plan'), escapeHtml(planLabel))}
+      ${kv(t('admin_detail_period_end'), dateOnly(p.periodEnd))}
+      ${kv(t('admin_detail_quota'), quotaText)}
+      ${kv(t('admin_users_col_sessions'), String(st.sessionCount))}
+      ${kv(t('admin_detail_referrer'), p.referrerEmail ? escapeHtml(p.referrerEmail) : '—')}
+      ${kv(t('admin_detail_referred'), String(p.referredCount || 0))}
+      ${kv(t('admin_detail_referral_code'), p.referralCode ? escapeHtml(p.referralCode) : '—')}
+      ${kv(t('admin_users_col_stripe'), p.hasStripeCustomer ? '✓' : '—')}
+    </div>`;
+
+  // ── Bankrolls ──
+  const bankrollsHtml = st.bankrolls.length ? `
     <div class="table-wrap"><table class="data-table"><thead><tr>
-      <th>${t('admin_detail_col_name')}</th><th>${t('admin_detail_col_currency')}</th><th>${t('admin_detail_col_start')}</th>
-    </tr></thead><tbody>${data.bankrolls.map(b => `
-      <tr><td>${escapeHtml(b.name)}</td><td>${escapeHtml(b.currency)}</td><td>${fmtMoney(b.start, b.currency)}</td></tr>
+      <th>${t('admin_detail_col_name')}</th><th>${t('admin_detail_col_start')}</th><th>${t('admin_detail_col_balance')}</th><th>${t('admin_detail_col_result')}</th><th>${t('admin_users_col_sessions')}</th><th>${t('admin_users_col_last_session')}</th>
+    </tr></thead><tbody>${st.bankrolls.map(b => `
+      <tr><td data-label="${t('admin_detail_col_name')}">${escapeHtml(b.name)}</td>
+      <td data-label="${t('admin_detail_col_start')}">${fmtMoney(b.start, b.currency)}</td>
+      <td data-label="${t('admin_detail_col_balance')}"><strong>${fmtMoney(b.balance, b.currency)}</strong></td>
+      <td data-label="${t('admin_detail_col_result')}" class="cell-profit ${b.profit >= 0 ? 'pos' : 'neg'}">${fmtSigned(b.profit, b.currency)}</td>
+      <td data-label="${t('admin_users_col_sessions')}">${b.sessionCount}</td>
+      <td data-label="${t('admin_users_col_last_session')}">${b.lastSessionDate ? escapeHtml(fmtDateFr(b.lastSessionDate)) : '—'}</td></tr>
     `).join('')}</tbody></table></div>` : `<p class="admin-detail-empty">${t('admin_detail_no_bankrolls')}</p>`;
 
+  // ── Sessions : activité des 6 derniers mois + dernières sessions ──
+  const maxM = Math.max(1, ...st.monthly.map(m => m.sessions));
+  const monthlyHtml = `<div class="admin-months">${st.monthly.map(m => `
+      <div class="admin-month" title="${escapeHtml(m.month)}">
+        <div class="admin-month-bar"><span style="height:${Math.max(m.sessions ? 8 : 2, Math.round(m.sessions / maxM * 100))}%"></span></div>
+        <div class="admin-month-n">${m.sessions}</div>
+        <div class="admin-month-l">${escapeHtml(m.month.slice(5))}/${escapeHtml(m.month.slice(2, 4))}</div>
+        <div class="admin-month-p">${m.profit.length ? m.profit.map(x => `<span class="${x.value >= 0 ? 'cell-profit pos' : 'cell-profit neg'}">${escapeHtml(fmtSigned(x.value, x.currency))}</span>`).join('<br>') : '—'}</div>
+      </div>`).join('')}</div>`;
   const bankrollNameById = {};
-  data.bankrolls.forEach(b => { bankrollNameById[b.id] = b.name; });
+  st.bankrolls.forEach(b => { bankrollNameById[b.id] = b.name; });
+  data.bankrolls.forEach(b => { if (!bankrollNameById[b.id]) bankrollNameById[b.id] = b.name; });
   const sessionsHtml = data.sessions.length ? `
     <div class="table-wrap"><table class="data-table"><thead><tr>
       <th>${t('admin_detail_col_date')}</th><th>${t('admin_users_col_bankrolls')}</th><th>${t('admin_detail_col_category')}</th><th>${t('admin_detail_col_format')}</th><th>${t('admin_detail_col_result')}</th>
     </tr></thead><tbody>${data.sessions.slice(0, 30).map(s => {
       const profit = sessionProfit(s);
-      return `<tr><td>${escapeHtml(fmtDateFr(s.date))}</td><td>${escapeHtml(bankrollNameById[s.bankrollId] || '—')}</td><td>${escapeHtml(s.category)}</td><td>${escapeHtml(s.format)}</td><td class="cell-profit ${profit>=0?'pos':'neg'}">${fmtSigned(profit, s.currency)}</td></tr>`;
+      return `<tr><td data-label="${t('admin_detail_col_date')}">${escapeHtml(fmtDateFr(s.date))}</td><td data-label="${t('admin_users_col_bankrolls')}">${escapeHtml(bankrollNameById[s.bankrollId] || '—')}</td><td data-label="${t('admin_detail_col_category')}">${escapeHtml(s.category)}</td><td data-label="${t('admin_detail_col_format')}">${escapeHtml(s.format)}</td><td data-label="${t('admin_detail_col_result')}" class="cell-profit ${profit >= 0 ? 'pos' : 'neg'}">${fmtSigned(profit, s.currency)}</td></tr>`;
     }).join('')}</tbody></table></div>` : `<p class="admin-detail-empty">${t('admin_detail_no_sessions')}</p>`;
 
+  // ── Activité : avis, support, factures ──
+  const reviewsHtml = (data.reviews && data.reviews.length) ? data.reviews.map(r => `
+    <div class="admin-activity-item">
+      <div class="admin-activity-head"><span class="admin-stars">${adminStars(r.rating)}</span><span class="admin-sub-chip">${escapeHtml(r.status || '')}</span><span class="admin-activity-date">${dateOnly(r.created_at)}</span></div>
+      <p>${escapeHtml(r.text || '')}</p>
+    </div>`).join('') : `<p class="admin-detail-empty">${t('admin_detail_no_reviews')}</p>`;
+  const supportHtml = (data.supportMessages && data.supportMessages.length) ? data.supportMessages.map(m => `
+    <div class="admin-activity-item">
+      <div class="admin-activity-head"><span class="admin-sub-chip">${escapeHtml(m.category || '')}</span><span class="admin-sub-chip">${escapeHtml(m.status || '')}</span><span class="admin-activity-date">${dateOnly(m.created_at)}</span></div>
+      <p>${escapeHtml(m.message || '')}</p>
+    </div>`).join('') : `<p class="admin-detail-empty">${t('admin_detail_no_support')}</p>`;
   const invoicesHtml = data.invoices.length ? `
     <div class="table-wrap"><table class="data-table"><thead><tr>
       <th>${t('admin_detail_col_date')}</th><th>${t('admin_detail_col_amount')}</th><th>${t('admin_detail_col_status')}</th><th></th>
     </tr></thead><tbody>${data.invoices.map(inv => `
-      <tr><td>${inv.date ? escapeHtml(new Date(inv.date).toLocaleDateString(locale)) : '—'}</td>
-      <td>${inv.amount != null ? fmtMoney(inv.amount, (inv.currency||'').toUpperCase()) : '—'}</td>
-      <td>${escapeHtml(inv.status || '—')}</td>
+      <tr><td data-label="${t('admin_detail_col_date')}">${inv.date ? escapeHtml(new Date(inv.date).toLocaleDateString(locale)) : '—'}</td>
+      <td data-label="${t('admin_detail_col_amount')}">${inv.amount != null ? fmtMoney(inv.amount, (inv.currency || '').toUpperCase()) : '—'}</td>
+      <td data-label="${t('admin_detail_col_status')}">${escapeHtml(inv.status || '—')}</td>
       <td>${inv.hostedInvoiceUrl ? `<a href="${escapeHtml(inv.hostedInvoiceUrl)}" target="_blank" rel="noopener">${t('admin_detail_view_invoice')}</a>` : '—'}</td></tr>
     `).join('')}</tbody></table></div>` : `<p class="admin-detail-empty">${t('admin_detail_no_invoices')}</p>`;
 
+  // Actions : attribuer Pro seulement à un compte gratuit ; retirer Pro seulement
+  // s'il a été attribué manuellement (jamais sur un abonné Stripe payant).
+  const canGrant = isFree;
+  const canRevoke = !isFree && !p.hasStripeCustomer;
   document.getElementById('admin-user-detail-body').innerHTML = `
     <div class="admin-detail-head">
       <div class="admin-detail-avatar">${escapeHtml(initial)}</div>
       <div>
         <div class="admin-detail-email">${escapeHtml(p.email || '—')}</div>
-        <div class="admin-detail-sub">${escapeHtml(t('admin_detail_member_since'))} ${p.createdAt ? escapeHtml(new Date(p.createdAt).toLocaleDateString(locale)) : '—'}</div>
+        <div class="admin-detail-sub">${p.displayName ? escapeHtml(p.displayName) + ' · ' : ''}${escapeHtml(t('admin_detail_member_since'))} ${dateOnly(p.createdAt)}</div>
       </div>
       <span class="plan-badge ${planClass}" style="margin-left:auto">${escapeHtml(planLabel)}</span>
     </div>
-    <button class="btn-secondary btn-sm" id="admin-detail-reset-btn" onclick="sendAdminUserPasswordReset('${p.id}')">${escapeHtml(t('admin_detail_send_reset'))}</button>
+    <div class="admin-detail-actions">
+      ${canGrant ? `<button class="btn-primary btn-sm" onclick="adminDetailSetPlan('pro')">${escapeHtml(t('admin_detail_grant_pro'))}</button>` : ''}
+      ${canRevoke ? `<button class="btn-secondary btn-sm" onclick="adminDetailSetPlan('free')">${escapeHtml(t('admin_detail_revoke_pro'))}</button>` : ''}
+      ${isFree ? `<button class="btn-secondary btn-sm" id="admin-detail-quota-btn" onclick="adminDetailResetQuota()">${escapeHtml(t('admin_detail_reset_quota'))}</button>` : ''}
+      <button class="btn-ghost btn-sm" id="admin-detail-reset-btn" onclick="sendAdminUserPasswordReset('${p.id}')">${escapeHtml(t('admin_detail_send_reset'))}</button>
+    </div>
+    <div class="account-feedback" id="admin-detail-action-feedback" hidden style="margin-top:.6rem"></div>
     <div class="account-feedback" id="admin-detail-reset-feedback" hidden style="margin-top:.6rem"></div>
-    <div class="admin-detail-section"><h4>${escapeHtml(t('admin_detail_bankrolls'))}</h4>${bankrollsHtml}</div>
-    <div class="admin-detail-section"><h4>${escapeHtml(t('admin_detail_sessions'))}</h4>${sessionsHtml}</div>
-    <div class="admin-detail-section"><h4>${escapeHtml(t('admin_detail_invoices'))}</h4>${p.hasStripeCustomer ? invoicesHtml : `<p class="admin-detail-empty">${t('admin_detail_no_stripe')}</p>`}</div>
+    <div class="admin-detail-tabs" role="tablist">
+      <button class="active" data-detail-tab="profile" onclick="adminDetailTab('profile')">${escapeHtml(t('admin_detail_tab_profile'))}</button>
+      <button data-detail-tab="bankrolls" onclick="adminDetailTab('bankrolls')">${escapeHtml(t('admin_detail_bankrolls'))}</button>
+      <button data-detail-tab="sessions" onclick="adminDetailTab('sessions')">${escapeHtml(t('admin_detail_sessions'))}</button>
+      <button data-detail-tab="activity" onclick="adminDetailTab('activity')">${escapeHtml(t('admin_detail_tab_activity'))}</button>
+    </div>
+    <div class="admin-detail-section" data-detail-panel="profile">${profileHtml}</div>
+    <div class="admin-detail-section" data-detail-panel="bankrolls" hidden>${bankrollsHtml}</div>
+    <div class="admin-detail-section" data-detail-panel="sessions" hidden><h4>${escapeHtml(t('admin_detail_monthly'))}</h4>${monthlyHtml}<h4 style="margin-top:1.2rem">${escapeHtml(t('admin_detail_sessions'))}</h4>${sessionsHtml}</div>
+    <div class="admin-detail-section" data-detail-panel="activity" hidden>
+      <h4>${escapeHtml(t('admin_detail_reviews'))}</h4>${reviewsHtml}
+      <h4 style="margin-top:1.2rem">${escapeHtml(t('admin_detail_support'))}</h4>${supportHtml}
+      <h4 style="margin-top:1.2rem">${escapeHtml(t('admin_detail_invoices'))}</h4>${p.hasStripeCustomer ? invoicesHtml : `<p class="admin-detail-empty">${t('admin_detail_no_stripe')}</p>`}
+    </div>
   `;
+}
+function adminDetailFeedback(message, isError){
+  const el = document.getElementById('admin-detail-action-feedback');
+  if (!el) return;
+  el.hidden = false;
+  el.className = 'account-feedback' + (isError ? ' error' : '');
+  el.textContent = message;
+}
+async function adminDetailSetPlan(plan){
+  if (!adminDetailData) return;
+  const p = adminDetailData.profile;
+  const feedback = document.getElementById('admin-detail-action-feedback');
+  const run = async () => {
+    feedback.hidden = false; feedback.className = 'account-feedback'; feedback.textContent = t('account_loading');
+    try {
+      await adminAuthedFetch('/api/admin-grant-plan', { email: p.email, plan });
+      adminStatsAt = 0;
+      await openAdminUserDetail(p.id);
+      adminDetailFeedback(t('admin_grant_success').replace('{email}', p.email).replace('{plan}', t('settings_account_plan_' + plan)));
+      renderAdminPanel(true);
+    } catch (e) {
+      feedback.className = 'account-feedback error';
+      feedback.textContent = t('admin_load_error');
+    }
+  };
+  if (plan === 'free') {
+    openConfirm(t('admin_detail_revoke_pro'), t('admin_detail_revoke_confirm').replace('{email}', p.email), () => { closeConfirmModal(); run(); }, t('admin_detail_revoke_pro'));
+  } else {
+    run();
+  }
+}
+async function adminDetailResetQuota(){
+  if (!adminDetailData) return;
+  const p = adminDetailData.profile;
+  const btn = document.getElementById('admin-detail-quota-btn');
+  const feedback = document.getElementById('admin-detail-action-feedback');
+  setBtnLoading(btn, true);
+  feedback.hidden = false; feedback.className = 'account-feedback'; feedback.textContent = t('account_loading');
+  try {
+    await adminAuthedFetch('/api/admin-user-detail', { action: 'reset-quota', userId: p.id });
+    adminStatsAt = 0;
+    await openAdminUserDetail(p.id);
+    adminDetailFeedback(t('admin_detail_quota_reset_ok'));
+    renderAdminPanel(true);
+  } catch (e) {
+    feedback.className = 'account-feedback error';
+    feedback.textContent = e && e.message === 'migration-required' ? t('admin_detail_quota_migration') : t('admin_load_error');
+  } finally {
+    setBtnLoading(btn, false);
+  }
 }
 async function sendAdminUserPasswordReset(userId){
   const btn = document.getElementById('admin-detail-reset-btn');
@@ -8298,6 +8574,17 @@ function maybeShowProWelcome(userId, plan){
   } catch (e) {}
 }
 let planPollTimer = null;
+// Requête séparée de celle du plan : si la colonne quota_reset_at n'existe pas
+// encore (migration SUPABASE_SETUP.md §17), elle échoue seule, sans casser le
+// suivi du plan.
+async function refreshQuotaResetAt(){
+  try {
+    const { data, error } = await supabase.from('profiles').select('quota_reset_at').eq('id', currentUser.id).maybeSingle();
+    if (error || !data) return;
+    const v = data.quota_reset_at ? new Date(data.quota_reset_at).getTime() : null;
+    if (v !== currentQuotaResetAt) { currentQuotaResetAt = v; updateSessionQuotaUI(); }
+  } catch (e) { /* non bloquant */ }
+}
 // Poll léger (pas de Realtime Supabase à configurer) pour détecter une
 // attribution de plan côté admin pendant qu'on est déjà connecté, sans
 // attendre une reconnexion. 30s = compromis entre réactivité et charge.
@@ -8317,6 +8604,7 @@ function startPlanPolling(){
         renderAccountSettings();
       }
       maybeShowProWelcome(currentUser.id, newPlan);
+      refreshQuotaResetAt();
     } catch (e) { /* on retente au prochain tick */ }
   }, 30000);
 }
@@ -8556,6 +8844,7 @@ async function deleteMyAccount(){
     currentPlan = 'free';
     currentPlanPeriodEnd = null;
     currentReferralCode = null;
+    currentQuotaResetAt = null;
     currentUserRole = 'user';
     localStorage.removeItem(STORAGE_KEY);
     state = seedDemoState();

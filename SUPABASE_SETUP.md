@@ -634,3 +634,43 @@ fonctionner normalement (le code détecte l'erreur Postgres "colonne
 inconnue" — 42703 — et retente automatiquement sans ce champ) : les
 dépenses restent visibles en local mais ne remontent pas encore dans le
 cloud tant que la colonne n'existe pas.
+
+## 17. Réinitialisation du quota mensuel d'un compte (geste commercial admin)
+
+Le plan gratuit est limité à 10 nouvelles sessions par mois (décompte côté
+application, `js/quota.js`). Depuis la fiche d'un compte du panneau admin, le
+bouton « Réinitialiser le quota du mois » enregistre une date
+(`profiles.quota_reset_at`) : seules les sessions saisies APRÈS cette date
+comptent dans le quota. Aucune session n'est supprimée ni modifiée.
+
+À exécuter dans Supabase (SQL Editor), **dans cet ordre** — la colonne doit
+exister avant que la fonction de protection ne la référence, sinon toute mise
+à jour de profil échouerait :
+
+```sql
+alter table public.profiles add column if not exists quota_reset_at timestamptz;
+
+create or replace function public.protect_profile_privileged_columns()
+returns trigger as $$
+begin
+  if auth.role() <> 'service_role' then
+    new.role := old.role;
+    new.plan := old.plan;
+    new.stripe_customer_id := old.stripe_customer_id;
+    new.stripe_subscription_id := old.stripe_subscription_id;
+    new.stripe_subscription_status := old.stripe_subscription_status;
+    new.stripe_current_period_end := old.stripe_current_period_end;
+    new.referral_reward_claimed := old.referral_reward_claimed;
+    new.referral_discount_used := old.referral_discount_used;
+    new.referred_by_user_id := old.referred_by_user_id;
+    new.quota_reset_at := old.quota_reset_at;
+  end if;
+  return new;
+end;
+$$ language plpgsql security definer;
+```
+
+Tant que cette migration n'est pas appliquée : le panneau admin affiche
+« migration requise » au clic sur le bouton, et le reste (quota, synchronisation,
+fiches) fonctionne normalement — les requêtes qui lisent la colonne sont
+isolées et ne cassent rien en son absence.

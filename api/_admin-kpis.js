@@ -7,7 +7,7 @@ const FREE_SESSIONS_PER_MONTH = 10; // doit rester aligné sur index.html
 
 function isoDay(ms){ return new Date(ms).toISOString().slice(0, 10); }
 
-function computeKpis({ profiles, bankrolls, sessions, authUsers, pendingReviews, newSupport, errors24h, nowMs }){
+function computeKpis({ profiles, bankrolls, sessions, authUsers, pendingReviews, newSupport, errors24h, quotaResetById, nowMs }){
   const now = nowMs || Date.now();
   const since = n => now - n * DAY_MS;
   const monthStart = new Date(new Date(now).getFullYear(), new Date(now).getMonth(), 1).getTime();
@@ -40,7 +40,10 @@ function computeKpis({ profiles, bankrolls, sessions, authUsers, pendingReviews,
   sessions.forEach(s => {
     sessionCount[s.user_id] = (sessionCount[s.user_id] || 0) + 1;
     const created = s.created_at ? new Date(s.created_at).getTime() : 0;
-    if (created >= monthStart) monthCount[s.user_id] = (monthCount[s.user_id] || 0) + 1;
+    // Réinitialisation du quota par un admin : seules les sessions saisies après
+    // cette date comptent (rien n'est supprimé).
+    const quotaFrom = Math.max(monthStart, (quotaResetById && quotaResetById[s.user_id]) || 0);
+    if (created >= quotaFrom) monthCount[s.user_id] = (monthCount[s.user_id] || 0) + 1;
     if (created >= since(7)) enteredRecently.add(s.user_id);
     if (created >= since(30)) sessions30d++;
   });
@@ -72,9 +75,62 @@ function computeKpis({ profiles, bankrolls, sessions, authUsers, pendingReviews,
       withFiveSessions: withFive, withFiveSessionsPct: pct(withFive),
     },
     active: { signedIn7d, signedIn30d, entered7d: enteredRecently.size, authAvailable: Array.isArray(authUsers) },
-    sessions30d, quotaBlocked,
+    sessions30d, quotaBlocked, monthCountByUser: monthCount,
     todo: { pendingReviews: pendingReviews || 0, newSupport: newSupport || 0, errors24h: errors24h || 0 },
   };
 }
 
-module.exports = { computeKpis, PRO_PRICE_EUR, FREE_SESSIONS_PER_MONTH };
+// Vue d'un seul compte : solde et résultat par bankroll (dans la devise de la
+// bankroll, jamais de somme entre devises), activité des 6 derniers mois,
+// sessions décomptées dans le quota du mois (réinitialisation admin incluse).
+function computeUserStats({ bankrolls, sessions, resetMs, nowMs }){
+  const now = nowMs || Date.now();
+  const d = new Date(now);
+  const monthStart = new Date(d.getFullYear(), d.getMonth(), 1).getTime();
+  const quotaFrom = Math.max(monthStart, resetMs || 0);
+  const round = n => Math.round(n * 100) / 100;
+  const byId = {};
+  const perBankroll = bankrolls.map(b => {
+    const row = { id: b.id, name: b.name, currency: b.currency, start: Number(b.start) || 0, sessionCount: 0, profit: 0, balance: 0, lastSessionDate: null };
+    byId[b.id] = row;
+    return row;
+  });
+  const monthKeys = [];
+  for (let i = 5; i >= 0; i--) {
+    const m = new Date(d.getFullYear(), d.getMonth() - i, 1);
+    monthKeys.push(m.getFullYear() + '-' + String(m.getMonth() + 1).padStart(2, '0'));
+  }
+  const monthly = {};
+  monthKeys.forEach(k => { monthly[k] = { month: k, sessions: 0, profitByCurrency: {} }; });
+  let quotaUsed = 0;
+  sessions.forEach(s => {
+    const row = byId[s.bankroll_id];
+    const rate = s.fx_rate == null ? 1 : s.fx_rate;
+    const profit = round((s.cashout - s.buy_in) * rate);
+    if (row) {
+      row.sessionCount++;
+      row.profit = round(row.profit + profit);
+      if (!row.lastSessionDate || (s.date && s.date > row.lastSessionDate)) row.lastSessionDate = s.date || row.lastSessionDate;
+    }
+    const key = (s.date || '').slice(0, 7);
+    if (monthly[key]) {
+      monthly[key].sessions++;
+      const cur = row ? row.currency : (s.currency || 'EUR');
+      monthly[key].profitByCurrency[cur] = round((monthly[key].profitByCurrency[cur] || 0) + profit);
+    }
+    const created = s.created_at ? new Date(s.created_at).getTime() : 0;
+    if (created >= quotaFrom) quotaUsed++;
+  });
+  perBankroll.forEach(r => { r.balance = round(r.start + r.profit); });
+  return {
+    bankrolls: perBankroll,
+    monthly: monthKeys.map(k => ({
+      month: k, sessions: monthly[k].sessions,
+      profit: Object.entries(monthly[k].profitByCurrency).map(([currency, value]) => ({ currency, value })),
+    })),
+    quotaUsed,
+    sessionCount: sessions.length,
+  };
+}
+
+module.exports = { computeKpis, computeUserStats, PRO_PRICE_EUR, FREE_SESSIONS_PER_MONTH };

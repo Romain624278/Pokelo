@@ -52,3 +52,21 @@ test('splitDuration décompose une durée et ne descend jamais sous zéro', () =
   assert.deepEqual(splitDuration(((2 * 24 + 3) * 60 + 4) * 60 * 1000 + 5000), { days: 2, hours: 3, minutes: 4, seconds: 5 });
   assert.deepEqual(splitDuration(-500), { days: 0, hours: 0, minutes: 0, seconds: 0 });
 });
+
+test('réinitialisation admin : seules les sessions saisies après la date comptent', () => {
+  const ref = at(2026, 10, 14);
+  const sessions = Array.from({ length: 10 }, (_, i) => ({ createdAt: at(2026, 10, 2 + i) }));
+  assert.equal(computeSessionQuota(sessions, 10, ref).blocked, true);
+  const reset = at(2026, 10, 9, 13); // sessions des 10 et 11 octobre seulement
+  const after = computeSessionQuota(sessions, 10, ref, reset);
+  assert.equal(after.blocked, false);
+  assert.equal(after.used, 2);
+  const withNew = computeSessionQuota(sessions.concat([{ createdAt: at(2026, 10, 14) }]), 10, ref, reset);
+  assert.equal(withNew.used, 3);
+});
+
+test("une réinitialisation d'un mois précédent n'a aucun effet sur le mois courant", () => {
+  const ref = at(2026, 10, 14);
+  const sessions = Array.from({ length: 10 }, (_, i) => ({ createdAt: at(2026, 10, 2 + i) }));
+  assert.equal(computeSessionQuota(sessions, 10, ref, at(2026, 9, 5)).blocked, true);
+});

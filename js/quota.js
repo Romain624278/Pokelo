@@ -16,14 +16,16 @@
   }
 
   // Les sessions de démonstration (`demo: true`) ne consomment jamais le quota.
-  function countSessionsInMonth(sessions, refMs){
-    const start = monthStartMs(refMs);
+  // `sinceMs` (optionnel) : réinitialisation du quota par un admin — seules les
+  // sessions saisies à partir de cette date comptent, jamais rien n'est supprimé.
+  function countSessionsInMonth(sessions, refMs, sinceMs){
+    const start = Math.max(monthStartMs(refMs), sinceMs || 0);
     const end = nextMonthStartMs(refMs);
     return (sessions || []).filter(s => !s.demo && s.createdAt >= start && s.createdAt < end).length;
   }
 
-  function computeSessionQuota(sessions, limit, refMs){
-    const used = countSessionsInMonth(sessions, refMs);
+  function computeSessionQuota(sessions, limit, refMs, sinceMs){
+    const used = countSessionsInMonth(sessions, refMs, sinceMs);
     return {
       used,
       limit,

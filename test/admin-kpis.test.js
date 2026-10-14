@@ -1,6 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { computeKpis } = require('../api/_admin-kpis.js');
+const { computeKpis, computeUserStats } = require('../api/_admin-kpis.js');
 
 const NOW = new Date(2026, 9, 14, 12, 0, 0).getTime(); // 14 oct. 2026
 const daysAgo = n => new Date(NOW - n * 86400000).toISOString();
@@ -71,4 +71,41 @@ test('base vide : aucun NaN ni division par zéro', () => {
   assert.equal(k.conversionPct, 0);
   assert.equal(k.mrrEstimate, 0);
   assert.equal(k.activation.withSessionPct, 0);
+});
+
+test('réinitialisation du quota : les sessions antérieures à la date ne comptent plus', () => {
+  const data = sample();
+  const reset = NOW - 30 * 60 * 1000; // il y a 30 min : seules ~0 sessions plus récentes
+  const k = computeKpis({ ...data, quotaResetById: { u1: reset }, nowMs: NOW });
+  assert.equal(k.quotaBlocked, 0);
+  assert.equal(k.monthCountByUser.u1 || 0, 0);
+  const base = computeKpis({ ...data, nowMs: NOW });
+  assert.equal(base.monthCountByUser.u1, 11);
+});
+
+test('fiche compte : solde, résultat et dernière session par bankroll', () => {
+  const bankrolls = [{ id: 'b1', name: 'Online', currency: 'EUR', start: 500 }, { id: 'b2', name: 'Live', currency: 'USD', start: 100 }];
+  const sessions = [
+    { bankroll_id: 'b1', buy_in: 20, cashout: 70, fx_rate: 1, date: '2026-10-10', created_at: daysAgo(4) },
+    { bankroll_id: 'b1', buy_in: 20, cashout: 0, fx_rate: 1, date: '2026-09-02', created_at: daysAgo(42) },
+    { bankroll_id: 'b2', buy_in: 50, cashout: 40, fx_rate: 1, date: '2026-10-12', created_at: daysAgo(2) },
+  ];
+  const r = computeUserStats({ bankrolls, sessions, nowMs: NOW });
+  const b1 = r.bankrolls.find(b => b.id === 'b1');
+  assert.equal(b1.profit, 30);
+  assert.equal(b1.balance, 530);
+  assert.equal(b1.sessionCount, 2);
+  assert.equal(b1.lastSessionDate, '2026-10-10');
+  assert.equal(r.bankrolls.find(b => b.id === 'b2').balance, 90);
+  assert.equal(r.sessionCount, 3);
+  assert.equal(r.monthly.length, 6);
+  assert.equal(r.monthly[5].month, '2026-10');
+  assert.equal(r.monthly[5].sessions, 2);
+  assert.equal(r.monthly[4].sessions, 1);
+});
+
+test('fiche compte : quota du mois avec réinitialisation', () => {
+  const sessions = Array.from({ length: 4 }, (_, i) => ({ bankroll_id: 'x', buy_in: 1, cashout: 1, created_at: new Date(NOW - (i + 1) * 3600000).toISOString() }));
+  assert.equal(computeUserStats({ bankrolls: [], sessions, nowMs: NOW }).quotaUsed, 4);
+  assert.equal(computeUserStats({ bankrolls: [], sessions, resetMs: NOW - 2.5 * 3600000, nowMs: NOW }).quotaUsed, 2);
 });

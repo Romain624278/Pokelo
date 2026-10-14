@@ -25,7 +25,7 @@ module.exports = async (req, res) => {
 
     const headers = { apikey: SERVICE_ROLE_KEY, Authorization: `Bearer ${SERVICE_ROLE_KEY}` };
     const [profilesRes, errorsRes, bankrollsRes, sessionsRes] = await Promise.all([
-      fetch(`${SUPABASE_URL}/rest/v1/profiles?select=id,email,plan,role,created_at,stripe_customer_id,stripe_current_period_end,referral_reward_claimed&order=created_at.desc`, { headers }),
+      fetch(`${SUPABASE_URL}/rest/v1/profiles?select=id,email,display_name,plan,role,created_at,stripe_customer_id,stripe_current_period_end,referral_reward_claimed&order=created_at.desc`, { headers }),
       fetch(`${SUPABASE_URL}/rest/v1/error_logs?select=*&order=created_at.desc&limit=20`, { headers }),
       fetch(`${SUPABASE_URL}/rest/v1/bankrolls?select=id,user_id,currency,start`, { headers }),
       fetch(`${SUPABASE_URL}/rest/v1/sessions?select=user_id,bankroll_id,buy_in,cashout,fx_rate,created_at&order=created_at.desc`, { headers }),
@@ -42,11 +42,25 @@ module.exports = async (req, res) => {
       try { const r = await fetch(url, { headers }); return r.ok ? await r.json() : null; } catch (e) { return null; }
     };
     const since24h = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-    const [pendingReviewsRows, newSupportRows, errors24hRows] = await Promise.all([
+    const [pendingReviewsRows, newSupportRows, errors24hRows, reviewRows, quotaResetRows] = await Promise.all([
       safeJson(`${SUPABASE_URL}/rest/v1/reviews?select=id&status=eq.pending&limit=1000`),
       safeJson(`${SUPABASE_URL}/rest/v1/support_messages?select=id&status=eq.new&limit=1000`),
       safeJson(`${SUPABASE_URL}/rest/v1/error_logs?select=id&created_at=gte.${since24h}&limit=1000`),
+      safeJson(`${SUPABASE_URL}/rest/v1/reviews?select=user_id,rating,status,created_at&order=created_at.desc&limit=2000`),
+      // Colonne ajoutée par la migration SUPABASE_SETUP.md §17 : requête isolée,
+      // elle renvoie null (et rien d'autre ne casse) tant que la migration n'est pas faite.
+      safeJson(`${SUPABASE_URL}/rest/v1/profiles?select=id,quota_reset_at&quota_reset_at=not.is.null&limit=2000`),
     ]);
+    const quotaResetById = {};
+    (quotaResetRows || []).forEach(r => { quotaResetById[r.id] = new Date(r.quota_reset_at).getTime(); });
+    const reviewsByUser = {};
+    (reviewRows || []).forEach(r => {
+      if (!r.user_id) return;
+      const cur = reviewsByUser[r.user_id] || { count: 0, rating: null, status: null };
+      cur.count++;
+      if (cur.rating == null) { cur.rating = r.rating; cur.status = r.status; } // le plus récent d'abord
+      reviewsByUser[r.user_id] = cur;
+    });
     // Dernière connexion : n'existe que dans l'authentification Supabase
     // (auth.users.last_sign_in_at), pas dans `profiles`.
     let authUsers = null;
@@ -69,6 +83,7 @@ module.exports = async (req, res) => {
       pendingReviews: pendingReviewsRows ? pendingReviewsRows.length : 0,
       newSupport: newSupportRows ? newSupportRows.length : 0,
       errors24h: errors24hRows ? errors24hRows.length : 0,
+      quotaResetById,
     });
 
     const bankrollCountByUser = {};
@@ -117,9 +132,10 @@ module.exports = async (req, res) => {
       if (p.referral_reward_claimed) referralRewardsGiven++;
     });
 
-    const users = profiles.slice(0, 200).map(p => ({
+    const users = profiles.slice(0, 1000).map(p => ({
       id: p.id,
       email: p.email,
+      displayName: p.display_name || '',
       plan: p.plan || 'free',
       role: p.role || 'user',
       createdAt: p.created_at,
@@ -129,6 +145,11 @@ module.exports = async (req, res) => {
       sessionCount: sessionCountByUser[p.id] || 0,
       lastSessionAt: lastSessionByUser[p.id] || null,
       lastSignInAt: lastSignInById[p.id] || null,
+      monthSessions: kpis.monthCountByUser[p.id] || 0,
+      quotaResetAt: quotaResetById[p.id] ? new Date(quotaResetById[p.id]).toISOString() : null,
+      reviewCount: (reviewsByUser[p.id] || {}).count || 0,
+      reviewRating: (reviewsByUser[p.id] || {}).rating == null ? null : reviewsByUser[p.id].rating,
+      reviewStatus: (reviewsByUser[p.id] || {}).status || null,
       bankrollValue: toCurrencyList(bankrollValueByUser[p.id]),
       profit30d: toCurrencyList(profit30dByUser[p.id]),
     }));
