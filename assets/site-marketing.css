@@ -5,7 +5,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
   --text: #EDEDED; --text-wall: #F1FFF5; --green: #08BF2F; --green-hov: #02851f;
-  --grey: #8A8A8A; --black: #0a0a0a; --black-card: #111111; --border: rgba(8,191,47,0.18);
+  --grey: #A9AEA9; --black: #0a0a0a; --black-card: #111111; --border: rgba(8,191,47,0.18);
   --radius: 12px; color-scheme: dark;
   --good: #08BF2F; --critical: #e66767; --blue: #3987e5; --amber: #c98500; --violet: #9085e9;
   --c-tournament: #08BF2F; --c-cash: #3987e5; --c-expresso: #c98500; --c-live: #08BF2F; --c-online: #9085e9;
@@ -42,7 +42,7 @@ nav.site-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display
 /* ── SECTION BASE ── */
 section { padding: 100px 6vw; }
 .section-tag { display: inline-block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--green); margin-bottom: 1rem; }
-.section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.2rem, 5vw, 3.8rem); letter-spacing: 0.04em; color: var(--text-wall); line-height: 1.05; margin-bottom: 1.2rem; }
+.section-title { font-family: 'Inter', sans-serif; font-weight: 700; font-size: clamp(1.9rem, 4.2vw, 3.05rem); letter-spacing: -0.025em; color: var(--text-wall); line-height: 1.12; margin-bottom: 1.2rem; }
 .section-sub { color: var(--grey); font-size: 1rem; max-width: 620px; font-weight: 300; margin: 0 auto; }
 .divider { width: 48px; height: 3px; background: var(--green); border-radius: 2px; margin: 1.5rem auto; }
 .hero-block { text-align: center; }

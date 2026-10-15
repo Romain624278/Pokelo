@@ -38,6 +38,7 @@ function computeKpis({ profiles, bankrolls, sessions, authUsers, pendingReviews,
   const sessionCount = {};
   const monthCount = {};
   const enteredRecently = new Set();
+  const sessionByDay = {};
   let sessions30d = 0;
   sessions.forEach(s => {
     sessionCount[s.user_id] = (sessionCount[s.user_id] || 0) + 1;
@@ -47,8 +48,10 @@ function computeKpis({ profiles, bankrolls, sessions, authUsers, pendingReviews,
     const quotaFrom = Math.max(monthStart, (quotaResetById && quotaResetById[s.user_id]) || 0);
     if (created >= quotaFrom) monthCount[s.user_id] = (monthCount[s.user_id] || 0) + 1;
     if (created >= since(7)) enteredRecently.add(s.user_id);
-    if (created >= since(30)) sessions30d++;
+    if (created >= since(30)) { sessions30d++; const dk = isoDay(created); sessionByDay[dk] = (sessionByDay[dk] || 0) + 1; }
   });
+  const sessionSeries = [];
+  for (let i = 29; i >= 0; i--) { const dk = isoDay(since(i)); sessionSeries.push({ date: dk, count: sessionByDay[dk] || 0 }); }
   const withSession = Object.keys(sessionCount).length;
   const withFive = Object.values(sessionCount).filter(n => n >= 5).length;
 
@@ -78,7 +81,7 @@ function computeKpis({ profiles, bankrolls, sessions, authUsers, pendingReviews,
       withFiveSessions: withFive, withFiveSessionsPct: pct(withFive),
     },
     active: { signedIn7d, signedIn30d, entered7d: enteredRecently.size, authAvailable: Array.isArray(authUsers) },
-    sessions30d, quotaBlocked, monthCountByUser: monthCount,
+    sessions30d, sessionSeries, quotaBlocked, monthCountByUser: monthCount,
     todo: { pendingReviews: pendingReviews || 0, newSupport: newSupport || 0, errors24h: errors24h || 0 },
   };
 }

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pokelo-v9';
+const CACHE_NAME = 'pokelo-v10';
 const SHELL_ASSETS = [
   './',
   './index.html',

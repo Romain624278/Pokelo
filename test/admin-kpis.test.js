@@ -124,3 +124,9 @@ test('partenaire : accès Pro offert, 0 € de MRR, hors conversion et hors abon
   assert.equal(k.proCount, 1);
   assert.equal(k.conversionPct, 25);
 });
+
+test('série quotidienne des sessions : 30 jours, total = sessions des 30 derniers jours', () => {
+  const k = computeKpis({ ...sample(), nowMs: NOW });
+  assert.equal(k.sessionSeries.length, 30);
+  assert.equal(k.sessionSeries.reduce((s, d) => s + d.count, 0), k.sessions30d);
+});
