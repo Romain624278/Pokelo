@@ -25,7 +25,7 @@ module.exports = async (req, res) => {
 
     const headers = { apikey: SERVICE_ROLE_KEY, Authorization: `Bearer ${SERVICE_ROLE_KEY}` };
     const [profilesRes, errorsRes, bankrollsRes, sessionsRes] = await Promise.all([
-      fetch(`${SUPABASE_URL}/rest/v1/profiles?select=id,email,display_name,plan,role,created_at,stripe_customer_id,stripe_current_period_end,referral_reward_claimed&order=created_at.desc`, { headers }),
+      fetch(`${SUPABASE_URL}/rest/v1/profiles?select=id,email,display_name,plan,role,created_at,stripe_customer_id,stripe_subscription_status,stripe_current_period_end,referral_reward_claimed&order=created_at.desc`, { headers }),
       fetch(`${SUPABASE_URL}/rest/v1/error_logs?select=*&order=created_at.desc&limit=20`, { headers }),
       fetch(`${SUPABASE_URL}/rest/v1/bankrolls?select=id,user_id,currency,start`, { headers }),
       fetch(`${SUPABASE_URL}/rest/v1/sessions?select=user_id,bankroll_id,buy_in,cashout,fx_rate,created_at&order=created_at.desc`, { headers }),
@@ -140,6 +140,7 @@ module.exports = async (req, res) => {
       role: p.role || 'user',
       createdAt: p.created_at,
       hasStripeCustomer: !!p.stripe_customer_id,
+      subscriptionStatus: p.stripe_subscription_status || null,
       periodEnd: p.stripe_current_period_end,
       bankrollCount: bankrollCountByUser[p.id] || 0,
       sessionCount: sessionCountByUser[p.id] || 0,
@@ -161,6 +162,8 @@ module.exports = async (req, res) => {
       signups30d,
       referralRewardsGiven,
       kpis,
+      // Santé du panneau : ce qui dépend d'une migration ou d'une API annexe.
+      capabilities: { authUsers: authUsers !== null, quotaReset: quotaResetRows !== null, reviews: reviewRows !== null },
       recentErrors: errors,
       users,
     });

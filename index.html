@@ -737,6 +737,15 @@
   .admin-stars { color: #F5B700; letter-spacing: 1px; font-size: .9rem; }
   @media (max-width: 480px) { .admin-months { grid-template-columns: repeat(3, 1fr); } .admin-month:nth-child(n+4) { margin-top: .6rem; } }
 
+  .admin-health { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .5rem; }
+  .admin-health-row { display: flex; align-items: flex-start; gap: .7rem; padding: .65rem .9rem; border: 1px solid var(--border); border-radius: 10px; background: var(--black-card); }
+  .admin-health-row strong { display: block; font-size: .86rem; }
+  .admin-health-row small { color: var(--grey); font-size: .76rem; line-height: 1.45; }
+  .admin-health-dot { flex: 0 0 auto; width: 10px; height: 10px; border-radius: 50%; margin-top: .3rem; background: var(--good); }
+  .admin-health-row.ko { border-color: rgba(229,72,77,.45); }
+  .admin-health-row.ko .admin-health-dot { background: var(--critical); }
+  .admin-account-link { color: var(--green); text-decoration: underline; text-underline-offset: 2px; }
+
   /* ── QUOTA MENSUEL (plan gratuit) : bandeau, jauge, compte à rebours ── */
   .quota-strip { display: flex; align-items: center; gap: .9rem; flex-wrap: wrap; width: 100%; background: var(--black-card); border: 1px solid var(--border); border-radius: 10px; padding: .65rem 1rem; margin-bottom: 1.1rem; font-size: .8rem; color: var(--text); cursor: pointer; text-align: left; font-family: inherit; transition: border-color .2s; }
   .quota-strip:hover { border-color: rgba(8,191,47,.4); }
@@ -2359,6 +2368,7 @@
               <option value="all" data-i18n="admin_filter_plan_all">Tous les plans</option>
               <option value="free" data-i18n="settings_account_plan_free">Gratuit</option>
               <option value="pro" data-i18n="settings_account_plan_pro">Pro</option>
+              <option value="partner" data-i18n="settings_account_plan_partner">Partenaire</option>
             </select>
             <select class="input" id="admin-users-filter-activity" onchange="adminUsersPage=1;renderAdminUsersTable()">
               <option value="all" data-i18n="admin_filter_all">Tous les comptes</option>
@@ -2400,6 +2410,26 @@
         </div>
         </div>
         <div class="admin-panel" data-admin-panel="plans" hidden>
+        <div class="summary-grid admin-kpi-grid" id="admin-plans-kpis" style="margin-bottom:1.2rem"></div>
+        <div class="settings-card">
+          <h3 data-i18n="admin_plans_title">Comptes Pro</h3>
+          <p class="settings-desc" data-i18n="admin_plans_desc">Abonnés Stripe et accès attribués manuellement, classés par date d'échéance.</p>
+          <div class="table-wrap">
+            <table class="data-table" id="admin-plans-table">
+              <thead><tr>
+                <th data-i18n="admin_users_col_email">E-mail</th>
+                <th data-i18n="admin_users_col_plan">Plan</th>
+                <th data-i18n="admin_plans_source">Source</th>
+                <th data-i18n="admin_plans_period_end">Échéance</th>
+                <th data-i18n="admin_plans_status">Statut</th>
+                <th data-i18n="admin_users_col_last_signin">Dernière connexion</th>
+                <th></th>
+              </tr></thead>
+              <tbody id="admin-plans-tbody"></tbody>
+            </table>
+          </div>
+          <p class="form-hint" id="admin-plans-empty" hidden data-i18n="admin_plans_empty">Aucun compte Pro pour le moment.</p>
+        </div>
         <div class="settings-card">
           <h3 data-i18n="admin_grant_title">Attribuer Pokelo Pro</h3>
           <p class="settings-desc" data-i18n="admin_grant_desc">Donne ou retire un plan directement, sans passer par un vrai abonnement Stripe — utile pour offrir un accès à un joueur.</p>
@@ -2407,6 +2437,7 @@
             <input class="input" type="email" id="admin-grant-email" placeholder="joueur@exemple.com" />
             <select class="input" id="admin-grant-plan-select" style="max-width:160px;">
               <option value="pro" data-i18n="settings_account_plan_pro">Pro</option>
+              <option value="partner" data-i18n="settings_account_plan_partner">Partenaire</option>
               <option value="free" data-i18n="settings_account_plan_free">Gratuit</option>
             </select>
             <button class="btn-primary btn-sm" onclick="submitAdminGrantPlan()" data-i18n="admin_grant_submit">Appliquer</button>
@@ -2474,6 +2505,14 @@
         <div class="settings-card">
           <h3 data-i18n="admin_reviews_title">Avis</h3>
           <p class="settings-desc" data-i18n="admin_reviews_desc">Avis soumis par les utilisateurs. Seuls les avis approuvés apparaissent sur la page d'accueil.</p>
+          <div class="admin-toolbar">
+            <select class="input" id="admin-reviews-filter" onchange="renderAdminReviewsList()">
+              <option value="all" data-i18n="admin_filter_status_all">Tous les statuts</option>
+              <option value="pending" data-i18n="admin_reviews_status_pending">En attente</option>
+              <option value="approved" data-i18n="admin_reviews_status_approved">Validé</option>
+              <option value="rejected" data-i18n="admin_reviews_status_rejected">Rejeté</option>
+            </select>
+          </div>
           <div class="table-wrap">
             <table class="data-table" id="admin-reviews-table">
               <thead><tr>
@@ -2492,6 +2531,13 @@
         <div class="settings-card">
           <h3 data-i18n="admin_support_title">Messages de support</h3>
           <p class="settings-desc" data-i18n="admin_support_desc">Messages envoyés depuis le formulaire de contact du site (avec ou sans compte).</p>
+          <div class="admin-toolbar">
+            <select class="input" id="admin-support-filter" onchange="renderAdminSupportList()">
+              <option value="all" data-i18n="admin_filter_status_all">Tous les statuts</option>
+              <option value="new" data-i18n="admin_support_status_new">Nouveau</option>
+              <option value="read" data-i18n="admin_support_status_read">Lu</option>
+            </select>
+          </div>
           <div class="table-wrap">
             <table class="data-table" id="admin-support-table">
               <thead><tr>
@@ -2509,6 +2555,15 @@
         </div>
         </div>
         <div class="admin-panel" data-admin-panel="system" hidden>
+        <div class="settings-card">
+          <h3 data-i18n="admin_health_title">Santé du service</h3>
+          <p class="settings-desc" data-i18n="admin_health_desc">Ce qui conditionne le bon fonctionnement du panneau et de l'application.</p>
+          <ul class="admin-health" id="admin-health-list"></ul>
+          <div class="form-row" style="margin-top:.8rem">
+            <button class="btn-secondary btn-sm" onclick="adminTestFxApi()" data-i18n="admin_fx_test">Tester l'API des taux de change</button>
+          </div>
+          <div class="account-feedback" id="admin-fx-result" hidden></div>
+        </div>
         <div class="settings-card">
           <h3 data-i18n="admin_simulate_title">Tests &amp; simulation</h3>
           <p class="settings-desc" data-i18n="admin_simulate_desc">Déclenchez ces flux sur votre propre compte pour les vérifier, sans attendre les conditions réelles (15 jours d'usage, inactivité...).</p>
@@ -3591,7 +3646,7 @@ const I18N = {
     settings_account_delete_confirm_title:'Supprimer mon compte',
     settings_account_delete_confirm_text:'Cette action supprime définitivement votre compte, vos bankrolls, vos sessions et vos préférences. Elle est irréversible et ne peut pas être annulée.',
     settings_account_delete_error:'La suppression a échoué. Réessayez ou contactez le support.',
-    settings_account_plan:'Plan actuel', settings_account_plan_free:'Gratuit', settings_account_plan_pro:'Pro',
+    settings_account_plan:'Plan actuel', settings_account_plan_free:'Gratuit', settings_account_plan_pro:'Pro', settings_account_plan_partner:'Partenaire',
     settings_account_manage_plan:'Gérer mon abonnement',
     settings_account_view_plans:'Voir les plans disponibles',
     settings_account_role_admin:'✓ Statut administrateur actif sur ce compte.',
@@ -3625,6 +3680,17 @@ const I18N = {
     admin_users_col_bankrolls:'Bankrolls', admin_users_col_sessions:'Sessions', admin_users_col_last_session:'Dernière session', admin_users_col_stripe:'Stripe',
     admin_users_col_bankroll_value:'Bankroll totale', admin_users_col_profit30d:'30 derniers jours',
     admin_refresh:'Actualiser', admin_updated_at:'Mis à jour à {time}',
+    admin_plans_title:'Comptes Pro', admin_plans_desc:"Abonnés Stripe et accès attribués manuellement, classés par date d'échéance.", admin_plans_empty:'Aucun compte Pro pour le moment.',
+    admin_plans_source:'Source', admin_plans_source_stripe:'Stripe', admin_plans_source_manual:'Attribué manuellement', admin_plans_period_end:'Échéance', admin_plans_status:'Statut', admin_plans_soon:'bientôt',
+    admin_kpi_partners:'Partenaires', admin_kpi_partners_sub:'accès Pro offert · 0 € de MRR', admin_plans_source_partner:'Partenaire (gratuit)', admin_detail_grant_partner:'Passer en Partenaire',
+    admin_plans_manual:'Attribués manuellement', admin_plans_manual_sub:'hors MRR', admin_plans_ending:'Échéances sous 7 jours', admin_plans_ending_sub:'abonnements Stripe', admin_plans_problem:'Paiements en échec', admin_plans_problem_sub:'à relancer',
+    admin_filter_status_all:'Tous les statuts', admin_promo_copy:'Copier', admin_promo_copied:'Code copié',
+    admin_health_title:'Santé du service', admin_health_desc:"Ce qui conditionne le bon fonctionnement du panneau et de l'application.", admin_health_ok:'OK',
+    admin_health_auth:'Données de connexion (authentification)', admin_health_auth_hint:'Indisponibles : dernière connexion et actifs 7/30 j ne peuvent pas être calculés.',
+    admin_health_quota:'Réinitialisation du quota', admin_health_quota_hint:'Migration manquante : exécutez le SQL du §17 de SUPABASE_SETUP.md (colonne quota_reset_at).',
+    admin_health_reviews:'Table des avis', admin_health_reviews_hint:'Table « reviews » inaccessible : voir le §15 de SUPABASE_SETUP.md.',
+    admin_health_errors:'Erreurs serveur (24 h)', admin_health_errors_hint:'{n} erreur(s) dans les dernières 24 h : voir la liste ci-dessous.',
+    admin_fx_test:"Tester l'API des taux de change", admin_fx_ok:'API de taux de change opérationnelle : 1 EUR = {rate} USD ({ms} ms).', admin_fx_ko:"L'API de taux de change ne répond pas correctement : les conversions de devises risquent d'échouer.",
     admin_users_col_last_signin:'Dernière connexion', admin_users_col_review:'Avis',
     admin_filter_plan_all:'Tous les plans', admin_filter_all:'Tous les comptes', admin_filter_active7:'Connectés sur 7 jours', admin_filter_inactive30:'Inactifs depuis 30 jours',
     admin_filter_never:'Jamais connectés', admin_filter_nosession:'Sans aucune session', admin_filter_blocked:'Bloqués par le quota', admin_filter_reviewed:'Ont laissé un avis',
@@ -3999,7 +4065,7 @@ const I18N = {
     settings_account_delete_confirm_title:'Delete my account',
     settings_account_delete_confirm_text:'This permanently deletes your account, bankrolls, sessions, and preferences. It is irreversible and cannot be undone.',
     settings_account_delete_error:'Deletion failed. Please try again or contact support.',
-    settings_account_plan:'Current plan', settings_account_plan_free:'Free', settings_account_plan_pro:'Pro',
+    settings_account_plan:'Current plan', settings_account_plan_free:'Free', settings_account_plan_pro:'Pro', settings_account_plan_partner:'Partner',
     settings_account_manage_plan:'Manage my subscription',
     settings_account_view_plans:'View available plans',
     settings_account_role_admin:'✓ Administrator status active on this account.',
@@ -4033,6 +4099,17 @@ const I18N = {
     admin_users_col_bankrolls:'Bankrolls', admin_users_col_sessions:'Sessions', admin_users_col_last_session:'Last session', admin_users_col_stripe:'Stripe',
     admin_users_col_bankroll_value:'Total bankroll', admin_users_col_profit30d:'Last 30 days',
     admin_refresh:'Refresh', admin_updated_at:'Updated at {time}',
+    admin_plans_title:'Pro accounts', admin_plans_desc:'Stripe subscribers and manually granted access, sorted by renewal date.', admin_plans_empty:'No Pro account yet.',
+    admin_plans_source:'Source', admin_plans_source_stripe:'Stripe', admin_plans_source_manual:'Granted manually', admin_plans_period_end:'Renewal', admin_plans_status:'Status', admin_plans_soon:'soon',
+    admin_kpi_partners:'Partners', admin_kpi_partners_sub:'free Pro access · €0 MRR', admin_plans_source_partner:'Partner (free)', admin_detail_grant_partner:'Make Partner',
+    admin_plans_manual:'Granted manually', admin_plans_manual_sub:'excluded from MRR', admin_plans_ending:'Renewing within 7 days', admin_plans_ending_sub:'Stripe subscriptions', admin_plans_problem:'Failed payments', admin_plans_problem_sub:'to follow up',
+    admin_filter_status_all:'All statuses', admin_promo_copy:'Copy', admin_promo_copied:'Code copied',
+    admin_health_title:'Service health', admin_health_desc:'What the panel and the app depend on to work properly.', admin_health_ok:'OK',
+    admin_health_auth:'Sign-in data (authentication)', admin_health_auth_hint:'Unavailable: last sign-in and 7/30-day active users cannot be computed.',
+    admin_health_quota:'Quota reset', admin_health_quota_hint:'Missing migration: run the SQL from §17 of SUPABASE_SETUP.md (quota_reset_at column).',
+    admin_health_reviews:'Reviews table', admin_health_reviews_hint:'"reviews" table unreachable: see §15 of SUPABASE_SETUP.md.',
+    admin_health_errors:'Server errors (24 h)', admin_health_errors_hint:'{n} error(s) in the last 24 h: see the list below.',
+    admin_fx_test:'Test the exchange-rate API', admin_fx_ok:'Exchange-rate API is working: 1 EUR = {rate} USD ({ms} ms).', admin_fx_ko:'The exchange-rate API is not responding properly: currency conversions may fail.',
     admin_users_col_last_signin:'Last sign-in', admin_users_col_review:'Review',
     admin_filter_plan_all:'All plans', admin_filter_all:'All accounts', admin_filter_active7:'Signed in over 7 days', admin_filter_inactive30:'Inactive for 30 days',
     admin_filter_never:'Never signed in', admin_filter_nosession:'No session at all', admin_filter_blocked:'Blocked by the quota', admin_filter_reviewed:'Left a review',
@@ -7487,7 +7564,7 @@ function renderAccountSettings(){
   loggedIn.hidden = false;
   const emailEl = document.getElementById('settings-account-current-email');
   if (emailEl) emailEl.textContent = t('settings_account_current_email').replace('{email}', currentUser.email);
-  const planLabels = { free: t('settings_account_plan_free'), pro: t('settings_account_plan_pro') };
+  const planLabels = { free: t('settings_account_plan_free'), pro: t('settings_account_plan_pro'), partner: t('settings_account_plan_partner') };
   const planLabelEl = document.getElementById('settings-account-plan-label');
   if (planLabelEl) planLabelEl.textContent = planLabels[currentPlan] || planLabels.free;
   const planCardEl = document.getElementById('plan-status-card');
@@ -7507,7 +7584,7 @@ function renderAccountSettings(){
     }
   }
   const manageBtn = document.getElementById('settings-account-manage-plan-btn');
-  if (manageBtn) manageBtn.hidden = !isPremium();
+  if (manageBtn) manageBtn.hidden = !isPremium() || currentPlan === 'partner';
   const roleLabelEl = document.getElementById('settings-account-role-label');
   if (roleLabelEl) roleLabelEl.textContent = currentUserRole === 'admin' ? t('settings_account_role_admin') : '';
   renderProfileSettings();
@@ -7557,7 +7634,8 @@ function adminFilteredUsers(){
   const rows = adminUsersCache.filter(u => {
     if (q && !((u.email || '').toLowerCase().includes(q) || (u.displayName || '').toLowerCase().includes(q))) return false;
     if (plan === 'free' && u.plan !== 'free') return false;
-    if (plan === 'pro' && u.plan === 'free') return false;
+    if (plan === 'pro' && !(u.plan === 'pro' || u.plan === 'team')) return false;
+    if (plan === 'partner' && u.plan !== 'partner') return false;
     const si = ts(u.lastSignInAt);
     if (act === 'active7' && !(si && now - si <= 7 * DAY)) return false;
     if (act === 'inactive30' && !(si && now - si > 30 * DAY)) return false;
@@ -7768,6 +7846,7 @@ function renderAdminUserDetailBody(data){
   // Actions : attribuer Pro seulement à un compte gratuit ; retirer Pro seulement
   // s'il a été attribué manuellement (jamais sur un abonné Stripe payant).
   const canGrant = isFree;
+  const canPartner = p.plan !== 'partner' && (isFree || !p.hasStripeCustomer);
   const canRevoke = !isFree && !p.hasStripeCustomer;
   document.getElementById('admin-user-detail-body').innerHTML = `
     <div class="admin-detail-head">
@@ -7780,6 +7859,7 @@ function renderAdminUserDetailBody(data){
     </div>
     <div class="admin-detail-actions">
       ${canGrant ? `<button class="btn-primary btn-sm" onclick="adminDetailSetPlan('pro')">${escapeHtml(t('admin_detail_grant_pro'))}</button>` : ''}
+      ${canPartner ? `<button class="btn-secondary btn-sm" onclick="adminDetailSetPlan('partner')">${escapeHtml(t('admin_detail_grant_partner'))}</button>` : ''}
       ${canRevoke ? `<button class="btn-secondary btn-sm" onclick="adminDetailSetPlan('free')">${escapeHtml(t('admin_detail_revoke_pro'))}</button>` : ''}
       ${isFree ? `<button class="btn-secondary btn-sm" id="admin-detail-quota-btn" onclick="adminDetailResetQuota()">${escapeHtml(t('admin_detail_reset_quota'))}</button>` : ''}
       <button class="btn-ghost btn-sm" id="admin-detail-reset-btn" onclick="sendAdminUserPasswordReset('${p.id}')">${escapeHtml(t('admin_detail_send_reset'))}</button>
@@ -7888,6 +7968,8 @@ function renderAdminStats(data){
   const pctText = n => nf(n) + ' %';
   adminUsersCache = data.users || [];
   renderAdminUsersTable();
+  renderAdminPlans();
+  renderAdminHealth(data);
   if (k) {
     const tpl = (key, vars) => Object.keys(vars).reduce((s, name) => s.replace('{' + name + '}', vars[name]), t(key));
     // « À traiter » : pastilles cliquables vers l'onglet concerné
@@ -7913,7 +7995,8 @@ function renderAdminStats(data){
     document.getElementById('admin-kpi-revenue').innerHTML =
       adminKpiTile(t('admin_kpi_mrr'), fmtMoney(k.mrrEstimate, 'EUR'), tpl('admin_kpi_mrr_sub', { n: nf(k.payingPro) }), true) +
       adminKpiTile(t('admin_kpi_pro_total'), nf(k.proCount), tpl('admin_kpi_pro_sub', { n: nf(k.grantedPro) })) +
-      adminKpiTile(t('admin_kpi_conversion'), pctText(k.conversionPct), tpl('admin_kpi_conversion_sub', { n: nf(k.planCounts.free || 0) }));
+      adminKpiTile(t('admin_kpi_conversion'), pctText(k.conversionPct), tpl('admin_kpi_conversion_sub', { n: nf(k.planCounts.free || 0) })) +
+      adminKpiTile(t('admin_kpi_partners'), nf(k.partnerCount || 0), t('admin_kpi_partners_sub'));
     const a = k.activation;
     document.getElementById('admin-kpi-activation').innerHTML =
       adminKpiTile(t('admin_kpi_with_bankroll'), pctText(a.withBankrollPct), tpl('admin_kpi_accounts', { n: nf(a.withBankroll) })) +
@@ -8068,7 +8151,7 @@ async function renderAdminPromosTable(){
         <td>${durationLabels[p.duration] || escapeHtml(p.duration || '—')}</td>
         <td>${p.timesRedeemed}${p.maxRedemptions ? ' / ' + p.maxRedemptions : ''}</td>
         <td>${p.active ? `<span style="color:var(--good)">${t('admin_promo_active')}</span>` : `<span style="color:var(--grey)">${t('admin_promo_inactive')}</span>`}</td>
-        <td>${p.active ? `<button class="btn-ghost btn-sm" onclick="deactivatePromoCode('${p.id}')">${t('admin_promo_deactivate')}</button>` : ''}</td>
+        <td><div class="row-actions"><button class="btn-ghost btn-sm" onclick="navigator.clipboard && navigator.clipboard.writeText('${escapeHtml(p.code)}').then(() => showToast(t('admin_promo_copied'), 'success'))">${t('admin_promo_copy')}</button>${p.active ? `<button class="btn-ghost btn-sm" onclick="deactivatePromoCode('${p.id}')">${t('admin_promo_deactivate')}</button>` : ''}</div></td>
       </tr>`).join('');
   } catch (e) {
     console.warn('renderAdminPromosTable:', e);
@@ -8086,43 +8169,152 @@ async function deactivatePromoCode(id){
   }
 }
 
+// ── Plans & paiements : comptes Pro, source, échéances ──
+function adminPlanSource(u){
+  if (u.plan === 'partner') return t('admin_plans_source_partner');
+  return u.hasStripeCustomer ? t('admin_plans_source_stripe') : t('admin_plans_source_manual');
+}
+function renderAdminPlans(){
+  const kpiEl = document.getElementById('admin-plans-kpis');
+  const tbody = document.getElementById('admin-plans-tbody');
+  if (!kpiEl || !tbody) return;
+  const locale = state.settings.lang === 'en' ? 'en-US' : 'fr-FR';
+  const now = Date.now(), WEEK = 7 * 86400000;
+  const pros = adminUsersCache.filter(u => u.plan !== 'free');
+  const partnersCount = pros.filter(u => u.plan === 'partner').length;
+  const ends = u => (u.periodEnd ? new Date(u.periodEnd).getTime() : 0);
+  const soon = pros.filter(u => u.hasStripeCustomer && ends(u) && ends(u) - now <= WEEK && ends(u) >= now);
+  const problem = pros.filter(u => ['past_due', 'unpaid', 'incomplete', 'incomplete_expired'].includes(u.subscriptionStatus));
+  const k = (adminStatsCache && adminStatsCache.kpis) || null;
+  kpiEl.innerHTML =
+    adminKpiTile(t('admin_kpi_pro_total'), pros.length - partnersCount, '') +
+    adminKpiTile(t('admin_kpi_mrr'), k ? fmtMoney(k.mrrEstimate, 'EUR') : '—', k ? t('admin_kpi_mrr_sub').replace('{n}', k.payingPro) : '', true) +
+    adminKpiTile(t('admin_kpi_partners'), partnersCount, t('admin_kpi_partners_sub')) +
+    adminKpiTile(t('admin_plans_manual'), pros.filter(u => !u.hasStripeCustomer && u.plan !== 'partner').length, t('admin_plans_manual_sub')) +
+    adminKpiTile(t('admin_plans_ending'), soon.length, t('admin_plans_ending_sub')) +
+    adminKpiTile(t('admin_plans_problem'), problem.length, t('admin_plans_problem_sub'));
+  const sorted = pros.slice().sort((a, b) => (ends(a) || Infinity) - (ends(b) || Infinity));
+  document.getElementById('admin-plans-empty').hidden = sorted.length > 0;
+  tbody.innerHTML = sorted.map(u => {
+    const end = ends(u);
+    const danger = problem.includes(u);
+    const endsSoon = soon.includes(u);
+    const endText = end ? new Date(end).toLocaleDateString(locale) : '—';
+    return `<tr class="admin-user-row" onclick="openAdminUserDetail('${u.id}')">
+      <td data-label="${t('admin_users_col_email')}">${escapeHtml(u.email || '—')}</td>
+      <td data-label="${t('admin_users_col_plan')}"><span class="plan-badge plan-badge-pro">${escapeHtml(t('settings_account_plan_' + u.plan) || u.plan)}</span></td>
+      <td data-label="${t('admin_plans_source')}">${escapeHtml(adminPlanSource(u))}</td>
+      <td data-label="${t('admin_plans_period_end')}">${endText}${endsSoon ? ` <span class="admin-sub-chip full">${escapeHtml(t('admin_plans_soon'))}</span>` : ''}</td>
+      <td data-label="${t('admin_plans_status')}">${danger ? `<span class="admin-sub-chip full">${escapeHtml(u.subscriptionStatus)}</span>` : escapeHtml(u.subscriptionStatus || (u.hasStripeCustomer ? '—' : t('admin_plans_source_manual')))}</td>
+      <td data-label="${t('admin_users_col_last_signin')}">${escapeHtml(adminRelativeDay(u.lastSignInAt, locale))}</td>
+      <td><button class="btn-ghost btn-sm" onclick="event.stopPropagation();openAdminUserDetail('${u.id}')">${escapeHtml(t('admin_users_details'))}</button></td>
+    </tr>`;
+  }).join('');
+}
+
+// ── Système : santé du panneau + test des taux de change ──
+function renderAdminHealth(data){
+  const el = document.getElementById('admin-health-list');
+  if (!el) return;
+  const cap = data.capabilities || {};
+  const k = data.kpis;
+  const row = (ok, label, hint) => `<li class="admin-health-row ${ok ? 'ok' : 'ko'}"><span class="admin-health-dot"></span><div><strong>${escapeHtml(label)}</strong><small>${escapeHtml(ok ? t('admin_health_ok') : hint)}</small></div></li>`;
+  el.innerHTML =
+    row(cap.authUsers !== false, t('admin_health_auth'), t('admin_health_auth_hint')) +
+    row(cap.quotaReset !== false, t('admin_health_quota'), t('admin_health_quota_hint')) +
+    row(cap.reviews !== false, t('admin_health_reviews'), t('admin_health_reviews_hint')) +
+    row(!k || k.todo.errors24h === 0, t('admin_health_errors'), t('admin_health_errors_hint').replace('{n}', k ? k.todo.errors24h : 0));
+}
+async function adminTestFxApi(){
+  const out = document.getElementById('admin-fx-result');
+  if (!out) return;
+  out.hidden = false; out.className = 'account-feedback'; out.textContent = t('account_loading');
+  const started = performance.now();
+  try {
+    const r = await fetch('https://api.frankfurter.dev/v1/latest?from=EUR&to=USD', { cache: 'no-store' });
+    const body = await r.json();
+    if (!r.ok || !body.rates || !body.rates.USD) throw new Error('bad response');
+    out.textContent = t('admin_fx_ok').replace('{rate}', body.rates.USD).replace('{ms}', Math.round(performance.now() - started));
+  } catch (e) {
+    out.className = 'account-feedback error';
+    out.textContent = t('admin_fx_ko');
+  }
+}
+
+// ── Avis & support rattachés aux comptes ──
+function adminAccountLink(userId, fallback){
+  if (!userId) return escapeHtml(fallback || '—');
+  const u = adminUsersCache.find(x => x.id === userId);
+  const label = (u && u.email) || fallback || userId.slice(0, 8);
+  return `<a href="#" class="admin-account-link" onclick="event.preventDefault();event.stopPropagation();openAdminUserDetail('${escapeHtml(userId)}')">${escapeHtml(label)}</a>`;
+}
+let adminSupportCache = [];
+let adminReviewsCache = [];
+function renderAdminSupportList(){
+  const tbody = document.getElementById('admin-support-tbody');
+  const emptyEl = document.getElementById('admin-support-empty');
+  if (!tbody) return;
+  const filter = document.getElementById('admin-support-filter').value;
+  const messages = adminSupportCache.filter(m => filter === 'all' || (filter === 'new' ? m.status !== 'read' : m.status === 'read'));
+  if (!messages.length) {
+    tbody.innerHTML = '';
+    if (emptyEl) { emptyEl.hidden = false; emptyEl.textContent = t('admin_support_empty'); }
+    return;
+  }
+  if (emptyEl) emptyEl.hidden = true;
+  const catLabels = { bug: t('support_cat_bug'), billing: t('support_cat_billing'), suggestion: t('support_cat_suggestion'), other: t('support_cat_other') };
+  const locale = state.settings.lang === 'en' ? 'en-US' : 'fr-FR';
+  tbody.innerHTML = messages.map(m => `
+    <tr>
+      <td data-label="${t('admin_support_col_date')}">${new Date(m.created_at).toLocaleDateString(locale, { day: '2-digit', month: 'short', year: 'numeric' })}</td>
+      <td data-label="${t('admin_support_col_category')}">${escapeHtml(catLabels[m.category] || m.category)}</td>
+      <td data-label="${t('admin_support_col_email')}">${adminAccountLink(m.user_id, m.email)}</td>
+      <td data-label="${t('admin_support_col_message')}" style="max-width:320px;white-space:pre-wrap">${escapeHtml(m.message)}</td>
+      <td data-label="${t('admin_support_col_status')}">${m.status === 'read' ? `<span style="color:var(--grey)">${t('admin_support_status_read')}</span>` : `<span style="color:var(--good)">${t('admin_support_status_new')}</span>`}</td>
+      <td><button class="btn-ghost btn-sm" onclick="toggleSupportMessageStatus('${m.id}','${m.status === 'read' ? 'new' : 'read'}')">${m.status === 'read' ? t('admin_support_mark_new') : t('admin_support_mark_read')}</button></td>
+    </tr>`).join('');
+}
 async function renderAdminSupportTable(){
   const tbody = document.getElementById('admin-support-tbody');
   const emptyEl = document.getElementById('admin-support-empty');
   if (!tbody) return;
   try {
     const data = await adminAuthedFetch('/api/support', null, 'GET');
-    const messages = data.messages || [];
-    if (!messages.length) {
-      tbody.innerHTML = '';
-      if (emptyEl) emptyEl.hidden = false;
-      return;
-    }
-    if (emptyEl) emptyEl.hidden = true;
-    const catLabels = { bug: t('support_cat_bug'), billing: t('support_cat_billing'), suggestion: t('support_cat_suggestion'), other: t('support_cat_other') };
-    const locale = state.settings.lang === 'en' ? 'en-US' : 'fr-FR';
-    tbody.innerHTML = messages.map(m => `
-      <tr>
-        <td>${new Date(m.created_at).toLocaleDateString(locale, { day:'2-digit', month:'short', year:'numeric' })}</td>
-        <td>${escapeHtml(catLabels[m.category] || m.category)}</td>
-        <td>${escapeHtml(m.email || '—')}</td>
-        <td style="max-width:320px;white-space:pre-wrap">${escapeHtml(m.message)}</td>
-        <td>${m.status === 'read' ? `<span style="color:var(--grey)">${t('admin_support_status_read')}</span>` : `<span style="color:var(--good)">${t('admin_support_status_new')}</span>`}</td>
-        <td><button class="btn-ghost btn-sm" onclick="toggleSupportMessageStatus('${m.id}','${m.status === 'read' ? 'new' : 'read'}')">${m.status === 'read' ? t('admin_support_mark_new') : t('admin_support_mark_read')}</button></td>
-      </tr>`).join('');
+    adminSupportCache = data.messages || [];
+    renderAdminSupportList();
   } catch (e) {
     console.warn('renderAdminSupportTable:', e);
     tbody.innerHTML = '';
     if (emptyEl) { emptyEl.hidden = false; emptyEl.textContent = t('admin_load_error'); }
   }
 }
-async function toggleSupportMessageStatus(id, status){
-  try {
-    await adminAuthedFetch('/api/support', { action: 'update-status', id, status });
-    renderAdminSupportTable();
-  } catch (e) {
-    showToast(t('admin_load_error'), 'error');
+function renderAdminReviewsList(){
+  const tbody = document.getElementById('admin-reviews-tbody');
+  const emptyEl = document.getElementById('admin-reviews-empty');
+  if (!tbody) return;
+  const filter = document.getElementById('admin-reviews-filter').value;
+  const reviews = adminReviewsCache.filter(r => filter === 'all' || r.status === filter);
+  if (!reviews.length) {
+    tbody.innerHTML = '';
+    if (emptyEl) { emptyEl.hidden = false; emptyEl.textContent = t('admin_reviews_empty'); }
+    return;
   }
+  if (emptyEl) emptyEl.hidden = true;
+  const locale = state.settings.lang === 'en' ? 'en-US' : 'fr-FR';
+  const statusLabel = { pending: t('admin_reviews_status_pending'), approved: t('admin_reviews_status_approved'), rejected: t('admin_reviews_status_rejected') };
+  const statusColor = { pending: 'var(--grey)', approved: 'var(--good)', rejected: 'var(--critical)' };
+  tbody.innerHTML = reviews.map(r => `
+    <tr>
+      <td data-label="${t('admin_reviews_col_date')}">${new Date(r.created_at).toLocaleDateString(locale, { day: '2-digit', month: 'short', year: 'numeric' })}</td>
+      <td data-label="${t('admin_reviews_col_rating')}">${starsHtml(r.rating)}</td>
+      <td data-label="${t('admin_reviews_col_author')}">${escapeHtml(r.display_name || '—')}<br><small>${adminAccountLink(r.user_id, '')}</small></td>
+      <td data-label="${t('admin_reviews_col_text')}" style="max-width:320px;white-space:pre-wrap">${escapeHtml(r.text)}</td>
+      <td data-label="${t('admin_reviews_col_status')}"><span style="color:${statusColor[r.status]}">${statusLabel[r.status] || r.status}</span></td>
+      <td><div class="row-actions">
+        ${r.status !== 'approved' ? `<button class="btn-ghost btn-sm" onclick="setAdminReviewStatus('${r.id}','approved')">${t('admin_reviews_approve')}</button>` : ''}
+        ${r.status !== 'rejected' ? `<button class="btn-ghost btn-sm" onclick="setAdminReviewStatus('${r.id}','rejected')">${t('admin_reviews_reject')}</button>` : ''}
+      </div></td>
+    </tr>`).join('');
 }
 async function renderAdminReviewsTable(){
   const tbody = document.getElementById('admin-reviews-tbody');
@@ -8130,32 +8322,21 @@ async function renderAdminReviewsTable(){
   if (!tbody) return;
   try {
     const data = await adminAuthedFetch('/api/admin-reviews', null, 'GET');
-    const reviews = data.reviews || [];
-    if (!reviews.length) {
-      tbody.innerHTML = '';
-      if (emptyEl) emptyEl.hidden = false;
-      return;
-    }
-    if (emptyEl) emptyEl.hidden = true;
-    const locale = state.settings.lang === 'en' ? 'en-US' : 'fr-FR';
-    const statusLabel = { pending: t('admin_reviews_status_pending'), approved: t('admin_reviews_status_approved'), rejected: t('admin_reviews_status_rejected') };
-    const statusColor = { pending: 'var(--grey)', approved: 'var(--good)', rejected: 'var(--critical)' };
-    tbody.innerHTML = reviews.map(r => `
-      <tr>
-        <td>${new Date(r.created_at).toLocaleDateString(locale, { day:'2-digit', month:'short', year:'numeric' })}</td>
-        <td>${starsHtml(r.rating)}</td>
-        <td>${escapeHtml(r.display_name || '—')}</td>
-        <td style="max-width:320px;white-space:pre-wrap">${escapeHtml(r.text)}</td>
-        <td><span style="color:${statusColor[r.status]}">${statusLabel[r.status] || r.status}</span></td>
-        <td><div class="row-actions">
-          ${r.status !== 'approved' ? `<button class="btn-ghost btn-sm" onclick="setAdminReviewStatus('${r.id}','approved')" data-i18n="admin_reviews_approve">Valider</button>` : ''}
-          ${r.status !== 'rejected' ? `<button class="btn-ghost btn-sm" onclick="setAdminReviewStatus('${r.id}','rejected')" data-i18n="admin_reviews_reject">Rejeter</button>` : ''}
-        </div></td>
-      </tr>`).join('');
+    adminReviewsCache = data.reviews || [];
+    renderAdminReviewsList();
   } catch (e) {
     console.warn('renderAdminReviewsTable:', e);
     tbody.innerHTML = '';
     if (emptyEl) { emptyEl.hidden = false; emptyEl.textContent = t('admin_load_error'); }
+  }
+}
+
+async function toggleSupportMessageStatus(id, status){
+  try {
+    await adminAuthedFetch('/api/support', { action: 'update-status', id, status });
+    renderAdminSupportTable();
+  } catch (e) {
+    showToast(t('admin_load_error'), 'error');
   }
 }
 async function setAdminReviewStatus(id, status){

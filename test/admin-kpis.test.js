@@ -109,3 +109,18 @@ test('fiche compte : quota du mois avec réinitialisation', () => {
   assert.equal(computeUserStats({ bankrolls: [], sessions, nowMs: NOW }).quotaUsed, 4);
   assert.equal(computeUserStats({ bankrolls: [], sessions, resetMs: NOW - 2.5 * 3600000, nowMs: NOW }).quotaUsed, 2);
 });
+
+test('partenaire : accès Pro offert, 0 € de MRR, hors conversion et hors abonnés payants', () => {
+  const profiles = [
+    { id: 'p1', plan: 'pro', created_at: daysAgo(30), stripe_customer_id: 'cus_a' },
+    { id: 'p2', plan: 'partner', created_at: daysAgo(30) },
+    { id: 'p3', plan: 'partner', created_at: daysAgo(10), stripe_customer_id: 'cus_b' },
+    { id: 'p4', plan: 'free', created_at: daysAgo(5) },
+  ];
+  const k = computeKpis({ profiles, bankrolls: [], sessions: [], nowMs: NOW });
+  assert.equal(k.partnerCount, 2);
+  assert.equal(k.payingPro, 1);
+  assert.equal(k.mrrEstimate, 9.9);
+  assert.equal(k.proCount, 1);
+  assert.equal(k.conversionPct, 25);
+});

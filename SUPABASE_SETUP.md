@@ -674,3 +674,21 @@ Tant que cette migration n'est pas appliquée : le panneau admin affiche
 « migration requise » au clic sur le bouton, et le reste (quota, synchronisation,
 fiches) fonctionne normalement — les requêtes qui lisent la colonne sont
 isolées et ne cassent rien en son absence.
+
+## 18. Plan « Partenaire » (accès Pro offert, 0 € de MRR)
+
+Le plan `partner` s'attribue depuis le panneau admin (onglet Plans, ou fiche
+d'un compte → « Passer en Partenaire »). Il donne exactement les mêmes droits
+que Pro (bankrolls illimitées, sessions illimitées, dépenses, dashboard
+modulaire, export...) : le client et les triggers testent « plan différent de
+`free` », donc aucune migration n'est nécessaire.
+
+- **MRR** : les comptes `partner` ne comptent jamais dans le MRR estimé, ni
+  dans la conversion gratuit → Pro ; ils ont leur propre tuile « Partenaires ».
+- **Pas de portail Stripe** : le bouton de gestion d'abonnement est masqué
+  pour un partenaire (il n'a pas de client Stripe).
+- **Si la colonne `plan` porte une contrainte CHECK** qui n'autorise que
+  `free`/`pro`/`team`, l'attribution échouera : l'étendre avec
+  `alter table public.profiles drop constraint <nom>;` puis la recréer en
+  ajoutant `'partner'`. (Aucune contrainte de ce type n'est créée par ce
+  document.)

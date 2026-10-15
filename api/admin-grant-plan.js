@@ -13,7 +13,7 @@ module.exports = async (req, res) => {
   if (!accessToken) { res.status(401).json({ error: 'Missing access token' }); return; }
 
   const { email, plan } = req.body || {};
-  if (!email || !['free', 'pro', 'team'].includes(plan)) { res.status(400).json({ error: 'Missing or invalid email/plan' }); return; }
+  if (!email || !['free', 'pro', 'team', 'partner'].includes(plan)) { res.status(400).json({ error: 'Missing or invalid email/plan' }); return; }
 
   const SUPABASE_URL = process.env.SUPABASE_URL;
   const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;

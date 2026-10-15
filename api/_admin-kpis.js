@@ -13,7 +13,7 @@ function computeKpis({ profiles, bankrolls, sessions, authUsers, pendingReviews,
   const monthStart = new Date(new Date(now).getFullYear(), new Date(now).getMonth(), 1).getTime();
 
   const total = profiles.length;
-  const planCounts = { free: 0, pro: 0, team: 0 };
+  const planCounts = { free: 0, pro: 0, team: 0, partner: 0 };
   let signups7d = 0, signups30d = 0, referralRewardsGiven = 0, payingPro = 0, grantedPro = 0;
   const signupByDay = {};
   profiles.forEach(p => {
@@ -24,7 +24,9 @@ function computeKpis({ profiles, bankrolls, sessions, authUsers, pendingReviews,
     if (created >= since(30)) signups30d++;
     if (created >= since(30)) { const k = isoDay(created); signupByDay[k] = (signupByDay[k] || 0) + 1; }
     if (p.referral_reward_claimed) referralRewardsGiven++;
-    if (plan !== 'free') { if (p.stripe_customer_id) payingPro++; else grantedPro++; }
+    // « partner » : accès Pro offert, 0 € de MRR par construction. Jamais compté
+    // parmi les abonnés payants ni dans la conversion gratuit → Pro.
+    if (plan !== 'free' && plan !== 'partner') { if (p.stripe_customer_id) payingPro++; else grantedPro++; }
   });
   const signupSeries = [];
   for (let i = 29; i >= 0; i--) {
@@ -63,10 +65,11 @@ function computeKpis({ profiles, bankrolls, sessions, authUsers, pendingReviews,
   });
 
   const proCount = planCounts.pro + planCounts.team;
+  const partnerCount = planCounts.partner;
   const pct = n => (total ? Math.round((n / total) * 1000) / 10 : 0);
   return {
     totalUsers: total, signups7d, signups30d, signupSeries, referralRewardsGiven,
-    planCounts, proCount, payingPro, grantedPro,
+    planCounts, proCount, partnerCount, payingPro, grantedPro,
     mrrEstimate: Math.round(payingPro * PRO_PRICE_EUR * 100) / 100,
     conversionPct: pct(proCount),
     activation: {
