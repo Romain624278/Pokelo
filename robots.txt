@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /app
+Disallow: /account
+Disallow: /u/
 
 Sitemap: https://www.pokelo.fr/sitemap.xml

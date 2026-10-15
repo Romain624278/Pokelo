@@ -4,7 +4,7 @@
 // lien vers la facture PDF). Regroupées dans un seul fichier pour rester sous
 // la limite de 12 fonctions serverless du plan Hobby Vercel.
 // Variables d'environnement requises : STRIPE_SECRET_KEY, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
-const { stripeRequest, stripeGet, getSupabaseUser } = require('./_stripe-helpers');
+const { stripeRequest, stripeGet, getSupabaseUser, safeOrigin } = require('./_stripe-helpers');
 
 async function getCustomerId(SUPABASE_URL, SERVICE_ROLE_KEY, userId){
   const profileRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${userId}&select=stripe_customer_id`, {
@@ -51,7 +51,7 @@ module.exports = async (req, res) => {
     if (req.method === 'POST') {
       const customerId = await getCustomerId(SUPABASE_URL, SERVICE_ROLE_KEY, user.id);
       if (!customerId) { res.status(404).json({ error: 'No Stripe customer for this account yet' }); return; }
-      const origin = req.headers.origin || `https://${req.headers.host}`;
+      const origin = safeOrigin(req);
       const portalSession = await stripeRequest('billing_portal/sessions', STRIPE_SECRET_KEY, {
         customer: customerId,
         return_url: `${origin}/app/account`,

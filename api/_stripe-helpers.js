@@ -130,4 +130,18 @@ function getRawBody(req){
   });
 }
 
-module.exports = { stripeRequest, stripeGet, getSupabaseUser, fetchProfileFields, logServerError, verifyStripeSignature, getRawBody };
+// Origine utilisée pour construire les URL de retour Stripe (checkout/portail) :
+// jamais l'en-tête Origin tel quel (contrôlé par l'appelant) — uniquement le site
+// officiel, ses aperçus Vercel et le développement local ; sinon, le site officiel.
+const CANONICAL_ORIGIN = 'https://www.pokelo.fr';
+function safeOrigin(req){
+  const origin = String((req.headers && req.headers.origin) || '');
+  if (/^https:\/\/(www\.)?pokelo\.fr$/.test(origin)) return origin;
+  if (/^https:\/\/[a-z0-9-]+\.vercel\.app$/.test(origin)) return origin;
+  if (/^http:\/\/localhost(:\d+)?$/.test(origin)) return origin;
+  return CANONICAL_ORIGIN;
+}
+
+module.exports = { stripeRequest, stripeGet, getSupabaseUser, fetchProfileFields, logServerError, verifyStripeSignature, getRawBody ,
+  safeOrigin,
+};

@@ -17,15 +17,12 @@ function extract(startMarker, endMarker){
   if (b < 0) throw new Error('fin introuvable pour : ' + startMarker);
   return indexSrc.slice(a, b + endMarker.length);
 }
-const code = [
-  extract('const POKER_CALENDAR_2026 = [', '\n];'),
-  extract('const FLAG_SVG = {', '\n};'),
-  extract('const COUNTRY_NAMES = {', '\n};'),
-  'this.out = { events: POKER_CALENDAR_2026, flags: FLAG_SVG, names: COUNTRY_NAMES.fr };',
-].join('\n');
-const ctx = {};
-vm.runInNewContext(code, ctx);
-const { events, flags, names } = ctx.out;
+const flagsCode = extract('const FLAG_SVG = {', '\n};') + '\nthis.out = FLAG_SVG;';
+const flagsCtx = {};
+vm.runInNewContext(flagsCode, flagsCtx);
+const { POKER_CALENDAR_2026: events, COUNTRY_NAMES } = require('./calendar-data');
+const flags = flagsCtx.out;
+const names = COUNTRY_NAMES.fr;
 
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const fmt = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });

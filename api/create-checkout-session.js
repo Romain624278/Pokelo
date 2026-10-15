@@ -3,7 +3,7 @@
 //   STRIPE_SECRET_KEY, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
 //   STRIPE_COUPON_REFERRAL30 (optionnel — voir STRIPE_SETUP.md, système de parrainage)
 // Voir STRIPE_SETUP.md pour la marche à suivre complète (compte Stripe, Price ID, etc.).
-const { stripeRequest, getSupabaseUser, fetchProfileFields, logServerError } = require('./_stripe-helpers');
+const { stripeRequest, getSupabaseUser, fetchProfileFields, logServerError, safeOrigin } = require('./_stripe-helpers');
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
@@ -59,7 +59,7 @@ module.exports = async (req, res) => {
       await logServerError(SUPABASE_URL, SERVICE_ROLE_KEY, 'create-checkout-session-referral', String(refErr && refErr.message || refErr), { priceId }, userId).catch(() => {});
     }
 
-    const origin = req.headers.origin || `https://${req.headers.host}`;
+    const origin = safeOrigin(req);
     const sessionParams = {
       mode: 'subscription',
       line_items: [{ price: priceId, quantity: 1 }],

@@ -111,6 +111,10 @@ module.exports = async (req, res) => {
   if (!SUPABASE_URL || !SERVICE_ROLE_KEY) { res.status(500).json({ error: 'Server misconfigured' }); return; }
 
   const userId = req.query.id;
+  if (userId && !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(userId))) {
+    res.status(404).json({ error: 'Not found' });
+    return;
+  }
   if (userId) { await handlePublicProfile(req, res, userId, SUPABASE_URL, SERVICE_ROLE_KEY); return; }
   await handleReferralStats(req, res, SUPABASE_URL, SERVICE_ROLE_KEY);
 };

@@ -1,23 +1,74 @@
 {
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/app", "destination": "/" },
-    { "source": "/app/:path*", "destination": "/" },
-    { "source": "/account", "destination": "/" },
-    { "source": "/account/:path*", "destination": "/" },
-    { "source": "/u/:path*", "destination": "/" }
+    {
+      "source": "/app",
+      "destination": "/"
+    },
+    {
+      "source": "/app/:path*",
+      "destination": "/"
+    },
+    {
+      "source": "/account",
+      "destination": "/"
+    },
+    {
+      "source": "/account/:path*",
+      "destination": "/"
+    },
+    {
+      "source": "/u/:path*",
+      "destination": "/"
+    }
   ],
   "crons": [
-    { "path": "/api/reengagement", "schedule": "0 9 * * *" }
+    {
+      "path": "/api/reengagement",
+      "schedule": "0 9 * * *"
+    }
   ],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), payment=(self)" }
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), payment=(self)"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://esm.sh https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://www.pokelo.fr; connect-src 'self' https://uaeurizcwiaxrwcfwehm.supabase.co wss://uaeurizcwiaxrwcfwehm.supabase.co https://api.frankfurter.dev https://esm.sh; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+        },
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=31536000"
+        }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
       ]
     }
   ]

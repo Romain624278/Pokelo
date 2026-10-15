@@ -36,8 +36,10 @@ async function sendEmail(apiKey, to, subject, html){
 // Même gabarit visuel que supabase/email-templates/*.html (fond clair, en-tête
 // sombre avec le logo, bouton vert) pour rester cohérent avec les e-mails
 // d'authentification déjà envoyés par Supabase.
+const escapeHtml = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
 function reminderEmailHtml(displayName, days, unsubscribeUrl){
-  const greeting = displayName ? `Salut ${displayName},` : 'Salut,';
+  const greeting = displayName ? `Salut ${escapeHtml(displayName)},` : 'Salut,';
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f5f4;padding:32px 0;font-family:Arial,Helvetica,sans-serif;">
   <tr><td align="center">
     <table role="presentation" width="480" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;">

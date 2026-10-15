@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Pokelo — Suivi de bankroll poker, simple et gratuit</title>
-<meta name="description" content="Pokelo est l'outil de suivi de bankroll poker, gratuit et minimaliste : tournois, cash game, expressos, live et online, multi-devises, graphiques clairs et analyses de risque." />
-<meta name="keywords" content="pokelo, bankroll poker, suivi bankroll, gestion de bankroll, bankroll management, poker tracker, suivi tournoi poker, cash game, expresso poker, ROI poker, winrate poker" />
+<title>Pokelo — Suivi de bankroll poker gratuit : ROI, winrate, risque de ruine</title>
+<meta name="description" content="Suivi de bankroll poker gratuit : tournois, cash game, expressos, live et online. ROI, winrate, risque de ruine et multi-devises. Sans carte bancaire." />
+<meta name="keywords" content="bankroll poker, suivi de bankroll poker, gestion de bankroll poker, tracker poker, application bankroll poker, calculateur risque de ruine poker, bankroll management poker, suivi résultats poker, ROI poker, winrate poker, cash game, tournoi MTT, expresso poker, pokelo" />
 <meta name="robots" content="index, follow" />
 <meta name="author" content="Pokelo" />
 <link rel="canonical" href="https://www.pokelo.fr/" />
@@ -15,16 +15,16 @@
 <meta property="og:site_name" content="Pokelo" />
 <meta property="og:locale" content="fr_FR" />
 <meta property="og:url" content="https://www.pokelo.fr/" />
-<meta property="og:title" content="Pokelo — Le suivi de bankroll poker, enfin simple" />
-<meta property="og:description" content="Suivez vos bankrolls poker (tournois, cash game, expressos, live/online) avec des graphiques clairs, le multi-devises et des analyses de risque. Gratuit pour commencer." />
+<meta property="og:title" content="Pokelo — Suivi de bankroll poker gratuit (ROI, risque de ruine)" />
+<meta property="og:description" content="Suivi de bankroll poker gratuit : tournois, cash game, expressos, live et online. ROI, winrate, risque de ruine et multi-devises. Sans carte bancaire." />
 <meta property="og:image" content="https://www.pokelo.fr/og-image.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Pokelo — Le suivi de bankroll poker, enfin simple" />
-<meta name="twitter:description" content="Suivez vos bankrolls poker (tournois, cash game, expressos, live/online) avec des graphiques clairs, le multi-devises et des analyses de risque." />
+<meta name="twitter:title" content="Pokelo — Suivi de bankroll poker gratuit (ROI, risque de ruine)" />
+<meta name="twitter:description" content="Suivi de bankroll poker gratuit : tournois, cash game, expressos, live et online. ROI, winrate, risque de ruine et multi-devises. Sans carte bancaire." />
 <meta name="twitter:image" content="https://www.pokelo.fr/og-image.png" />
 
 <script type="application/ld+json">
@@ -32,12 +32,45 @@
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   "name": "Pokelo",
+  "alternateName": "Pokelo — suivi de bankroll poker",
   "url": "https://www.pokelo.fr/",
   "applicationCategory": "FinanceApplication",
-  "operatingSystem": "Web, iOS, Android",
-  "description": "Pokelo est l'outil de suivi de bankroll poker, gratuit et minimaliste : tournois, cash game, expressos, live et online, multi-devises, graphiques clairs et analyses de risque.",
-  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
-  "publisher": { "@type": "Organization", "name": "Pokelo", "url": "https://www.pokelo.fr/" }
+  "operatingSystem": "Web, iOS, Android (PWA)",
+  "inLanguage": [
+    "fr",
+    "en"
+  ],
+  "description": "Suivi de bankroll poker gratuit : tournois, cash game, expressos, live et online. ROI, winrate, risque de ruine et multi-devises. Sans carte bancaire.",
+  "screenshot": "https://www.pokelo.fr/og-image.png",
+  "featureList": [
+    "Suivi de bankroll poker (tournois, cash game, expressos)",
+    "ROI, winrate, variance et risque de ruine",
+    "Multi-bankrolls et multi-devises avec conversion automatique",
+    "Dashboard modulaire à 23 modules",
+    "Import et export CSV",
+    "Application installable (PWA)"
+  ],
+  "offers": [
+    {
+      "@type": "Offer",
+      "name": "Pokelo Gratuit",
+      "price": "0",
+      "priceCurrency": "EUR",
+      "description": "1 bankroll, 10 nouvelles sessions par mois, statistiques de base"
+    },
+    {
+      "@type": "Offer",
+      "name": "Pokelo Pro",
+      "price": "9.90",
+      "priceCurrency": "EUR",
+      "description": "Bankrolls et sessions illimitées, dashboard modulaire, statistiques avancées, dépenses, export CSV"
+    }
+  ],
+  "publisher": {
+    "@type": "Organization",
+    "name": "Pokelo",
+    "url": "https://www.pokelo.fr/"
+  }
 }
 </script>
 <script type="application/ld+json">
@@ -45,7 +78,105 @@
   "@context": "https://schema.org",
   "@type": "WebSite",
   "name": "Pokelo",
-  "url": "https://www.pokelo.fr/"
+  "url": "https://www.pokelo.fr/",
+  "inLanguage": "fr"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Pokelo",
+  "url": "https://www.pokelo.fr/",
+  "logo": "https://www.pokelo.fr/icons/icon-512.png"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Qu'est-ce que la gestion de bankroll au poker, concrètement ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "C'est le suivi rigoureux de vos gains et pertes pour ajuster vos limites de jeu à votre roll réel plutôt qu'à l'instinct — jouer trop haut pour son bankroll est l'une des premières causes de bust. Pokelo automatise ce suivi : vous entrez vos sessions, l'app calcule ROI, winrate, variance et risque de ruine à votre place."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Pourquoi pas simplement un tableur Excel ou Google Sheets ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Un tableur fonctionne, mais il faut le construire soi-même, les formules finissent par casser, et logger une session sur son téléphone juste après avoir joué est pénible. Pokelo fait ce travail à votre place (graphiques, ROI, risque de ruine, multi-devises) et s'installe comme une app pour logger en quelques secondes — gratuit pour commencer, sans carte bancaire."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Puis-je suivre le cash game, les tournois et les expressos ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Oui, les trois types de session sont pris en charge nativement, en live comme en online, chacun avec ses propres champs et statistiques adaptées."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Mes données sont-elles en sécurité et resteront-elles privées ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Oui : vos données sont stockées sur une base protégée par des règles d'accès par compte (personne d'autre que vous ne peut lire vos sessions), jamais revendues à des tiers. Vous pouvez exporter (JSON/CSV) ou supprimer définitivement vos données à tout moment depuis les paramètres de votre compte."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Puis-je utiliser Pokelo sur mobile ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Pokelo est installable comme une vraie app (PWA) sur iOS et Android depuis votre navigateur, pour logger une session en quelques secondes juste après avoir joué. Une app native est aussi en préparation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Dois-je entrer ma carte bancaire pour créer un compte gratuit ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Non, le plan Gratuit ne demande aucune carte bancaire. Vous n'en aurez besoin que si vous choisissez de passer à un plan payant."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Comment fonctionne la conversion multi-devises ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Chaque bankroll a sa propre devise. Si vous loggez une session dans une autre devise, Pokelo la convertit automatiquement au taux de change de la date de la session."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Puis-je changer de plan ou annuler à tout moment ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Oui, sans engagement. Vous gérez votre abonnement (changement de plan, annulation, moyen de paiement) directement depuis les paramètres de votre compte."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Le plan Gratuit est-il une vraie version utilisable, ou juste une démo ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Le plan Gratuit reste gratuit indéfiniment, sans limite de durée : une bankroll, 10 nouvelles sessions par mois, statistiques de base. Le plan Pro sert à débloquer les sessions illimitées, plus de bankrolls, le dashboard modulaire, les statistiques avancées et le suivi des dépenses — jamais à retirer ce que vous avez déjà enregistré : vos sessions existantes restent toujours consultables."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Que se passe-t-il si j'arrête Pokelo Pro ou si je supprime mon compte ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Si vous annulez Pro, vous repassez simplement au plan Gratuit à la fin de la période déjà payée — vos bankrolls et sessions restent intactes, seules les fonctionnalités Pro se reverrouillent. Si vous supprimez votre compte, la suppression est définitive et immédiate (conforme RGPD) : pensez à exporter vos données avant si vous voulez les garder."
+      }
+    }
+  ]
 }
 </script>
 
@@ -219,7 +350,7 @@
   @media (prefers-reduced-motion: reduce) { .hf { animation: none; } }
   @media (max-width: 900px) { .hero-floaters { display: none; } }
   .hero-content { position: relative; z-index: 1; max-width: 800px; }
-  .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 8vw, 6.4rem); line-height: 1; letter-spacing: 0.03em; color: var(--text-wall); margin-bottom: 1.5rem; }
+  .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.4rem, 8vw, 6.4rem); line-height: 1; letter-spacing: 0.03em; color: var(--text-wall); margin-bottom: 1.5rem; }
   .hero-title em { font-style: normal; color: var(--green); }
   .hero-sub { font-size: 1.1rem; color: var(--grey); max-width: 560px; margin: 0 auto 2.5rem; font-weight: 300; }
   .hero-sub strong { color: var(--text); font-weight: 600; }
@@ -264,10 +395,6 @@
   .hero-mock-dot { width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,0.15); }
   .hero-mock-title { margin-left: 8px; font-size: 0.75rem; color: var(--grey); letter-spacing: 0.05em; }
   .hero-mock-body { padding: 1.6rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; text-align: left; }
-  .hero-mock-tile { background: var(--black-card); border: 1px solid var(--border); border-radius: 10px; padding: 0.9rem 1.1rem; }
-  .hero-mock-tile .hmt-label { font-size: 0.68rem; color: var(--grey); text-transform: uppercase; letter-spacing: 0.08em; }
-  .hero-mock-tile .hmt-val { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--text-wall); margin-top: 4px; }
-  .hero-mock-tile .hmt-val.pos { color: var(--green); }
   .hero-mock-chart { grid-column: span 4; height: 170px; margin-top: .2rem; overflow: hidden; }
   .hero-chart-track { display: flex; width: 200%; height: 100%; animation: hero-chart-scroll 16s linear infinite; }
   .hero-chart-track svg { width: 50%; height: 100%; flex-shrink: 0; display: block; }
@@ -275,7 +402,6 @@
   @media (prefers-reduced-motion: reduce) { .hero-chart-track { animation: none; } }
   .hero-stats { display: flex; gap: 3rem; justify-content: center; margin-top: 3.5rem; flex-wrap: wrap; position: relative; z-index: 1; }
   .stat { text-align: center; width: 130px; }
-  .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.4rem; color: var(--green); line-height: 1; }
   .stat-label { font-size: 0.72rem; color: var(--grey); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 4px; }
   .stat-icon { width: 30px; height: 30px; margin: 0 auto 10px; color: var(--green); }
   .stat-icon svg { width: 100%; height: 100%; stroke-width: 1.6; }
@@ -297,18 +423,14 @@
   .feat-card:not(.big) { display: flex; flex-direction: column; justify-content: center; }
   .feat-card:hover { border-color: rgba(8,191,47,0.5); transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.35); }
   .feat-card.big { grid-column: span 2; grid-row: span 2; display: flex; flex-direction: column; }
-  .feat-card.wide { grid-column: span 2; }
   .feat-card::before { content:''; position:absolute; inset:-1px; background: radial-gradient(160px 160px at var(--mx,50%) var(--my,0%), rgba(8,191,47,0.14), transparent 70%); opacity:0; transition: opacity .3s; pointer-events:none; }
   .feat-card:hover::before { opacity: 1; }
-  .feat-icon { width: 44px; height: 44px; border-radius: 10px; background: rgba(8,191,47,0.08); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--green); margin-bottom: 1.1rem; position: relative; z-index: 1; transition: transform .3s; }
-  .feat-card:hover .feat-icon { transform: scale(1.08) rotate(-4deg); box-shadow: 0 0 0 6px rgba(8,191,47,0.07); }
   .feat-card h3 { font-size: 1.02rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; position: relative; z-index: 1; }
   .feat-card p { font-size: 0.86rem; color: var(--grey); line-height: 1.55; position: relative; z-index: 1; }
   .feat-card.big h3 { font-size: 1.2rem; }
   .feat-big-chart { margin-top: auto; flex: 1; min-height: 92px; position: relative; z-index: 1; }
   .feat-live-dot { display:inline-flex; align-items:center; gap:6px; font-size:0.68rem; color: var(--green); text-transform:uppercase; letter-spacing:.08em; font-weight:700; margin-bottom: .6rem; }
   .feat-live-dot::before { content:''; width:6px; height:6px; border-radius:50%; background: var(--green); animation: pulseDot 1.6s ease-in-out infinite; }
-  .feat-soon-badge { display: inline-block; align-self: flex-start; font-size: .64rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--grey); background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: .25rem .55rem; border-radius: 100px; margin-bottom: .7rem; }
   @keyframes pulseDot { 0%,100% { box-shadow: 0 0 0 0 rgba(8,191,47,0.5);} 50% { box-shadow: 0 0 0 5px rgba(8,191,47,0);} }
   .feat-mini-stat { display:flex; align-items:baseline; gap:8px; margin-top:.3rem; position:relative; z-index:1; }
   .feat-mini-stat b { font-family:'Bebas Neue',sans-serif; font-size:1.6rem; color: var(--text-wall); }
@@ -349,12 +471,10 @@
   .reviews-empty { text-align: center; color: var(--grey); font-size: .88rem; grid-column: 1 / -1; padding: 1.5rem 0; }
   .testimonial-card { background: var(--black); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.6rem; text-align: left; display: flex; flex-direction: column; transition: border-color .2s, transform .2s; }
   .testimonial-card:hover { border-color: rgba(8,191,47,0.35); transform: translateY(-3px); }
-  .testimonial-quote-icon { width: 26px; height: 20px; color: var(--green); opacity: .5; margin-bottom: .9rem; }
   .testimonial-text { font-size: .89rem; color: var(--text); line-height: 1.65; flex: 1; margin-bottom: 1.3rem; }
   .testimonial-author { display: flex; align-items: center; gap: .7rem; }
   .testimonial-avatar { width: 38px; height: 38px; border-radius: 50%; background: rgba(8,191,47,0.14); color: var(--green); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; flex-shrink: 0; }
   .testimonial-name { font-size: .84rem; font-weight: 700; color: var(--text); }
-  .testimonial-meta { font-size: .74rem; color: var(--grey); }
   @media (max-width: 900px) { .testimonials-grid { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 640px) { .testimonials-grid { grid-template-columns: 1fr; } }
 
@@ -389,42 +509,12 @@
 
   /* ── PRICING ── */
   #pricing { background: radial-gradient(ellipse 60% 50% at 10% 100%, rgba(8,191,47,0.05) 0%, transparent 60%), radial-gradient(ellipse 55% 45% at 90% 0%, rgba(8,191,47,0.04) 0%, transparent 60%), var(--black-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-  .pricing-toggle { display: inline-flex; align-items: center; gap: .7rem; margin-top: 1.6rem; font-size: .85rem; color: var(--grey); }
   .price-note { text-align: center; margin-top: 2.2rem; font-size: .78rem; color: var(--grey); max-width: 1140px; }
-
-
   /* ── BLOG PREVIEW / BLOG LIST ── */
-  .blog-filter-tabs { display: flex; gap: .6rem; margin-top: 2.4rem; flex-wrap: wrap; justify-content: center; }
-  .blog-filter-tab { font-size: .75rem; padding: .5rem 1.1rem; border-radius: 100px; border: 1px solid var(--border); color: var(--grey); background: none; cursor: pointer; white-space: nowrap; transition: all .2s; font-weight: 600; }
-  .blog-filter-tab:hover { color: var(--text); border-color: rgba(8,191,47,0.4); }
-  .blog-filter-tab.active { color: var(--green); border-color: var(--green); background: rgba(8,191,47,0.08); }
-  .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.3rem; margin: 1.6rem auto 0; max-width: 1140px; }
 
+  .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.3rem; margin: 1.6rem auto 0; max-width: 1140px; }
   /* ── CALENDRIER POKER ── */
-  #calendar-hero { padding: 150px 6vw 5rem; }
-  .calendar-filters { display: flex; gap: 1.4rem; margin: 2.2rem auto 0; flex-wrap: wrap; max-width: 1140px; }
-  .calendar-filter-group { display: flex; flex-direction: column; gap: .4rem; }
-  .calendar-filter-group label { font-size: .72rem; color: var(--grey); text-transform: uppercase; letter-spacing: .06em; }
-  .calendar-filter-group select { min-width: 200px; }
-  .calendar-list { display: flex; flex-direction: column; gap: .7rem; margin: 2rem auto 0; max-width: 1140px; }
-  .calendar-event { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.2rem; background: var(--black-card); border: 1px solid var(--border); border-radius: var(--radius); transition: border-color .2s; }
-  .calendar-event:hover { border-color: rgba(8,191,47,0.4); }
-  .ce-flag { width: 38px; height: 26px; flex-shrink: 0; border-radius: 4px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
-  .ce-flag svg { width: 100%; height: 100%; display: block; }
-  .ce-body { flex: 1; min-width: 0; }
-  .ce-top { display: flex; align-items: center; gap: .7rem; flex-wrap: wrap; }
-  .ce-name { font-size: .92rem; font-weight: 700; color: var(--text); }
-  .ce-tour { font-size: .64rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--green); background: color-mix(in srgb, var(--green) 14%, transparent); padding: .2rem .55rem; border-radius: 100px; }
-  .ce-meta { font-size: .8rem; color: var(--grey); margin-top: .25rem; }
-  .ce-result { display: flex; align-items: center; gap: 8px; margin-top: .55rem; padding-top: .55rem; border-top: 1px solid var(--border); font-size: .82rem; flex-wrap: wrap; }
-  .ce-result svg { width: 15px; height: 15px; color: #F5B700; flex-shrink: 0; }
-  .ce-result-winner { color: var(--text); font-weight: 600; }
-  .ce-result-handle { color: var(--grey); font-weight: 400; }
-  .ce-result-prize { margin-left: auto; color: var(--green); font-weight: 700; white-space: nowrap; }
-  .ce-result-source { width: 100%; font-size: .68rem; color: var(--grey); opacity: .7; }
-  .calendar-empty { color: var(--grey); font-size: .88rem; padding: 1rem 0; }
-  .calendar-disclaimer { font-size: .76rem; color: var(--grey); max-width: 1140px; margin: 2rem auto 0; line-height: 1.5; border-top: 1px solid var(--border); padding-top: 1.4rem; }
-  @media (max-width: 640px) { .calendar-event { flex-wrap: wrap; } }
+
   .blog-card { background: var(--black-card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; cursor: pointer; transition: border-color .25s, transform .25s; text-decoration: none; display: flex; flex-direction: column; }
   .blog-card:hover { border-color: var(--green); transform: translateY(-4px); }
   .blog-card-top { height: 120px; background: var(--black); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
@@ -446,28 +536,10 @@
   .faq-chevron { width: 18px; height: 18px; flex-shrink: 0; color: var(--grey); transition: transform 0.2s; }
   .faq-item[open] .faq-chevron { transform: rotate(180deg); color: var(--green); }
   .faq-item p { padding: 0 1.4rem 1.2rem; font-size: 0.85rem; color: var(--grey); line-height: 1.6; }
-
-  #blog-hero { padding-top: 150px; }
-  .blog-filters { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: 2rem; }
-  .blog-filter { font-size: .78rem; padding: .45rem 1rem; border-radius: 100px; border: 1px solid var(--border); color: var(--grey); cursor: pointer; background: none; transition: all .2s; }
-  .blog-filter.active, .blog-filter:hover { border-color: var(--green); color: var(--green); }
-
   /* ── ARTICLE ── */
-  #article-view { padding-top: 150px; }
-  .article-wrap { max-width: 720px; margin: 0 auto; }
+
   .article-back { font-size: 0.82rem; color: var(--green); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 2rem; cursor: pointer; }
-  .article-tag { color: var(--green); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
   .article-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 5vw, 3.2rem); color: var(--text-wall); margin: 0.8rem 0 1rem; line-height: 1.08; }
-  .article-meta { font-size: 0.82rem; color: var(--grey); margin-bottom: 2.5rem; }
-  .article-body h2 { font-family: 'Bebas Neue', sans-serif; font-size: 1.7rem; letter-spacing: 0.02em; color: var(--text-wall); margin: 2.2rem 0 1rem; }
-  .article-body p { font-size: 0.98rem; color: var(--grey); margin-bottom: 1.2rem; line-height: 1.8; }
-  .article-body strong { color: var(--text); }
-  .article-body ul, .article-body ol { color: var(--grey); margin: 0 0 1.2rem 1.3rem; line-height: 1.8; font-size: .98rem; }
-  .article-body li { margin-bottom: 0.4rem; }
-  .article-body li::marker { color: var(--green); }
-  .article-cta { margin-top: 3rem; padding: 2rem; background: rgba(8,191,47,0.05); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
-  .article-cta p { color: var(--grey); margin-bottom: 1.2rem; }
-  .article-related { max-width: 1140px; margin: 5rem auto 0; }
 
   /* ── FINAL CTA ── */
   #final-cta { text-align: center; background: linear-gradient(135deg, #001a04 0%, #003d0e 100%); border-top: 1px solid rgba(8,191,47,0.25); border-bottom: 1px solid rgba(8,191,47,0.25); }
@@ -572,12 +644,6 @@
   .stat-tile-enter { animation: statTileIn 0.5s ease-out backwards; }
   @keyframes statTileIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
   @media (prefers-reduced-motion: reduce) { .stat-tile-enter { animation: none; } }
-
-  .card-row { display: grid; grid-template-columns: 1.5fr 1fr; gap: 1.2rem; margin-bottom: 1.2rem; align-items: stretch; }
-  .chart-card { background: var(--black-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem 1.5rem; }
-  .chart-card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.1rem; gap: 1rem; flex-wrap: wrap; }
-  .chart-card-head h3 { font-size: 0.92rem; font-weight: 700; color: var(--text); }
-  .chart-card-head .sub { font-size: 0.75rem; color: var(--grey); margin-top: 2px; }
   .chart-box { position: relative; height: 260px; }
   .chart-box.sm { height: 210px; }
 
@@ -592,23 +658,10 @@
   .onboarding-icon svg { width: 30px; height: 30px; }
   .onboarding-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: .02em; color: var(--text-wall); margin-bottom: .5rem; }
   .onboarding-sub { color: var(--grey); font-size: .88rem; margin-bottom: 1.8rem; line-height: 1.6; }
-  .onboarding-steps { display: flex; flex-direction: column; gap: .8rem; text-align: left; }
-  .onboarding-step { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.2rem; border-radius: 12px; border: 1px solid var(--border); background: var(--black); transition: border-color .2s; }
-  .onboarding-step.active { border-color: rgba(8,191,47,0.4); background: rgba(8,191,47,0.05); }
-  .onboarding-step.done { border-color: rgba(8,191,47,0.25); opacity: .7; }
-  .onboarding-step.locked { opacity: .5; }
-  .onboarding-step-num { flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; background: rgba(255,255,255,0.06); color: var(--grey); }
-  .onboarding-step.active .onboarding-step-num, .onboarding-step.done .onboarding-step-num { background: var(--green); color: #0a0a0a; }
-  .onboarding-step-body { flex: 1; min-width: 0; }
-  .onboarding-step-title { font-size: .9rem; font-weight: 700; color: var(--text); }
-  .onboarding-step-desc { font-size: .78rem; color: var(--grey); margin-top: .2rem; line-height: 1.4; }
-  .onboarding-step .btn-primary, .onboarding-step .btn-secondary { flex-shrink: 0; }
   .onboarding-skip { display: block; margin: 1.4rem auto 0; font-size: .78rem; color: var(--grey); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; text-align: center; background: none; border: none; padding: 0; }
   .onboarding-skip:hover { color: var(--text); }
   @media (max-width: 480px) {
     .onboarding-card { padding: 1.8rem 1.4rem; }
-    .onboarding-step { flex-direction: column; align-items: flex-start; }
-    .onboarding-step .btn-primary, .onboarding-step .btn-secondary { width: 100%; justify-content: center; }
   }
 
   /* ── DASHBOARD MODULES (drag & drop) ── */
@@ -775,11 +828,6 @@
   .admin-funnel-row b { text-align: right; }
   .admin-funnel-row em { font-style: normal; color: var(--grey); text-align: right; font-size: .76rem; }
   @media (max-width: 520px) { .admin-funnel-row { grid-template-columns: 1fr 54px 48px; } .admin-funnel-track { grid-column: 1 / -1; order: 3; } }
-  .admin-spark-card { margin-top: .9rem; }
-  .admin-spark-head { display: flex; justify-content: space-between; font-size: .78rem; color: var(--grey); margin-bottom: .7rem; }
-  .admin-spark-head #admin-signups-series-total { color: var(--text); font-weight: 700; }
-  .admin-spark { display: flex; align-items: flex-end; gap: 3px; height: 64px; }
-  .admin-spark-bar { flex: 1; min-width: 3px; background: var(--green); opacity: .8; border-radius: 2px 2px 0 0; }
   .admin-updated { font-size: .74rem; color: var(--grey); align-self: center; }
   @media (max-width: 480px) { .admin-updated { display: none; } }
 
@@ -1029,7 +1077,6 @@
   .profit-preview { padding: 0.8rem 1rem; border-radius: 8px; background: rgba(255,255,255,0.02); border: 1px solid var(--border); font-size: 0.85rem; color: var(--grey); display: flex; justify-content: space-between; align-items: center; }
   .profit-preview .val { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; }
 
-
   /* ── SETTINGS ── */
   .settings-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem; max-width: 900px; }
   .settings-card { background: var(--black-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem 1.5rem; }
@@ -1139,7 +1186,6 @@
   .account-tab { flex: 1; background: none; border: none; color: var(--grey); font-size: 0.74rem; font-weight: 600; padding: 0.6rem 0.4rem; cursor: pointer; border-right: 1px solid var(--border); transition: background .15s, color .15s; }
   .account-tab:last-child { border-right: none; }
   .account-tab.active { background: rgba(8,191,47,0.12); color: var(--green); }
-  .account-notice { font-size: 0.76rem; color: var(--grey); background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 8px; padding: 0.7rem 0.9rem; margin-bottom: 1.4rem; line-height: 1.5; text-align: left; }
   .account-panel { display: none; text-align: left; }
   .account-panel.active { display: block; }
   .account-feedback { margin-top: 1rem; font-size: 0.82rem; color: var(--green); background: rgba(8,191,47,0.08); border: 1px solid var(--border); border-radius: 8px; padding: 0.7rem 0.9rem; line-height: 1.5; }
@@ -1169,7 +1215,6 @@
   /* ── APP RESPONSIVE ── */
   @media (max-width: 1100px) {
     .stat-grid { grid-template-columns: repeat(3, 1fr); }
-    .card-row { grid-template-columns: 1fr; }
     .bankroll-grid { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 900px) {
@@ -1301,7 +1346,7 @@
       <span class="hf hf-4">♥</span>
     </div>
     <div class="hero-content fade-up">
-      <h1 class="hero-title"><span data-i18n="hero_title_1">Votre bankroll,</span><br><em data-i18n="hero_title_2">sous contrôle.</em></h1>
+      <h1 class="hero-title"><span data-i18n="hero_title_1">Votre bankroll poker,</span><br><em data-i18n="hero_title_2">sous contrôle.</em></h1>
       <p class="hero-sub" data-i18n="hero_sub">
         Pokelo enregistre vos <strong>tournois</strong>, <strong>cash games</strong> et <strong>expressos</strong>,
         en <strong>live</strong> comme en <strong>online</strong>, dans la devise de votre choix — et transforme
@@ -1637,68 +1682,8 @@
 
 </main>
 
-<!-- ══════════════ VIEW : BLOG LIST ══════════════ -->
-<main id="view-blog" hidden>
-  <section id="blog-hero">
-    <div class="fade-up">
-      <div class="section-tag" data-i18n="blog_hero_tag">Blog Pokelo</div>
-      <h2 class="section-title" data-i18n="blog_hero_title">Bankroll management<br>&amp; stratégie poker</h2>
-      <div class="divider"></div>
-      <p class="section-sub" data-i18n="blog_hero_sub">Des tutos courts, sans blabla, pour mieux gérer votre argent de jeu.</p>
-    </div>
-    <div class="blog-filter-tabs fade-up">
-      <button type="button" class="blog-filter-tab active" data-type="all" onclick="setBlogFilter('all')" data-i18n="blog_filter_all">Tous</button>
-      <button type="button" class="blog-filter-tab" data-type="guide" onclick="setBlogFilter('guide')" data-i18n="blog_filter_guide">Progresser</button>
-      <button type="button" class="blog-filter-tab" data-type="news" onclick="setBlogFilter('news')" data-i18n="blog_filter_news">Actualités</button>
-    </div>
-    <div class="blog-grid fade-up" id="blog-list-grid"><!-- filled by JS --></div>
-  </section>
-</main>
 
-<!-- ══════════════ VIEW : CALENDRIER POKER ══════════════ -->
-<main id="view-calendar" hidden>
-  <section id="calendar-hero">
-    <div class="fade-up">
-      <div class="section-tag" style="color: var(--amber);" data-i18n="calendar_tag">Gratuit</div>
-      <h2 class="section-title" data-i18n="calendar_title">Le calendrier du poker mondial 2026</h2>
-      <div class="divider"></div>
-      <p class="section-sub" data-i18n="calendar_sub">Les grands rendez-vous live de l'année, filtrables par pays et par type d'événement.</p>
-    </div>
-    <div class="calendar-filters fade-up">
-      <div class="calendar-filter-group">
-        <label data-i18n="calendar_filter_country">Pays</label>
-        <select class="input" id="calendar-country-filter" onchange="setCalendarFilter('country', this.value)"></select>
-      </div>
-      <div class="calendar-filter-group">
-        <label data-i18n="calendar_filter_tour">Circuit</label>
-        <select class="input" id="calendar-tour-filter" onchange="setCalendarFilter('tour', this.value)"></select>
-      </div>
-      <div class="calendar-filter-group">
-        <label data-i18n="calendar_sort_label">Trier par</label>
-        <select class="input" id="calendar-sort" onchange="setCalendarSort(this.value)">
-          <option value="date" data-i18n="calendar_sort_date">Date</option>
-          <option value="tour" data-i18n="calendar_sort_tour">Circuit</option>
-        </select>
-      </div>
-    </div>
-    <div class="calendar-list fade-up" id="calendar-list"><!-- filled by JS --></div>
-    <p class="calendar-disclaimer fade-up" data-i18n="calendar_disclaimer">Dates indicatives fondées sur les annonces officielles des organisateurs au moment de la publication — vérifiez les dates exactes sur le site de l'organisateur avant de réserver un déplacement.</p>
-  </section>
-</main>
 
-<!-- ══════════════ VIEW : ARTICLE ══════════════ -->
-<main id="view-article" hidden>
-  <section id="article-view">
-    <div class="article-wrap">
-      <a href="/blog" class="article-back">&larr; <span data-i18n="article_back">Retour au blog</span></a>
-      <div id="article-content"><!-- filled by JS --></div>
-      <div class="article-cta fade-up visible">
-        <p data-i18n="article_cta_text">Mettez ces principes en pratique dès votre prochaine session.</p>
-        <a href="/account/signup" data-link class="btn-primary" data-i18n="article_cta_button">Créer un compte gratuit</a>
-      </div>
-    </div>
-  </section>
-</main>
 
 <!-- ══════════════ FOOTER (marketing) ══════════════ -->
 <footer class="site-footer" id="site-footer">
@@ -1844,147 +1829,8 @@
   </section>
 </main>
 
-<!-- ══════════════ VIEW : MENTIONS LÉGALES ══════════════ -->
-<main id="view-legal" hidden>
-  <section id="legal-view" style="padding-top:150px">
-    <div class="article-wrap fade-up visible">
-      <a href="/" data-link class="article-back">&larr; Retour au site</a>
-      <div class="article-tag">Informations légales</div>
-      <h1 class="article-title">Mentions légales</h1>
-      <div class="article-meta">Dernière mise à jour : 24 juillet 2026</div>
-      <div class="article-body">
-        <h2>Éditeur du site</h2>
-        <p>Le site Pokelo (ci-après « le Site ») est édité par :<br>
-        RD DIGITAL<br>
-        Entreprise individuelle<br>
-        Siège social : Annecy, Haute-Savoie (74), France<br>
-        SIRET : 901 296 947 00020 — SIREN : 901 296 947<br>
-        Téléphone : 07 83 75 45 23<br>
-        Email : contact@rd-digital.fr</p>
 
-        <h2>Directeur de la publication</h2>
-        <p>Romain Desgres, en qualité d'exploitant de RD DIGITAL (entreprise individuelle).</p>
 
-        <h2>Hébergement</h2>
-        <p>Le Site est hébergé par :<br>
-        Vercel Inc.<br>
-        340 S Lemon Ave #4133, Walnut, CA 91789, États-Unis<br>
-        <a href="https://vercel.com" target="_blank" rel="noopener">vercel.com</a></p>
-        <p>La base de données et l'authentification des comptes sont hébergées par :<br>
-        Supabase Inc.<br>
-        970 Toa Payoh North #07-04, Singapour<br>
-        <a href="https://supabase.com" target="_blank" rel="noopener">supabase.com</a></p>
-
-        <h2>Propriété intellectuelle</h2>
-        <p>L'ensemble des contenus présents sur le Site (textes, graphismes, logo, icônes, structure) est, sauf mention contraire, la propriété de l'éditeur du Site. Toute reproduction, représentation, modification ou adaptation totale ou partielle de ces éléments, sans autorisation préalable, est interdite.</p>
-
-        <h2>Limitation de responsabilité</h2>
-        <p>Pokelo est un outil de suivi et d'analyse de bankroll fourni à titre informatif. Les estimations statistiques (risque de ruine, projections, moyennes) sont des approximations simplifiées et ne constituent en aucun cas un conseil financier, juridique ou une garantie de résultat. L'éditeur ne saurait être tenu responsable des décisions de jeu prises sur la base de ces indicateurs.</p>
-        <p>Le poker est un jeu d'argent : jouez de manière responsable et dans les limites autorisées par la législation de votre pays de résidence.</p>
-
-        <h2>Contact</h2>
-        <p>Pour toute question relative au Site : contact@rd-digital.fr.</p>
-      </div>
-      <div class="article-cta">
-        <p>Une question sur vos données personnelles ?</p>
-        <a href="/confidentialite" class="btn-primary">Voir la politique de confidentialité</a>
-      </div>
-    </div>
-  </section>
-</main>
-
-<!-- ══════════════ VIEW : POLITIQUE DE CONFIDENTIALITÉ ══════════════ -->
-<main id="view-privacy" hidden>
-  <section id="privacy-view" style="padding-top:150px">
-    <div class="article-wrap fade-up visible">
-      <a href="/" data-link class="article-back">&larr; Retour au site</a>
-      <div class="article-tag">Vie privée</div>
-      <h1 class="article-title">Politique de confidentialité</h1>
-      <div class="article-meta">Dernière mise à jour : 24 juillet 2026</div>
-      <div class="article-body">
-        <h2>Quelles données sont collectées</h2>
-        <p>Un compte est nécessaire pour utiliser Pokelo. Lorsque vous créez un compte, nous collectons votre adresse e-mail et un mot de passe (stocké de façon chiffrée par notre prestataire d'authentification, jamais en clair). Vos bankrolls et sessions sont synchronisées vers une base de données sécurisée afin d'être accessibles depuis vos différents appareils.</p>
-
-        <h2>Pourquoi ces données sont collectées</h2>
-        <ul>
-          <li>Faire fonctionner le suivi de bankroll (calculs, graphiques, statistiques) ;</li>
-          <li>Vous permettre de vous connecter et retrouver vos données sur un autre appareil ;</li>
-          <li>Vous envoyer les e-mails strictement nécessaires au fonctionnement du compte (confirmation d'inscription, réinitialisation de mot de passe).</li>
-        </ul>
-        <p>Nous ne vendons ni ne partageons vos données financières de jeu avec des tiers à des fins commerciales ou publicitaires.</p>
-
-        <h2>Services tiers utilisés</h2>
-        <ul>
-          <li><strong>Frankfurter API</strong> (taux de change) : reçoit uniquement des codes de devise et une date, jamais de données personnelles ni financières nominatives.</li>
-          <li><strong>Google Fonts</strong> : chargement des polices d'écriture du Site.</li>
-          <li><strong>Chart.js (jsDelivr CDN)</strong> : bibliothèque de graphiques exécutée dans votre navigateur.</li>
-          <li><strong>Supabase</strong> (si vous créez un compte) : hébergement de l'authentification et de la base de données.</li>
-          <li><strong>Vercel</strong> : hébergement du Site.</li>
-        </ul>
-
-        <h2>Cookies &amp; stockage local</h2>
-        <p>Le Site n'utilise pas de cookies publicitaires ou de traceurs tiers. Il utilise le <code>localStorage</code> de votre navigateur comme copie locale de vos données (pour un chargement plus rapide), ainsi qu'un cookie de session technique (strictement nécessaire) pour vous garder connecté à votre compte.</p>
-
-        <h2>Durée de conservation</h2>
-        <p>Les données d'un compte sont conservées tant que celui-ci est actif. Vous pouvez demander la suppression complète de votre compte et de toutes les données associées à tout moment (voir « Vos droits » ci-dessous).</p>
-
-        <h2>Vos droits (RGPD)</h2>
-        <p>Conformément au Règlement Général sur la Protection des Données, vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation et de portabilité de vos données, ainsi que du droit de vous opposer à leur traitement. Pour exercer ces droits, contactez contact@rd-digital.fr.</p>
-        <p>Vous disposez également du droit d'introduire une réclamation auprès de la CNIL (<a href="https://www.cnil.fr" target="_blank" rel="noopener">cnil.fr</a>) si vous estimez que vos droits ne sont pas respectés.</p>
-
-        <h2>Contact</h2>
-        <p>Pour toute question relative à cette politique ou à vos données personnelles : contact@rd-digital.fr.</p>
-      </div>
-      <div class="article-cta">
-        <p>Prêt à créer votre compte Pokelo ?</p>
-        <a href="/account/signup" data-link class="btn-primary">Créer un compte gratuit</a>
-      </div>
-    </div>
-  </section>
-</main>
-
-<!-- ══════════════ VIEW : CGV / CGU ══════════════ -->
-<main id="view-terms" hidden>
-  <section id="terms-view" style="padding-top:150px">
-    <div class="article-wrap fade-up visible">
-      <a href="/" data-link class="article-back">&larr; Retour au site</a>
-      <div class="article-tag">Conditions</div>
-      <h1 class="article-title">Conditions générales d'utilisation et de vente</h1>
-      <div class="article-meta">Dernière mise à jour : 24 juillet 2026</div>
-      <div class="article-body">
-        <h2>1. Objet</h2>
-        <p>Les présentes conditions générales d'utilisation et de vente (CGU/CGV) régissent l'accès et l'utilisation du site et de l'application Pokelo (ci-après « le Service »), édité par RD DIGITAL (entreprise individuelle, Annecy, Haute-Savoie), ainsi que la souscription aux offres payantes proposées. L'utilisation du Service implique l'acceptation pleine et entière des présentes CGU/CGV.</p>
-
-        <h2>2. Accès au Service</h2>
-        <p>L'accès aux fonctionnalités de Pokelo nécessite la création d'un compte (adresse e-mail et mot de passe). L'utilisateur s'engage à fournir des informations exactes et à assurer la confidentialité de ses identifiants. Pokelo se réserve le droit de suspendre ou supprimer un compte en cas d'usage frauduleux ou contraire aux présentes conditions.</p>
-
-        <h2>3. Description des offres</h2>
-        <p>Pokelo propose un plan Gratuit sans limite de durée et un plan payant par abonnement (Pro) dont le détail des fonctionnalités et tarifs est présenté sur la page <a href="/" data-link>Tarifs</a>. Les tarifs sont indiqués en euros, toutes taxes applicables comprises le cas échéant.</p>
-
-        <h2>4. Prix et paiement</h2>
-        <p>Les abonnements payants sont facturés de façon récurrente (mensuelle) via notre prestataire de paiement Stripe, qui traite les données de paiement de façon sécurisée — Pokelo n'a à aucun moment accès à vos coordonnées bancaires complètes. Le paiement est exigible dès la souscription puis à chaque échéance jusqu'à résiliation.</p>
-
-        <h2>5. Droit de rétractation</h2>
-        <p>Conformément à l'article L221-28 du Code de la consommation, le droit de rétractation ne s'applique pas aux contenus numériques non fournis sur un support matériel dont l'exécution a commencé avec l'accord préalable exprès du consommateur, qui reconnaît ainsi renoncer à son droit de rétractation. En souscrivant à une offre payante, vous reconnaissez demander l'accès immédiat au Service et renoncer à votre droit de rétractation pour la période en cours.</p>
-
-        <h2>6. Durée et résiliation</h2>
-        <p>Les abonnements sont sans engagement de durée et peuvent être résiliés à tout moment depuis les paramètres du compte (portail de gestion d'abonnement). La résiliation prend effet à la fin de la période de facturation en cours ; aucun remboursement au prorata n'est effectué pour la période déjà entamée, sauf disposition légale contraire.</p>
-
-        <h2>7. Responsabilité</h2>
-        <p>Pokelo est un outil de suivi et d'analyse fourni à titre informatif (voir les <a href="/mentions-legales">Mentions légales</a> pour la limitation de responsabilité complète, notamment concernant les indicateurs statistiques et le caractère non contractuel des estimations).</p>
-
-        <h2>8. Modification des CGU/CGV</h2>
-        <p>RD DIGITAL se réserve le droit de modifier les présentes conditions à tout moment. Les utilisateurs seront informés de toute modification substantielle ; la poursuite de l'utilisation du Service après modification vaut acceptation des nouvelles conditions.</p>
-
-        <h2>9. Droit applicable et litiges</h2>
-        <p>Les présentes conditions sont soumises au droit français. En cas de litige, une solution amiable sera recherchée en priorité avant toute action judiciaire, qui relèvera des juridictions françaises compétentes.</p>
-
-        <h2>10. Contact</h2>
-        <p>Pour toute question relative aux présentes conditions : contact@rd-digital.fr.</p>
-      </div>
-    </div>
-  </section>
-</main>
 
 <!-- ══════════════ VIEW : PROFIL PUBLIC ══════════════ -->
 <main id="view-public-profile" hidden>
@@ -3516,7 +3362,7 @@ function refreshLabelDicts(){
 const I18N = {
   fr: {
     nav_features:'Fonctionnalités', nav_pricing:'Tarifs', nav_blog:'Blog', nav_calendar:'Calendrier', nav_open_app:"Se connecter", nav_my_dashboard:'Mon dashboard',
-    hero_title_1:'Votre bankroll,', hero_title_2:'sous contrôle.',
+    hero_title_1:'Votre bankroll poker,', hero_title_2:'sous contrôle.',
     hero_sub:"Pokelo enregistre vos <strong>tournois</strong>, <strong>cash games</strong> et <strong>expressos</strong>, en <strong>live</strong> comme en <strong>online</strong>, dans la devise de votre choix — et transforme tout ça en graphiques clairs pour progresser sereinement.",
     hero_cta_primary:'Créer un compte gratuit', hero_cta_secondary:'Comment ça marche',
     hero_stat_bankrolls:'Bankrolls illimitées', hero_stat_currency:'Multi-devises', hero_stat_modular:'Dashboard modulaire', hero_stat_composed:'Composé par vous', hero_stat_start:'Gratuit pour commencer',
@@ -3543,8 +3389,8 @@ const I18N = {
     pricing_tag:'Tarifs', pricing_title:'Simple, comme<br>le reste de Pokelo',
     pricing_sub:"Un plan gratuit qui couvre l'essentiel, et des formules à venir pour les joueurs les plus exigeants.",
     pricing_note_italic:'Tarifs indicatifs, susceptibles d\'évoluer.',
-    price_free_name:'Gratuit', price_free_desc:'Pour suivre sa bankroll sans se poser de questions.',
-    price_pro_name:'Pro', price_pro_desc:'Pour les joueurs réguliers qui gèrent plusieurs bankrolls.', price_pro_badge:'Le plus choisi',
+    price_free_name:'Gratuit',
+    price_pro_name:'Pro',price_pro_badge:'Le plus choisi',
     price_cta_free:'Créer un compte gratuit', price_cta_soon:'Bientôt disponible', price_cta_subscribe:'S\'abonner',
     price_note:'Aucune carte bancaire requise pour le plan Gratuit.',
     blog_tag:'Blog', blog_title:'Apprendre à gérer<br>sa bankroll',
@@ -3589,17 +3435,16 @@ const I18N = {
     support_modal_success:'Message envoyé, merci ! On revient vers vous rapidement.',
     support_modal_error:'Erreur lors de l\'envoi — réessayez ou écrivez à contact@pokelo.fr.',
     support_modal_error_empty:'Merci de décrire votre demande.',
-    blog_hero_tag:'Blog Pokelo', blog_hero_title:'Bankroll management<br>&amp; stratégie poker', blog_hero_sub:'Des tutos courts, sans blabla, pour mieux gérer votre argent de jeu.',
-    blog_filter_all:'Tous', blog_filter_guide:'Progresser', blog_filter_news:'Actualités',
-    calendar_tag:'Gratuit', calendar_title:'Le calendrier du poker mondial 2026',
-    calendar_sub:"Les grands rendez-vous live de l'année, filtrables par pays et par circuit.",
-    calendar_filter_country:'Pays', calendar_filter_all_countries:'Tous les pays',
-    calendar_filter_tour:'Circuit', calendar_filter_all_tours:'Tous les circuits',
-    calendar_sort_label:'Trier par', calendar_sort_date:'Date', calendar_sort_tour:'Circuit', calendar_source_label:'Source',
-    calendar_prizepool_label:'Prize pool', calendar_payout_label:'Gain vainqueur',
-    calendar_empty:'Aucun événement ne correspond à ces filtres.',
-    calendar_disclaimer:"Dates indicatives fondées sur les annonces officielles des organisateurs au moment de la publication — vérifiez les dates exactes sur le site de l'organisateur avant de réserver un déplacement.",
-    article_back:'Retour au blog', article_cta_text:'Mettez ces principes en pratique dès votre prochaine session.', article_cta_button:'Créer un compte gratuit',
+
+
+
+
+
+
+
+
+
+
     app_back_site:'Retour au site',
     public_profile_anonymous:'Joueur Pokelo', public_profile_member_since:'Membre depuis',
     public_profile_not_found:'Ce profil est introuvable ou n\'est pas public.',
@@ -3771,7 +3616,7 @@ const I18N = {
     settings_referral_desc:'Invitez des amis avec votre lien : ils obtiennent -30% sur leur premier mois Pro, et vous recevez 1 mois offert dès qu\'ils s\'abonnent (si vous êtes abonné Pro). Pour être récompensé, vous devez avoir déjà payé au moins un abonnement : un parrain en plan gratuit ne reçoit rien, et la récompense n\'est pas rattrapée plus tard.',
     settings_referral_stats:'{count} ami(s) inscrit(s) avec votre code · {rewards} mois offert(s) reçu(s)',
     nav_admin:'Admin',
-    admin_total_users:'Utilisateurs', admin_plan_pro:'Abonnés payants', admin_signups_30d:'Inscriptions (30j)', admin_referral_rewards:'Mois offerts (parrainage)',
+    admin_total_users:'Utilisateurs',admin_signups_30d:'Inscriptions (30j)', admin_referral_rewards:'Mois offerts (parrainage)',
     admin_errors_title:'Dernières erreurs serveur', admin_errors_desc:"Webhook Stripe, création de session de paiement, crédit de parrainage — surveillez ici les échecs silencieux.",
     admin_errors_col_date:'Date', admin_errors_col_source:'Source', admin_errors_col_message:'Message',
     admin_errors_empty:'Aucune erreur récente. Tout va bien.', admin_load_error:"Impossible de charger les statistiques admin.",
@@ -3787,7 +3632,7 @@ const I18N = {
     admin_support_empty:'Aucun message de support pour le moment.', admin_support_status_new:'Nouveau', admin_support_status_read:'Traité',
     admin_support_mark_read:'Marquer traité', admin_support_mark_new:'Marquer nouveau',
     admin_users_title:'Comptes & mouvements', admin_users_desc:"Vue d'ensemble de tous les comptes : plan, activité, statut Stripe.",
-    admin_users_col_email:'E-mail', admin_users_col_plan:'Plan', admin_users_col_role:'Rôle', admin_users_col_created:'Créé le',
+    admin_users_col_email:'E-mail', admin_users_col_plan:'Plan',admin_users_col_created:'Créé le',
     admin_users_col_bankrolls:'Bankrolls', admin_users_col_sessions:'Sessions', admin_users_col_last_session:'Dernière session', admin_users_col_stripe:'Stripe',
     admin_users_col_bankroll_value:'Bankroll totale', admin_users_col_profit30d:'30 derniers jours',
     admin_refresh:'Actualiser', admin_updated_at:'Mis à jour à {time}',
@@ -3837,9 +3682,9 @@ const I18N = {
     admin_detail_member_since:'Membre depuis', admin_detail_no_stripe:'Aucun client Stripe associé.',
     admin_detail_bankrolls:'Bankrolls', admin_detail_sessions:'Sessions récentes', admin_detail_invoices:'Factures',
     admin_detail_no_bankrolls:'Aucune bankroll.', admin_detail_no_sessions:'Aucune session.', admin_detail_no_invoices:'Aucune facture.',
-    admin_detail_col_name:'Nom', admin_detail_col_currency:'Devise', admin_detail_col_start:'Solde de départ',
+    admin_detail_col_name:'Nom',admin_detail_col_start:'Solde de départ',
     admin_detail_col_date:'Date', admin_detail_col_category:'Type', admin_detail_col_format:'Format', admin_detail_col_result:'Résultat',
-    admin_detail_col_amount:'Montant', admin_detail_col_status:'Statut', admin_detail_col_invoice:'Facture',
+    admin_detail_col_amount:'Montant', admin_detail_col_status:'Statut',
     admin_detail_send_reset:'Envoyer un e-mail de réinitialisation', admin_detail_reset_sending:'Envoi…',
     admin_detail_reset_success:'E-mail de réinitialisation envoyé à {email}.', admin_detail_reset_error:"Échec de l'envoi.",
     admin_detail_view_invoice:'Voir',
@@ -3856,15 +3701,12 @@ const I18N = {
     plan_per_month:'mois',
     pt_feat_bankrolls:'Bankrolls', pt_feat_sessions:'Sessions', pt_feat_game_types:'Tournois & cash game', pt_feat_expresso:'Expresso / Spin & Go',
     pt_feat_stats:'Statistiques', pt_feat_export:'Export CSV', pt_feat_modular_dashboard:'Dashboard modulaire (drag & drop)', pt_feat_content:'Guides, blog & calendrier des événements',
-    pt_feat_cloud_sync:'Sauvegarde & synchronisation cloud', pt_feat_pwa:'Application installable (PWA)', pt_feat_support:'Support',
-    pt_feat_group_view:'Vue consolidée multi-joueurs', pt_feat_roles:'Gestion des accès par rôle', pt_feat_billing:'Facturation centralisée',
+pt_feat_pwa:'Application installable (PWA)', pt_feat_support:'Support',
     pt_val_1_bankroll:'1', pt_val_unlimited:'Illimité', pt_val_basic:'De base', pt_val_advanced:'Avancées',
     pt_val_standard:'Standard', pt_val_priority:'Prioritaire',
-    plan_feat_1_bankroll:'1 bankroll', plan_feat_unlimited_sessions:'10 sessions par mois', plan_feat_basic_stats:'Statistiques de base',
-    plan_feat_unlimited_bankrolls:'Bankrolls illimitées', plan_feat_modular_dashboard:'Dashboard modulaire', plan_feat_advanced_stats:'Statistiques avancées',
-    plan_feat_all_pro:'Tout Pro, multi-joueurs', plan_feat_group_view:'Vue de groupe', plan_feat_roles:'Gestion des rôles',
+
+
     toast_sync_error:'La synchronisation a échoué. Vos changements seront réessayés automatiquement.',
-    toast_sync_error_logout:"Impossible de sauvegarder vos dernières modifications — déconnexion annulée pour ne pas perdre de données. Réessayez dans quelques instants.",
     signout_sync_failed_title:'Synchronisation impossible',
     signout_sync_failed_text:"Vos dernières modifications n'ont pas pu être sauvegardées dans le cloud (problème réseau ou serveur). Vous pouvez réessayer, ou vous déconnecter quand même — dans ce cas, les modifications non sauvegardées seront perdues.",
     signout_force_confirm:'Se déconnecter quand même',
@@ -3917,10 +3759,9 @@ const I18N = {
     settings_install_desc:'Ajoutez Pokelo à votre écran d\'accueil pour un accès en un tap, comme une vraie app.',
     install_ios_hint:'Sur iPhone/iPad : bouton Partager de Safari → « Sur l\'écran d\'accueil ».',
     btn_see_all:'Tout voir', empty_no_data:'Pas encore de données',
-    empty_no_bankroll_title:'Créez votre première bankroll', empty_no_bankroll_text:'Une bankroll regroupe vos sessions (tournois, cash game, expressos) dans une devise donnée.',
-    empty_no_module_text:'Aucun module actif. Cliquez sur « Personnaliser » pour en ajouter.',
+
     th_date:'Date', th_type:'Type', th_format:'Format', th_buyin:'Mise', th_cashout:'Gain', th_result:'Résultat', th_bankroll:'Bankroll',
-    th_sessions_count:'Sessions', th_invested:'Investi', th_roi:'ROI',
+    th_sessions_count:'Sessions',
     settings_display_title:'Affichage',
     settings_lang_title:'Langue', settings_lang_desc:'Langue de l\'interface de Pokelo.',
     settings_theme_title:'Thème', settings_theme_desc:'Apparence claire ou sombre de l\'application.',
@@ -3934,14 +3775,13 @@ const I18N = {
     stake_tier_micro:"Micro jusqu'à", stake_tier_low:"Low jusqu'à", stake_tier_mid:"Mid jusqu'à",
     settings_stakes_hint:'Au-delà du seuil Mid, les sessions sont classées en High.', settings_reset_stakes:'Réinitialiser les seuils',
     label_tournament:'Tournoi', label_cash:'Cash Game', label_expresso:'Expresso', label_live:'Live', label_online:'Online',
-    settings_saved:'Préférences enregistrées',
     module_bank_all_active:'Tous les modules sont actifs.', module_bank_empty_layout:'Aucun module actif.<br>Glissez-en un ici.',
     empty_no_sessions_bankroll:'Aucune session pour cette bankroll.', empty_no_sessions_filter:'Aucune session ne correspond à ces filtres.',
     filter_result_all:'Tous les résultats', filter_result_win:'Gagnantes', filter_result_loss:'Perdantes',
   },
   en: {
     nav_features:'Features', nav_pricing:'Pricing', nav_blog:'Blog', nav_calendar:'Calendar', nav_open_app:'Log in', nav_my_dashboard:'My dashboard',
-    hero_title_1:'Your bankroll,', hero_title_2:'under control.',
+    hero_title_1:'Your poker bankroll,', hero_title_2:'under control.',
     hero_sub:"Pokelo logs your <strong>tournaments</strong>, <strong>cash games</strong> and <strong>Spin & Go's</strong>, both <strong>live</strong> and <strong>online</strong>, in the currency of your choice — and turns it all into clear charts so you can play with a level head.",
     hero_cta_primary:'Create a free account', hero_cta_secondary:'How it works',
     hero_stat_bankrolls:'Unlimited bankrolls', hero_stat_currency:'Multi-currency', hero_stat_modular:'Modular dashboard', hero_stat_composed:'Composed by you', hero_stat_start:'Free to start',
@@ -3968,8 +3808,8 @@ const I18N = {
     pricing_tag:'Pricing', pricing_title:'Simple, just like<br>the rest of Pokelo',
     pricing_sub:'A free plan that covers the essentials, with more formulas coming soon for the most demanding players.',
     pricing_note_italic:'Indicative pricing, subject to change.',
-    price_free_name:'Free', price_free_desc:'To track your bankroll without overthinking it.',
-    price_pro_name:'Pro', price_pro_desc:'For regular players managing several bankrolls.', price_pro_badge:'Most popular',
+    price_free_name:'Free',
+    price_pro_name:'Pro',price_pro_badge:'Most popular',
     price_cta_free:'Create a free account', price_cta_soon:'Coming soon', price_cta_subscribe:'Subscribe',
     price_note:'No credit card required for the Free plan.',
     blog_tag:'Blog', blog_title:'Learn to manage<br>your bankroll',
@@ -4014,17 +3854,16 @@ const I18N = {
     support_modal_success:'Message sent, thank you! We\'ll get back to you shortly.',
     support_modal_error:'Error sending message — try again or write to contact@pokelo.fr.',
     support_modal_error_empty:'Please describe your request.',
-    blog_hero_tag:'Pokelo Blog', blog_hero_title:'Bankroll management<br>&amp; poker strategy', blog_hero_sub:'Short, no-fluff tutorials to better manage your poker money.',
-    blog_filter_all:'All', blog_filter_guide:'Improve', blog_filter_news:'News',
-    calendar_tag:'Free', calendar_title:'The 2026 world poker calendar',
-    calendar_sub:"The year's biggest live events, filterable by country and tour.",
-    calendar_filter_country:'Country', calendar_filter_all_countries:'All countries',
-    calendar_filter_tour:'Tour', calendar_filter_all_tours:'All tours',
-    calendar_sort_label:'Sort by', calendar_sort_date:'Date', calendar_sort_tour:'Tour', calendar_source_label:'Source',
-    calendar_prizepool_label:'Prize pool', calendar_payout_label:'Winner payout',
-    calendar_empty:'No events match these filters.',
-    calendar_disclaimer:"Indicative dates based on official organizer announcements at time of publishing — check the organizer's website for exact dates before booking travel.",
-    article_back:'Back to blog', article_cta_text:'Put these principles into practice starting your very next session.', article_cta_button:'Create a free account',
+
+
+
+
+
+
+
+
+
+
     app_back_site:'Back to site',
     public_profile_anonymous:'Pokelo player', public_profile_member_since:'Member since',
     public_profile_not_found:'This profile could not be found or is not public.',
@@ -4196,7 +4035,7 @@ const I18N = {
     settings_referral_desc:'Invite friends with your link: they get 30% off their first Pro month, and you get 1 month free as soon as they subscribe (if you have Pokelo Pro). To be rewarded, you must have already paid for at least one subscription: a referrer on the free plan gets nothing, and the reward is not credited retroactively.',
     settings_referral_stats:'{count} friend(s) signed up with your code · {rewards} free month(s) received',
     nav_admin:'Admin',
-    admin_total_users:'Users', admin_plan_pro:'Paying subscribers', admin_signups_30d:'Signups (30d)', admin_referral_rewards:'Free months (referral)',
+    admin_total_users:'Users',admin_signups_30d:'Signups (30d)', admin_referral_rewards:'Free months (referral)',
     admin_errors_title:'Recent server errors', admin_errors_desc:'Stripe webhook, checkout session creation, referral crediting — monitor silent failures here.',
     admin_errors_col_date:'Date', admin_errors_col_source:'Source', admin_errors_col_message:'Message',
     admin_errors_empty:'No recent errors. All good.', admin_load_error:'Could not load admin stats.',
@@ -4212,7 +4051,7 @@ const I18N = {
     admin_support_empty:'No support messages yet.', admin_support_status_new:'New', admin_support_status_read:'Resolved',
     admin_support_mark_read:'Mark resolved', admin_support_mark_new:'Mark new',
     admin_users_title:'Accounts & activity', admin_users_desc:'Overview of every account: plan, activity, Stripe status.',
-    admin_users_col_email:'Email', admin_users_col_plan:'Plan', admin_users_col_role:'Role', admin_users_col_created:'Created',
+    admin_users_col_email:'Email', admin_users_col_plan:'Plan',admin_users_col_created:'Created',
     admin_users_col_bankrolls:'Bankrolls', admin_users_col_sessions:'Sessions', admin_users_col_last_session:'Last session', admin_users_col_stripe:'Stripe',
     admin_users_col_bankroll_value:'Total bankroll', admin_users_col_profit30d:'Last 30 days',
     admin_refresh:'Refresh', admin_updated_at:'Updated at {time}',
@@ -4262,9 +4101,9 @@ const I18N = {
     admin_detail_member_since:'Member since', admin_detail_no_stripe:'No Stripe customer linked.',
     admin_detail_bankrolls:'Bankrolls', admin_detail_sessions:'Recent sessions', admin_detail_invoices:'Invoices',
     admin_detail_no_bankrolls:'No bankrolls.', admin_detail_no_sessions:'No sessions.', admin_detail_no_invoices:'No invoices.',
-    admin_detail_col_name:'Name', admin_detail_col_currency:'Currency', admin_detail_col_start:'Starting balance',
+    admin_detail_col_name:'Name',admin_detail_col_start:'Starting balance',
     admin_detail_col_date:'Date', admin_detail_col_category:'Type', admin_detail_col_format:'Format', admin_detail_col_result:'Result',
-    admin_detail_col_amount:'Amount', admin_detail_col_status:'Status', admin_detail_col_invoice:'Invoice',
+    admin_detail_col_amount:'Amount', admin_detail_col_status:'Status',
     admin_detail_send_reset:'Send a password reset email', admin_detail_reset_sending:'Sending…',
     admin_detail_reset_success:'Reset email sent to {email}.', admin_detail_reset_error:'Failed to send.',
     admin_detail_view_invoice:'View',
@@ -4281,15 +4120,12 @@ const I18N = {
     plan_per_month:'month',
     pt_feat_bankrolls:'Bankrolls', pt_feat_sessions:'Sessions', pt_feat_game_types:'Tournaments & cash game', pt_feat_expresso:'Expresso / Spin & Go',
     pt_feat_stats:'Statistics', pt_feat_export:'CSV export', pt_feat_modular_dashboard:'Modular dashboard (drag & drop)', pt_feat_content:'Guides, blog & event calendar',
-    pt_feat_cloud_sync:'Cloud backup & sync', pt_feat_pwa:'Installable app (PWA)', pt_feat_support:'Support',
-    pt_feat_group_view:'Consolidated multi-player view', pt_feat_roles:'Role-based access', pt_feat_billing:'Centralized billing',
+pt_feat_pwa:'Installable app (PWA)', pt_feat_support:'Support',
     pt_val_1_bankroll:'1', pt_val_unlimited:'Unlimited', pt_val_basic:'Basic', pt_val_advanced:'Advanced',
     pt_val_standard:'Standard', pt_val_priority:'Priority',
-    plan_feat_1_bankroll:'1 bankroll', plan_feat_unlimited_sessions:'10 sessions per month', plan_feat_basic_stats:'Basic statistics',
-    plan_feat_unlimited_bankrolls:'Unlimited bankrolls', plan_feat_modular_dashboard:'Modular dashboard', plan_feat_advanced_stats:'Advanced statistics',
-    plan_feat_all_pro:'Everything in Pro, multi-player', plan_feat_group_view:'Group view', plan_feat_roles:'Role management',
+
+
     toast_sync_error:'Sync failed. Your changes will be retried automatically.',
-    toast_sync_error_logout:'Could not save your latest changes — sign-out cancelled to avoid data loss. Try again shortly.',
     signout_sync_failed_title:'Sync failed',
     signout_sync_failed_text:"Your latest changes couldn't be saved to the cloud (network or server issue). You can try again, or sign out anyway — in that case, unsaved changes will be lost.",
     signout_force_confirm:'Sign out anyway',
@@ -4342,10 +4178,9 @@ const I18N = {
     settings_install_desc:'Add Pokelo to your home screen for one-tap access, like a real app.',
     install_ios_hint:'On iPhone/iPad: Safari Share button → "Add to Home Screen".',
     btn_see_all:'See all', empty_no_data:'No data yet',
-    empty_no_bankroll_title:'Create your first bankroll', empty_no_bankroll_text:'A bankroll groups your sessions (tournaments, cash games, Spin & Go) in a given currency.',
-    empty_no_module_text:'No active module. Click "Customize" to add one.',
+
     th_date:'Date', th_type:'Type', th_format:'Format', th_buyin:'Buy-in', th_cashout:'Cash-out', th_result:'Result', th_bankroll:'Bankroll',
-    th_sessions_count:'Sessions', th_invested:'Invested', th_roi:'ROI',
+    th_sessions_count:'Sessions',
     settings_display_title:'Display',
     settings_lang_title:'Language', settings_lang_desc:'Language of the Pokelo interface.',
     settings_theme_title:'Theme', settings_theme_desc:'Light or dark appearance of the app.',
@@ -4359,7 +4194,6 @@ const I18N = {
     stake_tier_micro:'Micro up to', stake_tier_low:'Low up to', stake_tier_mid:'Mid up to',
     settings_stakes_hint:'Above the Mid threshold, sessions are classified as High.', settings_reset_stakes:'Reset thresholds',
     label_tournament:'Tournament', label_cash:'Cash Game', label_expresso:'Spin & Go', label_live:'Live', label_online:'Online',
-    settings_saved:'Preferences saved',
     module_bank_all_active:'All modules are active.', module_bank_empty_layout:'No active module.<br>Drag one here.',
     empty_no_sessions_bankroll:'No sessions for this bankroll.', empty_no_sessions_filter:'No session matches these filters.',
     filter_result_all:'All results', filter_result_win:'Winning', filter_result_loss:'Losing',
@@ -4806,7 +4640,7 @@ function bankrollColor(bk){
 /* ══════════════════════════════════════════════════════════════
    POKELO — router
    ══════════════════════════════════════════════════════════════ */
-const VIEWS = ['view-landing','view-blog','view-article','view-calendar','view-app','view-account','view-legal','view-privacy','view-terms','view-public-profile'];
+const VIEWS = ['view-landing','view-app','view-account','view-public-profile'];
 let currentBankrollScope = null; // for dashboard/stats bankroll selector
 
 function showView(id){
@@ -5065,27 +4899,11 @@ function blogCardHtml(a){
       </div>
     </a>`;
 }
-let currentBlogFilter = 'all';
-function setBlogFilter(type){
-  currentBlogFilter = type;
-  document.querySelectorAll('.blog-filter-tabs .blog-filter-tab').forEach(b => b.classList.toggle('active', b.dataset.type === type));
-  renderBlogGrid('blog-list-grid', null, currentBlogFilter);
-}
 function renderBlogGrid(containerId, limit, filterType){
   const el = document.getElementById(containerId);
   let list = filterType && filterType !== 'all' ? ARTICLES.filter(a => a.type === filterType) : ARTICLES;
   if (limit) list = list.slice(0, limit);
   el.innerHTML = list.map(blogCardHtml).join('');
-}
-function renderArticle(slug){
-  const a = ARTICLES.find(x => x.slug === slug) || ARTICLES[0];
-  document.getElementById('article-content').innerHTML = `
-    <div class="article-tag">${escapeHtml(a.tag)}</div>
-    <h1 class="article-title">${escapeHtml(a.title)}</h1>
-    <div class="article-meta">${fmtDateFr(a.date)} · ${a.readTime} de lecture</div>
-    <div class="article-body">${a.content}</div>
-  `;
-  document.title = a.title + ' — Pokelo';
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -5139,58 +4957,6 @@ async function renderPublicReviews(){
    (WSOP.com, PokerNews, Pokerfuse) au moment de la rédaction —
    voir la mention "dates indicatives" affichée sur la page.
    ══════════════════════════════════════════════════════════════ */
-const POKER_CALENDAR_2026 = [
-  { name:'WPT Seminole Hard Rock Lucky Hearts Poker Open', tour:'WPT', country:'US', city:'Hollywood, Floride', start:'2026-01-06', end:'2026-01-20', type:'majeur',
-    result: { winner:'Giuseppe Iadisernia', prizePool:'3 932 800 $', payout:'611 700 $', source:'CardPlayer, CasinoCityTimes' } },
-  { name:'Partouche Poker Deepstack — La Tour-de-Salvagny', tour:'Partouche', country:'FR', city:'La Tour-de-Salvagny', start:'2026-01-21', end:'2026-01-25', type:'circuit',
-    result: { winner:'Nicolas Reder', prizePool:'124 608 €', payout:'25 000 €', source:'PokerNews FR, Live-Poker.com' } },
-  { name:'WPT Cambodia', tour:'WPT', country:'KH', city:'Phnom Penh (NagaWorld)', start:'2026-01-21', end:'2026-02-03', type:'majeur',
-    result: { winner:'Xiaosheng Zheng', prizePool:'1 500 000 $ GTD', payout:'244 500 $', source:'PokerNews' } },
-  { name:"PokerStars Open Campione", tour:'PokerStars Open', country:'IT', city:"Campione d'Italia", start:'2026-01-23', end:'2026-02-01', type:'circuit',
-    result: { winner:'Elvir Nuhiu', prizePool:'1 518 720 €', payout:'200 640 €', source:'CardPlayer' } },
-  { name:'WPT Venetian Las Vegas Spring Championship', tour:'WPT', country:'US', city:'Las Vegas', start:'2026-02-09', end:'2026-02-24', type:'majeur',
-    result: { winner:'Nicholas Seward', prizePool:'2 244 800 $', payout:'418 700 $', source:'PokerNews' } },
-  { name:'EPT Paris', tour:'EPT', country:'FR', city:'Paris', start:'2026-02-18', end:'2026-03-01', type:'majeur',
-    result: { winner:'Jorge Abreu', handle:'Jorginho88', prizePool:'7 075 200 €', payout:'1 148 600 €', source:'PokerNews, CardPlayer' } },
-  { name:'Triton ONE Jeju', tour:'Triton', country:'KR', city:'Jeju', start:'2026-03-05', end:'2026-03-15', type:'highroller',
-    result: { winner:'Zhao Wenjie', payout:'1 160 000 $', source:'PokerNews, CardPlayer' } },
-  { name:'Triton Super High Roller Series Jeju (mars)', tour:'Triton', country:'KR', city:'Jeju', start:'2026-03-14', end:'2026-04-01', type:'highroller',
-    result: { winner:'Ben Tollerene', handle:'Ben86', payout:'3 766 000 $', source:'PokerNews, tritonpokerseries.com' } },
-  { name:'Irish Poker Open', tour:'Irish Poker Open', country:'IE', city:'Dublin', start:'2026-03-26', end:'2026-04-06', type:'majeur',
-    result: { winner:'Narcis Nedelcu', handle:'Narcisus90', prizePool:'4 852 910 €', payout:'336 798 €', source:'PokerNews, PokerWired' } },
-  { name:'WSOP Europe', tour:'WSOP Europe', country:'CZ', city:"Prague (King's Casino)", start:'2026-03-31', end:'2026-04-12', type:'majeur',
-    result: { winner:'Marius Kudzmanas', prizePool:'13 085 000 €', payout:'2 000 000 €', source:'PokerNews, WSOP.com' } },
-  { name:'WSOP Circuit — Pasino Partouche', tour:'WSOP Circuit', country:'FR', city:'Aix-en-Provence', start:'2026-04-10', end:'2026-04-21', type:'circuit',
-    result: { winner:'Matthieu Cartillier', payout:'150 000 €', source:'Pokerology, Texapoker' } },
-  { name:'Partouche Poker Deepstack — Divonne-les-Bains', tour:'Partouche', country:'FR', city:'Divonne-les-Bains', start:'2026-04-22', end:'2026-04-26', type:'circuit' },
-  { name:'Aussie Millions', tour:'Aussie Millions', country:'AU', city:'Melbourne (Crown)', start:'2026-04-24', end:'2026-05-10', type:'majeur',
-    result: { winner:'Malcolm Trayner', prizePool:'7 700 000 AUD', source:'PokerNews, ASGAM' } },
-  { name:'EPT Monte-Carlo', tour:'EPT', country:'MC', city:'Monte-Carlo', start:'2026-04-30', end:'2026-05-10', type:'majeur',
-    result: { winner:'Roman Stoica', prizePool:'4 903 350 €', payout:'825 000 €', source:'PokerNews, igaming.org' } },
-  { name:'Triton Super High Roller Series Montenegro', tour:'Triton', country:'ME', city:'Sveti Stefan', start:'2026-05-13', end:'2026-05-28', type:'highroller',
-    result: { winner:'Danny Tang', prizePool:'15 900 000 $', payout:'3 522 000 $', source:'PokerNews, CardPlayer' } },
-  { name:'Riviera Poker Festival', tour:'Partouche', country:'FR', city:'Aix-en-Provence', start:'2026-05-08', end:'2026-08-05', type:'circuit' },
-  { name:'PokerStars Open Namur', tour:'PokerStars Open', country:'BE', city:'Namur', start:'2026-05-27', end:'2026-06-07', type:'circuit',
-    result: { winner:'Koen De Visscher', payout:'220 800 €', source:'PokerNews' } },
-  { name:'World Series of Poker (WSOP)', tour:'WSOP', country:'US', city:'Las Vegas (Horseshoe & Paris)', start:'2026-05-26', end:'2026-07-15', type:'majeur',
-    result: { winner:'Lucas Jumalon', prizePool:'85 600 000 $ (9 208 entrées)', payout:'10 000 000 $', source:'PokerNews, WSOP.com' } },
-  { name:'WPT Cambodia — Passport to the World Championship', tour:'WPT', country:'KH', city:'Phnom Penh (NagaWorld)', start:'2026-08-12', end:'2026-08-24', type:'majeur',
-    result: { winner:'Ari Engel', payout:'91 444 $', source:'SoMuchPoker' } },
-  { name:'Triton Super High Roller Series Jeju (septembre)', tour:'Triton', country:'KR', city:'Jeju', start:'2026-09-04', end:'2026-09-17', type:'highroller',
-    result: { winner:'Nick Schulman', prizePool:'19 600 000 $', payout:'3 854 888 $', source:'PokerNews, TightPoker' } },
-  { name:'WPT Prime Australia', tour:'WPT', country:'AU', city:'Sydney (The Star)', start:'2026-09-10', end:'2026-09-30', type:'majeur',
-    result: { winner:'Cooper Feltham', prizePool:'1 346 800 AUD', payout:'187 793 AUD', source:'PokerNews, SoMuchPoker' } },
-  { name:'WPT Prime Lodge Championship', tour:'WPT', country:'US', city:'Austin, Texas', start:'2026-09-24', end:'2026-10-12', type:'majeur',
-    result: { winner:'Shrikant Pillamarapu', payout:'148 527 $ (après deal ICM)', source:'PokerNews' } },
-  { name:'WPT Seoul', tour:'WPT', country:'KR', city:'Séoul (INSPIRE)', start:'2026-10-30', end:'2026-11-09', type:'majeur' },
-  { name:'PokerStars Open Aix-en-Provence', tour:'PokerStars Open', country:'FR', city:'Aix-en-Provence', start:'2026-11-01', end:'2026-11-08', type:'circuit' },
-  { name:'EPT Prague', tour:'EPT', country:'CZ', city:'Prague', start:'2026-12-02', end:'2026-12-13', type:'majeur' },
-  { name:'EPT Barcelona', tour:'EPT', country:'ES', city:'Barcelone', start:'2026-08-16', end:'2026-08-29', type:'majeur' },
-  { name:'WPT Venetian Las Vegas Fall Festival', tour:'WPT', country:'US', city:'Las Vegas (The Venetian)', start:'2026-10-28', end:'2026-11-15', type:'majeur' },
-  { name:'WPT World Championship', tour:'WPT', country:'US', city:'Las Vegas (Wynn)', start:'2026-11-27', end:'2026-12-21', type:'majeur' },
-  { name:'WSOP Paradise', tour:'WSOP', country:'BS', city:'Bahamas', start:'2026-12-02', end:'2026-12-17', type:'majeur' },
-  { name:'PokerStars Open Cannes', tour:'PokerStars Open', country:'FR', city:'Cannes', start:'2026-12-08', end:'2026-12-14', type:'circuit' },
-];
 const FLAG_SVG = {
   FR: `<rect width="10" height="20" fill="#002654"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ED2939"/>`,
   US: `<rect width="30" height="20" fill="#fff"/>
@@ -5255,10 +5021,6 @@ const FLAG_SVG = {
 function flagSvg(code){
   return `<svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg">${FLAG_SVG[code] || '<rect width="30" height="20" fill="var(--border)"/>'}</svg>`;
 }
-const COUNTRY_NAMES = {
-  fr: { US:'États-Unis', FR:'France', KH:'Cambodge', IT:'Italie', KR:'Corée du Sud', IE:'Irlande', CZ:'République tchèque', AU:'Australie', MC:'Monaco', ME:'Monténégro', BE:'Belgique', ES:'Espagne', BS:'Bahamas' },
-  en: { US:'United States', FR:'France', KH:'Cambodia', IT:'Italy', KR:'South Korea', IE:'Ireland', CZ:'Czech Republic', AU:'Australia', MC:'Monaco', ME:'Montenegro', BE:'Belgium', ES:'Spain', BS:'Bahamas' },
-};
 // Indicatifs téléphoniques internationaux — liste large (pas exhaustive à 195
 // pays) mais couvre les nationalités les plus probables pour un public poker
 // international. [code ISO, indicatif, nom FR, nom EN]
@@ -5317,89 +5079,6 @@ function phoneCountryLabel(entry){
   // calendrier) est affiché à côté du champ via updateAccountPhoneFlag().
   const lang = (state.settings && state.settings.lang === 'en') ? 3 : 2;
   return `${entry[lang]} (+${entry[1]})`;
-}
-function countryName(code){
-  const lang = (state.settings && state.settings.lang === 'en') ? 'en' : 'fr';
-  return COUNTRY_NAMES[lang][code] || code;
-}
-function fmtCalendarRange(startIso, endIso){
-  const locale = (state.settings && state.settings.lang === 'en') ? 'en-US' : 'fr-FR';
-  const opts = { day:'numeric', month:'short', year:'numeric' };
-  const s = new Date(startIso+'T00:00:00').toLocaleDateString(locale, opts);
-  if (!endIso || endIso === startIso) return s;
-  const e = new Date(endIso+'T00:00:00').toLocaleDateString(locale, opts);
-  return `${s} – ${e}`;
-}
-let calendarFilters = { country: 'all', tour: 'all' };
-let calendarSort = 'date';
-function setCalendarFilter(dim, value){
-  calendarFilters[dim] = value;
-  renderCalendarList();
-}
-function setCalendarSort(value){
-  calendarSort = value;
-  renderCalendarList();
-}
-function populateCalendarCountryFilter(){
-  const sel = document.getElementById('calendar-country-filter');
-  if (!sel) return;
-  const codes = [...new Set(POKER_CALENDAR_2026.map(e => e.country))].sort((a, b) => countryName(a).localeCompare(countryName(b)));
-  sel.innerHTML = `<option value="all">${t('calendar_filter_all_countries')}</option>` + codes.map(c => `<option value="${c}">${countryName(c)}</option>`).join('');
-  sel.value = calendarFilters.country;
-}
-function populateCalendarTourFilter(){
-  const sel = document.getElementById('calendar-tour-filter');
-  if (!sel) return;
-  const tours = [...new Set(POKER_CALENDAR_2026.map(e => e.tour))].sort((a, b) => a.localeCompare(b));
-  sel.innerHTML = `<option value="all">${t('calendar_filter_all_tours')}</option>` + tours.map(tr => `<option value="${escapeHtml(tr)}">${escapeHtml(tr)}</option>`).join('');
-  sel.value = calendarFilters.tour;
-}
-function renderCalendarList(){
-  const el = document.getElementById('calendar-list');
-  if (!el) return;
-  const list = POKER_CALENDAR_2026
-    .filter(e => calendarFilters.country === 'all' || e.country === calendarFilters.country)
-    .filter(e => calendarFilters.tour === 'all' || e.tour === calendarFilters.tour)
-    .slice();
-  if (calendarSort === 'tour') list.sort((a, b) => a.tour.localeCompare(b.tour) || a.start.localeCompare(b.start));
-  else list.sort((a, b) => a.start.localeCompare(b.start));
-  if (!list.length) { el.innerHTML = `<p class="calendar-empty">${t('calendar_empty')}</p>`; return; }
-  el.innerHTML = list.map(e => `
-    <div class="calendar-event">
-      <div class="ce-flag">${flagSvg(e.country)}</div>
-      <div class="ce-body">
-        <div class="ce-top">
-          <span class="ce-name">${escapeHtml(e.name)}</span>
-          <span class="ce-tour">${escapeHtml(e.tour)}</span>
-        </div>
-        <div class="ce-meta">${escapeHtml(e.city)}, ${escapeHtml(countryName(e.country))} · ${fmtCalendarRange(e.start, e.end)}</div>
-        ${calendarResultHtml(e.result)}
-      </div>
-    </div>`).join('');
-}
-// N'affiche un résultat que si des données réelles et vérifiées existent pour
-// l'événement (voir POKER_CALENDAR_2026) — jamais de gagnant/prize pool
-// inventé pour un tournoi réel, même pour un événement déjà terminé dont on
-// n'a pas trouvé de résultat publié fiable.
-function calendarResultHtml(result){
-  if (!result) return '';
-  const prizeParts = [];
-  if (result.prizePool) prizeParts.push(`${t('calendar_prizepool_label')} ${result.prizePool}`);
-  if (result.payout) prizeParts.push(`${t('calendar_payout_label')} ${result.payout}`);
-  return `
-    <div class="ce-result">
-      <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M5 18h14l1.4-8.4-4.4 2.6-3-5.2-3 5.2-4.4-2.6L5 18Z"/></svg>
-      <span class="ce-result-winner">${escapeHtml(result.winner)}${result.handle ? ` <span class="ce-result-handle">(${escapeHtml(result.handle)})</span>` : ''}</span>
-      ${prizeParts.length ? `<span class="ce-result-prize">${escapeHtml(prizeParts.join(' · '))}</span>` : ''}
-      ${result.source ? `<span class="ce-result-source">${t('calendar_source_label')} : ${escapeHtml(result.source)}</span>` : ''}
-    </div>`;
-}
-function renderPokerCalendar(){
-  populateCalendarCountryFilter();
-  populateCalendarTourFilter();
-  const sortSel = document.getElementById('calendar-sort');
-  if (sortSel) sortSel.value = calendarSort;
-  renderCalendarList();
 }
 
 /* ══════════════════════════════════════════════════════════════
